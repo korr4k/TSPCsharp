@@ -1,5 +1,6 @@
 ﻿using ILOG.Concert;
 using ILOG.CPLEX;
+using System.IO;
 using System.Diagnostics;
 
 namespace TSPCsharp
@@ -38,6 +39,8 @@ namespace TSPCsharp
 
             cplex.Output().WriteLine();
 
+            StreamWriter file = new StreamWriter(instance.InputFile + ".dat");
+
             for (int i = 0; i < instance.NNodes; i++)
             { 
                 for (int j = i + 1; j < instance.NNodes; j++)
@@ -47,9 +50,17 @@ namespace TSPCsharp
                         int position = zPos(i, j, instance.NNodes);
                         instance.BestSol[position] = cplex.GetValue(z[position]);
                         cplex.Output().WriteLine(z[position].Name + " = " + instance.BestSol[position]);
+                        
+                        if(instance.BestSol[position] != 0)
+                        {
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y);
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + "\n");
+                        }
                     }
                 }
             }
+
+            file.Close();
 
             cplex.Output().WriteLine();
 
