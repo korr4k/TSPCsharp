@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ILOG.Concert;
-using ILOG.CPLEX;
-using System.Threading.Tasks;
 
 
 namespace TSPCsharp
@@ -165,6 +159,19 @@ namespace TSPCsharp
             set
             {
                 coord = value;
+            }
+        }
+
+        public int ZStart
+        {
+            get
+            {
+                return zStart;
+            }
+
+            set
+            {
+                zStart = value;
             }
         }
 

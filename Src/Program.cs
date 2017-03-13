@@ -1,5 +1,4 @@
 ﻿using System;
-using ILOG.Concert;
 using System.IO;
 using System.Diagnostics;
 
@@ -7,7 +6,7 @@ namespace TSPCsharp
 {
     class Program
     {
-        const int VERBOSE = 50;
+        public const int VERBOSE = 50;
         const double XSMALL = 1E-5; 		
         const double EPSILON = 1E-9;		
         const int TICKS_PER_SECOND = 1000;
@@ -34,12 +33,12 @@ namespace TSPCsharp
             clock = new Stopwatch();
             clock.Start();
 
-            //if (!TSPopt(inst))
-            //    throw new System.Exception("Impossible to find the optimal solution for the given instance");
+            if (!TSP.TSPOpt(inst, clock))
+               throw new System.Exception("Impossible to find the optimal solution for the given instance");
 
             clock.Stop();
 
-            Console.WriteLine("The optimal solution was found in " + clock.ElapsedMilliseconds*1000 + " seconds");
+            Console.WriteLine("The optimal solution was found in " + clock.ElapsedMilliseconds/1000.0 + " s");
 
             Console.ReadLine();
         }
@@ -72,7 +71,7 @@ namespace TSPCsharp
 
             try
             {
-                using (StreamReader sr = new StreamReader("..\\..\\..\\Data\\" + inst.InputFile))
+                using (StreamReader sr = new StreamReader("..\\..\\..\\..\\Data\\" + inst.InputFile))
                 {
                     while ((line = sr.ReadLine()) != null)
                     {

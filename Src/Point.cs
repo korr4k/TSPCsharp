@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TSPCsharp
 {
@@ -43,7 +39,7 @@ namespace TSPCsharp
             }
         }
 
-        static double Distance( Point p1, Point p2, String pointType)
+         public static double Distance( Point p1, Point p2, String pointType)
         {
 
             double xD = p1.X - p2.X;
