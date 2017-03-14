@@ -39,7 +39,7 @@ namespace TSPCsharp
             clock.Stop();
 
             Console.WriteLine("The optimal solution was found in " + clock.ElapsedMilliseconds/1000.0 + " s");
-
+            
             Console.ReadLine();
         }
 

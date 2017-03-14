@@ -62,6 +62,8 @@ namespace TSPCsharp
 
             file.Close();
 
+            PrintGNUPlot(instance.InputFile);
+
             cplex.Output().WriteLine();
 
             instance.ZBest = cplex.ObjValue;
@@ -82,13 +84,14 @@ namespace TSPCsharp
 
             ILinearNumExpr expr = cplex.LinearNumExpr();
 
+            //populate objective function
+
             for (int i = 0; i < instance.NNodes; i++)
             {
                 for (int j = i + 1; j < instance.NNodes; j++)
                 {
                     int position = zPos(i, j, instance.NNodes);
                     expr.AddTerm(z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")"), Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
-                    double test = expr.Constant;
                 }
             }
 
@@ -112,6 +115,22 @@ namespace TSPCsharp
 
             return z;
 
+        }
+
+        static void PrintGNUPlot(string name)
+        {
+
+            ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe");
+            processStartInfo.RedirectStandardInput = true;
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.UseShellExecute = false;
+
+            Process process = Process.Start(processStartInfo);
+
+            if (process != null)
+            {
+                process.StandardInput.WriteLine("gnuplot\nplot '" + name + ".dat' with lines");
+            }
         }
 
         static int zPos(int i, int j, int nNodes)
