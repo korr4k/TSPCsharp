@@ -5,7 +5,7 @@ namespace TSPCsharp
 {
     class Instance
     {
-        //input data
+        // input data
         int nNodes;
         Point[] coord;
 
@@ -15,22 +15,25 @@ namespace TSPCsharp
         double timeLimit;                       // overall time limit, in sec.s
         string inputFile;                       // input file
 
-        //global data
-        double tStart;
+        // global data
+        double tStart;                          // real starting time 
         double zBest;                           // best sol. available  
         double tBest;                           // time for the best sol. available  
         double[] bestSol;                       // best sol. available    
         double bestLb;                          // best lower bound available
 
-        // model;     
-        int xStart;
-        int qStart;
-        int bigQStart;
-        int sStart;
-        int bigSStart;
-        int yStart;
-        int fStart;
+        // model:   
+        //int xStart;
+        //int qStart;
+        //int bigQStart;
+        //int sStart;
+        //int bigSStart;
+        //int yStart;
+        //int fStart;
         int zStart;
+
+
+        //get and set methods for all parameters:
 
         public int NNodes
         {
@@ -175,6 +178,8 @@ namespace TSPCsharp
             }
         }
 
+
+        //Used to print the points stored in instance.Coord vector
         static public void Print(Instance inst)
         {
             for (int i = 0; i < inst.NNodes; i++)

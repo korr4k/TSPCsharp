@@ -2,6 +2,8 @@
 
 namespace TSPCsharp
 {
+    //Custom class used to stored the coordinates of a point
+    //Attention: only 2D points are actually implemented
     class Point
     {
         private double x;
@@ -42,11 +44,14 @@ namespace TSPCsharp
          public static double Distance( Point p1, Point p2, String pointType)
         {
 
+            //Implamentation of the distance algorithms proposed by the official documentation
+
             double xD = p1.X - p2.X;
             double yD = p1.Y - p2.Y;
 
             if (pointType == "EUC_2D")
             {
+                //Cailing is used to round at the next int value
                 return Math.Ceiling(Math.Sqrt(xD * xD + yD * yD));
             }
             else if (pointType == "ATT")
@@ -59,6 +64,7 @@ namespace TSPCsharp
                     return tmp;
             }
 
+            //If each statem is false, the used point type is not yet implemented
             throw new Exception("Bad input format");
         }        
     }
