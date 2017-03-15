@@ -7,9 +7,9 @@ namespace TSPCsharp
     class Program
     {
         public const int VERBOSE = 50;
-        const double XSMALL = 1E-5; 		
-        const double EPSILON = 1E-9;		
-        const int TICKS_PER_SECOND = 1000;
+        public const double XSMALL = 1E-5;
+        public const double EPSILON = 1E-9;
+        public const int TICKS_PER_SECOND = 1000;
 
         static Stopwatch clock;
 

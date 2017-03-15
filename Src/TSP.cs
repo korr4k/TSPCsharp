@@ -10,7 +10,7 @@ namespace TSPCsharp
 
         static public bool TSPOpt(Instance instance, Stopwatch clock)
         {
-            instance.TStart = clock.ElapsedMilliseconds * 1000;
+            instance.TStart = clock.ElapsedMilliseconds /1000.0;
 
             Cplex cplex = new Cplex();
 
@@ -31,8 +31,8 @@ namespace TSPCsharp
 
             cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Traditional);
 
-            //mipTimelimit(env, CPX_INFBOUND, inst);
-            //if (timeLimitExpired(inst)) goto EXIT;
+            MipTimelimit(cplex, instance, clock);
+
             cplex.SetParam(Cplex.LongParam.NodeLim, 0);
 
             cplex.Solve();
@@ -142,6 +142,18 @@ namespace TSPCsharp
                 return zPos(j, i, nNodes);
 
             return i * nNodes + j - (i + 1) * (i + 2) / 2;
+        }
+
+        static void MipTimelimit(Cplex cplex, Instance inst, Stopwatch clock)
+        {
+            double residualTime = inst.TStart + inst.TimeLimit - clock.ElapsedMilliseconds / 1000.0;
+
+            if (residualTime < 0.0)
+                residualTime = 0.0;
+
+            cplex.SetParam(Cplex.IntParam.ClockType, 2);
+            cplex.SetParam(Cplex.Param.TimeLimit, residualTime);                            // real time
+            cplex.SetParam(Cplex.Param.DetTimeLimit, Program.TICKS_PER_SECOND * cplex.GetParam(Cplex.Param.TimeLimit));			// ticks
         }
     }
 }
