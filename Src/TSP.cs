@@ -18,18 +18,8 @@ namespace TSPCsharp
             //algorithms with C#
             Cplex cplex = new Cplex();
 
-            //Setting cplex parameters
-            cplex.SetParam(Cplex.IntParam.MIPDisplay, 4);
 
-            cplex.SetParam(Cplex.DoubleParam.EpInt, 0);
-            cplex.SetParam(Cplex.DoubleParam.EpGap, 1E-9);
-            cplex.SetParam(Cplex.DoubleParam.EpRHS, 1E-9);
-
-            cplex.SetParam(Cplex.LongParam.RINSHeur, 10);
-
-            cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Traditional);
-
-            MIPUtilities.mipSetLevelForAllCuts(cplex, 2);
+            cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Dynamic);
 
             //INumVar is a special interface used to stare any kinf of variable compatible with cplex
             //Building the model, z is necessary to access the variabiles via their stored names
@@ -38,13 +28,10 @@ namespace TSPCsharp
             //Allocating the correct space to store the optimal solution
             //Only links from node i to j with i < j are considered
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
-            instance.ZBest = 1E-20;
+            instance.ZBest = 1E20;
 
             //Setting the residual time limit for cplex, it's almost equal to instance.TStart
             MipTimelimit(cplex, instance, clock);
-
-            //Setting cplex parameter NodeLim
-            cplex.SetParam(Cplex.LongParam.NodeLim, 0);
 
             //Cplex solves the curretn
             cplex.Solve();
