@@ -33,33 +33,41 @@ namespace TSPCsharp
             //Only links from node i to j with i < j are considered
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
+            //Array that stores the related component of each node
             int[] compConn = new int[instance.NNodes];
+            //Array that stores the "related component" of each link*********************
             int[] linkCC = new int[(instance.NNodes - 1) * instance.NNodes / 2];
 
             //Setting the residual time limit for cplex, it's almost equal to instance.TStart
             MipTimelimit(cplex, instance, clock);
 
 
-            //Creating the file used by GNUPlot to print the solution
+            //Creating the StreamWriter used by GNUPlot to print the solution
             StreamWriter file;
 
             do
             {
-                //Cplex solves the current model
 
+                //Cplex solves the current model
                 cplex.Solve();
                 
+                //Initializing the arrays used to eliminate the subtour
                 InitCC(compConn, linkCC);
 
+                //Setting to 0 the # of related components
                 cntCC = 0;
 
+                //# of solutions found ++
                 cntSol++;
 
+                //Init the StreamWriter for the current solution
                 file = new StreamWriter(instance.InputFile + cntSol + ".dat");
 
                 //Storing the optimal value of the objective function
                 instance.ZBest = cplex.ObjValue;
 
+                //Storing the current link's optimal values 
+                //Adding a new equation to the model deletes the current solution!!!
                 int[] optSol = CopyOpt(cplex, z, (instance.NNodes - 1) * instance.NNodes / 2);
 
                 //Blank line
@@ -73,10 +81,9 @@ namespace TSPCsharp
 
                         //Retriving the correct index position for the current link inside z
                         int position = zPos(i, j, instance.NNodes);
+
                         //Reading the optimal solution for the actual link (i,j)
                         instance.BestSol[position] = optSol[position];
-                        //Printing the optimal solution for the link (i,j)
-                        //cplex.Output().WriteLine(z[position].Name + " = " + instance.BestSol[position]);
 
                         //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
                         if (instance.BestSol[position] != 0)
@@ -85,17 +92,16 @@ namespace TSPCsharp
                              *Current GNUPlot format is:
                              *-- previus link --
                              *<Blank line>
-                             *Xi Yi
-                             *Xj Yj
+                             *Xi Yi <index(i)>
+                             *Xj Yj <index(j)>
                              *<Blank line> 
                              *-- next link --
                             */
-                            UpdateCC(i, j, compConn, linkCC, cplex, z);
                             file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
                             file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
-                            //file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y);
-                            //file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + "\n");
 
+                            //Updating the model with the current subtours elimination
+                            UpdateCC(i, j, compConn, linkCC, cplex, z);
                         }
                     }
                 }
@@ -104,23 +110,28 @@ namespace TSPCsharp
                 file.Close();
 
                 //Accessing GNUPlot to read the file
-                //PrintGNUPlot(instance.InputFile);
+                if (Program.VERBOSE >= -100)
+                    PrintGNUPlot(instance.InputFile);
 
+                //Blank line
                 cplex.Output().WriteLine();
 
                 //Writing the value
                 cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
 
-            } while (cntCC > 1);
+                //Exporting the updated model
+                if (Program.VERBOSE >= -100)
+                    cplex.ExportModel(instance.InputFile + cntSol + ".lp");
+
+            } while (cntCC > 1); //if there is more then one related components the solution is not optimal 
+
 
             //Closing Cplex link
             cplex.End();
 
-
             //Accessing GNUPlot to read the file
-            
-            PrintGNUPlot(instance.InputFile);
-
+            if (Program.VERBOSE >= -100)
+                PrintGNUPlot(instance.InputFile);
 
             //Return without errors
             return true;
@@ -200,11 +211,13 @@ namespace TSPCsharp
                 /*
                  *Writing in the prompt:
                  *gnuplot
-                 *plot '<file_name>.tsp.dat' with lines
+                 *set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5
+                 *plot '<name_current_solution>.dat' with linespoints ls 1 notitle, '<name_current_solution>.dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle"
                  */
                 process.StandardInput.WriteLine("gnuplot\nset style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + cntSol + ".dat' with linespoints ls 1 notitle, '" + name + cntSol + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
             }
         }
+
 
         //Used to evaluete the correct position to store and read the variables for the model
         static int zPos(int i, int j, int nNodes)
@@ -233,6 +246,7 @@ namespace TSPCsharp
         }
 
 
+        //Initialization of the arrays used to keep track of the related components
         static void InitCC(int[] cc, int[] lcc)
         {
             for(int i = 0; i < cc.Length; i++)
@@ -242,38 +256,43 @@ namespace TSPCsharp
 
             for (int i = 0; i < lcc.Length; i++)
             {
+                //Value never used
                 lcc[i] = -1;
             }
         }
 
+
+        //Updating the related components for the current solution
         static void UpdateCC(int i, int j, int[] cc, int[] lcc, Cplex cplex, INumVar[] z)
         {
-            if (cc[i] != cc[j])
+            if (cc[i] != cc[j])//Same related component, the latter is not closed yet
             {
                 for (int k = i + 1; k < cc.Length; k++)
                 {
                     if ((k != j) && (cc[k] == cc[j]))
                     {
+                        //Same as Kruskal
                         cc[k] = cc[i];
                     }
                 }
 
+                //tmp is used in any iteration of the next cycle
                 int tmp = zPos(i, j, cc.Length);
 
                 for (int k = 0; k < lcc.Length; k++)
                 {                    
-
                     if ((k != tmp) && (lcc[k] == cc[j]))
                     {
                         lcc[k] = cc[i];
                     }
                 }
 
+                //Finally also the vallue relative to the Point j are updated
                 cc[j] = cc[i];
                 lcc[zPos(i, j, cc.Length)] = cc[i];
 
             }
-            else
+            else//Here the current releted component is complete and the relative subtout elimination constraint can be added to the model
             {
                 lcc[zPos(i, j, cc.Length)] = cc[i];
                 ILinearNumExpr expr = cplex.LinearNumExpr();
@@ -289,21 +308,25 @@ namespace TSPCsharp
                     }
                 }
                 cplex.AddLe(expr, cnt - 1, "test");
+                //Recording that one related component is complete
                 cntCC++;
             }
         }
 
+
+        //Just coping the optimal values of each variable into another array
         static int[] CopyOpt(Cplex cplex, INumVar[] z, int nLinks)
         {
             int[] tmp = new int[nLinks];
 
             for (int i = 0; i < nLinks; i++)
             {
-                tmp[i] = (int)cplex.GetValue(z[i]);
+                tmp[i] = (int)(cplex.GetValue(z[i]) + 0.5);
             }
 
             return tmp;
         }
+
     }
 }
     

@@ -47,7 +47,7 @@ namespace TSPCsharp
 
 
             //Starting the elaboration of the TSP problem
-            //The boolean returning value tell if everything went fine
+            //The boolean returning value tells if everything went fine
             if (!TSP.TSPOpt(inst, clock))
                throw new System.Exception("Impossible to find the optimal solution for the given instance");
 
