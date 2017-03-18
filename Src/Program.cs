@@ -121,7 +121,7 @@ namespace TSPCsharp
                         if (line.StartsWith("DIMENSION"))
                         {
                             //Setting the # of nodes for the problem
-                            inst.NNodes = Convert.ToInt32(line.Remove(0, 11));
+                            inst.NNodes = Convert.ToInt32(line.Remove(0, line.IndexOf(':') + 2));
                             //Allocating the space for the points that will be read
                             inst.Coord = new Point[inst.NNodes];
                             if (VERBOSE >= 1)
@@ -132,7 +132,7 @@ namespace TSPCsharp
                         //inst needs to be updated according to the value of his line
                         if (line.StartsWith("EDGE_WEIGHT_TYPE"))
                         {
-                            string tmp = line.Remove(0, 19);
+                            string tmp = line.Remove(0, line.IndexOf(':') + 2);
                             if (!(tmp == "EUC_2D" || tmp == "ATT"))
                                 throw new System.Exception("Format error:  only EDGE_WEIGHT_TYPE == EUC_2D || ATT implemented so far!!!!!!");
                             //Storing the edge type is necessary to correctly evaluete the distance between two points
@@ -175,7 +175,7 @@ namespace TSPCsharp
                             if (i < 0 || i > inst.NNodes)
                                 throw new System.Exception("Unknown node in NODE_COORD_SECTION section");
                             //Vectors starts at index 0 not 1, it is necessary to perform a -1
-                            inst.Coord[i - 1] = new Point(Convert.ToInt32(elements[1]), Convert.ToInt32(elements[2]));
+                            inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1]), Convert.ToDouble(elements[2]));
                             continue;
                         }
 

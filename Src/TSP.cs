@@ -2,12 +2,14 @@
 using ILOG.CPLEX;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace TSPCsharp
 {
     class TSP
     {
         static int cntCC = 0;
+        static int cntSol = 0;
 
         static public bool TSPOpt(Instance instance, Stopwatch clock)
         {
@@ -33,53 +35,67 @@ namespace TSPCsharp
 
             int[] compConn = new int[instance.NNodes];
             int[] linkCC = new int[(instance.NNodes - 1) * instance.NNodes / 2];
-            InitCC(compConn, linkCC);
 
             //Setting the residual time limit for cplex, it's almost equal to instance.TStart
             MipTimelimit(cplex, instance, clock);
 
+
+            //Creating the file used by GNUPlot to print the solution
+            StreamWriter file;
+
             do
             {
+                //Cplex solves the current model
 
-                //Cplex solves the curretn
                 cplex.Solve();
+                
+                InitCC(compConn, linkCC);
+
+                cntCC = 0;
+
+                cntSol++;
+
+                file = new StreamWriter(instance.InputFile + cntSol + ".dat");
+
+                //Storing the optimal value of the objective function
+                instance.ZBest = cplex.ObjValue;
+
+                int[] optSol = CopyOpt(cplex, z, (instance.NNodes - 1) * instance.NNodes / 2);
 
                 //Blank line
                 cplex.Output().WriteLine();
-
-                //Creating the file used by GNUPlot to print the solution
-                StreamWriter file = new StreamWriter(instance.InputFile + ".dat");
 
                 //Printing the optimal solution and the GNUPlot input file
                 for (int i = 0; i < instance.NNodes; i++)
                 {
                     for (int j = i + 1; j < instance.NNodes; j++)
                     {
-                        if (i != j)
-                        {
-                            //Retriving the correct index position for the current link inside z
-                            int position = zPos(i, j, instance.NNodes);
-                            //Reading the optimal solution for the actual link (i,j)
-                            instance.BestSol[position] = cplex.GetValue(z[position]);
-                            //Printing the optimal solution for the link (i,j)
-                            //cplex.Output().WriteLine(z[position].Name + " = " + instance.BestSol[position]);
 
-                            //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
-                            if (instance.BestSol[position] != 0)
-                            {
-                                /*
-                                 *Current GNUPlot format is:
-                                 *-- previus link --
-                                 *<Blank line>
-                                 *Xi Yi
-                                 *Xj Yj
-                                 *<Blank line> 
-                                 *-- next link --
-                                */
-                                UpdateCC(i, j, compConn, linkCC, cplex, z);
-                                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y);
-                                file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + "\n");
-                            }
+                        //Retriving the correct index position for the current link inside z
+                        int position = zPos(i, j, instance.NNodes);
+                        //Reading the optimal solution for the actual link (i,j)
+                        instance.BestSol[position] = optSol[position];
+                        //Printing the optimal solution for the link (i,j)
+                        //cplex.Output().WriteLine(z[position].Name + " = " + instance.BestSol[position]);
+
+                        //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                        if (instance.BestSol[position] != 0)
+                        {
+                            /*
+                             *Current GNUPlot format is:
+                             *-- previus link --
+                             *<Blank line>
+                             *Xi Yi
+                             *Xj Yj
+                             *<Blank line> 
+                             *-- next link --
+                            */
+                            UpdateCC(i, j, compConn, linkCC, cplex, z);
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            //file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y);
+                            //file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + "\n");
+
                         }
                     }
                 }
@@ -88,20 +104,22 @@ namespace TSPCsharp
                 file.Close();
 
                 //Accessing GNUPlot to read the file
-                PrintGNUPlot(instance.InputFile);
+                //PrintGNUPlot(instance.InputFile);
 
                 cplex.Output().WriteLine();
 
-                //Storing the optimal value of the objective function
-                instance.ZBest = cplex.ObjValue;
-
                 //Writing the value
                 cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
-            } while (cntCC > 1);
 
+            } while (cntCC > 1);
 
             //Closing Cplex link
             cplex.End();
+
+
+            //Accessing GNUPlot to read the file
+            
+            PrintGNUPlot(instance.InputFile);
 
 
             //Return without errors
@@ -184,7 +202,7 @@ namespace TSPCsharp
                  *gnuplot
                  *plot '<file_name>.tsp.dat' with lines
                  */
-                process.StandardInput.WriteLine("gnuplot\nplot '" + name + ".dat' with lines");
+                process.StandardInput.WriteLine("gnuplot\nset style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + cntSol + ".dat' with linespoints ls 1 notitle, '" + name + cntSol + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
             }
         }
 
@@ -199,6 +217,7 @@ namespace TSPCsharp
 
             return i * nNodes + j - (i + 1) * (i + 2) / 2;
         }
+
 
         //Setting the current real residual time for Cplex and some relative parameters
         static void MipTimelimit(Cplex cplex, Instance inst, Stopwatch clock)
@@ -231,11 +250,32 @@ namespace TSPCsharp
         {
             if (cc[i] != cc[j])
             {
+                for (int k = i + 1; k < cc.Length; k++)
+                {
+                    if ((k != j) && (cc[k] == cc[j]))
+                    {
+                        cc[k] = cc[i];
+                    }
+                }
+
+                int tmp = zPos(i, j, cc.Length);
+
+                for (int k = 0; k < lcc.Length; k++)
+                {                    
+
+                    if ((k != tmp) && (lcc[k] == cc[j]))
+                    {
+                        lcc[k] = cc[i];
+                    }
+                }
+
                 cc[j] = cc[i];
                 lcc[zPos(i, j, cc.Length)] = cc[i];
+
             }
             else
             {
+                lcc[zPos(i, j, cc.Length)] = cc[i];
                 ILinearNumExpr expr = cplex.LinearNumExpr();
 
                 int cnt = 0;
@@ -244,13 +284,25 @@ namespace TSPCsharp
                 {
                     if (lcc[h] == cc[i])
                     {
-                        expr.AddTerm(z[zPos(i, j, cc.Length)], 1);
+                        expr.AddTerm(z[h], 1);
                         cnt++;
                     }
-                    cplex.AddEq(expr, cnt -1);
-                    cntCC++;
                 }
+                cplex.AddLe(expr, cnt - 1, "test");
+                cntCC++;
             }
+        }
+
+        static int[] CopyOpt(Cplex cplex, INumVar[] z, int nLinks)
+        {
+            int[] tmp = new int[nLinks];
+
+            for (int i = 0; i < nLinks; i++)
+            {
+                tmp[i] = (int)cplex.GetValue(z[i]);
+            }
+
+            return tmp;
         }
     }
 }
