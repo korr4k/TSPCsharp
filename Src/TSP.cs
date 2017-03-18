@@ -10,6 +10,7 @@ namespace TSPCsharp
     {
         static int cntCC = 0;
         static int cntSol = 0;
+        static Process process;
 
         static public bool TSPOpt(Instance instance, Stopwatch clock)
         {
@@ -45,6 +46,8 @@ namespace TSPCsharp
             //Creating the StreamWriter used by GNUPlot to print the solution
             StreamWriter file;
 
+            process = InitProcess();
+
             do
             {
 
@@ -61,7 +64,7 @@ namespace TSPCsharp
                 cntSol++;
 
                 //Init the StreamWriter for the current solution
-                file = new StreamWriter(instance.InputFile + cntSol + ".dat");
+                file = new StreamWriter(instance.InputFile + ".dat", false);
 
                 //Storing the optimal value of the objective function
                 instance.ZBest = cplex.ObjValue;
@@ -111,7 +114,7 @@ namespace TSPCsharp
 
                 //Accessing GNUPlot to read the file
                 if (Program.VERBOSE >= -100)
-                    PrintGNUPlot(instance.InputFile);
+                    PrintGNUPlot(instance.InputFile, process);
 
                 //Blank line
                 cplex.Output().WriteLine();
@@ -121,7 +124,9 @@ namespace TSPCsharp
 
                 //Exporting the updated model
                 if (Program.VERBOSE >= -100)
-                    cplex.ExportModel(instance.InputFile + cntSol + ".lp");
+                    cplex.ExportModel(instance.InputFile + ".lp");
+
+                    //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
 
             } while (cntCC > 1); //if there is more then one related components the solution is not optimal 
 
@@ -131,13 +136,14 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -100)
-                PrintGNUPlot(instance.InputFile);
+                PrintGNUPlot(instance.InputFile, process);
 
             //Return without errors
             return true;
         }
 
 
+        //Building initial model
         static INumVar[] BuildModel(Cplex cplex, Instance instance)
         {
             
@@ -194,18 +200,10 @@ namespace TSPCsharp
 
         }
 
-        static void PrintGNUPlot(string name)
+
+        //Print for GNUPlot
+        static void PrintGNUPlot(string name, Process process)
         {
-            
-            //Setting values to open Prompt
-            ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe");
-            processStartInfo.RedirectStandardInput = true;
-            processStartInfo.RedirectStandardOutput = true;
-            processStartInfo.UseShellExecute = false;
-
-            //Executing the Prompt
-            Process process = Process.Start(processStartInfo);
-
             if (process != null)
             {
                 /*
@@ -214,7 +212,11 @@ namespace TSPCsharp
                  *set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5
                  *plot '<name_current_solution>.dat' with linespoints ls 1 notitle, '<name_current_solution>.dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle"
                  */
-                process.StandardInput.WriteLine("gnuplot\nset style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + cntSol + ".dat' with linespoints ls 1 notitle, '" + name + cntSol + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+
+                if (cntSol == 1)
+                    process.StandardInput.WriteLine("gnuplot");
+
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
             }
         }
 
@@ -325,6 +327,21 @@ namespace TSPCsharp
             }
 
             return tmp;
+        }
+
+
+        static Process InitProcess()
+        {
+            //Setting values to open Prompt
+            ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe");
+            processStartInfo.RedirectStandardInput = true;
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.UseShellExecute = false;
+
+            //Executing the Prompt
+            Process process = Process.Start(processStartInfo);
+
+            return process;
         }
 
     }
