@@ -9,7 +9,6 @@ namespace TSPCsharp
         int nNodes;
         Point[] coord;
 
-
         // parameters 
         string edgeType;                        // used in Point.distance()
         double timeLimit;                       // overall time limit, in sec.s

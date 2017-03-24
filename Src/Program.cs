@@ -9,7 +9,7 @@ namespace TSPCsharp
 
         //Setting constant value, to access them use Program.<name>
         public const int VERBOSE = 50;
-        public const double XSMALL = 1E-5;
+        //public const double XSMALL = 1E-5;
         public const double EPSILON = 1E-9;
         public const int TICKS_PER_SECOND = 1000;
 
@@ -29,13 +29,15 @@ namespace TSPCsharp
                     Console.Write(args[i].ToString() + " ");
                 Console.WriteLine("\n\n\n");
             }
-            
+
             /*
              * Saving input parameters inside an Instance variable
              * Attention: if file name or timilimit are missing 
              * an exception will be throw 
             */
-            Instance inst = ParseInst(args);
+            Instance inst = new Instance();
+
+            ParseInst(inst,args);
 
             //Reading the input file and storing its data into inst
             Populate(inst);
@@ -64,11 +66,8 @@ namespace TSPCsharp
             Console.ReadLine();
         }
 
-        static Instance ParseInst( String[] input)
+        static void ParseInst(Instance inst, String[] input)
         {
-            //inst will be populated and returned
-            Instance inst = new Instance();
-
             //input is equal to the args vector, every string is obtained by splitting
             //the input at each blank space
             for (int i = 0; i < input.Length; i++)
@@ -90,8 +89,6 @@ namespace TSPCsharp
             //At least the input file name and the timelimit are needed
             if (inst.InputFile == null || inst.TimeLimit == 0)
                 throw new Exception("File input name and/or timelimit are missing");
-
-            return inst;
         }
 
         static void Populate(Instance inst)

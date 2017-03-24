@@ -2,14 +2,13 @@
 using ILOG.CPLEX;
 using System.IO;
 using System.Diagnostics;
-using System.Collections.Generic;
 
 namespace TSPCsharp
 {
     class TSP
     {
         static int cntCC = 0;
-        static int cntSol = 0;
+        static int cntSol = 0; //da eliminare ----------------------------------------------------------------------
         static Process process;
 
         static public bool TSPOpt(Instance instance, Stopwatch clock)
@@ -36,8 +35,6 @@ namespace TSPCsharp
 
             //Array that stores the related component of each node
             int[] compConn = new int[instance.NNodes];
-            //Array that stores the "related component" of each link*********************
-            int[] linkCC = new int[(instance.NNodes - 1) * instance.NNodes / 2];
 
             //Setting the residual time limit for cplex, it's almost equal to instance.TStart
             MipTimelimit(cplex, instance, clock);
@@ -47,7 +44,7 @@ namespace TSPCsharp
             StreamWriter file;
 
             process = InitProcess();
-
+        
             do
             {
 
@@ -55,7 +52,7 @@ namespace TSPCsharp
                 cplex.Solve();
                 
                 //Initializing the arrays used to eliminate the subtour
-                InitCC(compConn, linkCC);
+                InitCC(compConn);
 
                 //Setting to 0 the # of related components
                 cntCC = 0;
@@ -89,7 +86,7 @@ namespace TSPCsharp
                         instance.BestSol[position] = optSol[position];
 
                         //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
-                        if (instance.BestSol[position] != 0)
+                        if (instance.BestSol[position] >= 0.5)
                         {
                             /*
                              *Current GNUPlot format is:
@@ -104,7 +101,7 @@ namespace TSPCsharp
                             file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
 
                             //Updating the model with the current subtours elimination
-                            UpdateCC(i, j, compConn, linkCC, cplex, z);
+                            UpdateCC(i, j, compConn, cplex, z);
                         }
                     }
                 }
@@ -249,27 +246,21 @@ namespace TSPCsharp
 
 
         //Initialization of the arrays used to keep track of the related components
-        static void InitCC(int[] cc, int[] lcc)
+        static void InitCC(int[] cc)
         {
             for(int i = 0; i < cc.Length; i++)
             {
                 cc[i] = i;
             }
-
-            for (int i = 0; i < lcc.Length; i++)
-            {
-                //Value never used
-                lcc[i] = -1;
-            }
         }
 
 
         //Updating the related components for the current solution
-        static void UpdateCC(int i, int j, int[] cc, int[] lcc, Cplex cplex, INumVar[] z)
+        static void UpdateCC(int i, int j, int[] cc, Cplex cplex, INumVar[] z)
         {
             if (cc[i] != cc[j])//Same related component, the latter is not closed yet
             {
-                for (int k = i + 1; k < cc.Length; k++)
+                for (int k = 0; k < cc.Length; k++)// k>i poichè i > j
                 {
                     if ((k != j) && (cc[k] == cc[j]))
                     {
@@ -278,34 +269,27 @@ namespace TSPCsharp
                     }
                 }
 
-                //tmp is used in any iteration of the next cycle
-                int tmp = zPos(i, j, cc.Length);
-
-                for (int k = 0; k < lcc.Length; k++)
-                {                    
-                    if ((k != tmp) && (lcc[k] == cc[j]))
-                    {
-                        lcc[k] = cc[i];
-                    }
-                }
-
                 //Finally also the vallue relative to the Point j are updated
                 cc[j] = cc[i];
-                lcc[zPos(i, j, cc.Length)] = cc[i];
-
             }
             else//Here the current releted component is complete and the relative subtout elimination constraint can be added to the model
             {
-                lcc[zPos(i, j, cc.Length)] = cc[i];
                 ILinearNumExpr expr = cplex.LinearNumExpr();
 
                 int cnt = 0;
 
-                for (int h = 0; h < lcc.Length; h++)
+                for (int h = 0; h < cc.Length; h++)
                 {
-                    if (lcc[h] == cc[i])
+                    if (cc[h] == cc[i])
                     {
-                        expr.AddTerm(z[h], 1);
+                        for (int k = h + 1; k < cc.Length; k++)
+                        {
+                            if (cc[k] == cc[i])
+                            {
+                                expr.AddTerm(z[zPos(h, k, cc.Length)], 1);
+                            }
+                        }
+
                         cnt++;
                     }
                 }
