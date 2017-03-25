@@ -52,7 +52,7 @@ namespace TSPCsharp
                             case "2":
                                 {
                                     Console.WriteLine("Write the % precision:");
-                                    int percentage = Convert.ToInt32(Console.ReadLine());
+                                    double percentage = Convert.ToDouble(Console.ReadLine());
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(cplex, instance, clock);
                                     //Real starting time is stored inside instance
@@ -76,7 +76,7 @@ namespace TSPCsharp
                             case "4":
                                 {
                                     Console.WriteLine("Write the % precision:");
-                                    int percentage = Convert.ToInt32(Console.ReadLine());
+                                    double percentage = Convert.ToDouble(Console.ReadLine());
                                     Console.WriteLine("Write the # of nearest edges:");
                                     int numb = Convert.ToInt32(Console.ReadLine());
                                     //Real starting time is stored inside instance
@@ -104,12 +104,250 @@ namespace TSPCsharp
 
         static void ClassicLoop(Instance instance)
         {
+            //listArray contains the nearest availeble edges for each edge
+            List < int >[] listArray = BuildSL(instance);
 
+            //INumVar is a special interface used to stare any kinf of variable compatible with cplex
+            //Building the model, z is necessary to access the variabiles via their stored names
+            INumVar[] z = BuildModelNearEdge(cplex, instance, listArray, -1);
+
+            //Allocating the correct space to store the optimal solution
+            //Only links from node i to j with i < j are considered
+            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+            //Array that stores the related component of each node
+            int[] compConn = new int[instance.NNodes];
+
+            //Creating the StreamWriter used by GNUPlot to print the solution
+            StreamWriter file;
+
+            process = InitProcess();
+
+            List<ILinearNumExpr> ccExpr = new List<ILinearNumExpr>();
+            List<int> bufferCoeffCC = new List<int>();
+
+            int typeSol = 1;
+
+            do
+            {
+
+                //Cplex solves the current model
+                cplex.Solve();
+
+                //Initializing the arrays used to eliminate the subtour
+                InitCC(compConn);
+
+                ccExpr = new List<ILinearNumExpr>();
+                bufferCoeffCC = new List<int>();
+
+                //# of solutions found ++
+                cntSol++;
+
+                //Init the StreamWriter for the current solution
+                file = new StreamWriter(instance.InputFile + ".dat", false);
+
+                //Storing the optimal value of the objective function
+                instance.ZBest = cplex.ObjValue;
+
+                //Blank line
+                cplex.Output().WriteLine();
+
+                //Printing the optimal solution and the GNUPlot input file
+                for (int i = 0; i < instance.NNodes; i++)
+                {
+                    for (int j = i + 1; j < instance.NNodes; j++)
+                    {
+
+                        //Retriving the correct index position for the current link inside z
+                        int position = zPos(i, j, instance.NNodes);
+
+                        //Reading the optimal solution for the actual link (i,j)
+                        instance.BestSol[position] = cplex.GetValue(z[position]);
+
+                        //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                        if (instance.BestSol[position] >= 0.5)
+                        {
+                            /*
+                             *Current GNUPlot format is:
+                             *-- previus link --
+                             *<Blank line>
+                             *Xi Yi <index(i)>
+                             *Xj Yj <index(j)>
+                             *<Blank line> 
+                             *-- next link --
+                            */
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+
+                            //Updating the model with the current subtours elimination
+                            UpdateCC(i, j, compConn, cplex, z, ccExpr, bufferCoeffCC);
+                        }
+                    }
+                }
+
+                if (ccExpr.Count > 1)
+                {
+                    for (int i = 0; i < ccExpr.Count; i++)
+                        cplex.AddLe(ccExpr[i], bufferCoeffCC[i] - 1);
+                }
+
+                //GNUPlot input file needs to be closed
+                file.Close();
+
+                //Accessing GNUPlot to read the file
+                if (Program.VERBOSE >= -100)
+                    PrintGNUPlot(instance.InputFile, process, typeSol);
+
+                //Blank line
+                cplex.Output().WriteLine();
+
+                //Writing the value
+                cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+
+                //Exporting the updated model
+                if (Program.VERBOSE >= -100)
+                    cplex.ExportModel(instance.InputFile + ".lp");
+
+                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
+
+            } while (ccExpr.Count > 1); //if there is more then one related components the solution is not optimal 
+
+
+            //Closing Cplex link
+            cplex.End();
+
+            //Accessing GNUPlot to read the file
+            if (Program.VERBOSE >= -100)
+                PrintGNUPlot(instance.InputFile, process, typeSol);
         }
 
-        static void PercLoop(int perc, Instance instance)
+        static void PercLoop(double perc, Instance instance)
         {
+            cplex.SetParam(Cplex.DoubleParam.EpGap, perc);
 
+            bool epGap = true;
+
+            //listArray contains the nearest availeble edges for each edge
+            List<int>[] listArray = BuildSL(instance);
+
+            //INumVar is a special interface used to stare any kinf of variable compatible with cplex
+            //Building the model, z is necessary to access the variabiles via their stored names
+            INumVar[] z = BuildModelNearEdge(cplex, instance, listArray, -1);
+
+            //Allocating the correct space to store the optimal solution
+            //Only links from node i to j with i < j are considered
+            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+            //Array that stores the related component of each node
+            int[] compConn = new int[instance.NNodes];
+
+            //Creating the StreamWriter used by GNUPlot to print the solution
+            StreamWriter file;
+
+            process = InitProcess();
+
+            List<ILinearNumExpr> ccExpr = new List<ILinearNumExpr>();
+            List<int> bufferCoeffCC = new List<int>();
+
+            int typeSol = 0;
+
+            do
+            {
+                if (ccExpr.Count == 1)
+                {
+                    cplex.SetParam(Cplex.DoubleParam.EpGap, 1e-06);
+                    epGap = false;
+                    typeSol = 1;
+                }
+
+                //Cplex solves the current model
+                cplex.Solve();
+
+                //Initializing the arrays used to eliminate the subtour
+                InitCC(compConn);
+
+                ccExpr = new List<ILinearNumExpr>();
+                bufferCoeffCC = new List<int>();
+
+                //# of solutions found ++
+                cntSol++;
+
+                //Init the StreamWriter for the current solution
+                file = new StreamWriter(instance.InputFile + ".dat", false);
+
+                //Storing the optimal value of the objective function
+                instance.ZBest = cplex.ObjValue;
+
+                //Blank line
+                cplex.Output().WriteLine();
+
+                //Printing the optimal solution and the GNUPlot input file
+                for (int i = 0; i < instance.NNodes; i++)
+                {
+                    for (int j = i + 1; j < instance.NNodes; j++)
+                    {
+
+                        //Retriving the correct index position for the current link inside z
+                        int position = zPos(i, j, instance.NNodes);
+
+                        //Reading the optimal solution for the actual link (i,j)
+                        instance.BestSol[position] = cplex.GetValue(z[position]);
+
+                        //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                        if (instance.BestSol[position] >= 0.5)
+                        {
+                            /*
+                             *Current GNUPlot format is:
+                             *-- previus link --
+                             *<Blank line>
+                             *Xi Yi <index(i)>
+                             *Xj Yj <index(j)>
+                             *<Blank line> 
+                             *-- next link --
+                            */
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+
+                            //Updating the model with the current subtours elimination
+                            UpdateCC(i, j, compConn, cplex, z, ccExpr, bufferCoeffCC);
+                        }
+                    }
+                }
+
+                if (ccExpr.Count > 1)
+                {
+                    for (int i = 0; i < ccExpr.Count; i++)
+                        cplex.AddLe(ccExpr[i], bufferCoeffCC[i] - 1);
+                }
+
+                //GNUPlot input file needs to be closed
+                file.Close();
+
+                //Accessing GNUPlot to read the file
+                if (Program.VERBOSE >= -100)
+                    PrintGNUPlot(instance.InputFile, process, typeSol);
+
+                //Blank line
+                cplex.Output().WriteLine();
+
+                //Writing the value
+                cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+
+                //Exporting the updated model
+                if (Program.VERBOSE >= -100)
+                    cplex.ExportModel(instance.InputFile + ".lp");
+
+                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
+
+            } while (ccExpr.Count > 1 || epGap); //if there is more then one related components the solution is not optimal 
+
+
+            //Closing Cplex link
+            cplex.End();
+
+            //Accessing GNUPlot to read the file
+            if (Program.VERBOSE >= -100)
+                PrintGNUPlot(instance.InputFile, process, typeSol);
         }
 
         static void NearLoop(int numb, Instance instance)
@@ -239,9 +477,137 @@ namespace TSPCsharp
                 PrintGNUPlot(instance.InputFile, process, typeSol);
         }
 
-        static void HLoop(int perc, int numb, Instance instance)
+        static void HLoop(double perc, int numb, Instance instance)
         {
+            cplex.SetParam(Cplex.DoubleParam.EpGap, perc);
 
+            bool epGap = true;
+
+            //listArray contains the nearest availeble edges for each edge 
+            List<int>[] listArray = BuildSL(instance);
+
+            //INumVar is a special interface used to stare any kinf of variable compatible with cplex
+            //Building the model, z is necessary to access the variabiles via their stored names
+            INumVar[] z = BuildModelNearEdge(cplex, instance, listArray, numb);
+
+            //Allocating the correct space to store the optimal solution
+            //Only links from node i to j with i < j are considered
+            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+            //Array that stores the related component of each node
+            int[] compConn = new int[instance.NNodes];
+
+            //Creating the StreamWriter used by GNUPlot to print the solution
+            StreamWriter file;
+
+            process = InitProcess();
+
+            bool allEdges = false;
+
+            List<ILinearNumExpr> ccExpr = new List<ILinearNumExpr>();
+            List<int> bufferCoeffCC = new List<int>();
+
+            int typeSol = 0;
+
+            do
+            {
+                if (ccExpr.Count == 1)
+                {
+                    ResetVariables(z);
+                    allEdges = true;
+                    cplex.SetParam(Cplex.DoubleParam.EpGap, 1e-06);
+                    epGap = false;
+                    typeSol = 1;
+                }
+
+                //Cplex solves the current model
+                cplex.Solve();
+
+                //Initializing the arrays used to eliminate the subtour
+                InitCC(compConn);
+
+                ccExpr = new List<ILinearNumExpr>();
+                bufferCoeffCC = new List<int>();
+
+                //# of solutions found ++
+                cntSol++;
+
+                //Init the StreamWriter for the current solution
+                file = new StreamWriter(instance.InputFile + ".dat", false);
+
+                //Storing the optimal value of the objective function
+                instance.ZBest = cplex.ObjValue;
+
+                //Blank line
+                cplex.Output().WriteLine();
+
+                //Printing the optimal solution and the GNUPlot input file
+                for (int i = 0; i < instance.NNodes; i++)
+                {
+                    for (int j = i + 1; j < instance.NNodes; j++)
+                    {
+
+                        //Retriving the correct index position for the current link inside z
+                        int position = zPos(i, j, instance.NNodes);
+
+                        //Reading the optimal solution for the actual link (i,j)
+                        instance.BestSol[position] = cplex.GetValue(z[position]);
+
+                        //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                        if (instance.BestSol[position] >= 0.5)
+                        {
+                            /*
+                             *Current GNUPlot format is:
+                             *-- previus link --
+                             *<Blank line>
+                             *Xi Yi <index(i)>
+                             *Xj Yj <index(j)>
+                             *<Blank line> 
+                             *-- next link --
+                            */
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+
+                            //Updating the model with the current subtours elimination
+                            UpdateCC(i, j, compConn, cplex, z, ccExpr, bufferCoeffCC);
+                        }
+                    }
+                }
+
+                if (ccExpr.Count > 1)
+                {
+                    for (int i = 0; i < ccExpr.Count; i++)
+                        cplex.AddLe(ccExpr[i], bufferCoeffCC[i] - 1);
+                }
+
+                //GNUPlot input file needs to be closed
+                file.Close();
+
+                //Accessing GNUPlot to read the file
+                if (Program.VERBOSE >= -100)
+                    PrintGNUPlot(instance.InputFile, process, typeSol);
+
+                //Blank line
+                cplex.Output().WriteLine();
+
+                //Writing the value
+                cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+
+                //Exporting the updated model
+                if (Program.VERBOSE >= -100)
+                    cplex.ExportModel(instance.InputFile + ".lp");
+
+                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
+
+            } while (ccExpr.Count > 1 || allEdges == false || epGap == true); //if there is more then one related components the solution is not optimal 
+
+
+            //Closing Cplex link
+            cplex.End();
+
+            //Accessing GNUPlot to read the file
+            if (Program.VERBOSE >= -100)
+                PrintGNUPlot(instance.InputFile, process, typeSol);
         }
 
         static void ResetVariables(INumVar[] z)
@@ -302,16 +668,30 @@ namespace TSPCsharp
             //Populating objective function
             for (int i = 0; i < instance.NNodes; i++)
             {
-                //Only links (i,j) with i < j are correct
-                for (int j = i + 1; j < instance.NNodes; j++)
+                if (n >= 0)
                 {
-                    //zPos return the correct position where to store the variable corresponding to the actual link (i,j)
-                    int position = zPos(i, j, instance.NNodes);
-                    if ((listArray[i]).IndexOf(j) < n)
+                    //Only links (i,j) with i < j are correct
+                    for (int j = i + 1; j < instance.NNodes; j++)
+                    {
+                        //zPos return the correct position where to store the variable corresponding to the actual link (i,j)
+                        int position = zPos(i, j, instance.NNodes);
+                        if ((listArray[i]).IndexOf(j) < n)
+                            z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
+                        else
+                            z[position] = cplex.NumVar(0, 0, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
+                        expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                    }
+                }
+                else
+                {
+                    //Only links (i,j) with i < j are correct
+                    for (int j = i + 1; j < instance.NNodes; j++)
+                    {
+                        //zPos return the correct position where to store the variable corresponding to the actual link (i,j)
+                        int position = zPos(i, j, instance.NNodes);
                         z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
-                    else
-                        z[position] = cplex.NumVar(0, 0, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
-                    expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                        expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                    }
                 }
             }
 
