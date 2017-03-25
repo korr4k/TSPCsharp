@@ -23,6 +23,10 @@ namespace TSPCsharp
             cplex = new Cplex();
             cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Dynamic);
 
+            //Real starting time is stored inside instance
+            instance.TStart = clock.ElapsedMilliseconds / 1000.0;
+
+            clock.Stop();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nPress anything to continue, attention: the display will be cleared");
             Console.ReadLine();
@@ -41,8 +45,7 @@ namespace TSPCsharp
                         {
                             case "1":
                                 {
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
+                                    clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(cplex, instance, clock);
                                     ClassicLoop(instance);
@@ -53,6 +56,7 @@ namespace TSPCsharp
                                 {
                                     Console.WriteLine("Write the % precision:");
                                     double percentage = Convert.ToDouble(Console.ReadLine());
+                                    clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(cplex, instance, clock);
                                     //Real starting time is stored inside instance
@@ -65,6 +69,7 @@ namespace TSPCsharp
                                 {
                                     Console.WriteLine("Write the # of nearest edges:");
                                     int numb = Convert.ToInt32(Console.ReadLine());
+                                    clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(cplex, instance, clock);
                                     //Real starting time is stored inside instance
@@ -79,6 +84,7 @@ namespace TSPCsharp
                                     double percentage = Convert.ToDouble(Console.ReadLine());
                                     Console.WriteLine("Write the # of nearest edges:");
                                     int numb = Convert.ToInt32(Console.ReadLine());
+                                    clock.Start();
                                     //Real starting time is stored inside instance
                                     instance.TStart = clock.ElapsedMilliseconds / 1000.0;
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
@@ -94,7 +100,10 @@ namespace TSPCsharp
                     }
 
                 case "2":
-                    break;
+                    {
+                        clock.Start();
+                        break;
+                    }
 
                 default:
                     throw new System.Exception("Bad argument");
