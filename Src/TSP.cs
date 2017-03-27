@@ -2,7 +2,6 @@
 using ILOG.CPLEX;
 using System.IO;
 using System.Diagnostics;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -11,7 +10,6 @@ namespace TSPCsharp
 {
     class TSP
     {
-        static int cntSol = 0; //da eliminare ----------------------------------------------------------------------
         static Process process;
         static int solveMethod; //0 loop, 1 b&c
         static Cplex cplex;
@@ -28,19 +26,19 @@ namespace TSPCsharp
 
             clock.Stop();
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\nPress anything to continue, attention: the display will be cleared");
+            Console.Write("\nPress enter to continue, attention: the display will be cleared");
             Console.ReadLine();
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Select how you want to procede:\nPress 1 to use the classic loop method, 2 to use the optimal branch & cut\n");
+            Console.Write("Insert 1 to use the classic loop method or 2 to use the optimal branch & cut: ");
 
             switch (Console.ReadLine())
             {
                 case "1":
                     {
                         solveMethod = 1;
-                        Console.WriteLine("Press 1 to not use any heuristic method, 2 to use the % precion method, 3 to use only a # of the nearest edges, 4 to use both 2 and 3\n");
+                        Console.Write("\nPress 1 to not use any heuristic method, 2 to use the % precion method, 3 to use only a # of the nearest edges, 4 to use both 2 and 3: ");
                         switch (Console.ReadLine())
                         {
                             case "1":
@@ -54,7 +52,7 @@ namespace TSPCsharp
 
                             case "2":
                                 {
-                                    Console.WriteLine("Write the % precision:");
+                                    Console.Write("\nWrite the % precision: ");
                                     double percentage = Convert.ToDouble(Console.ReadLine());
                                     clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
@@ -67,7 +65,7 @@ namespace TSPCsharp
 
                             case "3":
                                 {
-                                    Console.WriteLine("Write the # of nearest edges:");
+                                    Console.Write("\nWrite the # of nearest edges: ");
                                     int numb = Convert.ToInt32(Console.ReadLine());
                                     clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
@@ -80,9 +78,9 @@ namespace TSPCsharp
 
                             case "4":
                                 {
-                                    Console.WriteLine("Write the % precision:");
+                                    Console.Write("\nWrite the % precision: ");
                                     double percentage = Convert.ToDouble(Console.ReadLine());
-                                    Console.WriteLine("Write the # of nearest edges:");
+                                    Console.Write("Write the # of nearest edges: ");
                                     int numb = Convert.ToInt32(Console.ReadLine());
                                     clock.Start();
                                     //Real starting time is stored inside instance
@@ -131,6 +129,7 @@ namespace TSPCsharp
             StreamWriter file;
 
             process = InitProcess();
+            process.StandardInput.WriteLine("gnuplot");
 
             List<ILinearNumExpr> ccExpr = new List<ILinearNumExpr>();
             List<int> bufferCoeffCC = new List<int>();
@@ -148,9 +147,6 @@ namespace TSPCsharp
 
                 ccExpr = new List<ILinearNumExpr>();
                 bufferCoeffCC = new List<int>();
-
-                //# of solutions found ++
-                cntSol++;
 
                 //Init the StreamWriter for the current solution
                 file = new StreamWriter(instance.InputFile + ".dat", false);
@@ -216,8 +212,6 @@ namespace TSPCsharp
                 //Exporting the updated model
                 if (Program.VERBOSE >= -100)
                     cplex.ExportModel(instance.InputFile + ".lp");
-
-                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
 
             } while (ccExpr.Count > 1); //if there is more then one related components the solution is not optimal 
 
@@ -254,6 +248,7 @@ namespace TSPCsharp
             StreamWriter file;
 
             process = InitProcess();
+            process.StandardInput.WriteLine("gnuplot");
 
             List<ILinearNumExpr> ccExpr = new List<ILinearNumExpr>();
             List<int> bufferCoeffCC = new List<int>();
@@ -277,9 +272,6 @@ namespace TSPCsharp
 
                 ccExpr = new List<ILinearNumExpr>();
                 bufferCoeffCC = new List<int>();
-
-                //# of solutions found ++
-                cntSol++;
 
                 //Init the StreamWriter for the current solution
                 file = new StreamWriter(instance.InputFile + ".dat", false);
@@ -345,8 +337,6 @@ namespace TSPCsharp
                 //Exporting the updated model
                 if (Program.VERBOSE >= -100)
                     cplex.ExportModel(instance.InputFile + ".lp");
-
-                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
 
             } while (ccExpr.Count > 1 || epGap); //if there is more then one related components the solution is not optimal 
 
@@ -379,6 +369,7 @@ namespace TSPCsharp
             StreamWriter file;
 
             process = InitProcess();
+            process.StandardInput.WriteLine("gnuplot");
 
             bool allEdges = false;
 
@@ -404,9 +395,6 @@ namespace TSPCsharp
 
                 ccExpr = new List<ILinearNumExpr>();
                 bufferCoeffCC = new List<int>();
-
-                //# of solutions found ++
-                cntSol++;
 
                 //Init the StreamWriter for the current solution
                 file = new StreamWriter(instance.InputFile + ".dat", false);
@@ -472,8 +460,6 @@ namespace TSPCsharp
                 //Exporting the updated model
                 if (Program.VERBOSE >= -100)
                     cplex.ExportModel(instance.InputFile + ".lp");
-
-                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
 
             } while (ccExpr.Count > 1 || allEdges == false); //if there is more then one related components the solution is not optimal 
 
@@ -510,6 +496,7 @@ namespace TSPCsharp
             StreamWriter file;
 
             process = InitProcess();
+            process.StandardInput.WriteLine("gnuplot");
 
             bool allEdges = false;
 
@@ -537,9 +524,6 @@ namespace TSPCsharp
 
                 ccExpr = new List<ILinearNumExpr>();
                 bufferCoeffCC = new List<int>();
-
-                //# of solutions found ++
-                cntSol++;
 
                 //Init the StreamWriter for the current solution
                 file = new StreamWriter(instance.InputFile + ".dat", false);
@@ -605,8 +589,6 @@ namespace TSPCsharp
                 //Exporting the updated model
                 if (Program.VERBOSE >= -100)
                     cplex.ExportModel(instance.InputFile + ".lp");
-
-                //cplex.ExportModel(instance.InputFile + cntSol + ".lp");
 
             } while (ccExpr.Count > 1 || allEdges == false || epGap == true); //if there is more then one related components the solution is not optimal 
 
@@ -746,9 +728,6 @@ namespace TSPCsharp
                  *set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5
                  *plot '<name_current_solution>.dat' with linespoints ls 1 notitle, '<name_current_solution>.dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle"
                  */
-
-                if (cntSol == 1)
-                    process.StandardInput.WriteLine("gnuplot");
 
                 if(typeSol == 0)
                     process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
