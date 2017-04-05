@@ -8,8 +8,7 @@ namespace TSPCsharp
     {
 
         //Setting constant value, to access them use Program.<name>
-        public const int VERBOSE = 50;
-        //public const double XSMALL = 1E-5;
+        public const int VERBOSE = 5;
         public const double EPSILON = 1E-9;
         public const int TICKS_PER_SECOND = 1000;
 
@@ -22,7 +21,7 @@ namespace TSPCsharp
                 throw new System.Exception("Input args should be at least 2");
 
             //Writing the inpute parameters
-            if (VERBOSE >= 2)
+            if (VERBOSE >= 9)
             {
                 Console.Write("Input parameters: ");
                 for (int i = 0; i < args.Length; i++) 
@@ -110,7 +109,7 @@ namespace TSPCsharp
                         //Content of those lines are simply printed 
                         if (line.StartsWith("NAME") || line.StartsWith("COMMENT") || line.StartsWith("TYPE"))
                         {
-                            if (VERBOSE >= 1) Console.WriteLine(line);
+                            if (VERBOSE >= 5) Console.WriteLine(line);
                             continue;
                         }
 
@@ -121,7 +120,7 @@ namespace TSPCsharp
                             inst.NNodes = Convert.ToInt32(line.Remove(0, line.IndexOf(':') + 2));
                             //Allocating the space for the points that will be read
                             inst.Coord = new Point[inst.NNodes];
-                            if (VERBOSE >= 1)
+                            if (VERBOSE >= 5)
                                 Console.WriteLine(line);
                             continue;
                         }
@@ -134,7 +133,7 @@ namespace TSPCsharp
                                 throw new System.Exception("Format error:  only EDGE_WEIGHT_TYPE == EUC_2D || ATT implemented so far!!!!!!");
                             //Storing the edge type is necessary to correctly evaluete the distance between two points
                             inst.EdgeType = tmp;
-                            if (VERBOSE >= 1)
+                            if (VERBOSE >= 5)
                                 Console.WriteLine(line);
                             continue;
                         }
@@ -144,7 +143,7 @@ namespace TSPCsharp
                         {
                             if (inst.NNodes <= 0)
                                 throw new System.Exception("DIMENSION section should appear before NODE_COORD_SECTION section");
-                            if (VERBOSE >= 1)
+                            if (VERBOSE >= 5)
                                 Console.WriteLine(line);
                             readingCoordinates = true;
                             continue;
@@ -173,6 +172,17 @@ namespace TSPCsharp
                                 throw new System.Exception("Unknown node in NODE_COORD_SECTION section");
                             //Vectors starts at index 0 not 1, it is necessary to perform a -1
                             inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1]), Convert.ToDouble(elements[2]));
+
+                            //Storing the smallest and biggest x and y coordinates
+                            if (Convert.ToDouble(elements[1]) < inst.XMin)
+                                inst.XMin = Convert.ToDouble(elements[1]);
+                            if (Convert.ToDouble(elements[1]) > inst.XMax)
+                                inst.XMax = Convert.ToDouble(elements[1]);
+                            if (Convert.ToDouble(elements[2]) < inst.YMin)
+                                inst.YMin = Convert.ToDouble(elements[2]);
+                            if (Convert.ToDouble(elements[2]) > inst.YMax)
+                                inst.YMax = Convert.ToDouble(elements[2]);
+
                             continue;
                         }
 

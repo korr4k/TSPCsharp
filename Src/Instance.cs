@@ -31,6 +31,12 @@ namespace TSPCsharp
         //int fStart;
         int zStart;
 
+        // parameters used to build GNUPlot panel
+        double xMin = Double.MaxValue;
+        double xMax = Double.MinValue;
+        double yMin = Double.MaxValue;
+        double yMax = Double.MinValue;
+
 
         //get and set methods for all parameters:
 
@@ -174,6 +180,58 @@ namespace TSPCsharp
             set
             {
                 zStart = value;
+            }
+        }
+
+        public double XMin
+        {
+            get
+            {
+                return xMin;
+            }
+
+            set
+            {
+                xMin = value;
+            }
+        }
+
+        public double XMax
+        {
+            get
+            {
+                return xMax;
+            }
+
+            set
+            {
+                xMax = value;
+            }
+        }
+
+        public double YMin
+        {
+            get
+            {
+                return yMin;
+            }
+
+            set
+            {
+                yMin = value;
+            }
+        }
+
+        public double YMax
+        {
+            get
+            {
+                return yMax;
+            }
+
+            set
+            {
+                yMax = value;
             }
         }
 

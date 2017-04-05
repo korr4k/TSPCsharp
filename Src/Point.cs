@@ -51,7 +51,7 @@ namespace TSPCsharp
 
             if (pointType == "EUC_2D")
             {
-                //Cailing is used to round at the next int value
+                //Ceiling is used to round at the next int value
                 return Math.Ceiling(Math.Sqrt(xD * xD + yD * yD));
             }
             else if (pointType == "ATT")

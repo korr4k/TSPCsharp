@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using System.Management;
+using System.Windows.Forms;
 
 namespace TSPCsharp
 {
@@ -31,18 +31,19 @@ namespace TSPCsharp
         static List<int>[] listArray;
         //compConn stores the related component of each node
         static int[] compConn;
-        //Buffers used 
+        //Buffers used, ccExpr buffers the cuts for the loop method, buffeCoeffCC buffers the cuts known term
         static List<ILinearNumExpr> ccExpr;
         static List<int> bufferCoeffCC;
-        //If 0 the solution used heuristics methods, otherwhise it is 1
+        //If 0 the solution used heuristics methods, otherwhise it is 1, this parameter is used to set print GNUPlot graphs in different colors
         static int typeSol = 1;
 
 
+        //Define the Lazy Callback
         public class TSPLazyConsCallback : Cplex.LazyConstraintCallback
         {
             public override void Main()
             {
-                //Buffers used 
+                //Init buffers, due to multithreading, using global buffers is incorrect
                 List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
                 List<int> bufferCoeffCCLC = new List<int>(); ;
 
@@ -53,10 +54,16 @@ namespace TSPCsharp
                 //To call GetValues for each value in z is a lot more expensive for unknown reasons
                 double[] actualZ = GetValues(z);
 
+                //Node's is that generated the callback, used to create an unique nome for the GNUPlot files
                 string nodeId = GetNodeId().ToString();
 
-                //Init the StreamWriter for the current solution
-                StreamWriter fileLC = new StreamWriter(instance.InputFile + "_" + nodeId + ".dat", false);
+                StreamWriter fileLC;
+
+                if (Program.VERBOSE >= -1)
+                {
+                    //Init the StreamWriter for the current solution
+                    fileLC = new StreamWriter(instance.InputFile + "_" + nodeId + ".dat", false);
+                }
 
                 for (int i = 0; i < instance.NNodes; i++)
                 {
@@ -71,20 +78,26 @@ namespace TSPCsharp
                             //Updating the model with the current subtours elimination
                             BuildCC(i, j, ccExprLC, bufferCoeffCCLC, compConnLC);
 
-
-                            fileLC.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                            fileLC.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            if (Program.VERBOSE >= -1)
+                            {
+                                fileLC.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                                fileLC.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            }
                         }
                     }
                 }
 
-                //GNUPlot input file needs to be closed
-                fileLC.Close();
+                if (Program.VERBOSE >= -1)
+                {
+                    //GNUPlot input file needs to be closed
+                    fileLC.Close();
+                }
 
                 //Accessing GNUPlot to read the file
-                if (Program.VERBOSE >= -100)
+                if (Program.VERBOSE >= -1)
                     PrintGNUPlot(instance.InputFile + "_" + nodeId, typeSol);
 
+                //cuts will stores the user's cut
                 IRange[] cuts = new IRange[ccExprLC.Count];
 
                 if (cuts.Length > 1)
@@ -109,11 +122,13 @@ namespace TSPCsharp
                         //     The cut is added to the relaxation, but can be purged later if CPLEX determines
                         //     that the cut is ineffective.
 
+                        //Adding global cuts to cplex's model
                         Add(cuts[i], 1);
                     }                    
                 }
             }
 
+            //Same as
             internal void BuildCC(int i, int j, List<ILinearNumExpr> ccExprLC, List<int> bufferCoeffCCLC, int[] compConnLC)
             {
                 if (compConnLC[i] != compConnLC[j])//Same related component, the latter is not closed yet
@@ -160,6 +175,7 @@ namespace TSPCsharp
         }
 
 
+        //Support class for BuildSL()
         public class itemList
         {
             public itemList(double d, int i)
@@ -173,15 +189,15 @@ namespace TSPCsharp
         }
 
 
+        //"Main" method
         static public bool TSPOpt(Instance inst, Stopwatch clock)
         {
-
+            //cl is the global variable used TSP.cs
             cl = clock;
 
             //Cplex is the official class offered by IBM inside the API to use cplex
             //algorithms with C#
             cplex = new Cplex();
-            cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Dynamic);
 
             instance = inst;
 
@@ -206,9 +222,11 @@ namespace TSPCsharp
                         {
                             case "1":
                                 {
+                                    //Clock restart
                                     clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(clock);
+                                    //Calling the proper resolution method
                                     Loop(-1, -1);
                                     break;
                                 }
@@ -216,12 +234,13 @@ namespace TSPCsharp
                             case "2":
                                 {
                                     Console.Write("\nWrite the % precision: ");
+                                    //storing the percentage selected
                                     double percentage = Convert.ToDouble(Console.ReadLine());
+                                    //Clock restart
                                     clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(clock);
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
+                                    //Calling the proper resolution method
                                     Loop(percentage, -1);
                                     break;
                                 }
@@ -229,12 +248,13 @@ namespace TSPCsharp
                             case "3":
                                 {
                                     Console.Write("\nWrite the # of nearest edges: ");
+                                    //number of nearest edges selected
                                     int numb = Convert.ToInt32(Console.ReadLine());
+                                    //Clock restart
                                     clock.Start();
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(clock);
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
+                                    //Calling the proper resolution method
                                     Loop(-1, numb);
                                     break;
                                 }
@@ -242,14 +262,15 @@ namespace TSPCsharp
                             case "4":
                                 {
                                     Console.Write("\nWrite the % precision: ");
+                                    //storing the percentage selected
                                     double percentage = Convert.ToDouble(Console.ReadLine());
                                     Console.Write("Write the # of nearest edges: ");
+                                    //number of nearest edges selected
                                     int numb = Convert.ToInt32(Console.ReadLine());
                                     clock.Start();
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
                                     //Setting the residual time limit for cplex, it's almost equal to instance.TStart
                                     MipTimelimit(clock);
+                                    //Calling the proper resolution method
                                     Loop(percentage, numb);
                                     break;
                                 }
@@ -262,69 +283,12 @@ namespace TSPCsharp
 
                 case "2":
                     {
-                        Console.Write("\nInsert 1 to not use any heuristic method, 2 to use the % precion method, 3 to use only a # of the nearest edges, 4 to use both previous options: ");
-                        switch (Console.ReadLine())
-                        {
-                            case "1":
-                                {
-                                    //Restarting the clock
-                                    clock.Start();
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
-                                    CallBackMethod(-1, -1);
-                                    break;
-                                }
-
-                            case "2":
-                                {
-                                    Console.Write("\nWrite the % precision: ");
-                                    double percentage = Convert.ToDouble(Console.ReadLine());
-                                    clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
-                                    CallBackMethod(percentage, -1);
-                                    break;
-                                }
-
-                            case "3":
-                                {
-                                    Console.Write("\nWrite the # of nearest edges: ");
-                                    int numb = Convert.ToInt32(Console.ReadLine());
-                                    clock.Start();
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
-                                    CallBackMethod(-1, numb);
-                                    break;
-                                }
-
-                            case "4":
-                                {
-                                    Console.Write("\nWrite the % precision: ");
-                                    double percentage = Convert.ToDouble(Console.ReadLine());
-                                    Console.Write("Write the # of nearest edges: ");
-                                    int numb = Convert.ToInt32(Console.ReadLine());
-                                    clock.Start();
-                                    //Real starting time is stored inside instance
-                                    instance.TStart = clock.ElapsedMilliseconds / 1000.0;
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
-                                    CallBackMethod(percentage, numb);
-                                    break;
-                                }
-
-                            default:
-                                throw new System.Exception("Bad argument");
-                        }
-
-                        
+                        //Restarting the clock
+                        clock.Start();
+                        //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                        MipTimelimit(clock);
+                        //Calling the proper resolution method
+                        CallBackMethod();
                         break;
                     }
 
@@ -334,15 +298,17 @@ namespace TSPCsharp
             return true;
         }
 
-
+        //Handle the resolution method without callbacks
         static void Loop(double perc, int numb)
         {
-
+            //epGap is false when EpGap parameter is at default
             bool epGap = false;
 
+            //allEdges is true when all possible links have their upper bound to 1
             bool allEdges = true;
 
-            if (perc <= 1 && perc >= 0)
+            //Setting EpGap if a valid percentage is specified
+            if (perc >=0 && perc <= 1)
             {
                 cplex.SetParam(Cplex.DoubleParam.EpGap, perc);
 
@@ -351,6 +317,7 @@ namespace TSPCsharp
                 typeSol = 0;
             }
 
+            //numb is equal to -1 when all links upper bound are 1
             if (numb != -1)
             {
                 allEdges = false;
@@ -358,21 +325,25 @@ namespace TSPCsharp
                 typeSol = 0;
             }
 
+            //Building the maximum # of links that involves each node
             z = BuildModel(numb);
 
             //Allocating the correct space to store the optimal solution
             //Only links from node i to j with i < j are considered
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
+            //Init buffers
             compConn = new int[instance.NNodes];
-
-            process = InitProcess();
-
             ccExpr = new List<ILinearNumExpr>();
             bufferCoeffCC = new List<int>();
 
+            //Initialization of the process that handles GNUPlot
+            process = InitProcess();
+
+
             do
             {
+                //When only one related component is found and ehuristics methods are active they are disabled
                 if (ccExpr.Count == 1)
                 {
                     epGap = false;
@@ -437,6 +408,7 @@ namespace TSPCsharp
                     }
                 }
 
+                //Only when more than one related components are found they are added to the model
                 if (ccExpr.Count > 1)
                 {
                     for (int i = 0; i < ccExpr.Count; i++)
@@ -447,7 +419,7 @@ namespace TSPCsharp
                 file.Close();
 
                 //Accessing GNUPlot to read the file
-                if (Program.VERBOSE >= -100)
+                if (Program.VERBOSE >= -1)
                     PrintGNUPlot(instance.InputFile, typeSol);
 
                 //Blank line
@@ -457,7 +429,7 @@ namespace TSPCsharp
                 cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
 
                 //Exporting the updated model
-                if (Program.VERBOSE >= -100)
+                if (Program.VERBOSE >= -1)
                     cplex.ExportModel(instance.InputFile + ".lp");
 
             } while (ccExpr.Count > 1 || epGap || !allEdges); //if there is more then one related components the solution is not optimal 
@@ -467,65 +439,37 @@ namespace TSPCsharp
             cplex.End();
 
             //Accessing GNUPlot to read the file
-            if (Program.VERBOSE >= -100)
+            if (Program.VERBOSE >= -1)
                 PrintGNUPlot(instance.InputFile, typeSol);
         }
 
-        static void CallBackMethod(double perc, int numb)
+
+        //Handle the callback resolution method
+        static void CallBackMethod()
         {
-            bool epGap = false;
+            //-1 means that all links are enabled
+            z = BuildModel(-1);
 
-            bool allEdges = true;
-
-            if (perc <= 1 && perc >= 0)
-            {
-                cplex.SetParam(Cplex.DoubleParam.EpGap, perc);
-
-                epGap = true;
-
-                typeSol = 0;
-            }
-
-            if (numb != -1)
-            {
-                allEdges = false;
-
-                typeSol = 0;
-            }
-
-            z = BuildModel(numb);
-
+            //Initializing the vector
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
+            //Creation and initialization of the process that will handle GNUPlot
             process = InitProcess();
-
-            // Turn off presolve to prevent it from completely solving the model
-            // before entering the actual LP optimizer
-            cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
 
             // Turn on traditional search for use with control callbacks
             cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Auto);
 
-            cplex.SetParam(Cplex.Param.Threads, Environment.ProcessorCount);
+            //0 physicals, 1 virtuals
+            int coreCount = RetriveCoreNumber(0);
 
+            //Setting cplex # of threads
+            cplex.SetParam(Cplex.Param.Threads, coreCount);
+
+            //Adding lazycallback
             cplex.Use(new TSPLazyConsCallback());
 
+            //Solving
             cplex.Solve();
-
-            if (epGap || !allEdges)
-            {
-                epGap = false;
-
-                allEdges = true;
-
-                cplex.SetParam(Cplex.DoubleParam.EpGap, 1e-06);
-
-                ResetVariables(z);
-
-                typeSol = 1;
-
-                cplex.Solve();
-            }
 
             //Init the StreamWriter for the current solution
             file = new StreamWriter(instance.InputFile + ".dat", false);
@@ -570,7 +514,7 @@ namespace TSPCsharp
             file.Close();
 
             //Accessing GNUPlot to read the file
-            if (Program.VERBOSE >= -100)
+            if (Program.VERBOSE >= -1)
                 PrintGNUPlot(instance.InputFile, typeSol);
 
             //Blank line
@@ -580,20 +524,23 @@ namespace TSPCsharp
             cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
 
             //Exporting the updated model
-            if (Program.VERBOSE >= -100)
+            if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
+
+            
         }
 
-
+        //Setting Upper Bounds of each cplex model's variable to 1
         static void ResetVariables(INumVar[] z)
         {
             for (int i = 0; i < z.Length; i++)
                 z[i].UB = 1;
         }
 
-
+        //Computing the nearest edges for each node
         static List<int>[] BuildSL()
         {
+            //SL and L stores the information regarding the nearest edges for each node 
             List<itemList>[] SL = new List<itemList>[instance.NNodes];
             List<int>[] L = new List<int>[instance.NNodes];
 
@@ -603,11 +550,14 @@ namespace TSPCsharp
 
                 for (int j = i + 1; j < SL.Length; j++)
                 {
+                    //Simply adding each possible links with it's distance
                     if (i != j)
                         SL[i].Add(new itemList(Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType), j));
                 }
 
+                //Sorting the list
                 SL[i] = SL[i].OrderBy(itemList => itemList.dist).ToList<itemList>();
+                //Only the index of the nearest nodes are relevants
                 L[i] = SL[i].Select(itemList => itemList.index).ToList<int>();
             }
 
@@ -619,9 +569,11 @@ namespace TSPCsharp
         static INumVar[] BuildModel(int n)
         {
 
+            //When n is equal to -1 all links have their upper bound to 1, listArray is not needed
             if (n != -1)
                 listArray = BuildSL();
 
+            //Init the model's variables
             INumVar[] z = new INumVar[(instance.NNodes - 1) * instance.NNodes / 2];
 
             /*
@@ -685,7 +637,7 @@ namespace TSPCsharp
             }
 
             //Printing the complete model inside the file <name_file.tsp.lp>
-            if (Program.VERBOSE >= -100)
+            if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
 
             return z;
@@ -696,21 +648,29 @@ namespace TSPCsharp
         //Print for GNUPlot
         static void PrintGNUPlot(string name, int typeSol)
         {
-            if (process != null)
+            //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
+            if (typeSol == 0)
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+            else if (typeSol == 1)
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+        }
+
+        //Returns physical or virtual cores of the pc
+        static int RetriveCoreNumber(int type)
+        {
+            if (type == 0)
             {
-                /*
-                 *Writing in the prompt:
-                 *gnuplot
-                 *set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5
-                 *plot '<name_current_solution>.dat' with linespoints ls 1 notitle, '<name_current_solution>.dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle"
-                 */
+                int coreCount = 0;
 
-                if(typeSol == 0)
-                    process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
-                else if(typeSol == 1)
-                    process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 2 pt 7 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+                foreach (var item in new System.Management.ManagementObjectSearcher("Select NumberOfCores from Win32_Processor").Get())
+                {
+                    coreCount += int.Parse(item["NumberOfCores"].ToString());
+                }
 
+                return coreCount;
             }
+            else
+                return Environment.ProcessorCount;
         }
 
 
@@ -772,16 +732,21 @@ namespace TSPCsharp
             {
                 ILinearNumExpr expr = cplex.LinearNumExpr();
 
+                //cnt stores the # of nodes of the current related components
                 int cnt = 0;
 
                 for (int h = 0; h < compConn.Length; h++)
                 {
+                    //Only nodes of the current related components are considered
                     if (compConn[h] == compConn[i])
                     {
+                        //Each link involving the node with index h is analized
                         for (int k = h + 1; k < compConn.Length; k++)
                         {
+                            //Testing if the link is valid
                             if (compConn[k] == compConn[i])
                             {
+                                //Adding the link to the expression with coefficient 1
                                 expr.AddTerm(z[zPos(h, k, compConn.Length)], 1);
                             }
                         }
@@ -790,11 +755,13 @@ namespace TSPCsharp
                     }
                 }
 
+                //Adding the objects to the buffers
                 ccExpr.Add(expr);
                 bufferCoeffCC.Add(cnt);                
             }
         }
 
+        //Creation of the process used to interect with GNUPlot
         static Process InitProcess ()
         {
             //Setting values to open Prompt
@@ -806,8 +773,11 @@ namespace TSPCsharp
             //Executing the Prompt
             Process process = Process.Start(processStartInfo);
 
+            Object Width = SystemInformation.VirtualScreen.Width;
+            Object Height = SystemInformation.VirtualScreen.Height;
+
             //Enabling GNUPlot commands
-            process.StandardInput.WriteLine("gnuplot");
+            process.StandardInput.WriteLine("gnuplot\nset terminal wxt size {0},{1}\nset lmargin at screen 0.05\nset rmargin at screen 0.95\nset bmargin at screen 0.1\nset tmargin at screen 0.9\nset xrange [{2}:{3}]\nset yrange [{4}:{5}]", Convert.ToDouble(Width.ToString()) - 100, Convert.ToDouble(Height.ToString()) - 100, instance.XMin, instance.XMax, instance.YMin, instance.YMax);
 
             return process;
         }
