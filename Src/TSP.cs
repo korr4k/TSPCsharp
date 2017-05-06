@@ -179,6 +179,7 @@ namespace TSPCsharp
         static double distHeuristic;
         static int[] incumbentZHeuristic;
         static double incumbentDist;
+        static Taboo taboo;
 
 
         //Support class for BuildSL()
@@ -302,15 +303,13 @@ namespace TSPCsharp
 
                         rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
 
-                        Console.Write("\nInsert 1 to use 2OPT or 2 to use 3OPT: ");
+                        Console.Write("\nInsert 1 to use multi start, 2 to use Tabu-Search: ");
                         switch (Console.ReadLine())
                         {
                             case "1":
                                 {
                                     //Clock restart
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
                                     //Calling the proper resolution method
                                     Heuristic("2OPT");
                                     break;
@@ -320,10 +319,8 @@ namespace TSPCsharp
                                 {
                                     //Clock restart
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                                    MipTimelimit(clock);
                                     //Calling the proper resolution method
-                                    Heuristic("3OPT");
+                                    Heuristic("Tabu-Search");
                                     break;
                                 }
                             default:
@@ -572,10 +569,6 @@ namespace TSPCsharp
         //Handle the heuristic resolution method
         static void Heuristic(string choice)
         {
-            //Allocating the correct space to store the optimal solution
-            //Only links from node i to j with i < j are considered
-            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
-
             //Initialization of the process that handles GNUPlot
             process = InitProcess();
 
@@ -583,32 +576,51 @@ namespace TSPCsharp
 
             zHeuristic = new int[instance.NNodes];
 
-            do
+            switch (choice)
             {
-                BuildRandomSolution();
+                case "2OPT":
 
-                //PrintHeuristicSolution();
+                    do
+                    {
+                        BuildRandomSolution();
 
-                if (choice == "2OPT")
-                    TwoOpt();
-                //else
-                //ThreeOpt();
+                        if (incumbentDist > distHeuristic)
+                        {
+                            incumbentDist = distHeuristic;
+                            incumbentZHeuristic = zHeuristic;
 
-                if (incumbentZHeuristic == null || incumbentDist > distHeuristic)
-                {
-                    incumbentDist = distHeuristic;
-                    incumbentZHeuristic = zHeuristic;
+                            PrintHeuristicSolution();
 
+                            Console.WriteLine("Incumbed changed");
+                        }
+
+                        TwoOpt();
+
+                        if (incumbentDist > distHeuristic)
+                        {
+                            incumbentDist = distHeuristic;
+                            incumbentZHeuristic = zHeuristic;
+
+                            PrintHeuristicSolution();
+
+                            Console.WriteLine("Incumbed changed");
+                        }
+                        else
+                            Console.WriteLine("Incumbed not changed");
+
+                        zHeuristic = new int[instance.NNodes];
+
+                    } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+                    break;
+                case "Tabu-Search":
+
+                    BuildRandomSolution();
                     PrintHeuristicSolution();
-
-                    Console.WriteLine("Incumbed changed");
-                }
-                else
-                    Console.WriteLine("Incumbed not changed");
-
-                zHeuristic = new int[instance.NNodes];
-
-            } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+                    taboo = new Taboo("A", instance, 300);
+                    TabuSearch();
+                    break;
+            }            
 
             zHeuristic = incumbentZHeuristic;
             PrintHeuristicSolution();
@@ -625,9 +637,6 @@ namespace TSPCsharp
 
             for (int i = 0; i < availableIndexes.Length; i++)
                 availableIndexes[i] = -1;
-
-            for (int i = 0; i < instance.BestSol.Length; i++)
-                instance.BestSol[i] = 0;
 
             availableIndexes[currentIndex] = 1;
 
@@ -646,7 +655,6 @@ namespace TSPCsharp
 
                     if (availableIndexes[nextIndex] == -1)
                     {
-                        instance.BestSol[zPos(currentIndex, nextIndex, instance.NNodes)] = 1;
                         zHeuristic[currentIndex] = nextIndex;
                         distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[nextIndex], instance.EdgeType);
                         availableIndexes[nextIndex] = 1;
@@ -666,8 +674,12 @@ namespace TSPCsharp
 
                 } while (!found);
             }
-
-            instance.BestSol[zPos(currentIndex, 0, instance.NNodes)] = 1;
+            
+            if (incumbentZHeuristic == null)
+            {
+                incumbentZHeuristic = zHeuristic;
+                incumbentDist = distHeuristic;
+            }
         }
 
         static int RndPlus()
@@ -737,13 +749,8 @@ namespace TSPCsharp
                     double distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
                         Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
 
-                    if (distAC + distBD < distTotABCD && distAD + distBC < distTotABCD)
+                    if (distAC + distBD < distTotABCD)
                     {
-                        instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                        instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                        instance.BestSol[zPos(a, c, instance.NNodes)] = 1;
-                        instance.BestSol[zPos(b, d, instance.NNodes)] = 1;
-
                         SwapRoute(c, b);
 
                         zHeuristic[a] = c;
@@ -754,8 +761,6 @@ namespace TSPCsharp
                         indexStart = 0;
                         cnt = 0;
                         found = true;
-
-                        //PrintHeuristicSolution();
                         break;
                     }
 
@@ -772,6 +777,81 @@ namespace TSPCsharp
             } while (cnt < instance.NNodes);
         }
 
+        static void TabuSearch()
+        {
+            int indexStart = 0;
+            string nextMove = "";
+            double maxGain = double.MaxValue;
+            int a, b, c, d;
+            double distAC, distBD, distTotABCD;
+
+            do
+            {
+                for (int j = 0; j < instance.NNodes; j++, indexStart = b)
+                {
+                    a = indexStart;
+                    b = zHeuristic[a];
+                    c = zHeuristic[b];
+                    d = zHeuristic[c];
+
+                    for (int i = 0; i < instance.NNodes - 3; i++, c = d, d = zHeuristic[c])
+                    {
+                        if (!taboo.IsTaboo(a, b, c, d))
+                        {
+                            distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
+                            distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
+
+                            distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
+                                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
+
+                            if ((distAC + distBD) - distTotABCD < maxGain)
+                            {
+                                nextMove = a + ";" + b + ";" + c + ";" + d;
+                                maxGain = (distAC + distBD) - distTotABCD;
+                            }
+                        }
+                    }
+                }
+
+
+                string[] currentElements = nextMove.Split(';');
+                a = int.Parse(currentElements[0]);
+                b = int.Parse(currentElements[1]);
+                c = int.Parse(currentElements[2]);
+                d = int.Parse(currentElements[3]);
+
+
+                distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
+                distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
+
+                distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
+                                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
+
+                SwapRoute(c, b);
+
+                zHeuristic[a] = c;
+                zHeuristic[b] = d;
+
+                distHeuristic = distHeuristic - distTotABCD + distAC + distBD;
+
+                if (incumbentDist > distHeuristic)
+                {
+                    incumbentDist = distHeuristic;
+                    incumbentZHeuristic = zHeuristic;
+                }
+                PrintHeuristicSolution();
+
+                if ((distAC + distBD) - distTotABCD < 0)
+                    taboo.Clear();
+                else
+                    taboo.AddTaboo(a, b, c, d);
+
+                maxGain = double.MaxValue;
+
+            } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+        }
+
+        //not working
         static void ThreeOpt()
         {
             int indexStart = 0;
@@ -838,13 +918,7 @@ namespace TSPCsharp
                         if (distAC + distEB + distDF < minDist)
                         {
                             minDist = distAC + distEB + distDF;
-                            minRoute = "ABCFDE";
-                        }
-
-                        if (distAB + distCE + distDF < minDist)
-                        {
-                            minDist = distAB + distCE + distDF;
-                            minRoute = "ABCFDE";
+                            minRoute = "ACBEDF";
                         }
 
                         if (distAD + distCF + distEB < minDist)
@@ -870,6 +944,8 @@ namespace TSPCsharp
                             minDist = distAD + distCE + distEB;
                             minRoute = "ADECBF";
                         }
+
+
 
                         if(minRoute == "ABCDEF")
                         {
@@ -910,7 +986,7 @@ namespace TSPCsharp
                             zHeuristic[d] = b;
                             zHeuristic[c] = f;
 
-                            distHeuristic = distHeuristic - distTotABCDEF + distAE + distBD + distCE;
+                            distHeuristic = distHeuristic - distTotABCDEF + distAE + distBD + distCF;
 
                             indexStart = 0;
                             cnt = 0;
@@ -920,12 +996,13 @@ namespace TSPCsharp
                             break;
 
                         }
-                        else if (minRoute == "ABCFDE")
+                        else if (minRoute == "ACBEDF")
                         {
                             instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
                             instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
                             instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, e, instance.NNodes)] = 1;
+                            instance.BestSol[zPos(a, c, instance.NNodes)] = 1;
+                            instance.BestSol[zPos(b, e, instance.NNodes)] = 1;
                             instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
 
                             SwapRoute(d, e);
@@ -1369,6 +1446,62 @@ namespace TSPCsharp
             process.StandardInput.WriteLine("gnuplot\nset terminal wxt size {0},{1}\nset lmargin at screen 0.05\nset rmargin at screen 0.95\nset bmargin at screen 0.1\nset tmargin at screen 0.9\nset xrange [{2}:{3}]\nset yrange [{4}:{5}]", Convert.ToDouble(Width.ToString()) - 100, Convert.ToDouble(Height.ToString()) - 100, instance.XMin, instance.XMax, instance.YMin, instance.YMax);
 
             return process;
+        }
+
+        private class Taboo
+        {
+            string mode;
+            string originalMode;
+            List<string> tabooVector;
+            Instance inst;
+            int threshold;
+
+            public Taboo (string mode, Instance inst, int threshold)
+            {
+                this.mode = mode;
+                this.originalMode = mode;
+                this.inst = inst;
+                this.threshold = threshold;
+                this.tabooVector = new List<string>();
+            }
+
+            public bool IsTaboo(int a, int b, int c, int d)
+            {
+                if (tabooVector.Contains(a + ";" + b + "," + c + ";" + d) ||
+                    tabooVector.Contains(a + ";" + b + "," + d + ";" + c) ||
+                    tabooVector.Contains(b + ";" + a + "," + c + ";" + d) ||
+                    tabooVector.Contains(b + ";" + a + "," + d + ";" + c) ||
+                    tabooVector.Contains(c + ";" + d + "," + a + ";" + b) ||
+                    tabooVector.Contains(d + ";" + c + "," + a + ";" + b) ||
+                    tabooVector.Contains(c + ";" + d + "," + b + ";" + a) ||
+                    tabooVector.Contains(d + ";" + c + "," + b + ";" + a))
+                    return true;
+                else
+                    return false;
+            }
+
+            public void AddTaboo(int a, int b, int c, int d)
+            {
+                if (mode == "A" && tabooVector.Count == threshold)
+                {
+                    mode = "B";
+                    for(int i = 0; i < threshold - 5; i++)
+                    {
+                        tabooVector.RemoveAt(i);
+                    }
+                }else if(mode == "B")
+                {
+                    tabooVector.RemoveAt(0);
+                }
+
+                tabooVector.Add(a + ";" + c + "," + b + ";" + d);
+            }
+
+            public void Clear()
+            {
+                mode = originalMode;
+                tabooVector.Clear();
+            }
         }
 
     }
