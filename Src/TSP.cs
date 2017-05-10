@@ -179,7 +179,7 @@ namespace TSPCsharp
         static double distHeuristic;
         static int[] incumbentZHeuristic;
         static double incumbentDist;
-        static Taboo taboo;
+        static Tabu tabu;
 
 
         //Support class for BuildSL()
@@ -617,11 +617,15 @@ namespace TSPCsharp
 
                     BuildRandomSolution();
                     PrintHeuristicSolution();
-                    taboo = new Taboo("A", instance, 300);
+                    tabu = new Tabu("A", instance, 100);
                     TabuSearch();
+                    zHeuristic = incumbentZHeuristic;
+                    PrintHeuristicSolution();
+                    TwoOpt();
                     break;
-            }            
+            }
 
+            typeSol = 0;
             zHeuristic = incumbentZHeuristic;
             PrintHeuristicSolution();
             Console.WriteLine("Best distance found within the timelit is: " + distHeuristic);
@@ -722,7 +726,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlot(instance.InputFile, typeSol);
+                PrintGNUPlotHeuristic(instance.InputFile, typeSol);
         }
 
         static void TwoOpt()
@@ -780,8 +784,10 @@ namespace TSPCsharp
         static void TabuSearch()
         {
             int indexStart = 0;
-            string nextMove = "";
-            double maxGain = double.MaxValue;
+            string nextBestMove = "";
+            string nextWorstMove = "";
+            double bestGain = double.MaxValue;
+            double worstGain = double.MinValue;
             int a, b, c, d;
             double distAC, distBD, distTotABCD;
 
@@ -796,7 +802,7 @@ namespace TSPCsharp
 
                     for (int i = 0; i < instance.NNodes - 3; i++, c = d, d = zHeuristic[c])
                     {
-                        if (!taboo.IsTaboo(a, b, c, d))
+                        if (!tabu.IsTabu(a, c) && !tabu.IsTabu(b, d))
                         {
                             distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
                             distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
@@ -804,49 +810,77 @@ namespace TSPCsharp
                             distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
                                 Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
 
-                            if ((distAC + distBD) - distTotABCD < maxGain)
+                            if ((distAC + distBD) - distTotABCD < bestGain && (distAC + distBD) != distTotABCD)
                             {
-                                nextMove = a + ";" + b + ";" + c + ";" + d;
-                                maxGain = (distAC + distBD) - distTotABCD;
+                                nextBestMove = a + ";" + b + ";" + c + ";" + d;
+                                bestGain = (distAC + distBD) - distTotABCD;
+                            }
+
+                            if ((distAC + distBD) - distTotABCD > worstGain && (distAC + distBD) != distTotABCD)
+                            {
+                                nextWorstMove = a + ";" + b + ";" + c + ";" + d;
+                                worstGain = (distAC + distBD) - distTotABCD;
                             }
                         }
                     }
                 }
 
-
-                string[] currentElements = nextMove.Split(';');
-                a = int.Parse(currentElements[0]);
-                b = int.Parse(currentElements[1]);
-                c = int.Parse(currentElements[2]);
-                d = int.Parse(currentElements[3]);
-
-
-                distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
-                distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
-
-                distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
-                                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
-
-                SwapRoute(c, b);
-
-                zHeuristic[a] = c;
-                zHeuristic[b] = d;
-
-                distHeuristic = distHeuristic - distTotABCD + distAC + distBD;
-
-                if (incumbentDist > distHeuristic)
+                if (true)
                 {
-                    incumbentDist = distHeuristic;
-                    incumbentZHeuristic = zHeuristic;
+
+                    string[] currentElements = nextBestMove.Split(';');
+                    a = int.Parse(currentElements[0]);
+                    b = int.Parse(currentElements[1]);
+                    c = int.Parse(currentElements[2]);
+                    d = int.Parse(currentElements[3]);
+
+                    SwapRoute(c, b);
+
+                    zHeuristic[a] = c;
+                    zHeuristic[b] = d;
+
+                    distHeuristic += bestGain;
+
+                    if (incumbentDist > distHeuristic)
+                    {
+                        incumbentDist = distHeuristic;
+                        incumbentZHeuristic = zHeuristic;
+                    }
+
+                    if (bestGain < 0)
+                        typeSol = 0;
+                    else
+                    {
+                        tabu.AddTabu(a, b, c, d);
+                        typeSol = 1;
+                    }
+
                 }
+                else
+                {
+
+                    string[] currentElements = nextWorstMove.Split(';');
+                    a = int.Parse(currentElements[0]);
+                    b = int.Parse(currentElements[1]);
+                    c = int.Parse(currentElements[2]);
+                    d = int.Parse(currentElements[3]);
+
+                    SwapRoute(c, b);
+
+                    zHeuristic[a] = c;
+                    zHeuristic[b] = d;
+
+                    distHeuristic += worstGain;
+
+                    tabu.AddTabu(a, b, c, d);
+                    typeSol = 1;
+
+                }
+
                 PrintHeuristicSolution();
 
-                if ((distAC + distBD) - distTotABCD < 0)
-                    taboo.Clear();
-                else
-                    taboo.AddTaboo(a, b, c, d);
-
-                maxGain = double.MaxValue;
+                bestGain = double.MaxValue;
+                worstGain = double.MinValue;
 
             } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
         }
@@ -1291,6 +1325,16 @@ namespace TSPCsharp
                 process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
         }
 
+        static void PrintGNUPlotHeuristic(string name, int typeSol)
+        {
+            //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
+            if (typeSol == 0)
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentDist + "   Current solution: " + distHeuristic + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+            else if (typeSol == 1)
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentDist + "   Current solution: " + distHeuristic + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+        }
+
+
         //Returns physical or virtual cores of the pc
         static int RetriveCoreNumber(int type)
         {
@@ -1448,59 +1492,66 @@ namespace TSPCsharp
             return process;
         }
 
-        private class Taboo
+        private class Tabu
         {
             string mode;
             string originalMode;
-            List<string> tabooVector;
+            List<string> tabuVector;
             Instance inst;
             int threshold;
 
-            public Taboo (string mode, Instance inst, int threshold)
+            public Tabu (string mode, Instance inst, int threshold)
             {
                 this.mode = mode;
                 this.originalMode = mode;
                 this.inst = inst;
                 this.threshold = threshold;
-                this.tabooVector = new List<string>();
+                this.tabuVector = new List<string>();
             }
 
-            public bool IsTaboo(int a, int b, int c, int d)
+            public bool IsTabu(int a, int b)
             {
-                if (tabooVector.Contains(a + ";" + b + "," + c + ";" + d) ||
-                    tabooVector.Contains(a + ";" + b + "," + d + ";" + c) ||
-                    tabooVector.Contains(b + ";" + a + "," + c + ";" + d) ||
-                    tabooVector.Contains(b + ";" + a + "," + d + ";" + c) ||
-                    tabooVector.Contains(c + ";" + d + "," + a + ";" + b) ||
-                    tabooVector.Contains(d + ";" + c + "," + a + ";" + b) ||
-                    tabooVector.Contains(c + ";" + d + "," + b + ";" + a) ||
-                    tabooVector.Contains(d + ";" + c + "," + b + ";" + a))
+                if (tabuVector.Contains(a + ";" + b) ||
+                    tabuVector.Contains(b + ";" + a))
                     return true;
                 else
                     return false;
             }
 
-            public void AddTaboo(int a, int b, int c, int d)
+            public void AddTabu(int a, int b, int c, int d)
             {
-                if (mode == "A" && tabooVector.Count == threshold)
+                if (mode == "A" && tabuVector.Count >= (threshold - 1))
                 {
                     mode = "B";
-                    for(int i = 0; i < threshold - 5; i++)
-                    {
-                        tabooVector.RemoveAt(i);
-                    }
+
                 }else if(mode == "B")
                 {
-                    tabooVector.RemoveAt(0);
+                    if (tabuVector.Count >= 50)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            tabuVector.RemoveAt(i);
+                        }
+                    }
+                    else
+                        mode = "A";
                 }
 
-                tabooVector.Add(a + ";" + c + "," + b + ";" + d);
+                if(!tabuVector.Contains(a + ";" + b))
+                    tabuVector.Add(a + ";" + b);
+                if(!tabuVector.Contains(c + ";" + d))
+                    tabuVector.Add(c + ";" + d);
             }
 
             public void Clear()
             {
                 mode = originalMode;
-                tabooVector.Clear();
+                tabuVector.Clear();
+            }
+
+            public int TabuLenght()
+            {
+                return tabuVector.Count;
             }
         }
 
