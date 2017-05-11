@@ -323,6 +323,14 @@ namespace TSPCsharp
                                     Heuristic("Tabu-Search");
                                     break;
                                 }
+                            case "3":
+                                {
+                                    //Clock restart
+                                    clock.Start();
+                                    //Calling the proper resolution method
+                                    Heuristic("PLACE HOLDER");
+                                    break;
+                                }
                             default:
                                 throw new System.Exception("Bad argument");
                         }
@@ -579,50 +587,78 @@ namespace TSPCsharp
             switch (choice)
             {
                 case "2OPT":
+                    {
+                        do
+                        {
+                            BuildRandomSolution();
 
-                    do
+                            if (incumbentDist > distHeuristic)
+                            {
+                                incumbentDist = distHeuristic;
+                                incumbentZHeuristic = zHeuristic;
+
+                                PrintHeuristicSolution();
+
+                                Console.WriteLine("Incumbed changed");
+                            }
+
+                            TwoOpt();
+
+                            if (incumbentDist > distHeuristic)
+                            {
+                                incumbentDist = distHeuristic;
+                                incumbentZHeuristic = zHeuristic;
+
+                                PrintHeuristicSolution();
+
+                                Console.WriteLine("Incumbed changed");
+                            }
+                            else
+                                Console.WriteLine("Incumbed not changed");
+
+                            zHeuristic = new int[instance.NNodes];
+
+                        } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+                        break;
+                    }
+                case "Tabu-Search":
                     {
                         BuildRandomSolution();
-
-                        if (incumbentDist > distHeuristic)
-                        {
-                            incumbentDist = distHeuristic;
-                            incumbentZHeuristic = zHeuristic;
-
-                            PrintHeuristicSolution();
-
-                            Console.WriteLine("Incumbed changed");
-                        }
-
+                        PrintHeuristicSolution();
+                        tabu = new Tabu("A", instance, 100);
+                        TabuSearch();
+                        zHeuristic = incumbentZHeuristic;
+                        PrintHeuristicSolution();
                         TwoOpt();
+                        break;
+                    }
+                case "PLACE HOLDER":
+                    {
+                        BuildRandomSolution();
+                        PrintHeuristicSolution();
 
-                        if (incumbentDist > distHeuristic)
+                        do
                         {
-                            incumbentDist = distHeuristic;
-                            incumbentZHeuristic = zHeuristic;
+                            TwoOpt();
+
+                            if (incumbentDist > distHeuristic)
+                            {
+                                incumbentDist = distHeuristic;
+                                incumbentZHeuristic = zHeuristic;
+
+                                PrintHeuristicSolution();
+
+                                Console.WriteLine("Incumbed changed");
+                            }
+                            else
+                                Console.WriteLine("Incumbed not changed");
 
                             PrintHeuristicSolution();
-
-                            Console.WriteLine("Incumbed changed");
-                        }
-                        else
-                            Console.WriteLine("Incumbed not changed");
-
-                        zHeuristic = new int[instance.NNodes];
-
-                    } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
-
-                    break;
-                case "Tabu-Search":
-
-                    BuildRandomSolution();
-                    PrintHeuristicSolution();
-                    tabu = new Tabu("A", instance, 100);
-                    TabuSearch();
-                    zHeuristic = incumbentZHeuristic;
-                    PrintHeuristicSolution();
-                    TwoOpt();
-                    break;
+                            PlaceHolder();
+                        } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+                        break;
+                    }
             }
 
             typeSol = 0;
@@ -883,6 +919,84 @@ namespace TSPCsharp
                 worstGain = double.MinValue;
 
             } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+        }
+
+        static void PlaceHolder()
+        {
+            int a, b, c, d, e, f;
+
+            a = rnd.Next(zHeuristic.Length);
+            b = zHeuristic[a];
+
+            do
+            {
+                c = rnd.Next(zHeuristic.Length);
+                d = zHeuristic[c];
+            } while ((a == c && b == d) || a == d || b == c);
+
+            do
+            {
+                e = rnd.Next(zHeuristic.Length);
+                f = zHeuristic[e];
+            } while ((e == a && f == b) || e == b || f == a || (e == c && f == d) || e == d || f == c);
+
+            List<int> order = new List<int>();
+
+            for (int i = 0, index = 0; i < zHeuristic.Length && order.Count != 4; i++, index = zHeuristic[index])
+            {
+                if (a == index)
+                {
+                    order.Add(a);
+                    order.Add(b);
+                    i++;
+                    index = zHeuristic[index];
+                }
+                else if (c == index)
+                {
+                    order.Add(c);
+                    order.Add(d);
+                    i++;
+                    index = zHeuristic[index];
+                }
+                else if (e == index)
+                {
+                    order.Add(e);
+                    order.Add(f);
+                    i++;
+                    index = zHeuristic[index];
+                }
+            }
+
+            if(order[0] != a && order[2] != a)
+            {
+                order.Add(a);
+                order.Add(b);
+            }else if (order[0] != c && order[2] != c)
+            {
+                order.Add(c);
+                order.Add(d);
+            }else
+            {
+                order.Add(e);
+                order.Add(f);
+            }
+
+            SwapRoute(order[2], order[1]);
+
+            zHeuristic[order[0]] = order[2];
+
+            SwapRoute(order[4], order[3]);
+
+            zHeuristic[order[1]] = order[4];
+
+            zHeuristic[order[3]] = order[5];
+
+            distHeuristic += Point.Distance(instance.Coord[order[0]], instance.Coord[order[2]], instance.EdgeType) +
+                Point.Distance(instance.Coord[order[1]], instance.Coord[order[4]], instance.EdgeType) +
+                Point.Distance(instance.Coord[order[3]], instance.Coord[order[5]], instance.EdgeType) -
+                Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) -
+                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType) -
+                Point.Distance(instance.Coord[e], instance.Coord[f], instance.EdgeType);
         }
 
         //not working
@@ -1365,37 +1479,7 @@ namespace TSPCsharp
 
             return i * nNodes + j - (i + 1) * (i + 2) / 2;
         }
-
-        static int[] zPosInv(int index, int nNodes)
-        {
-            //int i = 0;
-            //int cnt = 1;
-            //int sup = nNodes - cnt;
-            //while(index > sup)
-            //{
-            //    cnt++;
-            //    sup += nNodes - cnt; 
-            //}
-
-            //i = cnt - 1;
-
-            //int j = index + (i + 1) * (i + 2) / 2 - i * nNodes;
-
-            //if (zPos(i, j, nNodes) != index)
-            //    Console.WriteLine("Sono un coglione. Juve merda");
-
-            for(int i=0; i<nNodes;i++)
-            {
-                for(int j=i+1;j<nNodes;j++)
-                    if(zPos(i,j,nNodes) == index)
-                        return new int[] { i, j };
-            }
-
-            return null;
-
-            //return new int[] { i, j };
-        }
-
+        
 
         //Setting the current real residual time for Cplex and some relative parameters
         static void MipTimelimit(Stopwatch clock)
