@@ -52,13 +52,13 @@ namespace TSPCsharp
             if (pointType == "EUC_2D")
             {
                 //Ceiling is used to round at the next int value
-                return Math.Ceiling(Math.Sqrt(xD * xD + yD * yD));
+                return (int)(Math.Sqrt(xD * xD + yD * yD) + 0.5);
             }
             else if (pointType == "ATT")
             {
                 double tmp = Math.Sqrt(xD * xD + yD * yD) / 10.0;
 
-                if (Math.Ceiling(tmp) < tmp)
+                if ((int)(tmp + 0.5) < tmp)
                     return (int)tmp + 1;
                 else
                     return tmp;

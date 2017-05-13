@@ -303,7 +303,7 @@ namespace TSPCsharp
 
                         rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
 
-                        Console.Write("\nInsert 1 to use multi start, 2 to use Tabu-Search: ");
+                        Console.Write("\nInsert 1 to use multi start 2OPT, 2 to use multi start 3OPT, 3 to use Tabu-Search or 4 to use VNS: ");
                         switch (Console.ReadLine())
                         {
                             case "1":
@@ -311,16 +311,15 @@ namespace TSPCsharp
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic("2OPT");
+                                    Heuristic("Multi Start 2OPT");
                                     break;
                                 }
-
                             case "2":
                                 {
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic("Tabu-Search");
+                                    Heuristic("Multi Start 3OPT");
                                     break;
                                 }
                             case "3":
@@ -328,7 +327,15 @@ namespace TSPCsharp
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic("PLACE HOLDER");
+                                    Heuristic("Tabu-Search");
+                                    break;
+                                }
+                            case "4":
+                                {
+                                    //Clock restart
+                                    clock.Start();
+                                    //Calling the proper resolution method
+                                    Heuristic("VNS");
                                     break;
                                 }
                             default:
@@ -586,7 +593,7 @@ namespace TSPCsharp
 
             switch (choice)
             {
-                case "2OPT":
+                case "Multi Start 2OPT":
                     {
                         do
                         {
@@ -622,6 +629,42 @@ namespace TSPCsharp
 
                         break;
                     }
+                case "Multi Start 3OPT":
+                    {
+                        do
+                        {
+                            BuildRandomSolution();
+
+                            if (incumbentDist > distHeuristic)
+                            {
+                                incumbentDist = distHeuristic;
+                                incumbentZHeuristic = zHeuristic;
+
+                                PrintHeuristicSolution();
+
+                                Console.WriteLine("Incumbed changed");
+                            }
+
+                            ThreeOpt();
+
+                            if (incumbentDist > distHeuristic)
+                            {
+                                incumbentDist = distHeuristic;
+                                incumbentZHeuristic = zHeuristic;
+
+                                PrintHeuristicSolution();
+
+                                Console.WriteLine("Incumbed changed");
+                            }
+                            else
+                                Console.WriteLine("Incumbed not changed");
+
+                            zHeuristic = new int[instance.NNodes];
+
+                        } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+                        break;
+                    }
                 case "Tabu-Search":
                     {
                         BuildRandomSolution();
@@ -633,7 +676,7 @@ namespace TSPCsharp
                         TwoOpt();
                         break;
                     }
-                case "PLACE HOLDER":
+                case "VNS":
                     {
                         BuildRandomSolution();
                         PrintHeuristicSolution();
@@ -655,7 +698,7 @@ namespace TSPCsharp
                                 Console.WriteLine("Incumbed not changed");
 
                             PrintHeuristicSolution();
-                            PlaceHolder();
+                            VNS();
                         } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
                         break;
                     }
@@ -714,8 +757,10 @@ namespace TSPCsharp
 
                 } while (!found);
             }
+
+            distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[0], instance.EdgeType);
             
-            if (incumbentZHeuristic == null)
+           if (incumbentZHeuristic == null)
             {
                 incumbentZHeuristic = zHeuristic;
                 incumbentDist = distHeuristic;
@@ -921,7 +966,7 @@ namespace TSPCsharp
             } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
         }
 
-        static void PlaceHolder()
+        static void VNS()
         {
             int a, b, c, d, e, f;
 
@@ -1011,27 +1056,24 @@ namespace TSPCsharp
                 found = false;
                 int a = indexStart;
                 int b = zHeuristic[a];
-                int c = zHeuristic[b];
-                int d = zHeuristic[c];
-                int e = zHeuristic[d];
-                int f = zHeuristic[e];
+                //int c = zHeuristic[b];
+                int c = a;
+                int e = c;
+                int d = b;
+                int f = b;
+                //int d = zHeuristic[c];
+                //int e = zHeuristic[d];
+                //int f = zHeuristic[e];
 
-                for (int i = 0; i < instance.NNodes -2; i++)
+                for (int i = 0; i < instance.NNodes; i++, c = d, e = c, d = zHeuristic[c], f = d)
                 {
-                    while (c == a && d == b)
+                    if (found)
                     {
-                        c = d;
-                        d = zHeuristic[c];
+                        break;
                     }
 
-                    for (int j = 0; j < instance.NNodes -2 - i; j++)
+                    for (int j = 0; j < instance.NNodes; j++, e = f, f = zHeuristic[e])
                     {
-
-                        while (e == a && f == b || e == c && f == d)
-                        {
-                            e = f;
-                            f = zHeuristic[e];
-                        }
 
                         double distAB = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType);
                         double distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
@@ -1046,7 +1088,7 @@ namespace TSPCsharp
                         double distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
                         double distBF = Point.Distance(instance.Coord[b], instance.Coord[f], instance.EdgeType);
 
-                        double distTotABCDEF = distAB + distCE +distEF;
+                        double distTotABCDEF = distAB + distCD +distEF;
 
                         double minDist = distTotABCDEF;
                         string minRoute = "ABCDEF";
@@ -1087,9 +1129,9 @@ namespace TSPCsharp
                             minRoute = "AEDCBF";
                         }
 
-                        if (distAD + distCE + distEB < minDist)
+                        if (distAD + distCE + distBF < minDist)
                         {
-                            minDist = distAD + distCE + distEB;
+                            minDist = distAD + distCE + distBF;
                             minRoute = "ADECBF";
                         }
 
@@ -1097,179 +1139,128 @@ namespace TSPCsharp
 
                         if(minRoute == "ABCDEF")
                         {
+                            continue;
 
                         }else if(minRoute == "ABCEDF")
                         {
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
-
-                            SwapRoute(d, e);
+                            SwapRoute(e, d);
 
                             zHeuristic[c] = e;
                             zHeuristic[d] = f;
 
-                            distHeuristic = distHeuristic - distTotABCDEF + distAB + distCE + distDF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
                         }
                         else if (minRoute == "AEDBCF")
                         {
-                            instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(a, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(c, f, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, b, instance.NNodes)] = 1;
-
-                            SwapRoute(d, e);
+                            SwapRoute(e, d);
 
                             zHeuristic[a] = e;
                             zHeuristic[d] = b;
                             zHeuristic[c] = f;
 
-                            distHeuristic = distHeuristic - distTotABCDEF + distAE + distBD + distCF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
 
                         }
                         else if (minRoute == "ACBEDF")
                         {
-                            instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(a, c, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(b, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
+                            SwapRoute(c, b);
 
-                            SwapRoute(d, e);
+                            zHeuristic[a] = c;
 
-                            zHeuristic[c] = e;
+                            SwapRoute(e, d);
+
+                            zHeuristic[b] = e;
                             zHeuristic[d] = f;
 
-                            distHeuristic = distHeuristic - distTotABCDEF + distAB + distCE + distDF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
 
                         }
                         else if (minRoute == "ADEBCF")
                         {
-                            instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
+                            zHeuristic[a] = d;
+                            zHeuristic[e] = b;
+                            zHeuristic[c] = f;
 
-                            SwapRoute(d, e);
-
-                            zHeuristic[c] = e;
-                            zHeuristic[d] = f;
-
-                            distHeuristic = distHeuristic - distTotABCDEF + distAB + distCE + distDF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
 
                         }
                         else if (minRoute == "ACBDEF")
                         {
-                            instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
+                            SwapRoute(c, b);
 
-                            SwapRoute(d, e);
+                            zHeuristic[a] = c;
+                            zHeuristic[b] = d;
 
-                            zHeuristic[c] = e;
-                            zHeuristic[d] = f;
-
-                            distHeuristic = distHeuristic - distTotABCDEF + distAB + distCE + distDF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
 
                         }
                         else if (minRoute == "AEDCBF")
                         {
-                            instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
+                            SwapRoute(e, d);
+                            zHeuristic[a] = e;
 
-                            SwapRoute(d, e);
+                            SwapRoute(c, b);
 
-                            zHeuristic[c] = e;
-                            zHeuristic[d] = f;
+                            zHeuristic[d] = c;
+                            zHeuristic[b] = f;
 
-                            distHeuristic = distHeuristic - distTotABCDEF + distAB + distCE + distDF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
 
                         }
                         else if (minRoute == "ADECBF")
                         {
-                            instance.BestSol[zPos(a, b, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, d, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(e, f, instance.NNodes)] = 0;
-                            instance.BestSol[zPos(c, e, instance.NNodes)] = 1;
-                            instance.BestSol[zPos(d, f, instance.NNodes)] = 1;
+                            zHeuristic[a] = d;
 
-                            SwapRoute(d, e);
+                            SwapRoute(c, b);
 
-                            zHeuristic[c] = e;
-                            zHeuristic[d] = f;
+                            zHeuristic[e] = c;
+                            zHeuristic[b] = f;
 
-                            distHeuristic = distHeuristic - distTotABCDEF + distAB + distCE + distDF;
+                            distHeuristic = distHeuristic - distTotABCDEF + minDist;
 
                             indexStart = 0;
                             cnt = 0;
                             found = true;
-
-                            //PrintHeuristicSolution();
                             break;
 
                         }
-
-                        c = d;
-                        d = zHeuristic[c];
                     }
+                }
 
-                    if (!found)
-                    {
-                        indexStart = b;
-                        cnt++;
-                    }
+                if (!found)
+                {
+                    indexStart = b;
+                    cnt++;
                 }
 
             } while (cnt < instance.NNodes);
