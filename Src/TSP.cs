@@ -4,8 +4,10 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System;
+using System.Text;
 using System.Linq;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace TSPCsharp
 {
@@ -124,7 +126,7 @@ namespace TSPCsharp
 
                         //Adding global cuts to cplex's model
                         Add(cuts[i], 1);
-                    }                    
+                    }
                 }
             }
 
@@ -180,6 +182,10 @@ namespace TSPCsharp
         static int[] incumbentZHeuristic;
         static double incumbentDist;
         static Tabu tabu;
+
+        [DllImport("ConcordeDLL.dll")]
+        //public static extern void Concorde(char[] fileName, int timeLimit);
+        public static extern int Concorde(StringBuilder fileName, int timeLimit);
 
 
         //Support class for BuildSL()
@@ -290,12 +296,32 @@ namespace TSPCsharp
 
                 case "2":
                     {
-                        //Restarting the clock
-                        clock.Start();
-                        //Setting the residual time limit for cplex, it's almost equal to instance.TStart
-                        MipTimelimit(clock);
-                        //Calling the proper resolution method
-                        CallBackMethod();
+                        Console.Write("\nInsert 1 to use LazyCallback, 2 to use UserCutCallBack: ");
+                        switch (Console.ReadLine())
+                        {
+                            case "1":
+                                {
+                                    //Restarting the clock
+                                    clock.Start();
+                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                                    MipTimelimit(clock);
+                                    //Calling the proper resolution method
+                                    CallBackMethod();
+                                    break;
+                                }
+                            case "2":
+                                {
+                                    //Restarting the clock
+                                    clock.Restart();
+                                    inst.BestLb = Concorde(new StringBuilder(inst.InputFile), (int)inst.TimeLimit);
+                                    process = InitProcess();
+                                    PrintGNUPlot(instance.InputFile, typeSol);
+                                    Console.WriteLine("Best solution: " + inst.BestLb);
+                                    break;
+                                }
+                            default:
+                                throw new System.Exception("Bad argument");
+                        }
                         break;
                     }
                 case "3":

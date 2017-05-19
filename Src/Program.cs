@@ -167,21 +167,21 @@ namespace TSPCsharp
                             string[] elements = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                             //First item of the line needs to be the index of the point
                             //Expected minimum index to be 1 and max to be instance.NNodes
-                            int i = Convert.ToInt32(elements[0]);
+                            int i = Convert.ToInt32(elements[0].Replace(".",","));
                             if (i < 0 || i > inst.NNodes)
                                 throw new System.Exception("Unknown node in NODE_COORD_SECTION section");
                             //Vectors starts at index 0 not 1, it is necessary to perform a -1
-                            inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1]), Convert.ToDouble(elements[2]));
+                            inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".",",")));
 
                             //Storing the smallest and biggest x and y coordinates
-                            if (Convert.ToDouble(elements[1]) < inst.XMin)
-                                inst.XMin = Convert.ToDouble(elements[1]);
-                            if (Convert.ToDouble(elements[1]) > inst.XMax)
-                                inst.XMax = Convert.ToDouble(elements[1]);
-                            if (Convert.ToDouble(elements[2]) < inst.YMin)
-                                inst.YMin = Convert.ToDouble(elements[2]);
-                            if (Convert.ToDouble(elements[2]) > inst.YMax)
-                                inst.YMax = Convert.ToDouble(elements[2]);
+                            if (Convert.ToDouble(elements[1].Replace(".", ",")) < inst.XMin)
+                                inst.XMin = Convert.ToDouble(elements[1].Replace(".", ","));
+                            if (Convert.ToDouble(elements[1].Replace(".", ",")) > inst.XMax)
+                                inst.XMax = Convert.ToDouble(elements[1].Replace(".", ","));
+                            if (Convert.ToDouble(elements[2].Replace(".", ",")) < inst.YMin)
+                                inst.YMin = Convert.ToDouble(elements[2].Replace(".", ","));
+                            if (Convert.ToDouble(elements[2].Replace(".", ",")) > inst.YMax)
+                                inst.YMax = Convert.ToDouble(elements[2].Replace(".", ","));
 
                             continue;
                         }
