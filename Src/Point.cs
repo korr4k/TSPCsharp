@@ -56,7 +56,7 @@ namespace TSPCsharp
             }
             else if (pointType == "ATT")
             {
-                double tmp = Math.Sqrt(xD * xD + yD * yD) / 10.0;
+                double tmp = Math.Sqrt((xD * xD + yD * yD) / 10.0);
 
                 if ((int)(tmp + 0.5) < tmp)
                     return (int)tmp + 1;
