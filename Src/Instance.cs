@@ -20,6 +20,8 @@ namespace TSPCsharp
         double tBest;                           // time for the best sol. available  
         double[] bestSol;                       // best sol. available    
         double bestLb;                          // best lower bound available
+        int sizePopulation;
+
 
         // model:   
         //int xStart;
@@ -236,6 +238,21 @@ namespace TSPCsharp
         }
 
 
+        public int SizePopulation
+
+        {
+            get
+            {
+                return sizePopulation;
+            }
+
+            set
+            {
+                sizePopulation = value;
+            }
+
+        }
+    
         //Used to print the points stored in instance.Coord vector
         static public void Print(Instance inst)
         {

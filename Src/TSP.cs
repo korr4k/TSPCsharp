@@ -39,12 +39,138 @@ namespace TSPCsharp
         //If 0 the solution used heuristics methods, otherwhise it is 1, this parameter is used to set print GNUPlot graphs in different colors
         static int typeSol = 1;
 
+        static Random rnd;
+
+        static Tabu tabu;
+
+        private class PathStandard : ICloneable
+        {
+            internal int[] path;
+            internal double cost;
+
+            public object Clone()
+            {
+                return this.MemberwiseClone();
+            }
+
+            public double Cost
+            {
+                get
+                {
+                    return cost;
+                }
+                set
+                {
+                    cost = value;
+                }
+            }
+
+            public int[] Path
+            {
+                get
+                {
+                    return path;
+                }
+                set
+                {
+                    path = value;
+                }
+            }
+
+
+            public PathStandard()//Cammino di default
+            {
+                path = null;
+                cost = -1;
+            }
+
+            public PathStandard(int[] path)
+            {
+                this.path = path;
+                cost = CalculateCost(path);
+            }
+
+            internal double CalculateCost(int[] path)//-------------------------------tipo di costo
+            {
+                int costPath = 0;
+                for (int i = 0; i < instance.NNodes - 1; i++)
+                    costPath += (int)Point.Distance(instance.Coord[path[i]], instance.Coord[path[i + 1]], "EUC_2D");
+                costPath += (int)Point.Distance(instance.Coord[path[0]], instance.Coord[path[instance.NNodes - 1]], "EUC_2D");
+                return costPath;
+            }
+        }
+        private class PathGenetic : PathStandard
+        {
+            int nRoulette;
+            double fitness;
+
+            public PathGenetic(int[] path, double cost)
+            {
+                this.path = path;
+                this.cost = cost;
+                CalculateFitness();
+                NRoulette = -1;
+            }
+            public PathGenetic(int[] path)
+            {
+                this.path = path;
+                this.cost = CalculateCost(path);
+                CalculateFitness();
+                NRoulette = -1;
+            }
+
+            public PathGenetic()
+            {
+                path = null;
+                cost = -1;
+                fitness = -1;
+                NRoulette = -1;
+            }
+
+
+            public double Fitness
+            {
+                get
+                {
+                    return fitness;
+                }
+                set
+                {
+                    fitness = value;
+                }
+            }
+
+            public int NRoulette
+            {
+                get
+                {
+                    return nRoulette;
+                }
+                set
+                {
+                    nRoulette = value;
+                }
+            }
+            private void CalculateFitness()
+            {
+                fitness = 1 / cost;//Maggiore è il cost minore deve essere la fitness          
+            }
+        }
+
 
         //Define the Lazy Callback
         public class TSPLazyConsCallback : Cplex.LazyConstraintCallback
         {
+            private bool BlockPrint;
+
+            public TSPLazyConsCallback(bool BlockPrint)
+            {
+                this.BlockPrint = BlockPrint;
+            }
+
             public override void Main()
             {
+
                 //Init buffers, due to multithreading, using global buffers is incorrect
                 List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
                 List<int> bufferCoeffCCLC = new List<int>(); ;
@@ -80,7 +206,7 @@ namespace TSPCsharp
                             //Updating the model with the current subtours elimination
                             BuildCC(i, j, ccExprLC, bufferCoeffCCLC, compConnLC);
 
-                            if (Program.VERBOSE >= -1)
+                            if (BlockPrint)
                             {
                                 fileLC.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
                                 fileLC.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
@@ -96,7 +222,7 @@ namespace TSPCsharp
                 }
 
                 //Accessing GNUPlot to read the file
-                if (Program.VERBOSE >= -1)
+                if (BlockPrint)
                     PrintGNUPlot(instance.InputFile + "_" + nodeId, typeSol);
 
                 //cuts will stores the user's cut
@@ -107,24 +233,6 @@ namespace TSPCsharp
                     for (int i = 0; i < cuts.Length; i++)
                     {
                         cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
-
-                        //----------------------2----------------------
-                        // Riepilogo:
-                        //     The cut is treated exactly as cuts generated by CPLEX.
-                        //
-                        // Commenti:
-                        //     In other words, the cut is filtered through the CPLEX process; it may not even
-                        //     be added to the relaxation; for example, if other cuts are deemed more effective,
-                        //     or if the cut is too dense, or for other similar reasons.
-                        //----------------------0----------------------
-                        // Riepilogo:
-                        //     The cut is added to the relaxation and remains there.
-                        //----------------------1----------------------
-                        // Riepilogo:
-                        //     The cut is added to the relaxation, but can be purged later if CPLEX determines
-                        //     that the cut is ineffective.
-
-                        //Adding global cuts to cplex's model
                         Add(cuts[i], 1);
                     }
                 }
@@ -135,7 +243,7 @@ namespace TSPCsharp
             {
                 if (compConnLC[i] != compConnLC[j])//Same related component, the latter is not closed yet
                 {
-                    for (int k = 0; k < compConnLC.Length; k++)// k>i poichè i > j
+                    for (int k = 0; k < compConnLC.Length; k++)// k>i poichè i > i
                     {
                         if ((k != j) && (compConnLC[k] == compConnLC[j]))
                         {
@@ -144,7 +252,7 @@ namespace TSPCsharp
                         }
                     }
 
-                    //Finally also the vallue relative to the Point j are updated
+                    //Finally also the vallue relative to the Point i are updated
                     compConnLC[j] = compConnLC[i];
                 }
                 else//Here the current releted component is complete and the relative subtout elimination constraint can be added to the model
@@ -176,12 +284,6 @@ namespace TSPCsharp
             }
         }
 
-        static Random rnd;
-        static int[] zHeuristic;
-        static double distHeuristic;
-        static int[] incumbentZHeuristic;
-        static double incumbentDist;
-        static Tabu tabu;
 
         [DllImport("ConcordeDLL.dll")]
         //public static extern void Concorde(char[] fileName, int timeLimit);
@@ -224,7 +326,7 @@ namespace TSPCsharp
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("Insert 1 to use the classic loop method, 2 to use the optimal branch & cut and 3 to use heuristics methods: ");
+            Console.Write("Insert 1 to use the classic loop method, 2 to use the optimal branch & cut , 3 to use heuristics methods , 4 to use matheuristics: ");
 
             switch (Console.ReadLine())
             {
@@ -329,7 +431,7 @@ namespace TSPCsharp
 
                         rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
 
-                        Console.Write("\nInsert 1 to use multi start 2OPT, 2 to use multi start 3OPT, 3 to use Tabu-Search or 4 to use VNS: ");
+                        Console.Write("\nInsert 1 to use multi start 2OPT, 2 to use multi start 3OPT, 3 to use Tabu-Search, 4 to use VNS or  5 to use Genetic algorithm: ");
                         switch (Console.ReadLine())
                         {
                             case "1":
@@ -364,15 +466,285 @@ namespace TSPCsharp
                                     Heuristic("VNS");
                                     break;
                                 }
+                            case "5":
+                                {
+                                    Console.Write("\nWrite the size of the population : ");
+                                    //storing the percentage selected
+                                    instance.SizePopulation = Convert.ToInt32(Console.ReadLine());
+                                    clock.Start();
+                                    //Calling the proper resolution method
+                                    Heuristic("GeneticAlgorithm");
+                                    break;
+                                }
                             default:
                                 throw new System.Exception("Bad argument");
                         }
                         break;
                     }
+
+                case "4":
+                    {
+                        rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
+
+                        Console.Write("\nInsert 1 to use HardFixing, 2 to use local branch, 3 Polishing: ");
+                        switch (Console.ReadLine())
+                        {
+                            case "1":
+                                {
+                                    //Clock restart
+                                    clock.Start();
+                                    //Calling the proper resolution method
+                                    HardFixing();
+                                    break;
+                                }
+                            case "2":
+                                {
+                                    //Clock restart
+                                    clock.Start();
+                                    //Calling the proper resolution method
+                                    LocalBranching();
+                                    
+                                    break;
+                                }
+                            case "3":
+                                {
+                                    //Clock restart
+                                    clock.Start();
+                                    //Calling the proper resolution method
+                                    
+                                    break;
+                                }                          
+                            default:
+                                throw new System.Exception("Bad argument");
+                        }
+                        break;
+                    }
+                    
                 default:
                     throw new System.Exception("Bad argument");
             }
             return true;
+        }
+        static void ModifyModel(int percentageFixing, double[] values, List<int[]> fixedEdges)
+        {
+            for (int i = 0; i < z.Length; i++)//Inutile la prima volta
+            {
+                z[i].LB = 0;
+                z[i].UB = 1;
+            }
+
+            for (int i = 0; i < z.Length; i++)
+            {
+                if ((values[i] == 1))
+                {
+                    if (RandomSelect(percentageFixing) == 1)
+                    {
+                        z[i].LB = 1;
+                        fixedEdges.Add((zPosInv(i, instance.NNodes)));
+                    }
+                }
+            }
+        }
+
+        static int RandomSelect(int percentageFixing)
+        {
+            if (rnd.Next(1, 10) < percentageFixing)
+                return 1;
+            else
+                return 0;
+        }
+
+        static void LocalBranching()
+        {
+            int[] possibleRange = { 3, 5, 10, 20 };// Fisso poco così inizialmente: al max r = 10
+            int currentRange = 0;
+            bool BlockPrint = false;
+            IRange cut ;
+            double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            double incumbentCost = -1;
+
+            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            z = BuildModel(-1);//Costruisco il modello la prima volta
+
+            PathStandard heuristicSol = NearestNeightbor();
+            ILinearNumExpr expr = cplex.LinearNumExpr();
+
+            for (int i = 0; i < instance.NNodes; i++)           
+                expr.AddTerm(z[zPos(i, heuristicSol.path[i], instance.NNodes)], 1);
+
+            cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local brnching constraint");
+            cplex.AddCut(cut);
+            process = InitProcess();
+   
+            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+            cplex.Use(new TSPLazyConsCallback(BlockPrint));
+
+            do
+            {
+                cplex.Solve();
+
+                if ((incumbentCost > cplex.ObjValue) || (incumbentCost == -1))
+                {
+                    incumbentCost = cplex.ObjValue;
+                    incumbentSol = cplex.GetValues(z);
+
+                    file = new StreamWriter(instance.InputFile + ".dat", false);
+
+                    for (int i = 0; i < instance.NNodes; i++)
+                    {
+                        for (int j = i + 1; j < instance.NNodes; j++)
+                        {
+                            int position = zPos(i, j, instance.NNodes);
+
+                            if (incumbentSol[position] >= 0.5)
+                            {
+                                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                                file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            }
+                        }
+                    }
+
+                    PrintGNUPlot(instance.InputFile, typeSol);
+                    file.Close();
+
+                    cplex.ClearCuts();//Elimino tutti i tagli
+
+                    for (int i = 0; i < instance.NNodes; i++)
+                    {
+                        if (incumbentSol[i] == 1)
+                            expr.AddTerm(z[i], 1);
+                    }
+
+                    cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local brnching constraint");//Aggiungo il vincolo nuovo
+                    cplex.AddCut(cut);
+                }
+                else
+                {
+                    if (possibleRange[currentRange] != 20)
+                        currentRange++;
+                    else
+                    {
+                        //esci
+                    }
+                }
+
+            } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+            instance.BestSol = incumbentSol;
+            instance.BestLb = incumbentCost;
+        }
+
+        static void HardFixing()
+        {
+            double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            double incumbentCost = -1;
+
+            List<int[]> fixedVariables = new List<int[]>();
+
+            bool BlockPrint = false;//Serve per differenziarsi rispetto alla lazy "normale" in cui stampo ogni soluzione intera(anche che non è un subtour)
+            int numIterazioni = 10;
+            int percentageFixing = 8;
+
+            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+            z = BuildModel(-1);
+
+            PathStandard heuristicSol = NearestNeightbor();
+
+            for (int i = 0; i < instance.NNodes; i++)
+            {
+                int position = zPos(i, heuristicSol.path[i], instance.NNodes);
+                incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
+            }
+            process = InitProcess();
+            //cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Auto);
+
+            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+            cplex.Use(new TSPLazyConsCallback(BlockPrint));//Installo la lazy   
+
+            do
+            {
+                ModifyModel(percentageFixing, incumbentSol, fixedVariables);
+                if ((fixedVariables.Count != instance.NNodes - 1) && (fixedVariables.Count != instance.NNodes))
+                    PreProcessing(fixedVariables);
+
+                cplex.AddMIPStart(z, incumbentSol);          
+                cplex.Solve();
+
+                if ((incumbentCost > cplex.ObjValue) || (incumbentCost == -1))
+                {
+                    incumbentCost = cplex.ObjValue;
+                     incumbentSol = cplex.GetValues(z);
+
+                    file = new StreamWriter(instance.InputFile + ".dat", false);
+
+                    for (int i = 0; i < instance.NNodes; i++)
+                    {
+                        for (int j = i + 1; j < instance.NNodes; j++)
+                        {
+                            int position = zPos(i, j, instance.NNodes);
+
+                            if (incumbentSol[position] >= 0.5)
+                            {
+                                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                                file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            }
+                        }
+                    }
+
+                    PrintGNUPlot(instance.InputFile, typeSol);
+                    file.Close();
+                }
+
+                cplex.DeleteMIPStarts(0);
+                fixedVariables.RemoveRange(0, fixedVariables.Count);
+                numIterazioni--;
+
+                if (numIterazioni == 0)
+                {
+                    if (percentageFixing > 2)
+                    {
+                        percentageFixing--;
+                        numIterazioni = 10;
+                    }
+                    else
+                        numIterazioni = 10;
+                }
+
+            } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+            instance.ZBest = incumbentCost;
+            instance.BestSol = incumbentSol;
+
+            file = new StreamWriter(instance.InputFile + ".dat", false);
+            cplex.Output().WriteLine();
+
+            for (int i = 0; i < instance.NNodes; i++)
+            {
+                for (int j = i + 1; j < instance.NNodes; j++)
+                {
+                    int position = zPos(i, j, instance.NNodes);
+
+                    // instance.BestSol[position] = cplex.GetValue(z[position]);
+
+                    if (instance.BestSol[position] >= 0.5)
+                    {
+                        file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                        file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                    }
+                }
+            }
+
+            file.Close();
+
+            if (Program.VERBOSE >= -1)
+                PrintGNUPlot(instance.InputFile, typeSol);
+
+            cplex.Output().WriteLine();
+            cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+
+            if (Program.VERBOSE >= -1)
+                cplex.ExportModel(instance.InputFile + ".lp");
         }
 
         //Handle the resolution method without callbacks
@@ -406,7 +778,7 @@ namespace TSPCsharp
             z = BuildModel(numb);
 
             //Allocating the correct space to store the optimal solution
-            //Only links from node i to j with i < j are considered
+            //Only links from node i to i with i < i are considered
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
             //Init buffers
@@ -461,7 +833,7 @@ namespace TSPCsharp
                         //Retriving the correct index position for the current link inside z
                         int position = zPos(i, j, instance.NNodes);
 
-                        //Reading the optimal solution for the actual link (i,j)
+                        //Reading the optimal solution for the actual link (i,i)
                         instance.BestSol[position] = cplex.GetValue(z[position]);
 
                         //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
@@ -472,7 +844,7 @@ namespace TSPCsharp
                              *-- previus link --
                              *<Blank line>
                              *Xi Yi <index(i)>
-                             *Xj Yj <index(j)>
+                             *Xj Yj <index(i)>
                              *<Blank line> 
                              *-- next link --
                             */
@@ -536,14 +908,11 @@ namespace TSPCsharp
             // Turn on traditional search for use with control callbacks
             cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Auto);
 
-            //0 physicals, 1 virtuals
-            int coreCount = RetriveCoreNumber(0);
-
             //Setting cplex # of threads
-            cplex.SetParam(Cplex.Param.Threads, coreCount);
+            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
 
             //Adding lazycallback
-            cplex.Use(new TSPLazyConsCallback());
+            cplex.Use(new TSPLazyConsCallback(true));
 
             //Solving
             cplex.Solve();
@@ -566,7 +935,7 @@ namespace TSPCsharp
                     //Retriving the correct index position for the current link inside z
                     int position = zPos(i, j, instance.NNodes);
 
-                    //Reading the optimal solution for the actual link (i,j)
+                    //Reading the optimal solution for the actual link (i,i)
                     instance.BestSol[position] = cplex.GetValue(z[position]);
 
                     //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
@@ -577,7 +946,7 @@ namespace TSPCsharp
                          *-- previus link --
                          *<Blank line>
                          *Xi Yi <index(i)>
-                         *Xj Yj <index(j)>
+                         *Xj Yj <index(i)>
                          *<Blank line> 
                          *-- next link --
                         */
@@ -603,7 +972,6 @@ namespace TSPCsharp
             //Exporting the updated model
             if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
-
             
         }
 
@@ -615,51 +983,49 @@ namespace TSPCsharp
 
             typeSol = 0;
 
-            zHeuristic = new int[instance.NNodes];
-
             switch (choice)
             {
                 case "Multi Start 2OPT":
                     {
+                        PathStandard incumbentSol = new PathStandard();
+                        PathStandard solHeuristic;
+
                         do
                         {
-                            BuildRandomSolution();
+                            solHeuristic = NearestNeightbor();
 
-                            if (incumbentDist > distHeuristic)
+                           if( (incumbentSol.cost > solHeuristic.cost) || (incumbentSol.cost == -1))
                             {
-                                incumbentDist = distHeuristic;
-                                incumbentZHeuristic = zHeuristic;
+                                incumbentSol = (PathStandard)solHeuristic.Clone();
 
-                                PrintHeuristicSolution();
+                                PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
 
                                 Console.WriteLine("Incumbed changed");
                             }
 
-                            TwoOpt();
+                            TwoOpt((PathGenetic)solHeuristic);
 
-                            if (incumbentDist > distHeuristic)
+                            if (incumbentSol.cost > solHeuristic.cost)
                             {
-                                incumbentDist = distHeuristic;
-                                incumbentZHeuristic = zHeuristic;
-
-                                PrintHeuristicSolution();
+                                incumbentSol = solHeuristic;
+                                PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
 
                                 Console.WriteLine("Incumbed changed");
                             }
                             else
-                                Console.WriteLine("Incumbed not changed");
-
-                            zHeuristic = new int[instance.NNodes];
+                                Console.WriteLine("Incumbed not changed");                            
 
                         } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
 
                         break;
                     }
                 case "Multi Start 3OPT":
-                    {
+                    {/*
                         do
                         {
-                            BuildRandomSolution();
+                            NearestNeightbor();
 
                             if (incumbentDist > distHeuristic)
                             {
@@ -688,59 +1054,480 @@ namespace TSPCsharp
                             zHeuristic = new int[instance.NNodes];
 
                         } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
-
+                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+                        */
                         break;
                     }
                 case "Tabu-Search":
                     {
-                        BuildRandomSolution();
-                        PrintHeuristicSolution();
+                        PathStandard incumbentSol;
+                        PathStandard solHeuristic = NearestNeightbor();
+                        incumbentSol = (PathStandard)solHeuristic.Clone();
+                        PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
                         tabu = new Tabu("A", instance, 100);
-                        TabuSearch();
-                        zHeuristic = incumbentZHeuristic;
-                        PrintHeuristicSolution();
-                        TwoOpt();
+                        TabuSearch(solHeuristic, incumbentSol);
+                        solHeuristic = incumbentSol;
+                        PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
+                        TwoOpt((PathGenetic)solHeuristic);
+                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
                         break;
                     }
                 case "VNS":
                     {
-                        BuildRandomSolution();
-                        PrintHeuristicSolution();
+                        PathStandard incumbentSol;
+                        PathStandard solHeuristic = NearestNeightbor();
+                        incumbentSol = (PathStandard)solHeuristic.Clone();
+                        PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
 
                         do
                         {
-                            TwoOpt();
+                            TwoOpt((PathGenetic)solHeuristic);
 
-                            if (incumbentDist > distHeuristic)
+                            if (incumbentSol.cost > solHeuristic.cost)
                             {
-                                incumbentDist = distHeuristic;
-                                incumbentZHeuristic = zHeuristic;
+                                incumbentSol =(PathStandard)solHeuristic.Clone();
 
-                                PrintHeuristicSolution();
+                                PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
 
                                 Console.WriteLine("Incumbed changed");
                             }
                             else
                                 Console.WriteLine("Incumbed not changed");
 
-                            PrintHeuristicSolution();
-                            VNS();
+                            PrintHeuristicSolution((PathGenetic)solHeuristic, incumbentSol.cost);
+                            VNS(solHeuristic);
                         } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+
+                        
                         break;
+                    }
+                case "GeneticAlgorithm":
+                    {
+                        PathGenetic incumbentSol = new PathGenetic();
+                        PathGenetic currentBestPath = null;
+
+                        List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
+                        List<PathGenetic> ChildPoulation = new List<PathGenetic>();
+
+                        for (int i = 0; i < instance.SizePopulation; i++)
+                            OriginallyPopulated.Add(NearestNeightborGenetic());//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
+                        do
+                        {
+                            for (int i = 0; i < instance.SizePopulation; i++)
+                            {
+                                if ((i != 0) && (i % 2 != 0))
+                                    ChildPoulation.Add(GenerateChild(OriginallyPopulated[i], OriginallyPopulated[i - 1]));
+                            }
+
+                            OriginallyPopulated = NextPopulation(OriginallyPopulated, ChildPoulation);
+                            currentBestPath = BestSolution(OriginallyPopulated, incumbentSol);
+
+                            if ((currentBestPath.cost < incumbentSol.cost)||(incumbentSol.cost == -1))
+                            {
+                                incumbentSol = (PathGenetic)currentBestPath.Clone();
+                                PrintGeneticSolution(incumbentSol.path);
+                            }
+
+                            ChildPoulation.RemoveRange(0, ChildPoulation.Count);
+
+                        } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+
+                        break;
+
                     }
             }
 
             typeSol = 0;
-            zHeuristic = incumbentZHeuristic;
-            PrintHeuristicSolution();
-            Console.WriteLine("Best distance found within the timelit is: " + distHeuristic);
+           
+            // Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+        }
+        static List<PathGenetic> NextPopulation(List<PathGenetic> FatherGeneration, List<PathGenetic> ChildGeneration)
+        {
+            List<PathGenetic> nextGeneration = new List<PathGenetic>();
+            List<int> roulette = new List<int>();
+            Random rouletteValue = new Random();
+            List<int> NumbersExtracted = new List<int>();
+            bool go = false;
+            int numberExtracted;
+
+            for (int i = 0; i < ChildGeneration.Count; i++)
+                FatherGeneration.Add(ChildGeneration[i]);
+
+            int upperExtremity = FillRoulette(roulette, FatherGeneration);
+
+            for (int i = 0; i < instance.SizePopulation; i++)
+            {
+                do
+                {
+                    go = true;
+                    numberExtracted = rouletteValue.Next(0, upperExtremity);
+                    int n = roulette[numberExtracted];
+                    if (NumbersExtracted.Contains(n) == false)//Un percorso non può essere sorteggiato più di una volta
+                    {
+                        PathGenetic h = FatherGeneration.Find(x => x.NRoulette == n);
+                        go = false;
+                        NumbersExtracted.Add(n);
+                        nextGeneration.Add(h);
+                    }
+                } while (go);
+            }
+            return nextGeneration;
         }
 
-        static void BuildRandomSolution()
+        static void PrintGeneticSolution(int[] Heuristic)
         {
-            int currentIndex = 0;
+            file = new StreamWriter(instance.InputFile + ".dat", false);
 
-            distHeuristic = 0;
+            for (int i = 0; i + 1 < instance.NNodes; i++)
+            {
+                int vertice1 = Heuristic[i];
+                int vertice2 = Heuristic[i + 1];
+                file.WriteLine(instance.Coord[vertice1].X + " " + instance.Coord[vertice1].Y + " " + (vertice1 + 1));
+                file.WriteLine(instance.Coord[vertice2].X + " " + instance.Coord[vertice2].Y + " " + (vertice2 + 1) + "\n");
+            }
+            file.WriteLine(instance.Coord[Heuristic[0]].X + " " + instance.Coord[Heuristic[0]].Y + " " + (Heuristic[0] + 1));
+            file.WriteLine(instance.Coord[Heuristic[instance.NNodes - 1]].X + " " + instance.Coord[Heuristic[instance.NNodes - 1]].Y + " " + (Heuristic[instance.NNodes - 1] + 1) + "\n");
+
+            //GNUPlot input file needs to be closed
+            file.Close();
+            //Accessing GNUPlot to read the file
+            if (Program.VERBOSE >= -1)
+                PrintGNUPlot(instance.InputFile, typeSol);
+        }
+
+        static PathGenetic BestSolution(List<PathGenetic> percorsi, PathGenetic migliorCamminoAssoluto)
+        {
+            PathGenetic migliorCamminoGenerazione = migliorCamminoAssoluto;
+
+            for (int i = 1; i < percorsi.Count; i++)
+            {
+                if ((percorsi[i].cost < (migliorCamminoGenerazione.cost)) || (migliorCamminoGenerazione.cost == -1))
+                    migliorCamminoGenerazione = percorsi[i];
+            }
+
+            return migliorCamminoGenerazione;
+        }
+
+        static int FillRoulette(List<int> roulette, List<PathGenetic> CurrentGeneration)
+        {
+            int sizeRoulette = 0;
+            int proportionalityConstant = Estimate(CurrentGeneration[0].Fitness);
+
+            for (int i = 0; i < CurrentGeneration.Count; i++)
+            {
+                int prob = (int)(CurrentGeneration[i].Fitness * proportionalityConstant);
+                CurrentGeneration[i].NRoulette = i;
+                sizeRoulette += prob;
+                for (int j = 0; j < prob; j++)
+                    roulette.Add(i);
+            }
+            return sizeRoulette;
+        }
+
+        static int Estimate(double sample)
+        {
+            int k = 1;
+            while (sample < 100)
+            {
+                sample = sample * 10;
+                k = k * 10;
+            }
+            return k;
+        }
+
+        static void Mutation(int[] pathChild)
+        {
+            int indiceDaModificare = rnd.Next(0, pathChild.Length);
+            int nuovoValore = rnd.Next(0, instance.NNodes);
+            pathChild[indiceDaModificare] = nuovoValore;
+        }
+
+        static PathGenetic GenerateChild(PathGenetic mother, PathGenetic father)
+        {
+            PathGenetic child;
+            int[] PercorsoFiglio = new int[instance.NNodes];
+
+            int crossover = (rnd.Next(0, instance.NNodes));
+
+            for (int i = 0; i < instance.NNodes; i++)
+            {
+                if (i > crossover)
+                    PercorsoFiglio[i] = mother.path[i];
+                else
+                    PercorsoFiglio[i] = father.path[i];
+            }
+
+            bool variableMutation = true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                if ((rnd.Next(2, 4) % 2) != 0)
+                {
+                    variableMutation = false;
+                    break;
+                }
+            }
+
+            if (variableMutation == true)
+                Mutation(PercorsoFiglio);
+
+            child = Repair(PercorsoFiglio);
+
+            if (ProbabilityTwoOpt() == 1)
+            {
+                child.path = InterfaceForTwoOpt(child.path);
+
+                TwoOpt(child);
+
+                child.path = Reverse(child.path);               
+            }
+            return child;
+        }
+
+        static int[] zPosInv(int index, int nNodes)
+        {
+            //int i = 0;
+            //int cnt = 1;
+            //int sup = nNodes - cnt;
+            //while(index > sup)
+            //{
+            //    cnt++;
+            //    sup += nNodes - cnt; 
+            //}
+
+            //i = cnt - 1;
+
+            //int i = index + (i + 1) * (i + 2) / 2 - i * nNodes;
+
+            //return new int[] { i, i };
+
+            for (int i = 0; i < nNodes; i++)
+            {
+                for (int j = i + 1; j < nNodes; j++)
+                    if (zPos(i, j, nNodes) == index)
+                        return new int[] { i, j };
+            }
+
+            return null;
+        }
+        static void PreProcessing(List<int[]> fixedVariables)
+        {
+            int nodeLeft = 0;
+            int nodeRight = 0;
+
+            /* for (int i = 0; i < fixedVariables.Count; i++)
+             {
+                 int[] x = fixedVariables[i];
+                 Console.WriteLine(x[0] + "---" + x[1]);
+             }
+             */
+            for (int i = 0; i < fixedVariables.Count; i++)
+            {
+                int[] currentEdge = fixedVariables[i];
+
+                nodeLeft = currentEdge[0];
+                nodeRight = currentEdge[1];
+                fixedVariables.Remove(currentEdge);
+
+
+                for (int k = 0; k < fixedVariables.Count; k++)
+                {
+                    int[] fixedEdge = fixedVariables[k];
+                    if (nodeLeft == fixedEdge[0])
+                    {
+                        nodeLeft = fixedEdge[1];
+                        fixedVariables.Remove(fixedEdge);
+                    }
+                }
+                for (int k = 0; k < fixedVariables.Count; k++)
+                {
+                    int[] fixedEdge = fixedVariables[k];
+                    if (nodeLeft == fixedEdge[1])
+                    {
+                        nodeLeft = fixedEdge[0];
+                        fixedVariables.Remove(fixedEdge);
+                    }
+                }
+
+                for (int k = 0; k < fixedVariables.Count; k++)
+                {
+                    int[] fixedEdge = fixedVariables[k];
+                    if (nodeRight == fixedEdge[0])
+                    {
+                        nodeRight = fixedEdge[1];
+                        fixedVariables.Remove(fixedEdge);
+                    }
+
+                }
+
+                for (int k = 0; k < fixedVariables.Count; k++)
+                {
+                    int[] fixedEdge = fixedVariables[k];
+                    if (nodeRight == fixedEdge[1])
+                    {
+                        nodeRight = fixedEdge[0];
+                        fixedVariables.Remove(fixedEdge);
+                    }
+
+                }
+                if (nodeLeft != currentEdge[0] || nodeRight != currentEdge[1])
+                    z[zPos(nodeLeft, nodeRight, instance.NNodes)].UB = 0;
+            }
+
+            /* for (int i = 0; i < z.Length; i++)
+              {
+                  if (z[i].LB == 1)
+                  {
+                      Console.WriteLine("Fissate a 1");
+                      int[] x = zPosInv(i, instance.NNodes);
+                      Console.WriteLine(x[0] +"-"+x[1]);
+                  }
+                  if (z[i].UB == 0)
+                  {
+                      Console.WriteLine("Fissate a 0");
+                      int[] x = zPosInv(i, instance.NNodes);
+                      Console.WriteLine(x[0] + "-" + x[1]);
+
+                  }
+              }*/
+        }
+
+        static int ProbabilityTwoOpt()
+        {
+            if (rnd.Next(1, instance.NNodes / 2) == 1)
+                return 1;
+            else
+                return 0;
+        }
+        static PathGenetic Repair(int[] pathChild)//Mi consente di togliere tutti i vertici duplicati
+        {
+            List<int> visitedNodes = new List<int>();//Serve per togliere il fatto che in un nodo incidano due vertici
+            List<int> isolatedNodes = new List<int>();//Sono i nodi di Child isolati
+            List<int> nearlestIsolatedNodes = new List<int>();
+
+            FindIsolatedNodes(pathChild, isolatedNodes, nearlestIsolatedNodes);
+
+            FindNearestNode(isolatedNodes, nearlestIsolatedNodes);
+
+            List<int> pathIncomplete = new List<int>();
+
+            int[] pathComplete = new int[instance.NNodes];
+
+            for (int i = 0; i < instance.NNodes; i++)
+            {
+                if (visitedNodes.Contains(pathChild[i]) == false)
+                {
+                    visitedNodes.Add(pathChild[i]);
+                    pathIncomplete.Add(pathChild[i]);
+                }
+            }
+
+            int positionInsertNode = 0;
+
+            for (int i = 0; i < pathIncomplete.Count; i++)
+            {
+                if (nearlestIsolatedNodes.Contains(pathIncomplete[i]))
+                {
+                    pathComplete[positionInsertNode] = pathIncomplete[i];
+                    pathComplete[positionInsertNode + 1] = isolatedNodes[nearlestIsolatedNodes.IndexOf(pathIncomplete[i])];
+                    positionInsertNode++;
+                }
+                else
+                    pathComplete[positionInsertNode] = pathIncomplete[i];
+
+                positionInsertNode++;
+            }
+
+            return new PathGenetic(pathComplete);
+        }
+        static void FindIsolatedNodes(int[] percorsoFiglio, List<int> nodiIsolati, List<int> piuVicininodiIsolati)
+        {
+            int cntVolte = 0;
+            for (int i = 0; i < instance.NNodes; i++)
+            {
+                for (int y = 0; y < instance.NNodes; y++)
+                {
+                    if (percorsoFiglio[y] == i)
+                        cntVolte++;
+                }
+
+                if (cntVolte == 0)
+                    nodiIsolati.Add(i);
+
+                cntVolte = 0;
+            }
+        }
+        static void FindNearestNode(List<int> nodiIsolati, List<int> piuVicininodiIsolati)
+        {
+            int nextNode = 0;
+            int nearestNode = 0;
+            bool go = true;
+
+            for (int i = 0; i < nodiIsolati.Count; i++)
+            {
+                go = false;
+                nextNode = 0;
+                do
+                {
+                    nearestNode = listArray[nodiIsolati[i]][nextNode];
+
+                    if (((nodiIsolati.Contains(nearestNode)) == false) && (piuVicininodiIsolati.Contains(nearestNode) == false))
+                    {
+                        piuVicininodiIsolati.Add(nearestNode);
+                        go = false;
+                    }
+                    else
+                    {
+                        nextNode++;
+                        go = true;
+                    }
+                } while (go);
+            }
+        }
+
+        static int[] InterfaceForTwoOpt(int[] path)
+        {
+            int[] inputTwoOpt = new int[path.Length];
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                for (int j = 0; j < path.Length; j++)
+                {
+                    if (j == path.Length - 1)
+                    {
+                        inputTwoOpt[i] = path[0];
+                    }
+                    else if (path[j] == i)
+                    {
+                        inputTwoOpt[i] = path[j + 1];
+                        break;
+                    }
+                }
+            }
+            return inputTwoOpt;
+        }
+
+        static int[] Reverse(int[] path)
+        {
+            int[] returnGenetic = new int[path.Length];
+
+            returnGenetic[0] = path[0];
+
+            for (int i = 1; i < path.Length; i++)
+                returnGenetic[i] = path[returnGenetic[i - 1]];
+
+            return returnGenetic;
+        }
+
+        static PathGenetic NearestNeightbor()
+        {
+            int[] zHeuristic = new int[instance.NNodes];
+            double distHeuristic = 0;
+
+            int currentIndex = 0;
 
             int[] availableIndexes = new int[instance.NNodes];
 
@@ -786,11 +1573,70 @@ namespace TSPCsharp
 
             distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[0], instance.EdgeType);
             
-           if (incumbentZHeuristic == null)
+           /*if (incumbentZHeuristic == null)
             {
                 incumbentZHeuristic = zHeuristic;
                 incumbentDist = distHeuristic;
+            }*/
+
+            return new PathGenetic(zHeuristic, distHeuristic);
+        }
+
+        static PathGenetic NearestNeightborGenetic()
+        {
+            int[] HeuristicSolution = new int[instance.NNodes];
+            List<int> availableNodes = new List<int>(); //Lista contenente tutti i nodi disponibil
+            int currenNode = rnd.Next(0, instance.NNodes);
+            HeuristicSolution[0] = currenNode;
+            availableNodes.Add(currenNode);
+
+            listArray = BuildSLComplete();//listArray[i][0] contiente il nodoo più vicino del vertice i
+
+            for (int i = 1; i < instance.NNodes; i++)
+            {
+                bool found = false;
+                int plus = RndGenetic();
+                int nextNode = listArray[currenNode][0 + plus];
+
+                do
+                {
+                    if (availableNodes.Contains(nextNode) == false)//Se il nodo scelto è disponibile
+                    {
+                        HeuristicSolution[i] = nextNode;
+                        availableNodes.Add(nextNode);//Setto che il nodo nodoCorrente è stato visitato e quindi non è più disponibile
+                        currenNode = nextNode;
+                        found = true;
+                    }
+                    else
+                    {
+                        plus++;
+                        if (plus >= instance.NNodes - 1)
+                        {
+                            nextNode = listArray[currenNode][0];
+                            plus = 0;
+                        }
+                        else
+                            nextNode = listArray[currenNode][0 + plus];
+                    }
+
+                } while (!found);
             }
+
+            return new PathGenetic(HeuristicSolution);//Il costo del percorso viene calcolato all' interno del costruttore
+
+        }
+
+        static int RndGenetic()
+        {
+            double tmp = rnd.NextDouble();
+            if (tmp < 0.5)
+                return 0;
+            else if (tmp < 0.60)
+                return 1;
+            else if (tmp < 0.80)
+                return 2;
+            else
+                return 3;
         }
 
         static int RndPlus()
@@ -805,7 +1651,7 @@ namespace TSPCsharp
                 return 2;
         }
 
-        static void PrintHeuristicSolution()
+        static void PrintHeuristicSolution(PathGenetic pathG,double incumbentCost)
         {
 
             //Init the StreamWriter for the current solution
@@ -819,13 +1665,12 @@ namespace TSPCsharp
                  *-- previus link --
                  *<Blank line>
                  *Xi Yi <index(i)>
-                 *Xj Yj <index(j)>
+                 *Xj Yj <index(i)>
                  *<Blank line> 
                  *-- next link --
                 */
                 file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                file.WriteLine(instance.Coord[zHeuristic[i]].X + " " + instance.Coord[zHeuristic[i]].Y + " " + (zHeuristic[i] + 1) + "\n");
-
+                file.WriteLine(instance.Coord[pathG.path[i]].X + " " + instance.Coord[pathG.path[i]].Y + " " + (pathG.path[i] + 1) + "\n");
             }
 
             //GNUPlot input file needs to be closed
@@ -833,10 +1678,10 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlotHeuristic(instance.InputFile, typeSol);
+                PrintGNUPlotHeuristic(instance.InputFile, typeSol, pathG.cost, incumbentCost);
         }
 
-        static void TwoOpt()
+        static void TwoOpt(PathGenetic pathG)
         {
             int indexStart = 0;
             int cnt = 0;
@@ -846,9 +1691,9 @@ namespace TSPCsharp
             {
                 found = false;
                 int a = indexStart;
-                int b = zHeuristic[a];
-                int c = zHeuristic[b];
-                int d = zHeuristic[c];
+                int b = pathG.path[a];
+                int c = pathG.path[b];
+                int d = pathG.path[c];
 
                 for (int i = 0; i < instance.NNodes - 3; i++)
                 {
@@ -862,12 +1707,12 @@ namespace TSPCsharp
 
                     if (distAC + distBD < distTotABCD)
                     {
-                        SwapRoute(c, b);
+                        SwapRoute(c, b, pathG);
 
-                        zHeuristic[a] = c;
-                        zHeuristic[b] = d;
+                        pathG.path[a] = c;
+                        pathG.path[b] = d;
 
-                        distHeuristic = distHeuristic - distTotABCD + distAC + distBD;
+                        pathG.cost = pathG.cost - distTotABCD + distAC + distBD;
 
                         indexStart = 0;
                         cnt = 0;
@@ -876,7 +1721,7 @@ namespace TSPCsharp
                     }
 
                     c = d;
-                    d = zHeuristic[c];
+                    d = pathG.path[c];
                 }
 
                 if (!found)
@@ -888,7 +1733,7 @@ namespace TSPCsharp
             } while (cnt < instance.NNodes);
         }
 
-        static void TabuSearch()
+        static void TabuSearch(PathStandard currentSol, PathStandard incumbentPath)
         {
             int indexStart = 0;
             string nextBestMove = "";
@@ -903,11 +1748,11 @@ namespace TSPCsharp
                 for (int j = 0; j < instance.NNodes; j++, indexStart = b)
                 {
                     a = indexStart;
-                    b = zHeuristic[a];
-                    c = zHeuristic[b];
-                    d = zHeuristic[c];
+                    b = currentSol.path[a];
+                    c = currentSol.path[b];
+                    d = currentSol.path[c];
 
-                    for (int i = 0; i < instance.NNodes - 3; i++, c = d, d = zHeuristic[c])
+                    for (int i = 0; i < instance.NNodes - 3; i++, c = d, d = currentSol.path[c])
                     {
                         if (!tabu.IsTabu(a, c) && !tabu.IsTabu(b, d))
                         {
@@ -941,17 +1786,18 @@ namespace TSPCsharp
                     c = int.Parse(currentElements[2]);
                     d = int.Parse(currentElements[3]);
 
-                    SwapRoute(c, b);
+                    SwapRoute(c, b, (PathGenetic)currentSol);
 
-                    zHeuristic[a] = c;
-                    zHeuristic[b] = d;
+                    currentSol.path[a] = c;
+                    currentSol.path[b] = d;
 
-                    distHeuristic += bestGain;
+                    currentSol.cost += bestGain;
 
-                    if (incumbentDist > distHeuristic)
+                    if (incumbentPath.cost > currentSol.cost)
                     {
-                        incumbentDist = distHeuristic;
-                        incumbentZHeuristic = zHeuristic;
+                        /* incumbentDist = distHeuristic;
+                         incumbentZHeuristic = zHeuristic;*/
+                        incumbentPath = (PathGenetic)currentSol.Clone();
                     }
 
                     if (bestGain < 0)
@@ -972,69 +1818,68 @@ namespace TSPCsharp
                     c = int.Parse(currentElements[2]);
                     d = int.Parse(currentElements[3]);
 
-                    SwapRoute(c, b);
+                    SwapRoute(c, b, (PathGenetic)currentSol);
 
-                    zHeuristic[a] = c;
-                    zHeuristic[b] = d;
+                    currentSol.path[a] = c;
+                    currentSol.path[b] = d;
 
-                    distHeuristic += worstGain;
+                    currentSol.cost += worstGain;
 
                     tabu.AddTabu(a, b, c, d);
                     typeSol = 1;
 
                 }
 
-                PrintHeuristicSolution();
-
+                PrintHeuristicSolution((PathGenetic)currentSol, incumbentPath.cost);
                 bestGain = double.MaxValue;
                 worstGain = double.MinValue;
 
             } while (cl.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
         }
 
-        static void VNS()
+        static void VNS(PathStandard currentSol)
         {
             int a, b, c, d, e, f;
 
-            a = rnd.Next(zHeuristic.Length);
-            b = zHeuristic[a];
+            a = rnd.Next(currentSol.path.Length);
+            b = currentSol.path[a];
 
             do
             {
-                c = rnd.Next(zHeuristic.Length);
-                d = zHeuristic[c];
+                c = rnd.Next(currentSol.path.Length);
+                d = currentSol.path[c];
             } while ((a == c && b == d) || a == d || b == c);
 
             do
             {
-                e = rnd.Next(zHeuristic.Length);
-                f = zHeuristic[e];
+                e = rnd.Next(currentSol.path.Length);
+                f = currentSol.path[e];
             } while ((e == a && f == b) || e == b || f == a || (e == c && f == d) || e == d || f == c);
 
             List<int> order = new List<int>();
 
-            for (int i = 0, index = 0; i < zHeuristic.Length && order.Count != 4; i++, index = zHeuristic[index])
+            for (int i = 0, index = 0; i < currentSol.path.Length && order.Count != 4; i++, index = currentSol.path[index])
             {
                 if (a == index)
                 {
                     order.Add(a);
                     order.Add(b);
                     i++;
-                    index = zHeuristic[index];
+                    index = currentSol.path[index];
                 }
                 else if (c == index)
                 {
                     order.Add(c);
                     order.Add(d);
                     i++;
-                    index = zHeuristic[index];
+                    index = currentSol.path[index];
                 }
                 else if (e == index)
                 {
                     order.Add(e);
                     order.Add(f);
                     i++;
-                    index = zHeuristic[index];
+                    index = currentSol.path[index];
                 }
             }
 
@@ -1052,27 +1897,29 @@ namespace TSPCsharp
                 order.Add(f);
             }
 
-            SwapRoute(order[2], order[1]);
+            SwapRoute(order[2], order[1], (PathGenetic)currentSol);
 
-            zHeuristic[order[0]] = order[2];
+            currentSol.path[order[0]] = order[2];
 
-            SwapRoute(order[4], order[3]);
+            SwapRoute(order[4], order[3],(PathGenetic)currentSol);
 
-            zHeuristic[order[1]] = order[4];
+            currentSol.path[order[1]] = order[4];
 
-            zHeuristic[order[3]] = order[5];
+            currentSol.path[order[3]] = order[5];
 
-            distHeuristic += Point.Distance(instance.Coord[order[0]], instance.Coord[order[2]], instance.EdgeType) +
+            currentSol.cost += Point.Distance(instance.Coord[order[0]], instance.Coord[order[2]], instance.EdgeType) +
                 Point.Distance(instance.Coord[order[1]], instance.Coord[order[4]], instance.EdgeType) +
                 Point.Distance(instance.Coord[order[3]], instance.Coord[order[5]], instance.EdgeType) -
                 Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) -
                 Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType) -
                 Point.Distance(instance.Coord[e], instance.Coord[f], instance.EdgeType);
+                
         }
 
         //not working
         static void ThreeOpt()
         {
+            /*
             int indexStart = 0;
             int cnt = 0;
             bool found = false;
@@ -1098,7 +1945,7 @@ namespace TSPCsharp
                         break;
                     }
 
-                    for (int j = 0; j < instance.NNodes; j++, e = f, f = zHeuristic[e])
+                    for (int i = 0; i < instance.NNodes; i++, e = f, f = zHeuristic[e])
                     {
 
                         double distAB = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType);
@@ -1290,16 +2137,17 @@ namespace TSPCsharp
                 }
 
             } while (cnt < instance.NNodes);
+            */
         }
 
-        static void SwapRoute(int c, int b)
+        static void SwapRoute(int c, int b, PathGenetic pathG)
         {
             int from = b;
-            int to = zHeuristic[from];
+            int to = pathG.path[from];
             do
             {
-                int tmpTo = zHeuristic[to];
-                zHeuristic[to] = from;
+                int tmpTo = pathG.path[to];
+                pathG.path[to] = from;
                 from = to;
                 to = tmpTo;
             } while (from != c);
@@ -1390,10 +2238,10 @@ namespace TSPCsharp
             {
                 if (n >= 0)
                 {
-                    //Only links (i,j) with i < j are correct
+                    //Only links (i,i) with i < i are correct
                     for (int j = i + 1; j < instance.NNodes; j++)
                     {
-                        //zPos return the correct position where to store the variable corresponding to the actual link (i,j)
+                        //zPos return the correct position where to store the variable corresponding to the actual link (i,i)
                         int position = zPos(i, j, instance.NNodes);
                         if ((listArray[i]).IndexOf(j) < n)
                             z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
@@ -1404,10 +2252,10 @@ namespace TSPCsharp
                 }
                 else
                 {
-                    //Only links (i,j) with i < j are correct
+                    //Only links (i,i) with i < i are correct
                     for (int j = i + 1; j < instance.NNodes; j++)
                     {
-                        //zPos return the correct position where to store the variable corresponding to the actual link (i,j)
+                        //zPos return the correct position where to store the variable corresponding to the actual link (i,i)
                         int position = zPos(i, j, instance.NNodes);
                         z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
                         expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
@@ -1427,7 +2275,7 @@ namespace TSPCsharp
 
                 for (int j = 0; j < instance.NNodes; j++)
                 {
-                    //For each row i only the links (i,j) or (j,i) have coefficent 1
+                    //For each row i only the links (i,i) or (i,i) have coefficent 1
                     //zPos return the correct position where link is stored inside the vector z
                     if (i != j)//No loops wioth only one node
                         expr.AddTerm(z[zPos(i, j, instance.NNodes)], 1);
@@ -1456,18 +2304,18 @@ namespace TSPCsharp
                 process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
         }
 
-        static void PrintGNUPlotHeuristic(string name, int typeSol)
+        static void PrintGNUPlotHeuristic(string name, int typeSol,double currentCost, double incumbentCost)
         {
             //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
             if (typeSol == 0)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentDist + "   Current solution: " + distHeuristic + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
             else if (typeSol == 1)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentDist + "   Current solution: " + distHeuristic + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
         }
 
 
         //Returns physical or virtual cores of the pc
-        static int RetriveCoreNumber(int type)
+      /*  static int RetriveCoreNumber(int type)
         {
             if (type == 0)
             {
@@ -1482,7 +2330,7 @@ namespace TSPCsharp
             }
             else
                 return Environment.ProcessorCount;
-        }
+        }*/
 
 
         //Used to evaluete the correct position to store and read the variables for the model
@@ -1527,7 +2375,7 @@ namespace TSPCsharp
         {
             if (compConn[i] != compConn[j])//Same related component, the latter is not closed yet
             {
-                for (int k = 0; k < compConn.Length; k++)// k>i poichè i > j
+                for (int k = 0; k < compConn.Length; k++)// k>i poichè i > i
                 {
                     if ((k != j) && (compConn[k] == compConn[j]))
                     {
@@ -1536,7 +2384,7 @@ namespace TSPCsharp
                     }
                 }
 
-                //Finally also the vallue relative to the Point j are updated
+                //Finally also the vallue relative to the Point i are updated
                 compConn[j] = compConn[i];
             }
             else//Here the current releted component is complete and the relative subtout elimination constraint can be added to the model

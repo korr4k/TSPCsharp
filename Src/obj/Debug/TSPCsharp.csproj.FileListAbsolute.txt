@@ -1,0 +1,1 @@
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\Debug\TSPCsharp.exe.config

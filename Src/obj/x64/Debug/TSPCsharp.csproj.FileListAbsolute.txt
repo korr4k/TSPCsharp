@@ -1,0 +1,10 @@
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\TSPCsharp.exe.config
+C:\Users\Mattia\Desktop\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.csprojResolveAssemblyReference.cache
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\TSPCsharp.exe
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\TSPCsharp.pdb
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\ILOG.Concert.dll
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\ILOG.CPLEX.dll
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\ILOG.Concert.xml
+C:\Users\Mattia\Desktop\TSPCsharp\Src\bin\x64\Debug\ILOG.CPLEX.xml
+C:\Users\Mattia\Desktop\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.exe
+C:\Users\Mattia\Desktop\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.pdb
