@@ -74,11 +74,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="itemList.cs" />
+    <Compile Include="PathGenetic.cs" />
+    <Compile Include="PathStandard.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tabu.cs" />
     <Compile Include="TSP.cs" />
+    <Compile Include="TSPLazyConsCallback.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

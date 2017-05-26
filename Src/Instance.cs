@@ -3,7 +3,7 @@
 
 namespace TSPCsharp
 {
-    class Instance
+    public class Instance
     {
         // input data
         int nNodes;
