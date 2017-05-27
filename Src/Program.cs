@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 
 namespace TSPCsharp
 {
@@ -50,7 +51,7 @@ namespace TSPCsharp
             //Starting the elaboration of the TSP problem
             //The boolean returning value tells if everything went fine
             if (!TSP.TSPOpt(inst, clock))
-               throw new System.Exception("Impossible to find the optimal solution for the given instance");
+                throw new System.Exception("Impossible to find the optimal solution for the given instance");
 
 
             //Stopping the clock
@@ -63,6 +64,16 @@ namespace TSPCsharp
 
             //Only to check the output
             Console.ReadLine();
+
+            foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dat").Where(item => item.EndsWith(".dat")))
+            {
+                File.Delete(file);
+            }
+
+            foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.lp").Where(item => item.EndsWith(".lp")))
+            {
+                File.Delete(file);
+            }
         }
 
         static void ParseInst(Instance inst, String[] input)
