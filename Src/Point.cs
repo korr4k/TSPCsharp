@@ -51,7 +51,6 @@ namespace TSPCsharp
 
             if (pointType == "EUC_2D")
             {
-                //Ceiling is used to round at the next int value
                 return Convert.ToInt32(Math.Sqrt(xD * xD + yD * yD) + 0.5);
             }
             else if (pointType == "MAN_2D")
@@ -108,7 +107,7 @@ namespace TSPCsharp
                     return tij;
             }else if(pointType == "CEIL_2D")
             {
-                return Convert.ToInt32(Math.Sqrt(xD * xD + yD * yD) + 0.5);
+                return Math.Ceiling(Math.Sqrt(xD * xD + yD * yD) + 0.5);
             }
 
             //If each statem is false, the used point type is not yet implemented
