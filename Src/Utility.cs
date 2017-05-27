@@ -273,7 +273,7 @@ namespace TSPCsharp
             return new PathGenetic(zHeuristic, distHeuristic);
         }
 
-        public static PathGenetic NearestNeightborGenetic(Instance instance, Random rnd, bool rndStartPoint)
+        public static PathGenetic NearestNeightborGenetic(Instance instance, Random rnd, bool rndStartPoint, List<int>[] listArray)
         {
             int[] heuristicSolution = new int[instance.NNodes];
             List<int> availableNodes = new List<int>(); //Lista contenente tutti i nodi disponibili
@@ -284,9 +284,7 @@ namespace TSPCsharp
                 currenNode = 0;
             heuristicSolution[0] = currenNode;
             availableNodes.Add(currenNode);
-
-            List<int>[] listArray = BuildSLComplete(instance);//listArray[i][0] contiente il nodo più vicino del vertice i
-
+            
             for (int i = 1; i < instance.NNodes; i++)
             {
                 bool found = false;
@@ -348,7 +346,7 @@ namespace TSPCsharp
             return L;
         }
 
-        static List<int>[] BuildSLComplete(Instance instance)
+        public static List<int>[] BuildSLComplete(Instance instance)
         {
             //SL and L stores the information regarding the nearest edges for each node 
             List<itemList>[] SL = new List<itemList>[instance.NNodes];
@@ -439,7 +437,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlotHeuristic(process, instance.InputFile, 0, pathG.cost, incumbentCost);
+                PrintGNUPlotHeuristic(process, instance.InputFile, typeSol, pathG.cost, incumbentCost);
         }
 
         public static void PrintGNUPlotHeuristic(Process process, string name, int typeSol, double currentCost, double incumbentCost)
@@ -451,7 +449,7 @@ namespace TSPCsharp
                 process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
         }
 
-        public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father)
+        public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father, List<int>[] listArray)
         {
             PathGenetic child;
             int[] PercorsoFiglio = new int[instance.NNodes];
@@ -480,7 +478,7 @@ namespace TSPCsharp
             if (variableMutation == true)
                 Mutation(instance, rnd, PercorsoFiglio);
 
-            child = Repair(instance, PercorsoFiglio);
+            child = Repair(instance, PercorsoFiglio, listArray);
 
             if (ProbabilityTwoOpt(instance, rnd) == 1)
             {
@@ -594,7 +592,7 @@ namespace TSPCsharp
             pathChild[indiceDaModificare] = nuovoValore;
         }
 
-        static PathGenetic Repair(Instance instance, int[] pathChild)
+        static PathGenetic Repair(Instance instance, int[] pathChild, List<int>[] listArray)
         {
             List<int> visitedNodes = new List<int>();//Serve per togliere il fatto che in un nodo incidano due vertici
             List<int> isolatedNodes = new List<int>();//Sono i nodi di Child isolati
@@ -602,7 +600,7 @@ namespace TSPCsharp
 
             FindIsolatedNodes(instance, pathChild, isolatedNodes, nearlestIsolatedNodes);
 
-            FindNearestNode(isolatedNodes, nearlestIsolatedNodes);
+            FindNearestNode(isolatedNodes, nearlestIsolatedNodes, listArray);
 
             List<int> pathIncomplete = new List<int>();
 
@@ -690,7 +688,7 @@ namespace TSPCsharp
                 return 0;
         }
 
-        static int[] InterfaceForTwoOpt(int[] path)
+        public static int[] InterfaceForTwoOpt(int[] path)
         {
             int[] inputTwoOpt = new int[path.Length];
 
@@ -712,20 +710,14 @@ namespace TSPCsharp
             return inputTwoOpt;
         }
 
-        static int[] Reverse(int[] path)
+        public static int[] Reverse(int[] path)
         {
             int[] returnGenetic = new int[path.Length];
 
-            int act = path[0];
-            int tmp = act;
+            returnGenetic[0] = path[0];
 
-            for (int i = 0; i < path.Length - 1; i++)
-            {
-                returnGenetic[act] = path[i + 1];
-                act = path[i + 1];
-            }
-
-            returnGenetic[act] = tmp;
+            for (int i = 1; i < path.Length; i++)
+                returnGenetic[i] = path[returnGenetic[i - 1]];
 
             return returnGenetic;
         }
@@ -861,14 +853,14 @@ namespace TSPCsharp
             PathGenetic child;
             int[] path = new int[instance.NNodes];
 
-            int[] m = Reverse(mother.path);
-            PrintGeneticSolution(instance, process, mother.path);
-            int[] f = Reverse(father.path);
-            PrintGeneticSolution(instance, process, father.path);
+            int[] m = InterfaceForTwoOpt(mother.path);
+            //PrintGeneticSolution(instance, process, mother.path);
+            int[] f = InterfaceForTwoOpt(father.path);
+            //PrintGeneticSolution(instance, process, father.path);
 
             for (int i = 0; i < m.Length; i++)
             {
-                if (m[i] == f[i])
+                if (m[i] == f[i] || f[m[i]] == i)
                     z[zPos(i, m[i], m.Length)].LB = 1;
             }
 
@@ -898,11 +890,11 @@ namespace TSPCsharp
             }
 
             child = new PathGenetic(Reverse(path), instance);
-            PrintGeneticSolution(instance, process, child.path);
+            //PrintGeneticSolution(instance, process, child.path);
 
             for (int i = 0; i < m.Length; i++)
             {
-                if (m[i] == f[i] || (i == f[m[i]] && m[i] == i))
+                if (m[i] == f[i] || i == f[m[i]])
                     z[zPos(i, m[i], m.Length)].LB = 0;
             }
 

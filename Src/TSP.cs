@@ -254,8 +254,7 @@ namespace TSPCsharp
                 epGap = true;
 
                 typeSol = 0;
-            }else
-                throw new System.Exception("Bad argument");
+            }
 
             //numb is equal to -1 when all links upper bound are 1
             if (numb != -1)
@@ -396,7 +395,7 @@ namespace TSPCsharp
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
 
             //Adding lazycallback
-            cplex.Use(new TSPLazyConsCallback(cplex, z, true));
+            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, true));
 
             //Solving
             cplex.Solve();
@@ -568,21 +567,19 @@ namespace TSPCsharp
                         do
                         {
                             TwoOpt(instance, solHeuristic);
-                            typeSol = 0;
-                            Utility.PrintHeuristicSolution(instance, process, solHeuristic, incumbentSol.cost, typeSol);
 
                             if (incumbentSol.cost > solHeuristic.cost)
                             {
                                 incumbentSol = (PathStandard)solHeuristic.Clone();
+
+                                Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
 
                                 Console.WriteLine("Incumbed changed");
                             }
                             else
                                 Console.WriteLine("Incumbed not changed");
 
-                            typeSol = 1;
                             VNS(instance, solHeuristic, rnd);
-                            Utility.PrintHeuristicSolution(instance, process, solHeuristic, incumbentSol.cost, typeSol);
 
                         } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
@@ -598,15 +595,17 @@ namespace TSPCsharp
                         List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
                         List<PathGenetic> ChildPoulation = new List<PathGenetic>();
 
+                        List<int>[] listArray = Utility.BuildSLComplete(instance);
+
 
                         for (int i = 0; i < instance.SizePopulation; i++)
-                            OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true));//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
+                            OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
                         do
                         {
                             for (int i = 0; i < instance.SizePopulation; i++)
                             {
                                 if ((i != 0) && (i % 2 != 0))
-                                    ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1]));
+                                    ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
                             }
 
                             OriginallyPopulated = Utility.NextPopulation(instance, OriginallyPopulated, ChildPoulation);
@@ -843,8 +842,7 @@ namespace TSPCsharp
 
         static void HardFixing(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
         {
-            StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
-
+            StreamWriter file;
             double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
             double incumbentCost = Double.MaxValue;
 
@@ -867,10 +865,11 @@ namespace TSPCsharp
             }
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, z, BlockPrint));
+            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, BlockPrint));
 
             do
             {
+
                 Utility.ModifyModel(instance, z, rnd, percentageFixing, incumbentSol, fixedVariables);
                 if ((fixedVariables.Count != instance.NNodes - 1) && (fixedVariables.Count != instance.NNodes))
                     Utility.PreProcessing(instance, z, fixedVariables);
@@ -880,6 +879,8 @@ namespace TSPCsharp
 
                 if (incumbentCost > cplex.ObjValue)
                 {
+                    file = new StreamWriter(instance.InputFile + ".dat", false);
+
                     incumbentCost = cplex.ObjValue;
                     incumbentSol = cplex.GetValues(z);
 
@@ -897,8 +898,9 @@ namespace TSPCsharp
                         }
                     }
 
-                    Utility.PrintGNUPlotHeuristic(process, instance.InputFile, 1, incumbentCost, incumbentCost);
                     file.Close();
+
+                    Utility.PrintGNUPlotHeuristic(process, instance.InputFile, 1, incumbentCost, incumbentCost);
                 }
 
                 cplex.DeleteMIPStarts(0);
@@ -980,7 +982,7 @@ namespace TSPCsharp
             cplex.AddCut(cut);
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, z, BlockPrint));
+            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, BlockPrint));
 
             do
             {
@@ -1054,21 +1056,23 @@ namespace TSPCsharp
             List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
             List<PathGenetic> ChildPoulation = new List<PathGenetic>();
 
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
+
             INumVar[] z = Utility.BuildModel(cplex, instance, -1);
 
-            cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
+            //cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
             cplex.SetParam(Cplex.DoubleParam.EpGap, 0.5);
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, z, false));//Installo la lazy 
+            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, false));//Installo la lazy 
 
             for (int i = 0; i < instance.SizePopulation; i++)
             {
-                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false));//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
-                //OriginallyPopulated[i].path = InterfaceForTwoOpt(OriginallyPopulated[i].path);
+                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false, listArray));//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
+                //OriginallyPopulated[i].path = Utility.InterfaceForTwoOpt(OriginallyPopulated[i].path);
 
-                //TwoOpt(OriginallyPopulated[i]);
+                //TwoOpt(instance, OriginallyPopulated[i]);
 
-                //OriginallyPopulated[i].path = Reverse(OriginallyPopulated[i].path);
+                //OriginallyPopulated[i].path = Utility.Reverse(OriginallyPopulated[i].path);
             }
 
             do
@@ -1321,4 +1325,3 @@ namespace TSPCsharp
 
     }
 }
-    

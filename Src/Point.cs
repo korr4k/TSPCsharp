@@ -4,7 +4,7 @@ namespace TSPCsharp
 {
     //Custom class used to stored the coordinates of a point
     //Attention: only 2D points are actually implemented
-    class Point
+    public class Point
     {
         private double x;
         private double y; 

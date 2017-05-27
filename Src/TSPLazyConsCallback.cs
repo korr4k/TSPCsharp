@@ -1,20 +1,26 @@
 ﻿using ILOG.Concert;
 using ILOG.CPLEX;
 using System.Collections.Generic;
+using System.IO;
+using System.Diagnostics;
 
 namespace TSPCsharp
 {
-    class TSPLazyConsCallback : Cplex.LazyConstraintCallback
+    public class TSPLazyConsCallback : Cplex.LazyConstraintCallback
     {
         private bool BlockPrint;
         private Cplex cplex;
         private INumVar[] z;
+        private Instance instance;
+        private Process process;
 
-        public TSPLazyConsCallback(Cplex cplex, INumVar[] z, bool BlockPrint)
+        public TSPLazyConsCallback(Cplex cplex, Instance instace, Process process, INumVar[] z, bool BlockPrint)
         {
             this.cplex = cplex;
             this.z = z;
             this.BlockPrint = BlockPrint;
+            this.instance = instace;
+            this.process = process;
         }
 
         public override void Main()
@@ -26,7 +32,7 @@ namespace TSPCsharp
 
             int[] compConnLC = new int[instance.NNodes];
 
-            InitCC(compConnLC);
+            Utility.InitCC(compConnLC);
 
             //To call GetValues for each value in z is a lot more expensive for unknown reasons
             double[] actualZ = GetValues(z);
@@ -47,7 +53,7 @@ namespace TSPCsharp
                 for (int j = i + 1; j < instance.NNodes; j++)
                 {
                     //Retriving the correct index position for the current link inside z
-                    int position = zPos(i, j, instance.NNodes);
+                    int position = Utility.zPos(i, j, instance.NNodes);
 
                     //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
                     if (actualZ[position] >= 0.5)
@@ -72,7 +78,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (BlockPrint)
-                PrintGNUPlot(instance.InputFile + "_" + nodeId, typeSol);
+                Utility.PrintGNUPlot(process, instance.InputFile + "_" + nodeId, 1);
 
             //cuts will stores the user's cut
             IRange[] cuts = new IRange[ccExprLC.Count];
@@ -117,7 +123,7 @@ namespace TSPCsharp
                         {
                             if (compConnLC[k] == compConnLC[i])
                             {
-                                expr.AddTerm(z[zPos(h, k, compConnLC.Length)], 1);
+                                expr.AddTerm(z[Utility.zPos(h, k, compConnLC.Length)], 1);
                             }
                         }
 
