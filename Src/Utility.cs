@@ -137,13 +137,23 @@ namespace TSPCsharp
         }
 
         //Print for GNUPlot
-        public static void PrintGNUPlot(Process process, string name, int typeSol)
+        public static void PrintGNUPlot(Process process, string name, int typeSol, double currentCost, double incumbentCost)
         {
-            //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
-            if (typeSol == 0)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
-            else if (typeSol == 1)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+            if (incumbentCost >= 0)
+            {
+                //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
+                if (typeSol == 0)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+                else if (typeSol == 1)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+            }else
+            {
+                //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
+                if (typeSol == 0)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+                else if (typeSol == 1)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+            }
         }
 
 
@@ -220,7 +230,8 @@ namespace TSPCsharp
 
         public static PathGenetic NearestNeightbor(Instance instance, Random rnd)
         {
-            int[] zHeuristic = new int[instance.NNodes];
+            // heuristicSolution is the path of the current heuristic solution generate
+            int[] heuristicSolution = new int[instance.NNodes];
             double distHeuristic = 0;
 
             int currentIndex = 0;
@@ -244,10 +255,9 @@ namespace TSPCsharp
 
                 do
                 {
-
                     if (availableIndexes[nextIndex] == -1)
                     {
-                        zHeuristic[currentIndex] = nextIndex;
+                        heuristicSolution[currentIndex] = nextIndex;
                         distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[nextIndex], instance.EdgeType);
                         availableIndexes[nextIndex] = 1;
                         currentIndex = nextIndex;
@@ -270,18 +280,25 @@ namespace TSPCsharp
 
             distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[0], instance.EdgeType);
 
-            return new PathGenetic(zHeuristic, distHeuristic);
+            return new PathGenetic(heuristicSolution, distHeuristic);
         }
 
+        //Generating a new heuristic solution for the Genetic Algorithm
         public static PathGenetic NearestNeightborGenetic(Instance instance, Random rnd, bool rndStartPoint, List<int>[] listArray)
         {
+            // heuristicSolution is the path of the current heuristic solution generate
             int[] heuristicSolution = new int[instance.NNodes];
-            List<int> availableNodes = new List<int>(); //Lista contenente tutti i nodi disponibili
+
+            //List that contains all nodes belonging to the graph 
+            List<int> availableNodes = new List<int>(); 
             int currenNode;
+
+            //rndStartPoint define if the starting point is random or always the node 0 
             if (rndStartPoint)
                 currenNode = rnd.Next(0, instance.NNodes);
             else
                 currenNode = 0;
+
             heuristicSolution[0] = currenNode;
             availableNodes.Add(currenNode);
             
@@ -293,10 +310,11 @@ namespace TSPCsharp
 
                 do
                 {
-                    if (availableNodes.Contains(nextNode) == false)//Se il nodo scelto è disponibile
+                    //We control that the selected node has never been visited
+                    if (availableNodes.Contains(nextNode) == false)
                     {
-                        heuristicSolution[i] = nextNode;
-                        availableNodes.Add(nextNode);//Setto che il nodo nodoCorrente è stato visitato e quindi non è più disponibile
+                        heuristicSolution[i] = nextNode;                     
+                        availableNodes.Add(nextNode);
                         currenNode = nextNode;
                         found = true;
                     }
@@ -315,8 +333,7 @@ namespace TSPCsharp
                 } while (!found);
             }
 
-            return new PathGenetic(heuristicSolution, instance);//Il costo del percorso viene calcolato all' interno del costruttore
-
+            return new PathGenetic(heuristicSolution, instance);
         }
 
         //Computing the nearest edges for each node
@@ -437,49 +454,39 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlotHeuristic(process, instance.InputFile, typeSol, pathG.cost, incumbentCost);
-        }
-
-        public static void PrintGNUPlotHeuristic(Process process, string name, int typeSol, double currentCost, double incumbentCost)
-        {
-            //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
-            if (typeSol == 0)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
-            else if (typeSol == 1)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+            {
+                if(pathG.cost != incumbentCost)
+                    PrintGNUPlot(process, instance.InputFile, typeSol, pathG.cost, incumbentCost);
+                else
+                    PrintGNUPlot(process, instance.InputFile, typeSol, pathG.cost, -1);
+            }
         }
 
         public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father, List<int>[] listArray)
         {
             PathGenetic child;
-            int[] PercorsoFiglio = new int[instance.NNodes];
+            int[] pathChild = new int[instance.NNodes];
 
+            //This variable defines the point of breaking the path of the father and that of the mother
             int crossover = (rnd.Next(0, instance.NNodes));
 
             for (int i = 0; i < instance.NNodes; i++)
             {
                 if (i > crossover)
-                    PercorsoFiglio[i] = mother.path[i];
+                    pathChild[i] = mother.path[i];
                 else
-                    PercorsoFiglio[i] = father.path[i];
+                    pathChild[i] = father.path[i];
             }
 
-            bool variableMutation = true;
 
-            for (int i = 0; i < 3; i++)
-            {
-                if ((rnd.Next(2, 4) % 2) != 0)
-                {
-                    variableMutation = false;
-                    break;
-                }
-            }
+            //With a probability of 0.01 we make a mutation
+            if (rnd.Next(0, 101) == 100)
+                Mutation(instance, rnd, pathChild);              
 
-            if (variableMutation == true)
-                Mutation(instance, rnd, PercorsoFiglio);
+            //The repair method ensures that the child is a permissible path
+            child = Repair(instance, pathChild, listArray);
 
-            child = Repair(instance, PercorsoFiglio, listArray);
-
+            //
             if (ProbabilityTwoOpt(instance, rnd) == 1)
             {
                 child.path = InterfaceForTwoOpt(child.path);
@@ -494,32 +501,37 @@ namespace TSPCsharp
         public static List<PathGenetic> NextPopulation(Instance instance, List<PathGenetic> FatherGeneration, List<PathGenetic> ChildGeneration)
         {
             List<PathGenetic> nextGeneration = new List<PathGenetic>();
+            //Data structure used to generate a population 
             List<int> roulette = new List<int>();
             Random rouletteValue = new Random();
+
+            //List that contains all number raffled
             List<int> NumbersExtracted = new List<int>();
-            bool go = false;
+            bool find = false;
             int numberExtracted;
 
             for (int i = 0; i < ChildGeneration.Count; i++)
                 FatherGeneration.Add(ChildGeneration[i]);
 
+            //FillRoulette return the size of the roultette
             int upperExtremity = FillRoulette(roulette, FatherGeneration);
 
             for (int i = 0; i < instance.SizePopulation; i++)
             {
                 do
                 {
-                    go = true;
+                    find = true;
                     numberExtracted = rouletteValue.Next(0, upperExtremity);
-                    int n = roulette[numberExtracted];
-                    if (NumbersExtracted.Contains(n) == false)//Un percorso non può essere sorteggiato più di una volta
+                    //A path can't be sorted more than one time
+                    if (NumbersExtracted.Contains(roulette[numberExtracted]) == false)
                     {
-                        PathGenetic h = FatherGeneration.Find(x => x.NRoulette == n);
-                        go = false;
-                        NumbersExtracted.Add(n);
-                        nextGeneration.Add(h);
+                        find = false;
+                        NumbersExtracted.Add(roulette[numberExtracted]);
+
+                        //We add to the next population the path having nRoulette equal to roulette[numberExtracted]
+                        nextGeneration.Add(FatherGeneration.Find(x => x.NRoulette == roulette[numberExtracted]));
                     }
-                } while (go);
+                } while (find);
             }
             return nextGeneration;
         }
@@ -553,6 +565,7 @@ namespace TSPCsharp
             return sizeRoulette;
         }
 
+        //Thi method create a constant k needed to the method FillRoulette
         static int Estimate(double sample)
         {
             int k = 1;
@@ -564,55 +577,57 @@ namespace TSPCsharp
             return k;
         }
 
-        public static void PrintGeneticSolution(Instance instance, Process process, int[] Heuristic)
+        public static void PrintGeneticSolution(Instance instance, Process process, PathGenetic Heuristic)
         {
             StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
 
             for (int i = 0; i + 1 < instance.NNodes; i++)
             {
-                int vertice1 = Heuristic[i];
-                int vertice2 = Heuristic[i + 1];
+                int vertice1 = Heuristic.path[i];
+                int vertice2 = Heuristic.path[i + 1];
                 file.WriteLine(instance.Coord[vertice1].X + " " + instance.Coord[vertice1].Y + " " + (vertice1 + 1));
                 file.WriteLine(instance.Coord[vertice2].X + " " + instance.Coord[vertice2].Y + " " + (vertice2 + 1) + "\n");
             }
-            file.WriteLine(instance.Coord[Heuristic[0]].X + " " + instance.Coord[Heuristic[0]].Y + " " + (Heuristic[0] + 1));
-            file.WriteLine(instance.Coord[Heuristic[instance.NNodes - 1]].X + " " + instance.Coord[Heuristic[instance.NNodes - 1]].Y + " " + (Heuristic[instance.NNodes - 1] + 1) + "\n");
+            file.WriteLine(instance.Coord[Heuristic.path[0]].X + " " + instance.Coord[Heuristic.path[0]].Y + " " + (Heuristic.path[0] + 1));
+            file.WriteLine(instance.Coord[Heuristic.path[instance.NNodes - 1]].X + " " + instance.Coord[Heuristic.path[instance.NNodes - 1]].Y + " " + (Heuristic.path[instance.NNodes - 1] + 1) + "\n");
 
             //GNUPlot input file needs to be closed
             file.Close();
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlot(process, instance.InputFile, 1);
+                PrintGNUPlot(process, instance.InputFile, 1, Heuristic.cost, -1);
         }
 
+        //We modify randomly the path relative to the child
         static void Mutation(Instance instance, Random rnd, int[] pathChild)
         {
-            int indiceDaModificare = rnd.Next(0, pathChild.Length);
-            int nuovoValore = rnd.Next(0, instance.NNodes);
-            pathChild[indiceDaModificare] = nuovoValore;
+            int indexToModify = rnd.Next(0, pathChild.Length);
+            int newValue = rnd.Next(0, instance.NNodes);
+            pathChild[indexToModify] = newValue;
         }
 
         static PathGenetic Repair(Instance instance, int[] pathChild, List<int>[] listArray)
         {
-            List<int> visitedNodes = new List<int>();//Serve per togliere il fatto che in un nodo incidano due vertici
-            List<int> isolatedNodes = new List<int>();//Sono i nodi di Child isolati
+            //This list contains the isolated nodes of the child
+            List<int> isolatedNodes = new List<int>();
+
+            //nearlestIsolatedNodes[i] contains the nearest node relative to isolatedNodes[i]
             List<int> nearlestIsolatedNodes = new List<int>();
 
             FindIsolatedNodes(instance, pathChild, isolatedNodes, nearlestIsolatedNodes);
 
             FindNearestNode(isolatedNodes, nearlestIsolatedNodes, listArray);
 
+            //Is the path without nodes visited more times
             List<int> pathIncomplete = new List<int>();
 
+            //Is the path that it is a solution of TSP
             int[] pathComplete = new int[instance.NNodes];
 
             for (int i = 0; i < instance.NNodes; i++)
-            {
-                if (visitedNodes.Contains(pathChild[i]) == false)
-                {
-                    visitedNodes.Add(pathChild[i]);
-                    pathIncomplete.Add(pathChild[i]);
-                }
+            {              
+                if (pathIncomplete.Contains(pathChild[i]) == false)
+                    pathIncomplete.Add(pathChild[i]);       
             }
 
             int positionInsertNode = 0;
@@ -630,58 +645,67 @@ namespace TSPCsharp
 
                 positionInsertNode++;
             }
-
             return new PathGenetic(pathComplete, instance);
         }
 
-        static void FindIsolatedNodes(Instance instance, int[] percorsoFiglio, List<int> nodiIsolati, List<int> piuVicininodiIsolati)
+        //This list method calculate the isolated nodes of the child
+        static void FindIsolatedNodes(Instance instance, int[] pathChild, List<int> isolatedNodes, List<int> nearestNeighIsolNode)
         {
-            int cntVolte = 0;
+            bool nodeIsVisited = false;
             for (int i = 0; i < instance.NNodes; i++)
             {
-                for (int y = 0; y < instance.NNodes; y++)
+                for (int j = 0; j < instance.NNodes; j++)
                 {
-                    if (percorsoFiglio[y] == i)
-                        cntVolte++;
+                    if (pathChild[j] == i)
+                    {
+                        nodeIsVisited = true;
+                        //If the node is visited can exit to for
+                        break;
+                    }
                 }
 
-                if (cntVolte == 0)
-                    nodiIsolati.Add(i);
+                //If the node has nevere been visited is a isolated noode
+                if (nodeIsVisited == false)
+                    isolatedNodes.Add(i);
 
-                cntVolte = 0;
+                //Configure nodeIsVisited to its default value
+                nodeIsVisited = false;
             }
         }
 
-        static void FindNearestNode(List<int> nodiIsolati, List<int> piuVicininodiIsolati, List<int>[] listArray)
+        static void FindNearestNode(List<int> isolatedNodes, List<int> nearestNeighIsolNode, List<int>[] listArray)
         {
             int nextNode = 0;
             int nearestNode = 0;
-            bool go = true;
+            bool find = true;
 
-            for (int i = 0; i < nodiIsolati.Count; i++)
+            for (int i = 0; i < isolatedNodes.Count; i++)
             {
-                go = false;
+                find = false;
                 nextNode = 0;
                 do
                 {
-                    nearestNode = listArray[nodiIsolati[i]][nextNode];
+                    nearestNode = listArray[isolatedNodes[i]][nextNode];
 
-                    if (((nodiIsolati.Contains(nearestNode)) == false) && (piuVicininodiIsolati.Contains(nearestNode) == false))
+                    /*We don't want that the nearestNeighIsolNode relative to a isolated node is a isolated node or the
+                    of another node*/
+                    if (((isolatedNodes.Contains(nearestNode)) == false) && (nearestNeighIsolNode.Contains(nearestNode) == false))
                     {
-                        piuVicininodiIsolati.Add(nearestNode);
-                        go = false;
+                        nearestNeighIsolNode.Add(nearestNode);
+                        find = false;
                     }
                     else
                     {
                         nextNode++;
-                        go = true;
+                        find = true;
                     }
-                } while (go);
+                } while (find);
             }
         }
 
         static int ProbabilityTwoOpt(Instance instance, Random rnd)
         {
+            //The probability to applying TwoOpt is proportional to the number of nodes
             if (rnd.Next(1, instance.NNodes / 2) == 1)
                 return 1;
             else

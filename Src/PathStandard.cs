@@ -2,6 +2,8 @@
 
 namespace TSPCsharp
 {
+    // A PathStandard represents contains the path and the cost of a solution of TSP
+
     public class PathStandard : ICloneable
     {
         internal int[] path;
@@ -37,7 +39,7 @@ namespace TSPCsharp
             }
         }
 
-        public PathStandard()//Cammino di default
+        public PathStandard()
         {
             path = null;
             cost = Double.MaxValue;

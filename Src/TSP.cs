@@ -120,8 +120,8 @@ namespace TSPCsharp
                                 {
                                     //Restarting the clock
                                     clock.Restart();
-                                    instance.BestLb = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
-                                    Utility.PrintGNUPlot(process, instance.InputFile, 1);
+                                    instance.ZBest = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
+                                    Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
                                     Console.WriteLine("Best solution: " + instance.BestLb);
                                     break;
                                 }
@@ -355,7 +355,7 @@ namespace TSPCsharp
 
                 //Accessing GNUPlot to read the file
                 if (Program.VERBOSE >= -1)
-                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol);
+                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
 
                 //Blank line
                 cplex.Output().WriteLine();
@@ -374,7 +374,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol);
+                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
         }
 
         //Handle the callback resolution method
@@ -444,7 +444,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol);
+                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
 
             //Blank line
             cplex.Output().WriteLine();
@@ -597,26 +597,31 @@ namespace TSPCsharp
 
                         List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-
+                        //Generate the first population
                         for (int i = 0; i < instance.SizePopulation; i++)
-                            OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
+                            OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));
                         do
                         {
+                            //Generate the child 
                             for (int i = 0; i < instance.SizePopulation; i++)
                             {
-                                if ((i != 0) && (i % 2 != 0))
+                                if (i % 2 != 0)
                                     ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
                             }
 
                             OriginallyPopulated = Utility.NextPopulation(instance, OriginallyPopulated, ChildPoulation);
+
+
+                            //currentBestPath contains the best path of the current population
                             currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
 
                             if (currentBestPath.cost < incumbentSol.cost)
                             {
                                 incumbentSol = (PathGenetic)currentBestPath.Clone();
-                                Utility.PrintGeneticSolution(instance, process, incumbentSol.path);
+                                Utility.PrintGeneticSolution(instance, process, incumbentSol);
                             }
 
+                            // We empty the list that contain the child
                             ChildPoulation.RemoveRange(0, ChildPoulation.Count);
 
                         } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
@@ -867,6 +872,8 @@ namespace TSPCsharp
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
             cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, BlockPrint));
 
+            cplex.AddMIPStart(z, incumbentSol, "HeuristicPath");
+            int x = cplex.GetMIPStartIndex("HeuristicPath");
             do
             {
 
@@ -874,7 +881,6 @@ namespace TSPCsharp
                 if ((fixedVariables.Count != instance.NNodes - 1) && (fixedVariables.Count != instance.NNodes))
                     Utility.PreProcessing(instance, z, fixedVariables);
 
-                cplex.AddMIPStart(z, incumbentSol);
                 cplex.Solve();
 
                 if (incumbentCost > cplex.ObjValue)
@@ -900,10 +906,10 @@ namespace TSPCsharp
 
                     file.Close();
 
-                    Utility.PrintGNUPlotHeuristic(process, instance.InputFile, 1, incumbentCost, incumbentCost);
+                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
+                    cplex.ChangeMIPStart(x, z, incumbentSol);
                 }
-
-                cplex.DeleteMIPStarts(0);
+            
                 fixedVariables.RemoveRange(0, fixedVariables.Count);
                 numIterazioni--;
 
@@ -943,7 +949,7 @@ namespace TSPCsharp
             file.Close();
 
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, 1);
+                Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
 
             cplex.Output().WriteLine();
             cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
@@ -1010,10 +1016,11 @@ namespace TSPCsharp
                         }
                     }
 
-                    Utility.PrintGNUPlotHeuristic(process, instance.InputFile, 1, incumbentCost, incumbentCost);
+                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
                     file.Close();
 
-                    cplex.ClearCuts();//Elimino tutti i tagli
+                    //Eliminate all cuts
+                    cplex.ClearCuts();
 
                     for (int i = 0; i < instance.NNodes; i++)
                     {
@@ -1067,7 +1074,7 @@ namespace TSPCsharp
 
             for (int i = 0; i < instance.SizePopulation; i++)
             {
-                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false, listArray));//IL NEARESTNABLE MI RITORNA SEMPRE LA STESSA SOLUZIONE
+                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false, listArray));
                 //OriginallyPopulated[i].path = Utility.InterfaceForTwoOpt(OriginallyPopulated[i].path);
 
                 //TwoOpt(instance, OriginallyPopulated[i]);
@@ -1089,7 +1096,7 @@ namespace TSPCsharp
                 if (currentBestPath.cost < incumbentSol.cost)
                 {
                     incumbentSol = (PathGenetic)currentBestPath.Clone();
-                    Utility.PrintGeneticSolution(instance, process, incumbentSol.path);
+                    Utility.PrintGeneticSolution(instance, process, incumbentSol);
                 }
 
                 ChildPoulation.RemoveRange(0, ChildPoulation.Count);

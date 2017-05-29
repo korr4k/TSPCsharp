@@ -118,7 +118,7 @@ namespace TSPCsharp
                     while ((line = sr.ReadLine()) != null)
                     {
                         //Content of those lines are simply printed 
-                        if (line.StartsWith("NAME") || line.StartsWith("COMMENT") || line.StartsWith("TYPE"))
+                        if (line.StartsWith("NAME") || line.StartsWith("COMMENT") || line.StartsWith("TYPE") || line.StartsWith("EDGE_WEIGHT_FORMAT: FUNCTION") || line.StartsWith("DISPLAY_DATA_TYPE: COORD_DISPLAY")) 
                         {
                             if (VERBOSE >= 5) Console.WriteLine(line);
                             continue;
@@ -140,8 +140,8 @@ namespace TSPCsharp
                         if (line.StartsWith("EDGE_WEIGHT_TYPE"))
                         {
                             string tmp = line.Remove(0, line.IndexOf(':') + 2);
-                            if (!(tmp == "EUC_2D" || tmp == "ATT"))
-                                throw new System.Exception("Format error:  only EDGE_WEIGHT_TYPE == EUC_2D || ATT implemented so far!!!!!!");
+                            if (!(tmp == "EUC_2D" || tmp == "ATT" || tmp == "MAN_2D" || tmp == "GEO" || tmp == "MAX_2D" || tmp == "CEIL_2D"))
+                                throw new System.Exception("Format error:  only EDGE_WEIGHT_TYPE == {ATT, MAN_2D, GEO, MAX_2D and CEIL_2D} are implemented");
                             //Storing the edge type is necessary to correctly evaluete the distance between two points
                             inst.EdgeType = tmp;
                             if (VERBOSE >= 5)
@@ -159,7 +159,10 @@ namespace TSPCsharp
                             readingCoordinates = true;
                             continue;
                         }
-                        
+                        if (line.StartsWith("EDGE_WEIGHT_FORMAT: FUNCTION "))
+                        {
+                            continue;
+                        }
 
                         //This line signals the end of the file
                         if (line.StartsWith("EOF"))
@@ -174,7 +177,6 @@ namespace TSPCsharp
                         //if true, line contains a point's coordinate
                         if (readingCoordinates)
                         {
-
                             string[] elements = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                             //First item of the line needs to be the index of the point
                             //Expected minimum index to be 1 and max to be instance.NNodes

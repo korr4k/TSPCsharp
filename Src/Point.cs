@@ -11,8 +11,8 @@ namespace TSPCsharp
 
         public Point (double x, double y)
         {
-            this.X = x;
-            this.Y = y;
+            this.x = x;
+            this.y = y;
         }
 
         public double X
@@ -43,7 +43,6 @@ namespace TSPCsharp
 
          public static double Distance( Point p1, Point p2, String pointType)
         {
-
             //Implamentation of the distance algorithms proposed by the official documentation
 
             double xD = p1.X - p2.X;
@@ -51,13 +50,13 @@ namespace TSPCsharp
 
             if (pointType == "EUC_2D")
             {
-                return Convert.ToInt32(Math.Sqrt(xD * xD + yD * yD) + 0.5);
+                return (int)(Math.Sqrt(xD * xD + yD * yD) + 0.5);
             }
             else if (pointType == "MAN_2D")
             {
                 xD = Math.Abs(xD);
                 yD = Math.Abs(yD);
-                return Convert.ToInt32(xD + yD + 0.5);
+                return (int)(xD + yD + 0.5);
             }
             else if (pointType == "MAX_2D")
             {
@@ -73,28 +72,30 @@ namespace TSPCsharp
             }
             else if (pointType == "GEO")
             {
-                double PI = 3.141592;
+                double PI = Math.PI;
 
-                int deg = Convert.ToInt32(p1.X);
+                int deg = (int)(p1.X + 0.5);
                 double min = p1.X - deg;
-                double latitude1 = PI * (deg + 0.5 * min / 3.0) / 180;
-                deg = Convert.ToInt32(p1.Y);
-                min = p1.Y - deg;
-                double longitude1 = PI * (deg + 0.5 * min / 3.0) / 180;
+                double latitude1 = PI * (deg + 5 * min / 3) / 180;
 
-                deg = Convert.ToInt32(p2.X);
+                deg = (int)(p1.Y + 0.5);
+                min = p1.Y - deg;
+                double longitude1 = PI * (deg + 5 * min / 3.0) / 180;
+
+                deg = (int)(p2.X + 0.5);
                 min = p2.X - deg;
-                double latitude2 = PI * (deg + 0.5 * min / 3.0) / 180;
-                deg = Convert.ToInt32(p2.Y);
+                double latitude2 = PI * (deg + 5 * min / 3.0) / 180;
+
+                deg = (int)(p2.Y + 0.5);
                 min = p2.Y - deg;
-                double longitude2 = PI * (deg + 0.5 * min / 3.0) / 180;
+                double longitude2 = PI * (deg + 5 * min / 3.0) / 180;
 
                 double RRR = 6378.388;
                 double q1 = Math.Cos(longitude1 - longitude2);
                 double q2 = Math.Cos(latitude1 - latitude2);
                 double q3 = Math.Cos(latitude1 + latitude2);
 
-                return Convert.ToInt32((RRR * Math.Acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3))) + 1.0);
+                return (int)((RRR * Math.Acos( 0.5 * ((1 + q1) * q2 - (1 - q1) * q3))) + 1);
             }
             else if (pointType == "ATT")
             {
