@@ -137,13 +137,23 @@ namespace TSPCsharp
         }
 
         //Print for GNUPlot
-        public static void PrintGNUPlot(Process process, string name, int typeSol)
+        public static void PrintGNUPlot(Process process, string name, int typeSol, double currentCost, double incumbentCost)
         {
-            //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
-            if (typeSol == 0)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
-            else if (typeSol == 1)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+            if (incumbentCost >= 0)
+            {
+                //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
+                if (typeSol == 0)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+                else if (typeSol == 1)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+            }else
+            {
+                //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
+                if (typeSol == 0)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+                else if (typeSol == 1)
+                    process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
+            }
         }
 
 
@@ -437,16 +447,12 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlotHeuristic(process, instance.InputFile, typeSol, pathG.cost, incumbentCost);
-        }
-
-        public static void PrintGNUPlotHeuristic(Process process, string name, int typeSol, double currentCost, double incumbentCost)
-        {
-            //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
-            if (typeSol == 0)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
-            else if (typeSol == 1)
-                process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle");
+            {
+                if(pathG.cost != incumbentCost)
+                    PrintGNUPlot(process, instance.InputFile, typeSol, pathG.cost, incumbentCost);
+                else
+                    PrintGNUPlot(process, instance.InputFile, typeSol, pathG.cost, -1);
+            }
         }
 
         public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father, List<int>[] listArray)
@@ -582,7 +588,7 @@ namespace TSPCsharp
             file.Close();
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlot(process, instance.InputFile, 1);
+                PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
         }
 
         static void Mutation(Instance instance, Random rnd, int[] pathChild)

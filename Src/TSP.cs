@@ -120,8 +120,8 @@ namespace TSPCsharp
                                 {
                                     //Restarting the clock
                                     clock.Restart();
-                                    instance.BestLb = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
-                                    Utility.PrintGNUPlot(process, instance.InputFile, 1);
+                                    instance.ZBest = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
+                                    Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
                                     Console.WriteLine("Best solution: " + instance.BestLb);
                                     break;
                                 }
@@ -355,7 +355,7 @@ namespace TSPCsharp
 
                 //Accessing GNUPlot to read the file
                 if (Program.VERBOSE >= -1)
-                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol);
+                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
 
                 //Blank line
                 cplex.Output().WriteLine();
@@ -374,7 +374,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol);
+                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
         }
 
         //Handle the callback resolution method
@@ -444,7 +444,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol);
+                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
 
             //Blank line
             cplex.Output().WriteLine();
@@ -900,7 +900,7 @@ namespace TSPCsharp
 
                     file.Close();
 
-                    Utility.PrintGNUPlotHeuristic(process, instance.InputFile, 1, incumbentCost, incumbentCost);
+                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
                 }
 
                 cplex.DeleteMIPStarts(0);
@@ -943,7 +943,7 @@ namespace TSPCsharp
             file.Close();
 
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, 1);
+                Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
 
             cplex.Output().WriteLine();
             cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
@@ -1010,7 +1010,7 @@ namespace TSPCsharp
                         }
                     }
 
-                    Utility.PrintGNUPlotHeuristic(process, instance.InputFile, 1, incumbentCost, incumbentCost);
+                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
                     file.Close();
 
                     cplex.ClearCuts();//Elimino tutti i tagli

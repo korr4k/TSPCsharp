@@ -78,7 +78,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (BlockPrint)
-                Utility.PrintGNUPlot(process, instance.InputFile + "_" + nodeId, 1);
+                Utility.PrintGNUPlot(process, instance.InputFile + "_" + nodeId, 1, GetIncumbentObjValue(), GetBestObjValue());
 
             //cuts will stores the user's cut
             IRange[] cuts = new IRange[ccExprLC.Count];
