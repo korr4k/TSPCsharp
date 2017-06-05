@@ -611,7 +611,6 @@ namespace TSPCsharp
 
                             OriginallyPopulated = Utility.NextPopulation(instance, OriginallyPopulated, ChildPoulation);
 
-
                             //currentBestPath contains the best path of the current population
                             currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
 
@@ -627,6 +626,10 @@ namespace TSPCsharp
                         } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
                         Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+
+                        instance.BestSol = incumbentSol.path;
+                        incumbentSol.cost = incumbentSol.Cost;
+
 
                         break;
 
