@@ -1,41 +1,220 @@
-\documentclass[11pt]{article}
-\usepackage{fullpage}
+\documentclass[12pt,                      % corpo del font principale
+a4paper,                   % carta A4
+twoside,openright,         % fronte-retro               
+]{book}
 
+\usepackage[utf8]{inputenc}                % codifica di input; anche [latin1] va bene
+% NOTA BENE! va accordata con le preferenze dell'editor
+\usepackage[dvipsnames ,table]{xcolor}            % colori
+
+\usepackage{microtype}                     % microtipografia
+
+\usepackage[italian,english]{babel}        % per scrivere in italiano e in inglese
+
+\usepackage[babel]{csquotes}               % l'ultima lingua(l'italiano) risulta predefinita
+
+\usepackage{listings,lstautogobble}
+
+\definecolor{RoyalBlue}{cmyk}{1, 0.50, 0, 0}
+
+\lstset{language=C,
+	keywordstyle=\color{RoyalBlue},
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\ttfamily\itshape\color{gray},
+	stringstyle=\ttfamily,
+	showstringspaces=false,
+	breaklines=true,
+	frameround=ffff,
+	frame=single,
+	rulecolor=\color{black},
+	autogobble=true
+}
+
+
+%\usepackage[binding=5mm]{layaureo}         % margini ottimizzati per l'A4; rilegatura di 5 mm
+\usepackage[a4paper]{geometry}
+\newgeometry{left=2cm,bottom=2.5cm, top=2cm, right=2cm}
+
+\usepackage{textcomp}
+
+\usepackage[normalem]{ulem}
+
+\usepackage{emptypage}                     % pagine vuote senza testatina e piede di pagina
+
+\usepackage[Lenny]{fncychap}
+
+\usepackage{verbatim}
+
+\usepackage{tabularx}                      % tabelle di larghezza prefissata
+
+\usepackage{multirow}
+
+\usepackage{listings}
+\lstset{language=Matlab,%
+	basicstyle=\small\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	stepnumber=2,
+	frame=lines
+}
+
+\usepackage{graphicx}                      % immagini
+
+\usepackage{caption}                       % didascalie
+
+\usepackage{pdfpages}
+
+
+
+\usepackage{listings}
+
+\usepackage{mparhack,fixltx2e,relsize}     % finezze tipografiche
+
+\usepackage{eurosym}
+
+\usepackage{amsmath,amssymb,amsthm} 
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\argminF}{\mathop{\mathrm{argmin}}\limits} 
+
+\usepackage{bookmark}                      % segnalibri
+\usepackage{wrapfig}
+
+\usepackage[style=numeric-comp,useprefix,hyperref,backend=bibtex]{biblatex}
+% eccellente pacchetto per la bibliografia;
+% produce uno stile di citazione autore-anno; 
+% lo stile "numeric-comp" produce riferimenti numerici
+%\usepackage[latin1]{inputenc}  
+\bibliography{bibliografia}                % database di biblatex  
+
+\usepackage[suftesi]{frontespizio}
+
+\setlength{\parindent}{0pt}
+
+\makeindex
 
 \begin{document}
 
-ABSTRACT
+\section*{ABSTRACT}
 
-Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema del Commesso Viaggiatore applicando differenti algoritmi risolutori. L'obiettivo di questo testo è quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bont\`a della soluzione prodotta. Verr\`a fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sar\`a analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
+Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema "Il Commesso Viaggiatore" applicando differenti algoritmi risolutori. L'obiettivo di questo testo è quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bontà\`a della soluzione prodotta. Verrà\`a fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sarà\`a analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
 
-INTRODUZIONE 
+\section*{INTRODUZIONE}
 
-Questa capitolo introduttivo \`e dedicato alla storia, alle applicazioni e alle correnti sfide riguardanti uno dei pi\`u importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem -TSP). 
-Il nome deriva dalla sua pi\`u tipica rappresentazione: data una rete di citt\`a, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le citt\`a una ed una sola volta e ritornare alla citt\`a di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le citt\`a relative al problema in questione mentre i possibili collegamenti tra le localit\`a sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall’ arco. Chiaramente è possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o di eventuali pedaggi presenti nei singoli percorsi. Come è facile immaginare, il TSP può essere quindi utilizzato per una infinità di problemi pratici ma anche teorici:\\
-Il problema del commesso viaggiatore riveste un ruolo notevole nell' ambito di problemi di logistica distributiva, detti anche problemi di routing. Questi riguardano l’organizzazione di sistemi di distribuzione di beni e servizi. Esempi di problemi di questo genere sono la movimentazione di pezzi o semilavorati tra reparti di produzione, la raccolta e distribuzione di materiali, la distribuzione di merci da centri di produzione a centri di distribuzione.
-Sebbene le applicazioni nel contesto dei trasporti siano le più naturali per il TSP, la semplicit\`a del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
-Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poich\`e esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
-
-
-Problemi matematici riconducibili al TSP furono trattati nell' Ottocento dal matematico irlandese Sir William Rowan Hamilton e dal matematico Britannico Thomas Penyngton.  Nel 1857, a Dublino, Rowan Hamilton descrisse un gioco, detto Icosian game, a una riunione della British Association for the Advancement of Science. Il gioco consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro ha 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
-Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema \`e un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ citt\`a \`e facile da calcolare: data una citt\`a di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda citt\`a, $(n - 2)$ per la terza e così via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo \`e dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a metà. Insomma, date n citt\`a, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
-
-Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP  su un campione di $n = 49$ citt\`a: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
-
-Nel 1962, Procter and Gamble bandì un concorso per 33 citt\`a, nel 1977 fu bandito un concorso che collegasse le 120 principali citt\`a della Germania Federale e la vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
-
-Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 citt\`a. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
-Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 citt\`a tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
-Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 citt\`a della Svezia. 
-Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unit\`a, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
-Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore è utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con più nodi in assoluto ha 85,900 citt\`a. 
+Questa capitolo introduttivo \`e dedicato alla storia, alle applicazioni e correnti sfide riguardanti uno dei pi\`u importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem -TSP). 
+Il nome deriva dalla sua pi\`u tipica rappresentazione: data una rete di città\`a, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le città\`a una ed una sola volta e ritornare alla città\`a di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le città\`a relative al problema in questione mentre i possibili collegamenti tra le località\`a sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall’arco. Chiaramente è possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o eventuali pedaggi presenti nei singoli percorsi. Come è facile immaginare, il TSP può essere quindi utilizzato per una infinità di problemi pratici ma anche teorici:\\
+Il problema del commesso viaggiatore riveste un ruolo notevole nell'ambito di problemi di logistica distributiva, detti anche di routing. Questi riguardano l’organizzazione di sistemi di distribuzione di beni e servizi. Esempi di problemi di questo genere sono la movimentazione di pezzi o semilavorati tra reparti di produzione, la raccolta e distribuzione di materiali, lo smistamento di merci da centri di produzione a di distribuzione.
+Sebbene le applicazioni nel contesto dei trasporti siano le più naturali per il TSP, la semplicità\`a del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
+Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poiché\`e esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
 
 
+Problemi matematici riconducibili al TSP furono trattati nell'Ottocento dal matematico irlandese Sir William Rowan Hamilton e dal matematico Britannico Thomas Penyngton.  Nel 1857, a Dublino, Rowan Hamilton descrisse un gioco, detto Icosian game, a una riunione della British Association for the Advancement of Science. Il gioco consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro ha 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
+Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema \`e un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ città\`a \`e facile da calcolare: data una città\`a di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda città\`a, $(n - 2)$ per la terza e così via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo \`e dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a metà. Insomma, date n città\`a, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
+
+Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP  su un campione di $n = 49$ città\`a: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
+
+Nel 1962, Procter and Gamble bandì un concorso per 33 città\`a, nel 1977 fu bandito un concorso che collegasse le 120 principali città\`a della Germania Federale e la vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
+
+Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 città\`a. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
+Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 città\`a tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
+Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 città\`a della Svezia. 
+Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unità\`a, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
+Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore è utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con più nodi in assoluto ha 85,900 città\`a. 
 
 
+\section*{AMBIENTE DI SVILUPPO: Cplex, Visual Studio e C\#}
 
-\end{document}
+Il progetto è stato sviluppato in ambiente Windows, in particolare il sistema operativo scelto è Windows 10.\\
+Cplex è la componente principale del progetto, prima di procedere è perciò necessario assicurarsi per potervi interagire dall'IDE che si desidera utilizzare. Il nostro gruppo ha deciso di adottare come linguaggio di programmazione il \textbf{C\#}, successore del \textbf{C++} ed anch'esso orientato agli oggetti.\\
+L'IDE più comune per chi desidera utilizzare tale linguaggio è senza dubbio \textbf{Visual Studio}, sviluppato dalla stessa Microsoft e distribuito gratuitamente. La versione utilizzata in questo progetto e dunque quella a cui si farà riferimento in questa guida è \textbf{Visual Studio Community 2017}. Una volta aperto l'installer reperibile al seguente \href{https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community&rel=15#}{indirizzo} è sufficiente installare i pacchetti \textbf{Sviluppo per desktop .NET} e \textbf{Sviluppo di applicazioni desktop con C++} (vedremo in seguito perché sono necessari pacchetti C++).\\
+Una volta terminata l'installazione assicuriamoci di aver installare nella nostra macchina una versione di cplex pari o superiore alla \textbf{12.7.0}, quella da noi utilizzata è più precisamente la \textbf{12.7.0}.\\
+A questo punto non ci rimane altro che creare il nostro progetto all'interno di Visual Studio e di collegarvi le apposite librerie di Cplex. Selezionare quindi dal menu a tendina \textbf{Visual C\#} e quindi \textbf{App console (.NET Framework)}, forniamo il nome e percorso che desideriamo:
 
-ewew
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{Immagini/"Progetto C Sharp".png}
+	\caption{Creazione progetto C Sharp}
+\end{figure}
+
+Per connettere Cplex al nostro progetto sono necessari i seguenti passaggi:
+
+\begin{flushleft}
+	\hyphenpenalty=10000
+	\exhyphenpenalty=10000
+
+\begin{itemize}
+	
+	\item Selezionare la voce \textbf{Progetto} e quindi \textbf{Aggiungi riferimento...}
+	
+	\item Premere il pulsante \textbf{Sfoglia} e dopo essersi recati nella propria cartella di installazione di Cplex, in genere "C:\textbackslash Program Files\textbackslash IBM\textbackslash ILOG\textbackslash CPLEX\_Studio1271\textbackslash cplex" accedere alla sotto directory "\textbackslash bin\textbackslash x64\_win64" e selezionare i file \textbf{ILOG.CPLEX.dll} e \textbf{ILOG.Concert.dll}. Fatto ciò possiamo chiudere la finestra per la gestione dei riferimenti appena aperta
+	
+	\item Selezionare la voce \textbf{Compilazione} e quindi \textbf{Gestione configurazione..}, nella nuova finestra inserire nella voce  \textbf{Piattaforma} una nuova voce e selezionare \textbf{x64}. Per quanto riguarda la voce configurazione è indifferente selezionare la voce \textbf{Debug} oppure \textbf{Release}: come è facilmente intuibile nella prima modalità e differenza della seconda sarà possibile effettuare il classico debug con break points e gestione delle eccezioni a discapito di tempi di esecuzione leggermente più alti. Cogliamo quindi l'occasione per specificare che tutti i risultati proposti nel seguito di questo testo sono tutti stati ottenuti in modalità \textbf{Release} per il motivo indicato precedentemente.
+	
+\end{itemize}
+
+
+\end{flushleft}
+
+A questo punto è possibile importare attraverso le direttive \textbf{using} sia \textbf{ILOG.CPLEX} che \textbf{ILOG.Concert}.
+
+\section*{Creazione ed utilizzo DLL C/C++ }
+
+In questa sezione viene spiegato come sia possibile utilizzare codice esterno, compilato anche in linguaggi differenti dal C\#, sotto forma di \textbf{DLL}. In particolare nel nostro caso si è presentata la necessità di poter utilizzare codice scritto in linguaggio C appartenente al programma Concorde.
+
+La problematica principale con cui ci si scontra in questi casi è l'incompatibilità dei tipi, per noi questo è ancora più accentuato in quanto C al contrario di C\# non è un linguaggio orientato agli oggetti e l'interfaccia con Cplex segue un differente approccio. La soluzione migliore è stata quindi quella di passare al codice C solamente le informazioni fornite in input dall'utente e cioè il nome del file contenente i dati ed il time limit. In altre parole il codice C\# diventa solamente\footnote{In realtà mantiene anche un cronometro per il tempo di risoluzione} una interfaccia per richiamare la DLL, la quale dovrà gestire completamente la lettura dell'input, la risoluzione e la visualizzazione dei risultati\footnote{Tutte le stampe effettuate nella DLL vengono automaticamente reindirizzate nella finestra Console di default utilizzata dal C\#}.
+
+Entriamo ora nel dettaglio della procedura da seguire:
+
+\begin{flushleft}
+	\hyphenpenalty=10000
+	\exhyphenpenalty=10000
+	
+	\begin{itemize}
+		
+		\item Prima di tutto da Visual Studio creiamo un nuovo progetto selezionando la voce \textbf{Visual C++} e quindi \textbf{Progetto Win32}. Nel caso in cui questa opzioni siano assenti significa che durante l'installazione di Visual Studio non sono stati selezionati i pacchetti C++, per maggiori dettagli seguire la procedura indicata nella sezione apposita.
+		
+		\item Nelle schermate successive è necessario selezionare l'opzione \textbf{DLL} come tipo di applicazione e \textbf{Progetto vuoto} come opzione aggiuntiva.
+		
+		\item A questo punto dovrebbe essersi creato il nostro nuovo e vuoto progetto, dal menu \textbf{Esplora soluzioni} nella cartella \textbf{File di origine} premiamo il tasto destro ed aggiungiamo un nuovo elemento. Selezioniamo dal menu \textbf{File di C++ (.cpp)}, assegniamo il nome che preferiamo e premiamo il tasto \textbf{Aggiungi}.
+		
+		\item A questo punto il file appena creato verrà compilato come codice \textbf{C++} ma Concorde utilizza \textbf{C} perciò per prima cosa dobbiamo inserire 
+		\begin{lstlisting}
+		extern "C"
+		{
+		}
+		\end{lstlisting}
+		In questo modo tutto il codice al suo interno viene compilato come \textbf{C}.
+		
+		\item Definiamo ora l'entry point per la nostra DLL che si tratta di un semplice metodo con prefisso \textbf{\_\_declspec(dllexport)}. Nel nostro caso si è deciso di utilizzare il metodo entry point come semplice interfaccia per la chiamata di un altro metodo che procederà alla reale risoluzione del problema:
+		\begin{lstlisting}
+		__declspec(dllexport) int Concorde(char *fileName, int timeLimit)
+		{
+		return exemain(strtok(fileName, "\0"), timeLimit);
+		}
+		\end{lstlisting}
+		
+		\item In modo analogo a come abbiamo appena creato questo file selezionando invece l'opzione per aggiungere file esistenti, importiamo tutti i file con estensione \textbf{.C} di cui necessitiamo da Concorde (maggiori dettagli riguardo quelli da noi utilizzati possono essere trovati nella sezione apposita).
+		
+		\item Settiamo ora le proprietà del progetto in modo tale che sia possibile utilizzare Cplex, diverse guide sono già disponibili e la procedura non viene qui riportata. In aggiunta è necessario selezionare nel sottomenù \textbf{C/C++ $\rightarrow$ Generale $\rightarrow$ Directory di inclusione aggiuntive} la cartella dove sono presenti i file \textbf{.h} di Concorde. 
+		
+		\item A questo punto non rimane altro che completare il nostro progetto inserendo i vari metodi necessari, maggiori dettagli nella sezione apposita. Fatto ciò siamo pronti a creare la DLL, dal menu \textbf{Compilazione} selezioniamo la voce \textbf{Compila soluzione} (assicuriamoci che nella barra degli strumenti sia selezionata la modalità release a 64 bit, in realtà è importante si utilizzino gli stessi bit che si adottano nel progetto originale). Terminata la compilazione la DLL si può trovare all'interno della cartella del progetto nella sottocartella \textbf{/x64/Release}.
+		
+		\item Posizioniamo la DLL all'interno della directory del nostro progetto C\# in particolare dentro \textbf{/bin/x64/Release} e \textbf{/bin/x64/Debug} per essere utilizzata nelle due modalità.
+		
+		\item Apriamo infine la classe del nostro progetto nella quale vogliamo utilizzare la DLL ed utilizziamo questo codice:
+		\begin{lstlisting}
+		[DllImport("ConcordeDLL.dll")]
+		public static extern int Concorde(StringBuilder fileName, int timeLimit);
+		\end{lstlisting} 
+		Successivamente potremmo utilizzare il metodo esterno importato come se fosse stato definito all'interno della classe, nel nostro caso:
+		\begin{lstlisting}
+		Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
+		\end{lstlisting}
+		Da notare che la classe \textbf{StringBuilder} permette la conversione automatica del tipo \textbf{String} di C\# a \textbf{char*} di C.
+		
+	\end{itemize}
+	
+	
+\end{flushleft}
 
 \end{document}

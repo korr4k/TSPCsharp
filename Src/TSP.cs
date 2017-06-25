@@ -12,7 +12,6 @@ namespace TSPCsharp
     class TSP
     {
         [DllImport("ConcordeDLL.dll")]
-        //public static extern void Concorde(char[] fileName, int timeLimit);
         public static extern int Concorde(StringBuilder fileName, int timeLimit);
 
         //"Main" method
@@ -627,7 +626,7 @@ namespace TSPCsharp
 
                         Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
 
-                        instance.BestSol = incumbentSol.path;
+                        instance.BestSol = Utility.ConvertIntArrayToDoubleArray(incumbentSol.path);
                         incumbentSol.cost = incumbentSol.Cost;
 
 

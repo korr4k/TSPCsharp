@@ -1,0 +1,10 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: Tesi.aux
+The style file: biblatex.bst
+I couldn't open database file bibliografia.bib
+---line 21 of file Tesi.aux
+ : \bibdata{Tesi-blx,bibliografia
+ :                               }
+I'm skipping whatever remains of this command
+Database file #1: Tesi-blx.bib
+Biblatex version: 3.3
+(There was 1 error message)

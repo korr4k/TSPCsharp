@@ -925,7 +925,7 @@ namespace TSPCsharp
             return child;
         }
 
-        static double[] ConvertIntArrayToDoubleArray(int[] adD)
+        public static double[] ConvertIntArrayToDoubleArray(int[] adD)
         {
             return adD.Select(d => (double)d).ToArray();
         }
