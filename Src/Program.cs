@@ -10,7 +10,6 @@ namespace TSPCsharp
 
         //Setting constant value, to access them use Program.<name>
         public const int VERBOSE = 5;
-        public const double EPSILON = 1E-9;
         public const int TICKS_PER_SECOND = 1000;
 
         //Stopwatch type is used to evaluate the execution time
@@ -76,7 +75,7 @@ namespace TSPCsharp
             }
         }
 
-        static void ParseInst(Instance inst, String[] input)
+        static void ParseInst(Instance inst, string[] input)
         {
             //input is equal to the args vector, every string is obtained by splitting
             //the input at each blank space
@@ -180,7 +179,7 @@ namespace TSPCsharp
                             string[] elements = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                             //First item of the line needs to be the index of the point
                             //Expected minimum index to be 1 and max to be instance.NNodes
-                            int i = Convert.ToInt32(elements[0].Replace(".",","));
+                            int i = Convert.ToInt32(elements[0]);
                             if (i < 0 || i > inst.NNodes)
                                 throw new System.Exception("Unknown node in NODE_COORD_SECTION section");
                             //Vectors starts at index 0 not 1, it is necessary to perform a -1

@@ -322,6 +322,7 @@ namespace TSPCsharp
                         //Reading the optimal solution for the actual link (i,i)
                         instance.BestSol[position] = cplex.GetValue(z[position]);
 
+
                         //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
                         if (instance.BestSol[position] >= 0.5)
                         {
@@ -626,10 +627,6 @@ namespace TSPCsharp
                         } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
                         Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
-
-                        instance.BestSol = incumbentSol.path;
-                        incumbentSol.cost = incumbentSol.Cost;
-
 
                         break;
 

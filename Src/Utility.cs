@@ -60,7 +60,7 @@ namespace TSPCsharp
              *later it will be Ax's rows 
             */
             ILinearNumExpr expr = cplex.LinearNumExpr();
-
+            
 
             //Populating objective function
             for (int i = 0; i < instance.NNodes; i++)
@@ -180,7 +180,7 @@ namespace TSPCsharp
         {
             if (relatedComponents[i] != relatedComponents[j])//Same related component, the latter is not closed yet
             {
-                for (int k = 0; k < relatedComponents.Length; k++)// k>i poichè i > i
+                for (int k = 0; k < relatedComponents.Length; k++)
                 {
                     if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
                     {
@@ -188,7 +188,6 @@ namespace TSPCsharp
                         relatedComponents[k] = relatedComponents[i];
                     }
                 }
-
                 //Finally also the vallue relative to the Point i are updated
                 relatedComponents[j] = relatedComponents[i];
             }

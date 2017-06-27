@@ -17,7 +17,7 @@ namespace TSPCsharp
         // global data
         double tStart;                          // real starting time 
         double zBest;                           // best sol. available  
-        double tBest;                           // time for the best sol. available  
+       
         double[] bestSol;                       // best sol. available    
         double bestLb;                          // best lower bound available
         int sizePopulation;
@@ -120,18 +120,6 @@ namespace TSPCsharp
             }
         }
 
-        public double TBest
-        {
-            get
-            {
-                return tBest;
-            }
-
-            set
-            {
-                tBest = value;
-            }
-        }
 
         public double[] BestSol
         {
