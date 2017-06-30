@@ -15,6 +15,7 @@
 \usepackage{booktabs}
 \usepackage{multirow} 
 \usepackage{tipa}
+\usepackage{textbf}
 
 
 %\setmonofont{Consolas} %to be used with XeLaTeX or LuaLaTeX
@@ -114,13 +115,13 @@ Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore
 MODELLO MATEMATICO
 \vspace{2\baselineskip}
 
-Nella sua formalizzazione pi\`u generale, il problema del Commesso Viaggiatore consiste nell' individuare un circuito hamiltoniano di costo minimo in un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ \`e un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ \`e un insieme di $m$ archi. 
+Nella sua formalizzazione pi\`u generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ \`e un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ \`e un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
 
-Senza perdita di generalit\`a, si suppone che il grafo $G$ sia completo e che il costo associato all' arco $[i,j]$, che indicheremo con $c_{ij}$, sia non negativo. Si osserva che aver imposto $c_{ij} \ge 0$ non \`e limitativo poich\'e \`e sempre possibile sommare a tutti i costi una costante sufficientemente elevata senza alterare l' ordinamento delle soluzioni. 
-A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato: tale scelta deriva dal fatto che, poich\'e $c_{ij}$ nel nostro lavoro rappresenta sempre la distanza (tipicamente euclidea) fra i vertici i e j si ha che:
+Senza perdita di generalit\`a, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, che indicheremo con $c_{ij}$, sia non negativo. Si osserva che aver imposto $c_{ij} \ge 0$ non \`e limitativo poich\'e \`e sempre possibile sommare a tutti i costi una costante sufficientemente elevata che li renda positivi senza alterarne l'ordinamento delle soluzioni. 
+A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato: tale scelta deriva dal fatto che $c_{ij}$ nel nostro lavoro rappresenta sempre la distanza (tipicamente euclidea) fra i vertici i e j si ha che:
 $$c_{ij} = c_{ji}$$
 
-ossia il costo associato ad un arco non dipende dalla direzione dell' arco stesso. Quando il grafo \`e non orientato la famiglia di coppie non ordinate di elementi di V, ossia l' insieme degli archi, viene indicato con $E$.
+ossia il costo associato ad un arco non dipende dalla direzione dell'arco stesso. Quando il grafo \`e non orientato la famiglia di coppie non ordinate di elementi di V, ossia l'insieme degli archi, viene indicato con $E$.
 
 
 Definito il problema forniamo ora una sua possibile formulazione in termini di PLI. Introducendo le seguenti variabili decisionali:
@@ -141,7 +142,7 @@ si ottiene il problema:
 &0\leq x_e \leq 1 \text{ intera , }\forall e \in E
 \end{eqnarray}
 
-L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidono esattamente due lati. In questa forma il modello \`e  compatto dato che il numero di vincoli \`e polinomiale rispetto alla dimensione dell' istanza ma non \`e completo poich\'e \`e sprovvisto dei vincoli di subtour che impediscono alla soluzione ottima di avere dei subtour al suo interno.
+L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidano esattamente due lati. In questa forma il modello \`e  compatto dato che il numero di vincoli \`e polinomiale rispetto alla dimensione dell'istanza ma non \`e completo poich\'e \`e sprovvisto dei vincoli di subtour che impediscono soluzioni il cui grafo risulta non connesso.
 
 \begin{center}
 \includegraphics[scale=0.5]{subtour}  
@@ -151,7 +152,7 @@ Figura 1: Soluzione con due subtour
 
 \vspace{2\baselineskip}
 
-Una possibile formulazione per i vincoli di subtour risulta essere:
+Una possibile formulazione per l'eliminazione dei subtour, detta appunto \textbf{subtour elimination}, risulta essere:
 
 \begin{eqnarray}
 &\displaystyle{\sum_{e \in E(S)}x_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
@@ -164,8 +165,8 @@ Il vincolo (4) indica che se si considera un sottoinsieme $S \subsetneq V$, che 
 $\delta(S) = $\{$ {[i,j]\in E : i \in S, j \notin S} $\} $ $
 \end{center}
 
-deve contenere almeno un lato appartenente ad $E$: poich\'e tutti i subtour violano tale vincolo la soluzione ottima non potr\`a contenere subtour al suo interno.  
-Essendo il numero di vincoli di subtour pari al numero di sottoinsiemi $S$ distinti, il numero di tali vincoli risulta esponenziale rispetto alla dimensione dell' istanza. In particolare il numero di sottoinsiemi $S$ distinti che si possono formare con $n$ nodi \`e $2^n$: questo perch\`e associando un bit per ogni vertice (il cui valore definisce se appartiene o meno al sottoinsieme) un sottoinsieme S risulta identificato da una sequenza di $n$ bit e quindi si hanno $2^n$ possibili sottoinsimi $S$ distinti. Dato che si \`e imposto che il vertice 1 appartiene sempre ad ogni $S$ e che $S \subsetneq V$, si ha che il numero di vincoli di subtour risultano pari a  $2^{n-1} - 1$.
+deve contenere almeno un lato appartenente ad $E$: poich\'e tutti i subtour violano tale vincolo la soluzione ottima non potr\`a contenerne al suo interno.  
+Essendo il numero di questi vincoli pari ai sottoinsiemi $S$ distinti, il numero di tali vincoli risulta esponenziale rispetto alla dimensione dell'istanza. In particolare il valore di $S$, dato un numero $n$ di nodi, \`e $2^n$: questo perch\`e associando un bit ad ogni vertice (il cui valore definisce se appartiene o meno al sottoinsieme) un qualsiasi sottoinsieme risulta identificato da una sequenza di $n$ bit è quindi possibile definirne $2^n$ distinti. In realtà avendo noi imposto che il vertice 1 appartenga sempre ad ogni $S$ e che $S \subsetneq V$, si ha che il numero di vincoli di subtour risulti pari a  $2^{n-1} - 1$.
 
 Una seconda formulazione equivalente per esprimere i vincoli di subtour \`e la seguente:
 
@@ -173,22 +174,21 @@ Una seconda formulazione equivalente per esprimere i vincoli di subtour \`e la s
 &\displaystyle{\sum_{e \in E(S)}x_e \leq |S| - 1} \text{ , } \forall S \subsetneq V \text{ , } |S| \geq 2
 \end{eqnarray}
 
-I vincoli di subtour non sono stati aggiunti al modello per via del loro numero: sar\`a nostra cura progettare un opportuno separatore, ossia una funzione che fornita in ingresso una soluzione x* ottima per il modello corrente generi tutti i vincoli di subtour che verranno aggiunti "al volo" al modello.
+La gestione di un numero esponenziale di vincoli implica in genere tempi di risoluzione troppo elevati. Nella pratica però non è necessario utilizzare tutti i vincoli di subtour elimination, è sufficiente considerarne un numero molto più ridotto. Non potendo conoscere in anticipo quali siano quelli essenziali sarà nostro compito progettare un opportuno separatore: ossia una funzione che fornita in ingresso una soluzione x* ottima per il modello corrente generi tutti i vincoli violati.
 
 
 \vspace{2\baselineskip}
-LETTURA FILE DI INPUT
+FILE DI INPUT
 \vspace{2\baselineskip}
 
 
-Le istanze del problema del Commesso Viaggiatore che sono state fornite in input al programma sono state selezionata da un libreria di istanze che si trovano al seguente indirizzo web: 
+Le istanze del problema del Commesso Viaggiatore fornite in input al programma sono state selezionata da un libreria presente al seguente indirizzo web: 
 
 \begin{center}
 \href{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}
 \end{center}
 
-Tali istanze, memorizzate ciascuna in un file di testo, hanno un formato ben preciso grazie al quale \`e stato possibile progettare un opportuno parser al fine di popolare le strutture dati interne del programma con i dati presenti in tale file.
-Conoscendo preventivamente la struttura del file si sono, in fase di progettazione, limitati i controlli inerenti a possibili modifiche riguardanti la struttura stessa del file, supponendo che l' utente fornisca in input solo file aventi la struttura nativa. 
+Ogni istanza è memorizzata in un file di testo in un formato ben preciso, \`e stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}. 
 
 \vspace{2\baselineskip}
 
@@ -199,15 +199,15 @@ STRUTTURA DEL PROGETTO
 \vspace{2\baselineskip}
 
 
-I file che compongono il programma realizzato sono stati organizzati nel modo seguente; all' interno della cartella TSPCsharp si sono create le seguenti sottocartelle:
+I file che compongono il programma realizzato sono stati organizzati nel modo seguente; all' interno della cartella radice, da noi chiamata TSPCsharp, si sono create le seguenti sottocartelle:
 
 \begin{itemize}
-\item Src contiene i codici sorgenti scritti in C\# e l'eseguibile;
-\item Data include le istanze del problema del commesso viaggiatore appartenenti alla TSPlib;
-\item Concorde la quale contiene i file sorgenti in  linguaggio C del programma Concorde la cui trattazione \`e rimandata al Capitolo X.
+\item \textbf{Src} contenente il progetto di Visual Studio;
+\item \textbf{Data} include le istanze del problema del commesso viaggiatore appartenenti alla TSPlib;
+\item \textbf{Concorde} contenente i file sorgenti in linguaggio C del programma Concorde\footnote{Concorde è un software freeware sviluppato da \textbf{William Cook} per la risoluzione di problemi TSP} la cui trattazione \`e rimandata al Capitolo X.
 \end{itemize}
 
-Il software sviluppato \`e composto da dieci classi, riportiamo di seguito il nominativo di ogni classe:
+Il software sviluppato \`e composto da dieci classi, riportiamo di seguito il nominativo di ognuna di esse:
 
 \begin{itemize}
 \item Instances
@@ -222,25 +222,23 @@ Il software sviluppato \`e composto da dieci classi, riportiamo di seguito il no
 \item Utility
 \end{itemize}
 
-Per le classi Point, Instances, Program, TSP e Utility verr\`a fornita una descrizione in questo capitolo, le rimanenti classi verranno presentate nei capitoli successivi poich\'e una loro trattazione risulta in questo momento prematura. 
+Per le classi Point, Instances, Program, TSP e Utility verr\`a fornita una descrizione in questo capitolo, le rimanenti classi verranno presentate nei capitoli successivi poich\'e una loro trattazione risulterebbe in questo momento prematura. 
 
 
 \vspace{2\baselineskip}
 CLASSE POINT
 \vspace{2\baselineskip}
 
-La classe Point \`e stata realizzate al fine di memorizzare le coordinate di un nodo appartenente all' istanza del problema del Commesso Viaggiatore fornito in ingresso al programma. Tale classe presenta due variabili private di tipo double chiamate rispettivamente x e y necessarie rispettivamente per memorizzare la coordinata x e la coordinata y del nodo. Il costruttore della classe semplicemente setta queste due variabili ai valori del nodo letto dal file di input. 
-
-Il metodo Distance \`e l' unico metodo appartenente a questa classe ed \`e stato implementato per  calcolare il costo del lato congiungente due vertici del grafo; la sua firma \`e:
+La classe Point \`e stata realizzate al fine di memorizzare le coordinate in due dimensioni di un singolo nodo $n$, a tal fine sono presenti due variabili private, accessibili attraverso i propri metodi get e set, di tipo \textbf{double} chiamate rispettivamente \textbf{x} e \textbf{y}. Il costruttore della classe non fa altro che ricevere in input i valori da assegnare a queste ultime. La classe presenta inoltre un ulteriore metodo pubblico e statico chiamato \textbf{Distance} che permette il calcolo della distanza tra due nodi:
 
 \begin{lstlisting}
     public static double Distance(Point p1, Point p2, string pointType)
 \end{lstlisting}
 
 \begin{itemize}
-\item p1: Rappresenta il primo nodo;
-\item p2: Rappresenta il secondo nodo;
-\item pointType: Rappresenta il modo con cui il costo relativo al lato che congiunge p1 con p2 viene calcolato; i valori che questo parametro pu\`o assumere sono i seguenti:
+\item \textbf{p1}: Rappresenta il primo nodo;
+\item \text{p2}: Rappresenta il secondo nodo;
+\item \textbf{pointType}: Rappresenta il modo con cui il costo relativo al lato che congiunge p1 con p2 viene calcolato; i valori che questo parametro pu\`o assumere sono i seguenti:
 	\begin{itemize}
 	\item EUC\char`_2D
 	\item ATT
@@ -251,7 +249,7 @@ Il metodo Distance \`e l' unico metodo appartenente a questa classe ed \`e stato
 	\end{itemize}
 \end{itemize}
 
-A titolo di esempio riportiamo il codice realizzato nel caso in cui pointType risulti uguale a EUC\char`_2D, in questo caso il costo del lato risulta pari alla distanza euclidea dei due nodi. 
+A titolo di esempio riportiamo il codice eseguito nel caso in cui pointType risulti uguale a EUC\char`_2D dove il costo del lato deve risultare pari alla distanza euclidea dei due nodi. 
 
 \begin{lstlisting}
 
@@ -272,7 +270,7 @@ Per quanto riguarda gli altri metodi di calcolo della distanza rimandiamo il let
 CLASSE INSTANCE
 \vspace{2\baselineskip}
 
-La classe Instance \`e stata creata per  memorizzare tutti i dati caratterizzanti l' istanza del problema del Commesso Viaggiatore. La tabella sottostante fornisce un elenco di variabili ed array definite all' interno della classe assieme ad una breve descrizione. 
+La classe Instance \`e stata creata per memorizzare tutti i dati caratterizzanti l'istanza del problema del Commesso Viaggiatore. La tabella sottostante fornisce un elenco di variabili ed array definite all'interno della classe assieme ad una loro breve descrizione. 
 
 
 \begin{center}
@@ -286,23 +284,19 @@ La classe Instance \`e stata creata per  memorizzare tutti i dati caratterizzant
     \begin{center} string \end{center} & \begin{center} edgeType \end{center}&\vfill Definisce la modalit\`a con cui calcolare la distanza fra due nodi.\vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} timeLimit \end{center}& \vfill Definisce la quantit\`a massima di tempo che il programma dispone per il calcolo della soluzione.\vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} inputFile \end{center}&\vfill Rappresenta il nome del file di input contenente l'istanza del problema del Commesso Viaggiatore. \vfill\\ \hline
-    \begin{center} double \end{center} & \begin{center} tStart \end{center}& \vfill ? \vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} zBest \end{center}& \vfill Rappresenta il costo della soluzione ottima restituira da cplex.\vfill \\ \hline
+    \begin{center} double \end{center} & \begin{center} tStart \end{center}& \vfill Rappresenta i secondi trascorsi dall'attivazione del cronometro al reale inizio delle operazioni di calcolo per la risoluzione del problema \vfill \\ \hline
+    \begin{center} double \end{center} & \begin{center} xBest \end{center}& \vfill Rappresenta il costo della soluzione ottima restituira da cplex.\vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} tBest \end{center}& \vfill Contiene la qantit\`a di tempo impiegata per il calcolo della soluzione ottima. \vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} bestSol \end{center}& \vfill Rappresenta la soluzione ottima ritornata da Cplex.\vfill \\ \hline
      \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
      \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
-     \begin{center} double \end{center} & \begin{center} dMin \end{center}& ?\\ \hline
-     \begin{center} double \end{center} & \begin{center} dMax \end{center}& ? \\ \hline
     \end{longtable}
 \end{center}
 
-\textit{Anzich\`e definire xMin/yMin e xMax/yMax definirei dMin e dMax. Se preferisci tenerle separate non ci sono problemi :)Il codice comunque non lo ho modificato. \\ In piu sarebbe piu giusto chiamare zBest xBest perche ascoltando le reg ho capito che la z ci andava nel suo esempio non nel nostro.. \\ mi sono accorto anche che sizePopulation non centra davvero nulla con inst e quindi la toglierei da qui}
+\textit{xMin e yMin ... mi servivano per gnuplot ma dato che ho messo l'autoscale credo non servano più. per xBest ok}
 
-
-Questa classe \`e risultata particolarmente utile poich\'e, passando come parametro una sua istanza ad un metodo,  quest' ultimo ha accesso a tutte le variabili elencate nella tabella. Non avere questa classe significava dover passare molti pi\`u parametri alle funzioni rendendo il codice meno chiaro.
-L' unico metodo appartenente a questa classe risulta essere il metodo Print, la cui firma risulta essere:
+L' unico metodo appartenente a questa classe, esclusi i vari getter e setter, è \textbf{Print}, la cui firma risulta essere:
 
 \begin{lstlisting}
                   static public void Print(Instance inst)
@@ -311,10 +305,10 @@ L' unico metodo appartenente a questa classe risulta essere il metodo Print, la 
 dove:
 
 \begin{itemize}
-\item inst: oggetto della classe Instance contente tutti dati che descrivono l' istanza del probelma del Commesso Viaggiatore fornita in ingresso dall' utente;
+\item \textbf{inst}: oggetto della classe Instance contente tutti dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' tente;
 \end{itemize}
 
-Tale metodo semplicemte stampa a video le coordinate di tutti i nodi contenuti nell' array Point dell' oggetto inst. Per scrupolo viene di seguito riportato il codice:
+Tale metodo stampa a video le coordinate di tutti i nodi memorizzati dentro \textbf{inst}. Viene di seguito riportato il codice:
 
 \begin{lstlisting}
 for (int i = 0; i < inst.NNodes; i++)
@@ -322,64 +316,74 @@ for (int i = 0; i < inst.NNodes; i++)
 \end{lstlisting}
 
 \vspace{2\baselineskip}
-CLASSE TSP
-\vspace{2\baselineskip}
-
-La classe TSP contiene il metodo TSPOpt invocato dal metodo Main e tutti gli algoritmi di risoluzione realizzati. In particolare il metodo TSPOpt realizza l'interfaccia grafica che consente all' utente di invocare l' algoritmo risolutore desiderato; nel caso in cui non si siano registrate anomalie, la funzione ritorna il valore true, viceversa false. 
-\textit{[In realt\`a da noi ritorna sempre true..sarebbe meglio tornasse false in qualche caso] \\ se dici questo è anche un buon punto per dire due parole sull' interfaccia grafica creata..}
-
-\vspace{2\baselineskip}
-CLASSE UTILITY
-\vspace{2\baselineskip}
-
-La classe Utility comprende al suo interno il codice di tutti i metodi invocati dagli algoritmi risolutori presenti nella classe TSP: si \`e deciso di dirottare in questa classe tali funzioni per avere nella classe TSP un codice pi\`u leggibile.
-
-\vspace{2\baselineskip}
 
 CLASSE PROGRAM
 
 \vspace{2\baselineskip}
 
-La classe Program contiene il metodo Main che, come noto, rappresenta il punto di inizio del programma: dal sistema operativo riceve in input l' array argv di stringhe contenente i parametri inseriti dall' utente da riga di comando. Appartengono a questa classe anche i metodi ParseInst e Populate; tali metodi consentono di popolare i campi associati all' istanza (che come vedremo \`e stata chiamata inst) della classe Istance. Mentre ParseInst svolge il suo compito utilizzando i valori passati dall' utente da riga di comando, Populate utilizza i dati presenti nel file di testo contenente l' istanza del problema del Commesso Viaggiatore. Firma e implementazione di tali metodi \`e rimandata al successivo capitolo.\\
-Nel metodo Main  principalmente si crea una istanza della classe Instance e si invocano nell' ordine i metodi ParseInst, Populate e TSPOpt. Nel caso non si siano rivelate anomalie e l' utente abbia scelto di utilizzare un algoritmo esatto, viene stampato a video il tempo impiegato da Cplex per il calcolo della soluzione ottima; nel caso in cui l' utente abbia scelto un algoritmo euristico viene stampato il tempo impiegato da quest' ultimo per produrre la soluzione(che non necessariamente \`e quella ottima) fornita in output.\textit{[Questa separazione non la facciamo ma secondo me \`e da fare perch\`e se usiamo un euristico e poi a video stampiamo "la soluzione ottima \`e stata trovata in..." \`e sbagliato]}. Si osserva che la stampa a video della soluzione ottima o della miglior soluzione trovata fino a quel momento nel caso di algoritmi euristici, viene effettuata all' interno dell' algoritmo risolutore.
+La classe Program contiene il metodo Main che, come noto, rappresenta il punto di inizio del programma: attraverso le funzionalità di Visual Studio esso riceve in input l'array \textbf{argv} di stringhe contenente i parametri di input forniti dall'utente come il nome del file contenente l'input ed il time limit per la sua risoluzione. Appartengono a questa classe anche i metodi \textbf{ParseInst} e \textbf{Populate}: rispettivamente forniscono il parser per \textbf{argv} ed il parser del file di ingresso indicato con conseguente inizializzazione delle coordinate dei nodi. Firma e implementazione di tali metodi \`e rimandata al successivo capitolo.\\
+All'interno del metodo \textbf{Main} vengono eseguite in ordine le seguenti attività:
+\begin{itemize}
+	\item Creata una istanza della classe \textbf{Instance} ed invocati i due metodi precedentemente nominati.
+	\item Creato un oggetto della classe \textbf{Stopwatch}. Questa classe è fornita direttamente da Visual Studio appartenente al Namespace \textbf{System.Diagnostics} è fornisce le funzionalità di un cronometro compatibile al multithreading.
+	\item Invocato il metodo \textbf{TSPOpt} della classe \textbf{TSP} passandogli come parametri i due oggetti di tipo Instance e Stopwatch.
+	\item In caso di risultato positivo (una soluzione del problema è stata trovata) viene mostrato a video il risultato ottenuto ed il tempo di calcolo trascorso.
+	\item Viene effettuata una pulizia dei file creatisi durante l'esecuzione del problema.
+\end{itemize}
 
-Nella seguente tabella sono mostrate le variabili definite in questa classe assieme ad una breve descrizione. Poich\'e tali variabili sono costanti, \`e riportato pure il loro valore. 
+In tutto il nostro progetto si è cercato di utilizzare il minor numero possibile di variabili globali, in particolare solo all'interno di questa classe ne sono state definite due di seguito descritte:
 
 \begin{center}
-
-    \begin{tabular}{ | p{1.5cm} | p{4cm} | p{2cm} | p{6.5cm} |}
-    \hline
-    \begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& \begin{center} \textbf{Valore} \end{center} & \begin{center} \textbf{Descrizione} \end{center}\\ \hline
-    \begin{center} int \end{center} & \begin{center} VERBOSE \end{center}& \begin{center} 5 \end{center} & Regola quanto output il programma mostra a video: si \`e scelto di condizionare l' esecuzione di molte righe di codice che producevano una stampa a video in base al valore assunto da questa variabile. Si \`e deciso di ristringere il suo valore da 1 a 9, quando assume il valore 9 viene riportato a video il maggior numero possibile di stampe. \\ \hline
-    \begin{center} int \end{center} & \begin{center} TICKS\char`_PER\char`_SECOND \end{center} &  \begin{center}1000  \end{center}& ? \\ \hline
-    
-\end{tabular}
+	
+	\begin{tabular}{ | p{1.5cm} | p{4cm} | p{2cm} | p{6.5cm} |}
+		\hline
+		\begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& \begin{center} \textbf{Valore} \end{center} & \begin{center} \textbf{Descrizione} \end{center}\\ \hline
+		\begin{center} int \end{center} & \begin{center} VERBOSE \end{center}& \begin{center} 5 \end{center} & Regola quanto output il programma mostra a video: si \`e scelto di condizionare l' esecuzione di molte righe di codice che producevano una stampa a video in base al valore assunto da questa variabile. Si \`e deciso di ristringere il suo valore da 1 a 9, quando assume il valore 9 viene riportato a video il maggior numero possibile di stampe. \\ \hline
+		\begin{center} int \end{center} & \begin{center} TICKS\char`_PER\char`_SECOND \end{center} &  \begin{center}1000  \end{center}& Cplex utilizza i così detti ticks come unità di misura per il tempo di calcolo, questa costante indica quanti ne trascorrono in un secondo.\\ \hline
+		
+	\end{tabular}
 \end{center}
 
-\textit{ci sarebbe pure clock, non so se ti sei dimenticato di toglierla o \`e giusto lasciarla globale}
+\vspace{2\baselineskip}
+CLASSE TSP
+\vspace{2\baselineskip}
 
+La classe \textbf{TSP} è stata pensata come il cuore del programma in quanto lo scheletro di tutti i metodi di risoluzione implementatisi trova al suo interno. Contiene un unico metodo pubblico che rappresenta quindi l'unico entry point per utilizzare questa classe: \textbf{TSPOpt}.
+
+\begin{lstlisting}
+static public bool TSPOpt(Instance instance, Stopwatch clock)
+\end{lstlisting}
+
+Come già specificato nella descrizione della classe Program, TSPOpt è invocato dal metodo Main e pertanto maggiori dettagli riguardanti i suoi parametri di ingresso possono essere trovati nella sezione precedente.\\
+TSPOpt si preoccupa di istanziare i vari elementi utilizzati da tutti i metodi di risoluzione\footnote{Fatta eccezione per l'UserCutCallBack che è gestita esternamente da una DLL}, fornire all'utente un'interfaccia grafica che gli permetta di scegliere quale di questi ultimi voglia utilizzare e di conseguenza invoca il metodo privato della classe associato alla scelta effettuata.\\
+Entrando nello specifico per quanto riguarda gli elementi inizializzati troviamo un oggetto della classe \textbf{Cplex} che come già accennato in precedenza ci permetterà di stabilire una connessione con il programma Cplex ed utilizzarlo per la risoluzione del modello matematico, ed un oggetto \textbf{Process} che sostanzialmente viene da noi utilizzato per inizializzare e comunicare con il programma \textbf{GNUPlot}\footnote{Per maggiori dettagli si veda la sezione dedicata a GNUPlot}.
+
+\vspace{2\baselineskip}
+CLASSE UTILITY
+\vspace{2\baselineskip}
+
+La classe Utility può essere considerata come una libreria: contiene al suo interno solamente metodi \textbf{statici} che si è deciso di raggruppare al suo interno per rendere il codice il più compatto e leggibile possibile.
 
 \vspace{2\baselineskip}
 INTERPRETAZIONE FILE DI INPUT
 \vspace{2\baselineskip}
 
-Lo sviluppo del programma \`e iniziato realizzando una opportuna funzione per interpretare correttamente i parametri di ingresso forniti dall' utente. Oltre al nome del file di testo contenente i dati relativi  all' istanza del problema che si vuole risolvere, all' utente \`e richiesto di fornite un time limit(espresso in secondi) e di scegliere con quale algoritmo risolvere l'istanza da esso fornita. Si \`e deciso di ricevere da riga di comando il nome del file e il time limit; per quanto riguarda la scelta dell' algoritmo risolutore ed eventuali parametri da esso richiesti si \`e preferito realizzare una semplice interfaccia grafica per favorire l'utente. 
-Per ottenere una maggiore flessibilit\`a , si \`e deciso che il valore di un parametro inserito da riga di comando  dovr\`a essere preceduto da una stringa identificatrice di quest' ultimo: in particolare si \`e deciso che il nome del file dovr\`a essere preceduto dalla stringa -file mentre il time limit dovr\`a essere preceduto dalla stringa -timelimit; questo permette di realizzare un codice che consente all' utente di  inserire in un ordina arbitrario tali parametri essendo sempre cosciente di quale parametro ha settato. Si osserva che allo stato attuale del programma il vantaggio \`e relativo passando solo due parametri ma, nel caso di futuri aggiornamenti che prevedono l' inserimento di un numero maggiore di parametri da riga di comando, il vantaggio diventerebbe notevole.
+Lo sviluppo del programma \`e iniziato realizzando una opportuna funzione per interpretare correttamente i parametri di ingresso forniti dall'utente. Oltre al nome del file di testo contenente i dati relativi  all'istanza del problema che si vuole risolvere, all'utente \`e richiesto di fornite un time limit(espresso in secondi) e di scegliere con quale algoritmo risolvere l'istanza da esso fornita. Si \`e deciso di ricevere da riga di comando il nome del file e il time limit; per quanto riguarda la scelta dell'algoritmo risolutore ed eventuali parametri da esso richiesti si \`e preferito realizzare una semplice interfaccia grafica per favorire l'utente. 
+Visual Studio, all'interno delle proprietà del progetto, permette di definire una stringa come parametro di ingresso per il programma. Questa viene automaticamente separata in sottostringhe utilizzando come separatore il carattere di spazio e fornito in ingresso al metodo Main. Allo stato attutale è gestita solamente la possibilità di fornire in ingresso il nome del file contenente i dati ed il timelimit per la ricerca della soluzione. Per ottenere una migliore organizzazione e chiarezza per il nostro lavoro è stato deciso di utilizzare questa regola per la costruzione della stringa di ingresso: ogni parametro inseritovi deve essere preceduto da una parola chiave che lo identifica il cui primo carattere deve essere '-'. Questa tecnica si rileverà utile anche in futuro nel caso si decidesse di ampliare la lista di parametri di ingresso.\\
 La funzione che interpreta correttamente gli argomenti forniti in input dalla riga di comando \`e stata chiamata ParseInst ed ha la seguente intestazione:
 
 \begin{lstlisting}
-	  static void ParseInst(Instance inst, string[] input)    
-
+	  static void ParseInst(Instance inst, string[] input) 
 \end{lstlisting}
 
 
 \begin{itemize}
-\item inst: rappresenta un riferimento l'istanza della classe Instance contente tutti dati che descrivono l' istanza del probelma del Commesso Viaggiatore fornita in ingresso dall' utente;
-\item input: rappresenta un vettore contenente i parametri di input forniti da riga di comando dall' utente.
+\item \textbf{inst}: rappresenta il riferimento all'istanza della classe Instance dichiarata nel metodo Main, i valori letti vengono memorizzati al suo interno.
+\item \textbf{input}: rappresenta un vettore contenente i parametri di input forniti da riga di comando dall'utente.
 \end{itemize}
 
 
-Il metodo \`e composto da un ciclo for il quale scandisce ad ogni iterazione tutte le celle dell'array input: se \`e presenta una uguaglianza fra l' elemento $i$ dell' array e una stringa identificatrice si assegna ad una opportuna variabile di inst il relativo valore che si trova in input[i+1]. Successivamente si esegue l'istruzione continue in modo da interrompere il corrente ciclo per iniziare il successivo.
+Il metodo \`e composto da un semplice ciclo for che scandisce il vettore \textbf{input} cercando una parola chiave, se trovata la stringa successiva viene memorizzata correttamente dentro \textbf{inst}: 
 
 \begin{lstlisting}
 
@@ -414,8 +418,8 @@ if (inst.InputFile == null || inst.TimeLimit == 0)
 METODO POPULATE
 \vspace{2\baselineskip}
 
-Come gi\`a accennato, il metodo Populate \`e stato implementato per memorizzare tutte le informazioni relative all' istanza del problema del Commesso Viaggiatore contenute nel file di testo nei rispettivi campi presenti in inst.
-Essendoci dati di natura diversa all' interno del file, quest' ultimo \`e diviso in sezioni che cominciano con una parola chiave. Tranne la sezione che inizia con la parola chiave NODE COORD SECTION, tutte le altre si sviluppano in una sola riga la quale ha la seguente struttura:
+Il metodo Populate \`e utilizzato per la lettura dei dati contenuti all'interno del file di input e soprattutto alla loro memorizzazione all'interno di un oggetto di tipo \textbf{Instance} in modo tale che una volta conclusosi il metodo questo contenga tutte le informazioni necessarie per la creazione del modello matematico.\\
+I file di input presenta una struttura pressoché identica tra loro e cioè una divisione in sezioni identificate da parole chiave. Fatta eccezione per la sezione che descrive le coordinate dei nodi, tutte le altre si sviluppano in una sola riga la cui struttura \'e del tipo:
 
 \begin{center}
 <parolaChiave> : < valore> 
@@ -434,36 +438,35 @@ Di seguito sono riportati i valori che possono essere assunti dalle parole chiav
 	\item indica il tipo dell' istanza. Nel nostro ambito sar\`a sempre TSP.    
     \end{itemize}	
 	 
-	\item COMMENT:<string> 
+	\item \textbf{COMMENT:<string>} 
 	\begin{itemize}	
 	\item include informazioni aggiuntive, solitamente contiene il nome deli gli autori che hanno proposto l'  				istanza.
 	\end{itemize}	
 	
 		
-	\item DIMENSION:<integer> 
+	\item \textbf{DIMENSION:<integer>} 
 	\begin{itemize}
 	\item indica il numero di nodi.
 	\end{itemize}	
 	
-	\item EDGE WEIGHT TYPE:<string>
+	\item \textbf{EDGE WEIGHT TYPE:<string>}
 	\begin{itemize} 
 	\item Definisce il modo con cui il costo del lato deve essere calcolato, i possibili valori  che pu\'o assumere    		     il contenuto di questa sezione sono stati gi\`a presentati a pagina 7 durante la descrizione del metodo Distance.
 	\end{itemize}	
 	
-	\item NODE COORD SECTION: 
+	\item \textbf{NODE COORD SECTION}: 
 	\begin{itemize}	
 	
 	\item Il contenuto di questa sezione si sviluppa in pi\`u righe; in ogni riga troviamo nell' ordine:
 	\begin{itemize}
-	\item Un numero progressivo intero positivo che comincia da 1 e che identifica il nodo. Osserviamo che anche se in input il       
-	primo nodo \`e numerato a partire da 1, nel vettore Point di inst le coordinate saranno memorizzate a partire dall' indice 0. 		In ogni caso sar\`a nostra cura quando ci interfacciamo con l' utente far partire la numerazione dei nodi da 1.
+	\item Un numero progressivo intero positivo che comincia da 1 e che identifica il nodo. Osserviamo che anche se in input il primo nodo \`e numerato a partire da 1, nel vettore Point di inst le coordinate saranno memorizzate a partire dall'indice 0\footnote{Tale scelta \'e per mantenere una conformit\'a con la metrica adottata dal linguaggio C\# per l'enumerazione degli elementi dei vettori, nel caso in cui le coordinate vengano visualizzate a video il loro indice viene comunque incrementato di uno}.
 	\item Un numero reale positivo che definisce la coordinata x del nodo.
 	\item Un numero reale positivo che identifica la coordinata y del nodo.
 	\end{itemize}		
 	\end{itemize}	
 \end{itemize}
 
-Il file di testo termina sempre con la stringa EOF che indica la fine del file di testo.
+Il file di testo termina sempre con la stringa \textbf{EOF} che indica la fine del file di testo.
 
 Per poter leggere il contenuto di un file \`e necessario inizializzare una nuova istanza della classe StreamReader passando come parametro al costruttore il percorso ove tale file \`e  collocato.
 
@@ -475,14 +478,23 @@ StreamReader sr = new StreamReader("..\\..\\..\\..\\Data\\" + inst.InputFile)
 \end{lstlisting}
 
 
-Il metodo ReadLine() della classe StreamReader ritorna, come stringa, il contenuto di una intera riga del file la quale viene memorizzata all' interno di una variabile di tipo string chiamata line. Poich\'e si vuole leggere tutto il contenuto del file, \`e necessario invocare ReadLine() ciclicamente sull' oggetto sr creato finch\`e line risulta diversa da null. Quando line risulta pari a null significa che il file \`e terminato e quindi tutto il suo contenuto \`e stato letto.
-
-Per quanto detto si \`e realizzato il seguente ciclo while per scandire tutte le righe del file:
+Il metodo ReadLine() della classe StreamReader ritorna, come stringa, il contenuto di una intera riga del file la quale viene memorizzata all'interno di una variabile di tipo string chiamata \textbf{line}. Poich\'e si vuole leggere tutto il contenuto del file, \`e necessario invocare ReadLine() ciclicamente sull' oggetto \textbf{sr} finch\`e line risulta diversa da null oppure viene incontrata la parola chiave \textbf{EOF}.
 
 \begin{lstlisting}
 
 while ((line = sr.ReadLine()) != null)
 {
+	...
+	
+	//This line signals the end of the file
+	if (line.StartsWith("EOF"))
+	{
+	Instance.Print(inst);
+	Console.WriteLine(line);
+	//Correct end of the file
+	break;
+	}
+	
 	...
 }
 \end{lstlisting}
@@ -496,7 +508,7 @@ Poich\'e ogni riga inizia con una nota parola chiave, per prelevare il contenuto
 
 \end{lstlisting}
 
-Questo metodo, applicato alla variabile line, determina se la prima stringa di line corrisponde alla stringa value specificata all' atto dell' invocazione del metodo. In caso in cui il confronto dia esito positivo, per prelevare il contenuto della sezione \`e neccessario applicare i metodi IndexOf e Remove sempre alla variabile line; l' intestazione di tali metodi \`e riportata di seguito:
+Questo metodo, applicato alla variabile line, determina se la prima stringa di line corrisponde alla stringa value specificata all'atto dell' invocazione del metodo. Nel caso in cui il confronto dia esito positivo, per prelevare il contenuto della sezione \`e necessario applicare i metodi IndexOf e Remove sempre alla variabile line; l'intestazione di tali metodi \`e riportata di seguito:
 
 
 \begin{lstlisting}
@@ -508,8 +520,8 @@ Questo metodo, applicato alla variabile line, determina se la prima stringa di l
 dove:
 
 \begin{itemize}
-	\item value: stringa da cercare;
-	\item startIndex: posizione iniziale della ricerca.
+	\item \textbf{value}: stringa da cercare.
+	\item \textbf{startIndex}: posizione iniziale della ricerca.
 \end{itemize}
 
 \begin{lstlisting}
@@ -522,24 +534,21 @@ dove:
 dove:
 
 \begin{itemize}
-	\item startIndex: posizione in base zero da cui iniziare l'eliminazione dei caratteri;
-	\item count: numero di caratteri da eliminare.
+	\item \textbf{startIndex}: posizione da cui iniziare l'eliminazione dei caratteri.
+	\item \textbf{count}: numero di caratteri da eliminare.
 \end{itemize}
 
-Per quanto visto, risulta immediata la comprensione del codice neccssario per prelevare il contenuto della sezione e memorizzarlo in un generica variabile, chiamata campo:
+Per quanto detto, risulta immediata la comprensione del codice necessario per prelevare il contenuto della sezione e memorizzarlo dentro un oggetto di tipo \textbf{Instance} chiamando il metodo setter adeguato:
 
 \begin{lstlisting}
 
-                inst.campo = (line.Remove(0, line.IndexOf(:) + 2));
+                inst.SetterName = (line.Remove(0, line.IndexOf(:) + 2));
 
 \end{lstlisting}
 
-Si ritiene utile osservare che \`e stato necessario incrementare il valore ritornato da meodo IndexOf di 2 poich\'e \`e presenta uno spazio fra il carattere ":" e il contenuto della sezione.
+Il codice riportato deve chiaramente effettuare un cast per i tipi diversi da string, i metodi necessari sono già disponibili all'interno della classe \textbf{Convert} di C\#.
 
-Nel caso in cui campo non \`e di tipo string \`e necessario effettuare una conversione esplicita utilizzando i metodi ToInt o ToDouble della classe Convert: questo in ogni caso non \`e un problema poich\'e noto il tipo di dato contenuto di una sezione.
-
-Poich\'e  il contenuto della sezione NODE COORD SECTION si sviluppa in pi\`u righe, si \`e dichiarata una variabile di tipo bool chiamata readingCoordinates inizializzata al valore logico false; a questa variabile viene assegnato il valore logico true solo una volta che si \`e entrati in questa sezione. 
-Per leggere il contenuto di questa sezione si \`e realizzato un if la cui condizione valutava se readingCoordinates assumeva il valore logico true; in tal caso sono eseguite le seguenti istruzioni:
+Una volta che ci troviamo all'interno della sezione \textbf{NODE COORD SECTION} la lettura delle coordinate viene eseguita eseguendo ciclicamente il seguente codice:
 
 \begin{lstlisting}
 
@@ -550,7 +559,7 @@ int i = Convert.ToInt32(elements[0]);
 inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".",",")));
 \end{lstlisting}
 
-Il metodo Split della classe String ritorna un array contenente in ogni elemento una sottostringa della stringa a cui tale metodo \`e applicato. Le sottostringhe vengono estratte dalla stringa in base ai caratteri delimitatori specificati all' atto dell'invocazione del metodo, quest' ultimo ha diversi overload: quello di nostro interesse \`e riportato di seguito.
+Il metodo Split della classe String ritorna un array contenente in ogni elemento una sottostringa della stringa a cui tale metodo \`e applicato. Le sottostringhe vengono estratte dalla stringa in base ai caratteri delimitatori specificati all'atto dell'invocazione del metodo, quest'ultimo ha diversi overload: quello di nostro interesse \`e riportato di seguito.
 
 \begin{lstlisting}
 
@@ -561,52 +570,46 @@ Il metodo Split della classe String ritorna un array contenente in ogni elemento
 dove:
 
 \begin{itemize}
-\item separator: array i cui elementi definiscono i separatori della stringa. 
-\item options: A questo parametro possono essere passate solo i seguenti due valori dell' enumerazione StringSplitOptions:
+\item \textbf{separator}: array i cui elementi definiscono i separatori della stringa. Nel nostro caso è un array con un solo elemento contenente il carattere \textipa{"}   \textipa{"}.
+\item \textbf{options}: A questo parametro possono essere passate solo i seguenti due valori dell' enumerazione StringSplitOptions:
 
 \begin{itemize}
 
-\item StringSplitOptions.RemoveEmptyEntries: indica che gli elementi dell' array ritornato non possono essere stringhe vuote.
-\item StringSplitOptions.None: indica che gli elementi dell' array ritornato possono essere stringhe vuote.
+\item \textbf{StringSplitOptions.RemoveEmptyEntries}: indica che gli elementi dell'array ritornato non possono essere stringhe vuote. Questo è l'opzione da noi selezionata.
+\item \textbf{StringSplitOptions.None}: indica che gli elementi dell'array ritornato possono essere stringhe vuote.
 
 \end{itemize}
 
 \end{itemize}
 
-Nel nostro caso dato che l' unico separatore \`e lo spazio vuoto, \`e stato sufficiente passare come primo parametro a Split un array con un solo elemento contenente il carattere \textipa{"}   \textipa{"}.
-Successivamente all' interno di una variabile di tipo intero chiamata i si \`e memorizzato l' indice del nodo che, per quanto visto, \`e memorizzato sempre in elements[0] ed \`e un numero intero: per tale ragione \`e stato necessario applicare il metodo ToInt32 della classe Convert.
-Si \`e infine memorizzato nel vettore Coor di inst, in un oggetto Point,le coordinate del nodo presenti in elements[1] e elements[2]. Come accennato in precedenza, mentre la numerazione dei nodi nell' istanza parte da 1, la memorizzazione delle coordinate in Coor inizia dall' indice 0.
+Ogni coordinata letta viene tradotta in un oggetto di tipo \textbf{Point} il quale è a sua volta memorizzato all'interno del vettore \textbf{Coord} dell'oggetto di tipo \textbf{Instance} nella posizione indice letta.
 
-Anche in questo caso \`e stato necessario effettuare una conversione da string a double ; inoltre \`e stato doveroso utilizzare il metodo Replace della classe string avente la seguente firma:
+Come nota conclusiva specifichiamo che C\# utilizza come separatore tra parte intere e parte decimale di un numero il carattere \textipa{"},\textipa{"} e non il carattere \textipa{"}.\textipa{"} utilizzato per nei file di input. E' quindi necessaria una modifica delle stringhe lette attraverso il metodo non statico della classe string:
 
 \begin{lstlisting}
 
-     public string Replace(string oldValue, string newValue
+     public string Replace(string oldValue, string newValue)
 )
 
 \end{lstlisting}
 dove:
 \begin{itemize}
-	\item oldValue: stringa sa sostituire;
-	\item newValue: stringa con cui sostituire tutte le occorrenze di oldValue.
+	\item \textbf{oldValue}: stringa sa sostituire;
+	\item \textbf{newValue}: stringa con cui sostituire tutte le occorrenze di oldValue.
 \end{itemize}
-
-
-Questo perch\`e il generale le coordinate dei vertici sono numeri reali aventi come carattere di separazione fra la parte intera e quella decimale il carattere \textipa{"}.\textipa{"} anzich\`e il carattere \textipa{"},\textipa{"} : questo fatto genera anomalie nella conversione fra i tipi di dato string e double e quindi \`e  stato necessario effettuare tale sostituzione di caratteri.
-
 
 \vspace{2\baselineskip}
 COSTRUZIONE DEL MODELLO
 \vspace{2\baselineskip}
 
-In questo paragrafo vedremo come \`e possibile creare da programma un modello matematico attraverso l' uso di alcune routine appartenenti alla libreria di Cplex. Premettiamo che esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di Cplex da iterativo.
+In questo paragrafo vedremo come \`e possibile creare da programma un modello matematico attraverso l'uso di alcune routine appartenenti alla libreria di Cplex. Esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di Cplex da iterativo.
 
 
 \vspace{2\baselineskip}
 COSTRUZIONE MODELLO IN C
 \vspace{2\baselineskip}
 
-Per istanziare un nuovo modello di programmazione lineare \`e necessario inizializzare un enviroment di Cplex utilizzando la funzione CPXopenCPLEX la quale ritorna un puntatore all' envairoment creato, la firma di tale funzione \`e:
+Per istanziare un nuovo modello di programmazione lineare \`e necessario inizializzare un \textbf{environment} di Cplex utilizzando la funzione \textbf{CPXopenCPLEX} la quale ritorna un puntatore all'environment creato, la firma di tale funzione \`e:
 
 
 \begin{lstlisting}
@@ -618,16 +621,15 @@ Per istanziare un nuovo modello di programmazione lineare \`e necessario inizial
 dove:
 
 \begin{itemize}
-\item status\char`_p: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore.
+\item \textbf{status\char`_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore.
 \end{itemize}
 
 
-L' enviroment \`e una struttura dati interna a Cplex i cui dettagli implementativi non sono di dominio pubblico, contenente variabili inerenti all' esecuzione di Cplex. Per esempio variabili interne all' enviroment sono il time limit e la variabile verbose. Ad un enviroment possiamo associare uno o pi\`u modelli: per associare un modello \`e necessario usare il metodo CPXcreateprob, la cui intestazione \`e:
+Ad un enviroment è possibile associare uno o pi\`u modelli attraverso il comando \textbf{CPXcreateprob}, la cui intestazione \`e:
 
 \begin{lstlisting}
 
-    CPXLPptr CPXcreateprob(CPXCENVptr env, int * status_p, const char * probname_str)
-
+    CPXLPptr CPXcreateprob(CPXCENVptr env, int * status_p, const char * probname_str
 
 \end{lstlisting}
 
@@ -635,14 +637,14 @@ L' enviroment \`e una struttura dati interna a Cplex i cui dettagli implementati
 dove:
 
 \begin{itemize}
-	\item env: puntatore all' environment sul quale si \`e deciso di creare il modello;
-	\item status\char`_p: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore;
-	\item probname\char`_str: rappresenta un array di caratteri che definisce il nome del modello creato.
+	\item \textbf{env}: puntatore all'environment sul quale si \`e deciso di creare il modello;
+	\item \textbf{status\char`_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore;
+	\item \textbf{probname\char`_str}: rappresenta un array di caratteri che definisce il nome del modello creato.
 \end{itemize}
 
-Tale funzione ritorna un puntatore al modello creato: questo risulta vuoto poich\`e  privo di funzione obbiettivo, di variabili e di vincoli.\\
+Tale funzione ritorna un puntatore al modello creato: questo risulta vuoto poich\`e privo di funzione obbiettivo, variabili e vincoli.\\
 
-Per poter definire la funzione obbiettivo \`e necessario aggiungere tutte le variabili definendo per ciascuna il relativo costo; un primo metodo per far ci\`o \`e inserire contemporaneamente tutte le variabili utilizzando la funzione CPXnewcols la cui firma \`e:
+Procediamo quindi al loro inserimento partendo definendo contemporaneamente le variabili e il loro coefficiente nella funzione obiettivo; è possibile procedere in più modi, quello da noi scelto è di utilizzare la funzione \textbf{CPXnewcols} la cui firma \`e:
 
 
 \begin{lstlisting}
@@ -654,77 +656,56 @@ int CPXnewcols (CPXENVptr env,CPXLPptr lp,int ccnt,double *obj, double *lb, doub
 dove:
 
 \begin{itemize}
-\item env : puntatore all' enviroment di Cplex nel quale vuole essere inserito il modello.
-\item lp : puntatore al problema di programmazione lineare.
-\item ccnt : intero che indica il numero delle nuove variabili che vengono aggiunte al problema.
-\item obj : array contenente per ogni variabile il relativo coefficiente 
-\item lb : array di lunghezza ccnt contenente il lower bound di ogni variabile aggiunta.
-\item ub : array contenente l' upper bound di ogni variabile aggiunta.
-\item ctype : array di lunghezza ccnt contenente il tipo di ogni variabile. I valori che un elemento di questo array pu\`o assumere sono:
+\item \textbf{env} : puntatore all'enviroment di Cplex nel quale vuole essere inserito il modello.
+\item \textbf{lp} : puntatore al problema di programmazione lineare.
+\item \textbf{ccnt} : intero che indica il numero delle nuove variabili che vengono aggiunte al problema.
+\item \textbf{obj} : array contenente per ogni variabile il relativo coefficiente 
+\item \textbf{lb} : array di lunghezza ccnt contenente il lower bound di ogni variabile aggiunta.
+\item \textbf{ub} : array contenente l'upper bound di ogni variabile aggiunta.
+\item \textbf{ctype} : array di lunghezza ccnt contenente il tipo di ogni variabile. I valori che un elemento di questo array pu\`o assumere sono:
 \begin{itemize}
-	\item \textipa{"}C\textipa{"}: variabile continua
-	\item \textipa{"}B\textipa{"}: variabile binaria
-	\item \textipa{"}I\textipa{"}: variabile intera
+	\item \textbf{\textipa{"}C\textipa{"}}: variabile continua
+	\item \textbf{\textipa{"}B\textipa{"}}: variabile binaria
+	\item \textbf{\textipa{"}I\textipa{"}}: variabile intera
 \end{itemize}
-\item colname : array di lunghezza ccnt contenente puntatori ad array di char contenente ogniuno il nome della variabile aggiunta al modello.
-\end{itemize}
-
-A livello implementativo \`e risultato pi\`u semplice anzich\`e  aggiungere al modello tutte le variabili contemporaneamente, utilizzare un secondo approccio che consiste nell' inserire una variabile per volta invocando la funzione CPXnewcols tante volte quante sono le variabili da aggiungere. In particolare si \`e inserita la funzione CPXnewcols in una coppia di cicli for in cui l' iniializzazione del ciclo for esterno risulta essere:
-
-\begin{lstlisting}
-
-int i = 0;
-
-\end{lstlisting}
-
-mentre l' inizzializzazione del ciclo for interno \`e:
-
-
-\begin{lstlisting}
-
-int j = i + 1;
-\end{lstlisting}
-
-
-Questo perch\`e essendo il grafo completo, per ogni coppia di nodi esiste un lato [i,j] a cui si associa una variabile in Cplex. Poich\'e il grafo non \`e orientato, associando una variabile ad ogni lato avremmo due variabili che corrispondono allo stesso lato: per questo motivo si \`e scelto di associare una variabile ad un lato [i,j] solo se i < j.
-
-Aggiungere una variabile alla volta significa per\`o che i parametri obj, lb, ub e ctype che CPXnewcols si aspetta essere array, risultano variabili. 
-
-Questa problematica \`e stata risolta utilizzando l' operatore di indirizzo \& prima del nome della variabile nell' invocazione della funzione simulando cos\`i una variabile come un array contenente un solo elemento. La funzione CPXnewcols ritorna un intero che \`e pari a 0 se non sono state riscontrate anomalie durante l' inserimento delle variabili, un codice di errore viceversa. 
-
-Dopo quanto detto si ritiene utile mostrare come avviene l' invocazione del metodo CPXnewcols nel nostro caso particolare e i parametri ad esso forniti:
-
-\begin{lstlisting}
-
-CPXnewcols(env, lp, 1, &obj, &zero, &ub, &binary, cname)
-
-\end{lstlisting}
-
-dove:
-
-\begin{itemize}
-\item env: puntatore all' enviroment di Cplex nel quale vuole essere inserito il modello.
-\item lp: puntatore al problema di programmazione lineare.
-\item 1: aggiungo una sola variabile
-\item obj: variabile double che memorizza al suo interno il costo del lato [i,j], il costo viene calcolato utilizzando il metodo dist gi\`a descritto in precedenza.
-\item zero: variabile di tipo double contenente il valore  0.0;
-\item ub: variabile di tipo double contenente il valore 1.0;
-\item binary: variabile di tipo char che assume il valore costante \textipa{"}B\textipa{"};
-\item cname : 
+\item \textbf{colname} : array di lunghezza ccnt contenente puntatori ad array di char, a sua volta ognuno di essi deve contenere il nome della variabile aggiunta al modello.
 \end{itemize}
 
-Dal momento che ad ogni lato del grafo \`e associata una variabile, \`e necessario realizzare una funzione chiamata xPos, la quale riceve in ingresso un lato [i,j] del grafo e restituisce l' indice della variabile Cplex associata a quest' ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice \`e  utile effettuare un controllo se il valore ritornato xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo.
+Per motivi di semplicità non andremo ad inserire tutte le variabili contemporaneamente ma una ad una.\\
 
+E' giunto quindi il momento di parlare di quali variabili vogliamo aggiungere al nostro modello tenendo presente che il medesimo discorso sarà applicato anche per la parte in C\#. Sappiamo che per ogni coppia di nodi (i,j)\footnote{Ricordiamo che i deve essere diverso da j in quanto per i problemi da noi considerati i cappi non sono ammessi} esiste un unico lato che li collega e che quest'ultimo è privo di direzione. Si presenta quindi la necessità di definire una convenzione per l'assegnazione del nome ai vari lati. La scelta adottata è la seguente: considerando due generici nodi \textbf{i} e \textbf{j} allora il loro lato sarà chiamato \textbf{x(i,j)} se $i<j$ oppure \textbf{x(j,i)} se $j<i$\footnote{Notiamo che per quanto espresso nella nota precedente non ha senso considerare il caso $i=j$}.\\
+Questa convenzione offre anche un importante spunto per decidere con quale ordine memorizzare i vari parametri delle variabili (nome, coefficiente, lower bound ecc..): date due coppie distinti di nodi (i,j) e (v,w)\footnote{dove assumiamo $i<j \& v<W$} la posizione di memoria in cui viene memorizzata l'informazione riguardante la prima coppia è \textbf{inferiore} rispetto alla seconda se e solo se $(i<v) || (i==v \& j<w)$. In altre parole saranno memorizzate in ordine le informazioni per i nodi (1,2), (1,3), ..., (2,3), (2,4), ..., (n-1,n).\\
+Una ulteriore considerazione necessaria \'e la seguente: come mostrato poco fa il metodo \textbf{CPXnewcols} si aspetta il passaggio di diversi array mentre noi vorremmo utilizzare semplici variabili. La soluzione \'e molto semplice e consiste nell'anteporre il carattere \& prima di ogni variabile in questo modo stiamo in realtà passando un puntatore alla sua locazione di memoria.\\
+
+Le operazioni descritte sono state realizzate tramite il seguente codice:
 
 \begin{lstlisting}
-if(CPXgetnumcols(env, lp) - 1 != xPos(i, j, inst))
-   printError(" ... errata posizione per x");
+
+double zero = 0.0; // one = 1.0; 	
+char binary = 'B';
+
+char **cname = (char **)calloc(1, sizeof(char *));		// (char **) required by cplex...
+cname[0] = (char *)calloc(100, sizeof(char));
+
+// add binary var.s y(i,j)      
+
+for (int i = 0; i < inst->nNodes; i++)
+{
+	for (int j = i + 1; j < inst->nNodes; j++)//Mi interessano solo le coppie con i<j
+	{
+		sprintf(cname[0], "x(%d,%d)", i + 1, j + 1);
+		double obj = dist(inst->coord[i], inst->coord[j], inst->edgeType);
+		double ub = 1.0;
+		if (CPXnewcols(env, lp, 1, &obj, &zero, &ub, &binary, cname)) printError(" ... errato CPXnewcols su x");//Aggiugo una variabile al modello
+		if (CPXgetnumcols(env, lp) - 1 != xPos(i, j, inst)) printError(" ... errata posizione per x");//Serve solo per controllare se la funzione xPos è corretta
+	}
+}
+
 \end{lstlisting}
 
+La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile Cplex associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice \`e  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C#.\\
 
-\textit{Passa al paragrafo successivo}
-
-Una volta definite le variabili \`e necessario creare i vincoli: per far ci\`o si \`e utilizzata la funzione CPXnewrows, la cui firma \`e:
+Una volta definite le variabili \`e necessario creare i vincoli: per far ci\`o si \`e utilizzata la funzione \textbf{CPXnewrows}, la cui firma \`e:
 
 \begin{lstlisting}
 int CPXnewrows(CPXCENVptr env, CPXLPptr lp, int rcnt, const double * rhs, const char * sense, const double * rngval, char ** rowname)
@@ -733,40 +714,38 @@ int CPXnewrows(CPXCENVptr env, CPXLPptr lp, int rcnt, const double * rhs, const 
 dove:
 
 \begin{itemize}
-\item env: puntatore all' enviroment di Cplex nel quale vuole essere inserito il modello.
-\item lp: puntatore al problema di programmazione lineare.
-\item rcnt: intero che definisce il numero di nuovi vincoli aggiunti al modello.
-\item rhs: array di lunghezza rcnt contenente il termine noto di ogni vincolo.
-\item sense: array di lunghezza rcnt i cui elementi possono assumere i seguenti valori:
+\item \textbf{env}: puntatore all'enviroment di Cplex nel quale vuole essere inserito il modello.
+\item \textbf{lp}: puntatore al problema di programmazione lineare.
+\item \textbf{rcnt}: intero che definisce il numero di nuovi vincoli aggiunti al modello.
+\item \textbf{rhs}: array di lunghezza rcnt contenente il termine noto di ogni vincolo.
+\item \textbf{sense}: array di lunghezza rcnt i cui elementi possono assumere i seguenti valori:
 
 \begin{itemize}
-\item \textipa{"}L\textipa{"}: indica che il vincolo \`e una disuguaglianza il cui segno \`e  $\leq$
-\item \textipa{"}E\textipa{"}: indica che il vincolo \`e una uguaglianza
-\item \textipa{"}G\textipa{"}: indica che il vincolo \`e una disuguaglianza il cui segno \`e $\geq$
-\item \textipa{"}R\textipa{"} : indica che il vincolo \`e limitato 
+\item \textbf{\textipa{"}L\textipa{"}}: indica che il vincolo \`e una disuguaglianza il cui segno \`e  $\leq$
+\item \textbf{\textipa{"}E\textipa{"}}: indica che il vincolo \`e una uguaglianza
+\item \textbf{\textipa{"}G\textipa{"}}: indica che il vincolo \`e una disuguaglianza il cui segno \`e $\geq$
+\item \textbf{\textipa{"}R\textipa{"}} : indica che il vincolo \`e limitato 
 \end{itemize}
 
-\item rngval: variabile di tipo double contenente il valore 1.0;
-\item rowname: variabile di tipo char che assume il valore costante \textipa{"}B\textipa{"};
+\item \textbf{rngval}: variabile di tipo double contenente il valore 1.0;
+\item \textbf{rowname}: variabile di tipo char che assume il valore costante \textipa{"}B\textipa{"};
 \end{itemize}
 
-
-
-Anche in questo caso anzich\`e aggiungere tutti i vincoli in una singola iterazione, risulta pi\`u semplice aggiungere un vincolo per involta invocando  CPXnewrows tante volte quante sono i vincoli da aggiungere.
+Anche in questo caso anzich\`e aggiungere tutti i vincoli in una singola iterazione, risulta pi\`u semplice aggiungere un vincolo per volta invocando il metodo tante volte quante sono i vincoli da aggiungere.
 
 \vspace{2\baselineskip}
-COSTRUZIONE MODELLO E RELATIVA RISOLUZIONE IN C\#
+COSTRUZIONE E RISOLUZIONE DEL MODELLO MATEMATICO IN C\#
 \vspace{2\baselineskip}
 
-Per poter creare un modello matematico in Cplex, utilizzando come linguaggio di programmazione C\# \`e necessario creare inizialmente una istanza della classe Cplex; tale istanza \`e stata nominata cplex: 
+Per poter creare un modello matematico in Cplex, utilizzando come linguaggio di programmazione C\# \`e necessario creare inizialmente una istanza della classe \textbf{Cplex}:
 
 \begin{lstlisting}
                            Cplex cplex = new Cplex();
 \end{lstlisting}
 
-Per creare il modello si associano, tramite opportune funzioni che descriveremo in questo paragrafo, all' istanza creata la funzione obbiettivo,le variabili e i vincoli del modello. 
+Per creare il modello si associano, tramite opportune funzioni che descriveremo in questo paragrafo, all'istanza creata la funzione obbiettivo,le variabili e i vincoli del modello. 
 
-In C\# le variabili del modello sono oggetti di tipo INumVar. Per creare una nuova variabile e aggiungerla al modello si invoca il metodo NumVar sull' oggetto cplex, esso ha come firma:
+In C\# le variabili del modello sono oggetti il cui tipo deve implementare l'interfaccia \textbf{INumVar}. Non è necessario creare da noi una nuova classe infatti ci viene fornito il metodo \textbf{NumVar} della classe \textbf{Cplex}:
 
 \begin{lstlisting}
 public virtual INumVar NumVar(double lb, double ub, NumVarType type, string name)
@@ -775,40 +754,28 @@ public virtual INumVar NumVar(double lb, double ub, NumVarType type, string name
 dove:
 
 \begin{itemize}
-\item  lb: Rappresenta il lower bound della variabile creata;
-\item ub: Rappresenta l' upper bound della variabile creata;
-\item type: Questo campo determina il tipo della variabile, pu\`o assumere i seguenti valori:
+\item \textbf{lb}: Rappresenta il lower bound della variabile creata;
+\item \textbf{ub}: Rappresenta l' upper bound della variabile creata;
+\item \textbf{type}: Questo campo determina il tipo della variabile, pu\`o assumere i seguenti valori:
 \begin{itemize}
-\item NumVarType.Int: Nel caso di variabile intera;
-\item NumVarType.Int: Nel caso di variabile binaria;
-\item NumVarType.Float: Nel caso di variabile continua;
+\item \textbf{NumVarType.Int}: Nel caso di variabile intera;
+\item \textbf{NumVarType.Int}: Nel caso di variabile binaria;
+\item \textbf{NumVarType.Float}: Nel caso di variabile continua;
 \end{itemize}
-\item name: Nome identificativo della variabile.
-\end{itemize}
-
-
-Tale metodo ritorna la variabile creata che risulta necessario memorizzare in una struttura dati: questo fondamentalmente per due motivi:
-
-\begin{itemize}
-\item Molti metodi presenti nella libreria di Cplex richiedono come parametro l' oggetto che rappresenta la variabile del modello.
-\item  Sull' oggetto che rappresenta la variabile \`e possibile invocare i metodi LB e UB che consentono di modificare il lower bound e l' upper bound della variabile; questi metodi sono utilizzati nei capitoli successivi. 
+\item \textbf{name}: Nome identificativo della variabile.
 \end{itemize}
 
-La struttura dati utilizzata per memorizzare tutte le variabili \`e un array che \`e stato chiamato z.\\
-
-Per definire la funzione obbiettivo \`e necessario utilizzare il metodo LinearNumExpr sull' oggetto cplex; tale metodo ritorna un oggetto di tipo ILinearNumExpr.
-
-
+Che come si può notare nella firma ha come tipo di ritorno un tipo di oggetto che implementa l'interfaccia da noi desiderata. Vedremo nel seguito della trattazione quanto utili risultano essere le funzionalità offerta de quest'ultima.\\
+Introduciamo ora una seconda interfaccia \textbf{ILinearNumExpr} che come si può intuire viene implementata da oggetti che vogliono definire una espressione lineare. Anche in questo caso ci viene incontro la classe \textbf{Cplex} attraverso il metodo \textbf{LinearNumExpr}:
 \begin{lstlisting}
                 ILinearNumExpr expr = cplex.LinearNumExpr();
 \end{lstlisting}
 
+La variabile \textbf{expr} rappresenta quindi una espressione lineare che deve essere definita come:
 
-La variabile expr rappresenta una espressione lineare nella forma:
+$$\displaystyle{\sum_{i = 1}^n a_i x_i} $$
 
-$$\displaystyle{\sum_{i = 1}^n a_i x_i + c} $$
-
-dove $x_i$ sono variabili di tipo INumVar mentre c e $a_i$ sono coefficienti di tipo double. Per aggiungere all' oggetto expr una variabile del modello \`e necessario utilizzare il metodo AddTerm la cui intestazione \`e:
+dove \textbf{$x_i$} sono variabili di tipo \textbf{INumVar} mentre \textbf{$a_i$} \'e un coefficiente di tipo \textbf{double}. Per aggiungere all'oggetto \textbf{expr} una variabile del modello \`e necessario utilizzare il metodo \textbf{AddTerm} la cui intestazione \`e:
 
 \begin{lstlisting}
                    void AddTerm(INumVar var,double coef)
@@ -817,43 +784,58 @@ dove $x_i$ sono variabili di tipo INumVar mentre c e $a_i$ sono coefficienti di 
 dove:
 
 \begin{itemize}
-\item var: variabile da aggiungere all' espressione;
-\item  coeff: coefficiente della variabile aggiunta all' espressione.
+\item \textbf{var}: variabile da aggiungere all'espressione;
+\item  \textbf{coeff}: coefficiente della variabile aggiunta all'espressione.
 \end{itemize}
 
-Poich\'e expr rappresenta la funzione obbiettivo, coef rappresenta il costo associato alla variabile.
-A livello implementativo per creare una nuova variabile ed aggiungerla alla funzione obbiettivo si \`e realizzato il seguente codice:
+L'implementazione da noi fornita per quanto riguarda la funzione obiettivo \'e la seguente:
 
 \begin{lstlisting}
 //Populating objective function
 
 for (int i = 0; i < instance.NNodes; i++)
 {
-  //Only links (i,i) with i < i are correct
+  //Only links (i,j) with i < j are correct
   
   for (int j = i + 1; j < instance.NNodes; j++)
   {
-      //zPos return the correct position where to store the variable corresponding to the actual link (i,j)
+      //zPos returns the correct position where to store the variable corresponding to the actual link (i,j)
            
      int position = zPos(i, j, instance.NNodes);
            
-     z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
+     z[position] = cplex.NumVar(0, 1, NumVarType.Int, "x(" + (i + 1) + "," + (j + 1) + ")");
          
      expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));      
    }
 }
+
 \end{lstlisting}
-Creata l' espressione matematica \`e stata associata all' oggetto cplex specificando che essa rappresenta la funzione obbiettivo del modello: ci\`o \`e stato fatto utilizzando il metodo AddMinimize:            
+
+Espressioni lineari definite in questo modo possono essere utilizzate sia per definire la funzione obiettivo del modello ma anche per i suoi vincoli.\\
+Nel primo caso risulta sufficiente invocare i metodi non statici \textbf{AddMinimize} oppure \textbf{AddMaximize} della classe \textbf{Cplex} che rispettivamente definiscono una funzione obiettivo da minimizzare o da massimizzare, nel nostro caso:            
 
 
 \begin{lstlisting}
                          cplex.AddMinimize(expr);         
 \end{lstlisting}
 
+Per quanto riguarda i vincoli \'e necessario utilizzare i metodi \textbf{AddEq}, \textbf{AddLe}, \textbf{AddGe} che rispettivamente aggiungono al modello una equazione, una disequazione avente segno $\leq$, una disequazione avente segno $\geq$.\\
+Nel nostro caso poich\'e ogni vincolo \`e una equazione riportiamo di seguito la firma della relativa funzione:
 
+\begin{lstlisting}
+public virtual IRange AddEq(INumExpr e,double v,string name)
+\end{lstlisting}
 
-Passiamo ora ad aggiungere al modello gli $n$ vincoli di grado, uno per ogni nodo. Per creare un vincolo \`e sempre necessario creare un oggetto di tipo ILinearNumExpr e ad esso aggiungere le variabili che partecipano al vincolo, solo successivamente si andr\`a ad aggiungere il vincoli al modello definendone il tipo e il termine noto. 
-Supponendo di voler aggiungere il vincolo di grado per il nodo $i$, \`e  necessario aggiungere all' espressione tutte le $n-1$ variabili corrispondenti ai lati che incidono in $i$. Per far ci\`o si \`e realizzato il seguente codice:
+dove:
+
+\begin{itemize}
+	\item \textbf{e}: Espressione contenente le variabili del vincolo;
+	\item \textbf{v}: Termine noto del vincolo;
+	\item \textbf{name}: Nome identificativo del vincolo.
+\end{itemize}
+
+Il codice completo diventa quindi:
+
 \begin{lstlisting}
 
 for (int i = 0; i < instance.NNodes; i++)
@@ -863,69 +845,49 @@ for (int i = 0; i < instance.NNodes; i++)
 
   for (int j = 0; j < instance.NNodes; j++)
   {
-   //For each row i only the links (i,j) or (j,i) have coefficent 1
-   //zPos return the correct position where link is stored inside the vector z
+   //For each row i only the link (i,j) or (j,i) has coefficent 1
+   //xPos return the correct position where link is stored inside the vector x
     
-    if (i != j)//No loops wioth only one node
-       expr.AddTerm(z[zPos(i, j, instance.NNodes)], 1);               
+    if (i != j)//No loops with only one node
+       expr.AddTerm(x[xPos(i, j, instance.NNodes)], 1);               
   }
 
-	...
+//Adding to the model the current equation with known term 2 and name degree(<current i node>)
+cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
+}
 
 \end{lstlisting}
 
-Infine per aggiungere un vincolo al modello è necessario invocare sull' istanza cplex uno dei seguenti metodi a seconda del vincolo:
-
-\begin{itemize}
-\item AddEq: nel caso in cui il vincolo sia una equazione;
-\item  AddLe:nel caso in cui il vincolo sia una disequazione avente segno $\leq$
-\item  AddGe:nel caso in cui il vincolo sia una disequazione avente segno $\geq$
-\end{itemize}
-
-Poich\'e il vincolo di grado \`e una equazione \`e stato necessario utilizzare il metodo AddEq, riportiamo di seguito la firma di tale funzione:
-
-\begin{lstlisting}
-       public virtual IRange AddEq(INumExpr e,double v,string name)
-\end{lstlisting}
-
-dove:
-
-\begin{itemize}
-\item e: Espressione contenente le variabili del vincolo;
-\item  v: Termine noto del vincolo;
-\item  name: Nome identificativo del vincolo.
-\end{itemize}
-
-I metodi AddLe ed AddGe hanno la medesima intestazione. \\
-Spiegato come \`e possibile creare un modello C\# risulta comprensibile la scelta di realizzare un' opportuna funzione, chiamata BuilModel appartenente alla classe Utility, che produce il modello matematico del Commesso Viaggiatore risolubile da cplex. BuilModel viene invocata in tutti gli algoritmi di risoluzione realizzati che prevedono l'utilizzo di Cplex. Tale funzione ha la seguente firma:
+Spiegato come \`e possibile creare un modello C\# risulta comprensibile la scelta di realizzare un'opportuna funzione, chiamata \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che produce il modello matematico del Commesso Viaggiatore risolubile da Cplex:
 
 \begin{lstlisting}
 public static INumVar[] BuildModel(Cplex cplex, Instance instance, int n)
 \end{lstlisting}
+
 dove:
 
-
 \begin{itemize}
-\item cplex: oggetto sul quale si definirà il modello matematico(funzione obbiettivo,variabili e vincoli)
-\item instance: oggetto contenente tutti i dati inerenti all' istanza del Commesso Viaggiatore fornita in ingresso dall' utente.
-\item n: Parametro la cui spiegazione \`e rimandata al capitolo...
+\item \textbf{cplex}: oggetto sul quale si definirà il modello matematico(funzione obbiettivo,variabili e vincoli)
+\item \textbf{instance}: oggetto contenente tutti i dati inerenti all'istanza del Commesso Viaggiatore fornita in ingresso dall' utente.
+\item \textbf{n}: Parametro la cui spiegazione \`e rimandata al capitolo...
 \end{itemize}
 
-Passiamo infine a descrivere i metodi necessari per risolvere il modello, ottenere il costo e la soluzione ottima calcolata da cplex.
+Passiamo infine a descrivere i metodi necessari per risolvere il modello, ottenere il costo e la soluzione ottima calcolata da Cplex.\\
 
-Per risolvere il modello \`e sufficiente invocare sull' oggetto di classe Cplex dove \`e stata definita la funzione obbiettivo, le variabili e i vincoli il metodo Solve:
+Per risolvere il modello \`e sufficiente invocare, sull'oggetto di classe Cplex dove \`e stato definito, il metodo \textbf{Solve}:
 
 \begin{lstlisting}
                          cplex.Solve();
 \end{lstlisting}
 
-Risolto il modello il costo della soluzione \`e memorizzato nella variabile double ObjValue accessibile tramite l' istanza della classe Cplex creata:
+Una volta avviata la risoluzione, Cplex fornisce in automatico informazioni sul processo stampate nello standard output da noi definito\footnote{Se non viene modificato di default risulta essere la classica console del progetto C#}: inizialmente troviamo le impostazioni di risoluzione selezionate come ad esempio il numero di Thread .., successivamente ..  .\\
+Terminata l'operazione il costo della soluzione \`e memorizzato all'interno della variabile \textbf{ObjValue} di tipo \textbf{double} del solito oggetto \textbf{cplex}:
 
 \begin{lstlisting}
                         cplex.ObjValue; 
 \end{lstlisting}
 
-Infine per ottenere il valore della soluzione ottima \`e necessario invocare sull' oggetto cplex la funzione GetValues la cui firma \`e:
+Naturalmente \'e anche possibile conoscere il valore assunto da ogni variabile nella soluzione fornitaci da Cplex tramite il metodo \textbf{GetValues} della classe \textbf{Cplex}:
 
 \begin{lstlisting}
                 public virtual double GetValues(INumVar[] var)
@@ -934,27 +896,32 @@ Infine per ottenere il valore della soluzione ottima \`e necessario invocare sul
 dove:
 
 \begin{itemize}
-\item var: rappresenta il vattore contenente tutte le variabile appartenenti al modello.
+\item \textbf: rappresenta il vettore contenente tutte le variabile appartenenti al modello.
 \end{itemize}
 
-Nel caso in cui si voglia anzich\`e il valore di tutte le variabili solo il valore di una certa variabile, è necessario utilizzare il metodo GetValue e passare come parametro solamente la variabile di cui si desidera conoscere il valore.
+\'E presente anche l'analogo metodo per accedere al valore di una sola variabile \textbf{GetValue}. Il suo utilizzo \'e da noi altamente sconsigliato in quanto sperimentalmente \'e stato da verificato che ciclare quest'ultimo metodo impiega un tempo molto maggiore rispetto al semplice \textbf{getValues}.
+
+
+
+------------------------------------------------------------------
+Qui bisogna aprire un capitolo nuovo con una breve introduzione, dire che si passa ora ad esporre i metodi utilizzati per gestire i vincoli di subtour elimination
+------------------------------------------------------------------
+
 
 \vspace{2\baselineskip}
 METODO LOOP
 \vspace{2\baselineskip}
 
-Una volta illustrato come \`e possibile istanziare il modello di programmazione lineare intera ed ottenere la soluzione ottima calcolata da Cplex, \`e stato necessario sviluppare un opportuno algoritmo in grado di calcolare la soluzione ottima tenendo conto anche dei vincoli di subtour. Come gi\`a accennato, il modello fornito a Cplex non \`e completo e quindi la soluzione ritornata potrebbe al suo interno contenere dei subtour;  questo fatto comporta che il tour calcolato possa non essere un circuito hamiltoniano e che quindi non sia una soluzione ammissibile per il problema del Commesso Viaggiatore. Il metodo Loop alla generica iterazione $i$, nel caso in cui la soluzione ritornata da Cplex contenga subtour al suo interno, aggiunge al modello corrente un vincolo per ogni subtour presente in tale soluzione; tali vincoli hanno la seguente forma:
+Il primo metodo sperimentato prende il nome di \textbf{LOOP}.
+-------------------------------------------------------------
+Va messa un p\'o di storia!!!!!!
+-------------------------------------------------------------
+L'idea alla sua base \'e molto semplice ed \'e la seguente: inizialmente il modello fornito non deve contiene alcun vincolo di subtour elimination ed una volta risolto si procedere ad analizzare la soluzione ottima trovata. Se questa presenta dei subtour il modello viene ampliato inserendovi gli appositi vincoli per eliminarli e si procede ad una sua nuova risoluzione. Viene da se che quest'ultimo passo va ripetuto fino a quando la soluzione proposta non risulta accettabile e quindi priva di subtour\footnote{Da qui deriva il nome del metodo in quanto la soluzione consiste in un loop delle stesse operazioni}.\\\'E importante far notare che ogni iterazione del loop i vincoli aggiunti nella precedente sono ovviamente mantenuti.\\
+In questo modo siamo sicuri di aver aggiunto al nostro modello solo i vincoli strettamente necessari il che non assicura che essi non siano un numero esponenziale.\\
 
-\begin{eqnarray}
-\displaystyle{\sum_{e \in E(S_k)} x_e \leq |S_k| - 1} \text{ , } k = 1,\ldots,m
-\end{eqnarray}
-
-
-dove $S_k\subset V$ sono i vertici che caratterizzano il k-esimo subtour.
-
-In questo modo, la successiva soluzione prodotta da Cplex pu\`o ancora avere dei subtour al suo interno, ma certamente non pu\`o avere i medesimi presenti nella soluzione precedente. Dopo $t$ iterazioni del metodo Loop la soluzione ottima ritornata da Cplex sar\`a priva di subtour: questo significa che essa \`e un circuito hamiltoniano e quindi \`e la soluzione ottima che sar\`a fornita all' utente.
-
-Per poter implementare il metodo Loop risulta evidente la necessit\`a di sviluppare un' opportuna funzione in grado di individuare i subtour e creare i relativi vincoli; tale funzione \`e stata chiamata UpdateCC, inserita nella classe Utility, e sar\`a descritta nel paragrafo successivo.\\ Per ottenere una maggior chiarezza da un punto di vista logico, il vincolo di subtour viene creato all' interno del metodo UpdateCC ma viene aggiunto al modello nel metodo Loop. In particolare si sono utilizzate le strutture dati:
+Per poter implementare il metodo Loop risulta quindi evidente la necessit\`a di sviluppare un'opportuna funzione in grado di individuare la presenza di subtour all'interno di una generica soluzione proposta e di generarne gli opportuni vincoli per eliminarli.\\
+In letteratura esistono molteplici modi per eseguire tali operazioni, quella da noi adottata si rif\'a all'algoritmo di \text{Kruskal} per trovare un albero a costo minimo in un grafo connesso con lati non orientati\footnote{Nello specifico la parte di nostro interesse \'e quella che impedisce la formazione di più componenti connesse}.\\
+La tecnica da noi adottata \'e stata quella di creare due metodi chiamati \textbf{InitCC} e \textbf{UpdateCC}: il primo serve solamente come inizializzazione per le strutture dati utilizzate dal secondo il quale, se invocato una volta per ogni lato appartenente alla soluzione attuale ne trova tutte le componenti connesse indicando anche quali lati sono a loro appartenenti. I dettagli riguardo le loro implementazioni sono visibili nella appendice di questo testo, per ora specifichiamo solamente che al termine dell'utilizzo del metodo \textbf{UpdateCC} i seguenti oggetti:
 
 \begin{lstlisting}
 
@@ -963,7 +930,8 @@ Per poter implementare il metodo Loop risulta evidente la necessit\`a di svilupp
 
 \end{lstlisting}
 
-le quali sono popolate all' interno del metodo UpdateCC; in particolare all' interno di rcExpr[i] \`e  memorizzata l' espressione contenente le variabili dell' i-esimo vincolo di subtour mentre in \\ bufferCoeffRC[i] viene memorizzato il relativo termine noto. Una volta scanditi tutti i lati della soluzione ottima, se \`e  presente almento un subtour il vincolo viene aggiunto utilizzando il metodo AddLe. A titolo illustrativo riportiamo il ciclo for che esegue ci\`o:
+risultano essere costruiti, in particolare \textbf{rcExpr} contiene le espressioni dei subtour elimination mentre invece \textbf{bufferCoeffRC} contiene il numero di lati appartenenti ad ogni subtour e quindi il termine noto delle precedenti espressioni\footnote{Il codice assume che l'espressione di indice $i$ presente all'interno di \textbf{rcExpr} abbia il proprio termine noto nella posizione di indice $i$ dentro \textbf{bufferCoeffRC}}.\\
+Se all'interno di \textbf{rcExpr} \'e presente una espressione sola significa che la soluzione attuale \'e valida e quindi ottima per il problema, al contrario si deve procedere all'inserimento dei vincoli con un semplice ciclo for:
 
 \begin{lstlisting}
                 
@@ -973,15 +941,54 @@ for (int i = 0; i < rcExpr.Count; i++)
 \end{lstlisting}
 
 \vspace{2\baselineskip}
-METODO UpdateCC
+METODI UpdateCC e InitCC
 \vspace{2\baselineskip}
 
+Come già specificato nella sezione riguardo il metodo \textbf{LOOP} questi due metodi di supporto appartenenti alla classe \textbf{Utility} hanno il compito di individuare tutte le componenti connesse (che da ora in avanti abbrevieremo con \textbf{cc}) di una generica soluzione proposta.\\
+Prima di passare alla implementazione vera e propria introduciamoli ad alto livello: inizialmente si vuole assumere l'esistenza di $n$ \textbf{cc} distinte, ognuna di esse contenente un nodo della soluzione. Questo \'e il compito della dalla funzione \textbf{InitCC}.\\
+Successivamente per ogni lato della soluzione si vuole analizzare a quali \textbf{cc} sono assegnati i due nodi che lo caratterizzano. Se queste sono differenti vanno unificate in modo tale che tutti i nodi appartenenti, ad esempio
+, alla seconda ora appartengano tutti alla prima. Nel caso in cui invece le due \textbf{cc} coincidano significa che abbiamo trovato un subtour e il relativo vincolo di eliminazione deve essere definito. Tutte questo \'e invece compito del metodo \textbf{UpdateCC}.
+
+Iniziamo quindi l'analisi del codice necessario. Per prima cosa si necessita di un vettore di interi che contenga all'indice $i-esimo$ l'identificativo della \textbf{cc} alla quale appartiene il nodo $i$\footnote{Per semplicit\'a si \'e deciso di identificare ogni \textbf{cc} con un valore intero univoco}. L'inizializzazione di questo vettore viene fornita da \textbf{InitCC}:
+
+\begin{lstlisting}
+
+public static void InitCC(int[] cc)
+{
+	for (int i = 0; i < cc.Length; i++)
+	{
+		cc[i] = i;
+	}
+}
+
+\end{lstlisting}
+
+Passiamo ora al metodo \textbf{UpdateCC} che presenta la seguente firma:
+
+\begin{lstlisting}
+
+public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
+
+\end{lstlisting}
+
+dove:
+
+\begin{itemize}
+	\item \textbf{cplex}: oggetto contenente il modello matematico corrente, eventualmente necessario per la creazione del vincolo di subtour elimination;
+	\item \textbf{z}: vettore contenente le variabili del modello, eventualmente necessario per la creazione del vincolo di subtour elimination;
+	\item \textbf{rcExpr}: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
+	\item \textbf{bufferCoeffRC}: Lista contenente i termini noti dei vincoli di subtour;
+	\item \textbf{relatedComponents}: vettore che definisce per ogni nodo del grafo la relativa componente connessa;
+	\item \textbf{i}: Nodo che con il parametro j forma il lato (i,j);
+	\item \textbf{j}: Nodo che con il parametro i forma il lato (i,j).
+\end{itemize}
 
 La funzione UpdateCC viene invocata dal metodo Loop $n$ volte, alla k-esima invocazione riceve in ingresso il k-esimo lato appartenente alla soluzione ottima del modello corrente. Per verificare se il lato ricevuto genera un subtour nel grafo G=(V,T*), dove T* contiene i precedenti $k-1$ lati controllati, si verifica se i vertici del lato appartengono alla medesima componente connessa. Nel caso in cui i due vertici non appartengono alla medesima componente connessa, \`e necessario aggiornare le componenti connesse dei vertici per l' invocazione successiva del metodo, viceversa si \`e  individuato un subtour caratterizzato dai nodi aventi come componente connessa la medesima dei nodi i e j.
 
 A livello implementativo si \`e utilizzato un array di interi chiamato relatedComponents, di dimensione pari al numero di vertici del grafo, come struttura dati necessaria per fotografare le componenti connesse del grafo G=(V,T*); relatedComponents contiene all' indice j la componente connessa del nodo j. La funzione InitCC, invocata ad ogni iterazione del metodo Loop, ha il compito di inizializzare relatedComponents associando ad ogni nodo una componente connessa diversa: in particolare si \`e  scelto di associare al nodo j la componente connessa j. Passiamo ora ad analizzare come \`e  stato nella pratica implementato il metodo UpdateCC, la sua intestazione \`e la seguente:
 
 \begin{lstlisting}
+
 public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,                int[] relatedComponents, int i, int j)
 
 \end{lstlisting}
@@ -997,52 +1004,64 @@ dove:
 \item j: Nodo che con il parametro i forma il lato [i,j].
 \end{itemize}
 
-La prima operazione prevede di confrontare le componenti connesse dei due nodi ricevuti in ingresso: se diverse significa che il lato corrente non genera subtour e quindi si procede ad aggiornare le componenti connesse dei vertici nell' array relatedComponents tramite il codice seguente:
+Il caso in cui non si crei un subtour \'e gestito molto semplicemente in questo modo:
 
 \begin{lstlisting}
 
-for (int k = 0; k < relatedComponents.Length; k++)
+if (relatedComponents[i] != relatedComponents[j])
 {
-  if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
-    relatedComponents[k] = relatedComponents[i];
-                    
+	for (int k = 0; k < relatedComponents.Length; k++)
+	{
+		if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
+		{
+			//Same as Kruskal
+			relatedComponents[k] = relatedComponents[i];
+		}
+	}
+	//Finally also the vallue relative to the Point i are updated
+	relatedComponents[j] = relatedComponents[i];
 }
-relatedComponents[j] = relatedComponents[i];
 
 \end{lstlisting}
 
-Si osserva che si \`e  deciso di assegnare a tutti i nodi appartenenti alla componente connessa del nodo j, il valore della componente connessa del nodo i, naturalmente si poteva fare equivalentemente il viceversa.\\
-Nel caso in cui il lato crei un subtour \`e necessario aggiungere il vincolo (6) al modello: per far ci\`o si \`e creata la consueta variabile di tipo ILinearNumExpr a cui si sono aggiunte tutte le variabili associate ai lati congiungenti nodi aventi come componente connessa relatedComponents[i]. Quando detto \`e  stato tradotto nel seguente codice:
+Dove per convenzione si \'e deciso di inglobare la \textbf{cc} del nodo $j$ in quella del nodo $i$.\\
+Il secondo caso \'e invece gestito nel seguente modo:
 
 \begin{lstlisting}
 
-ILinearNumExpr expr = cplex.LinearNumExpr();
-
-//cnt stores the # of nodes of the current related components
-int cnt = 0;
-
-for (int h = 0; h < relatedComponents.Length; h++)
+else
 {
-   //Only nodes of the current related components are considered
-    if (relatedComponents[h] == relatedComponents[i])
-    {
-      //Each link involving the node with index h is analized
-       for (int k = h + 1; k < relatedComponents.Length; k++)
-       {
-         //Testing if the link is valid
-          if (relatedComponents[k] == relatedComponents[i])
-          {
-             //Adding the link to the expression with coefficient 1
-               expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
-          }
-        }
+	ILinearNumExpr expr = cplex.LinearNumExpr();
 
-       cnt++;
-      }
+	//cnt stores the # of nodes of the current related components
+	int cnt = 0;
+
+	for (int h = 0; h < relatedComponents.Length; h++)
+	{
+		//Only nodes of the current related components are considered
+		if (relatedComponents[h] == relatedComponents[i])
+		{
+			//Each link involving the node with index h is analized
+			for (int k = h + 1; k < relatedComponents.Length; k++)
+			{
+				//Testing if the link is valid
+				if (relatedComponents[k] == relatedComponents[i])
+				{
+					//Adding the link to the expression with coefficient 1
+					expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
+				}
+			}
+			cnt++;
+		}
+	}
+	//Adding the objects to the buffers
+	rcExpr.Add(expr);
+	bufferCoeffRC.Add(cnt);
 }
+
 \end{lstlisting}
- 
-Come ultima operazione da compiere \`e stato necessario inserire nella lista rcExpr l' oggetto expr e nella lista bufferCoeffRC la variabile cnt.
+
+Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente ci assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per implementare i subtour elimination desiderati.
 
 \vspace{2\baselineskip}
 CALLBACK 
