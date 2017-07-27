@@ -15,8 +15,6 @@
 \usepackage{booktabs}
 \usepackage{multirow} 
 \usepackage{tipa}
-\usepackage{textbf}
-
 
 %\setmonofont{Consolas} %to be used with XeLaTeX or LuaLaTeX
 \definecolor{bluekeywords}{rgb}{0,0,1}
@@ -703,7 +701,7 @@ for (int i = 0; i < inst->nNodes; i++)
 
 \end{lstlisting}
 
-La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile Cplex associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice \`e  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C#.\\
+La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile Cplex associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice \`e  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C\#.\\
 
 Una volta definite le variabili \`e necessario creare i vincoli: per far ci\`o si \`e utilizzata la funzione \textbf{CPXnewrows}, la cui firma \`e:
 
@@ -880,7 +878,7 @@ Per risolvere il modello \`e sufficiente invocare, sull'oggetto di classe Cplex 
                          cplex.Solve();
 \end{lstlisting}
 
-Una volta avviata la risoluzione, Cplex fornisce in automatico informazioni sul processo stampate nello standard output da noi definito\footnote{Se non viene modificato di default risulta essere la classica console del progetto C#}: inizialmente troviamo le impostazioni di risoluzione selezionate come ad esempio il numero di Thread .., successivamente ..  .\\
+Una volta avviata la risoluzione, Cplex fornisce in automatico informazioni sul processo stampate nello standard output da noi definito\footnote{Se non viene modificato di default risulta essere la classica console del progetto C\#}: inizialmente troviamo le impostazioni di risoluzione selezionate come ad esempio il numero di Thread .., successivamente ..  .\\
 Terminata l'operazione il costo della soluzione \`e memorizzato all'interno della variabile \textbf{ObjValue} di tipo \textbf{double} del solito oggetto \textbf{cplex}:
 
 \begin{lstlisting}
