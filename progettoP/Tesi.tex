@@ -113,11 +113,11 @@ Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore
 MODELLO MATEMATICO
 \vspace{2\baselineskip}
 
-Nella sua formalizzazione pi\`u generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ \`e un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ \`e un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
+Nella sua formalizzazione pi\`u generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v\_1,\dots,v\_n} $\}$ $ \`e un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ \`e un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
 
-Senza perdita di generalit\`a, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, che indicheremo con $c_{ij}$, sia non negativo. Si osserva che aver imposto $c_{ij} \ge 0$ non \`e limitativo poich\'e \`e sempre possibile sommare a tutti i costi una costante sufficientemente elevata che li renda positivi senza alterarne l'ordinamento delle soluzioni. 
-A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato: tale scelta deriva dal fatto che $c_{ij}$ nel nostro lavoro rappresenta sempre la distanza (tipicamente euclidea) fra i vertici i e j si ha che:
-$$c_{ij} = c_{ji}$$
+Senza perdita di generalit\`a, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, che indicheremo con $c\_{ij}$, sia non negativo. Si osserva che aver imposto $c\_{ij} \ge 0$ non \`e limitativo poich\'e \`e sempre possibile sommare a tutti i costi una costante sufficientemente elevata che li renda positivi senza alterarne l'ordinamento delle soluzioni. 
+A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato: tale scelta deriva dal fatto che $c\_{ij}$ nel nostro lavoro rappresenta sempre la distanza (tipicamente euclidea) fra i vertici i e j si ha che:
+$$c\_{ij} = c\_{ji}$$
 
 ossia il costo associato ad un arco non dipende dalla direzione dell'arco stesso. Quando il grafo \`e non orientato la famiglia di coppie non ordinate di elementi di V, ossia l'insieme degli archi, viene indicato con $E$.
 
@@ -125,7 +125,7 @@ ossia il costo associato ad un arco non dipende dalla direzione dell'arco stesso
 Definito il problema forniamo ora una sua possibile formulazione in termini di PLI. Introducendo le seguenti variabili decisionali:
 
 \[
-x_{e}=
+x\_{e}=
 \begin{cases}
 1 & \text{se il lato $e \in E$ viene scelto nel circuito ottimo} \\
 0 & \text{altrimenti}
@@ -135,9 +135,9 @@ x_{e}=
 si ottiene il problema:
 
 \begin{eqnarray}
-& \text{min}\displaystyle\underbrace{\sum_{e \in E} c_e x_e}_{\text{costo circuito}} \\[1.5ex]
-&\displaystyle\underbrace{\sum_{e \in \delta(V)} x_e = 2}_{\text{due lati incidenti in }v}\text{,  }\forall v \in V \\[1.5ex]
-&0\leq x_e \leq 1 \text{ intera , }\forall e \in E
+& \text{min}\displaystyle\underbrace{\sum\_{e \in E} c\_e x\_e}\_{\text{costo circuito}} \\[1.5ex]
+&\displaystyle\underbrace{\sum\_{e \in \delta(V)} x\_e = 2}\_{\text{due lati incidenti in }v}\text{,  }\forall v \in V \\[1.5ex]
+&0\leq x\_e \leq 1 \text{ intera , }\forall e \in E
 \end{eqnarray}
 
 L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidano esattamente due lati. In questa forma il modello \`e  compatto dato che il numero di vincoli \`e polinomiale rispetto alla dimensione dell'istanza ma non \`e completo poich\'e \`e sprovvisto dei vincoli di subtour che impediscono soluzioni il cui grafo risulta non connesso.
@@ -153,7 +153,7 @@ Figura 1: Soluzione con due subtour
 Una possibile formulazione per l'eliminazione dei subtour, detta appunto \textbf{subtour elimination}, risulta essere:
 
 \begin{eqnarray}
-&\displaystyle{\sum_{e \in E(S)}x_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
+&\displaystyle{\sum\_{e \in E(S)}x\_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
 \end{eqnarray}
 
 
@@ -169,7 +169,7 @@ Essendo il numero di questi vincoli pari ai sottoinsiemi $S$ distinti, il numero
 Una seconda formulazione equivalente per esprimere i vincoli di subtour \`e la seguente:
 
 \begin{eqnarray}
-&\displaystyle{\sum_{e \in E(S)}x_e \leq |S| - 1} \text{ , } \forall S \subsetneq V \text{ , } |S| \geq 2
+&\displaystyle{\sum\_{e \in E(S)}x\_e \leq |S| - 1} \text{ , } \forall S \subsetneq V \text{ , } |S| \geq 2
 \end{eqnarray}
 
 La gestione di un numero esponenziale di vincoli implica in genere tempi di risoluzione troppo elevati. Nella pratica però non è necessario utilizzare tutti i vincoli di subtour elimination, è sufficiente considerarne un numero molto più ridotto. Non potendo conoscere in anticipo quali siano quelli essenziali sarà nostro compito progettare un opportuno separatore: ossia una funzione che fornita in ingresso una soluzione x* ottima per il modello corrente generi tutti i vincoli violati.
@@ -238,23 +238,23 @@ La classe Point \`e stata realizzate al fine di memorizzare le coordinate in due
 \item \text{p2}: Rappresenta il secondo nodo;
 \item \textbf{pointType}: Rappresenta il modo con cui il costo relativo al lato che congiunge p1 con p2 viene calcolato; i valori che questo parametro pu\`o assumere sono i seguenti:
 	\begin{itemize}
-	\item EUC\char`_2D
+	\item EUC\char`\_2D
 	\item ATT
-	\item MAN\char`_2D
+	\item MAN\char`\_2D
 	\item GEO
-	\item MAX\char`_2D	
-	\item CEIL\char`_2D
+	\item MAX\char`\_2D	
+	\item CEIL\char`\_2D
 	\end{itemize}
 \end{itemize}
 
-A titolo di esempio riportiamo il codice eseguito nel caso in cui pointType risulti uguale a EUC\char`_2D dove il costo del lato deve risultare pari alla distanza euclidea dei due nodi. 
+A titolo di esempio riportiamo il codice eseguito nel caso in cui pointType risulti uguale a EUC\char`\_2D dove il costo del lato deve risultare pari alla distanza euclidea dei due nodi. 
 
 \begin{lstlisting}
 
  double xD = p1.X - p2.X;
  double yD = p1.Y - p2.Y;
  
- if (pointType == "EUC_2D")
+ if (pointType == "EUC\_2D")
  {
      return (int)(Math.Sqrt(xD * xD + yD * yD) + 0.5);
  }
@@ -337,7 +337,7 @@ In tutto il nostro progetto si è cercato di utilizzare il minor numero possibil
 		\hline
 		\begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& \begin{center} \textbf{Valore} \end{center} & \begin{center} \textbf{Descrizione} \end{center}\\ \hline
 		\begin{center} int \end{center} & \begin{center} VERBOSE \end{center}& \begin{center} 5 \end{center} & Regola quanto output il programma mostra a video: si \`e scelto di condizionare l' esecuzione di molte righe di codice che producevano una stampa a video in base al valore assunto da questa variabile. Si \`e deciso di ristringere il suo valore da 1 a 9, quando assume il valore 9 viene riportato a video il maggior numero possibile di stampe. \\ \hline
-		\begin{center} int \end{center} & \begin{center} TICKS\char`_PER\char`_SECOND \end{center} &  \begin{center}1000  \end{center}& Cplex utilizza i così detti ticks come unità di misura per il tempo di calcolo, questa costante indica quanti ne trascorrono in un secondo.\\ \hline
+		\begin{center} int \end{center} & \begin{center} TICKS\char`\_PER\char`\_SECOND \end{center} &  \begin{center}1000  \end{center}& Cplex utilizza i così detti ticks come unità di misura per il tempo di calcolo, questa costante indica quanti ne trascorrono in un secondo.\\ \hline
 		
 	\end{tabular}
 \end{center}
@@ -612,14 +612,14 @@ Per istanziare un nuovo modello di programmazione lineare \`e necessario inizial
 
 \begin{lstlisting}
 
-                CPXENVptr CPXopenCPLEX(int* status_p)
+                CPXENVptr CPXopenCPLEX(int* status\_p)
 
 \end{lstlisting}
 
 dove:
 
 \begin{itemize}
-\item \textbf{status\char`_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore.
+\item \textbf{status\char`\_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore.
 \end{itemize}
 
 
@@ -627,7 +627,7 @@ Ad un enviroment è possibile associare uno o pi\`u modelli attraverso il comand
 
 \begin{lstlisting}
 
-    CPXLPptr CPXcreateprob(CPXCENVptr env, int * status_p, const char * probname_str
+    CPXLPptr CPXcreateprob(CPXCENVptr env, int * status\_p, const char * probname\_str
 
 \end{lstlisting}
 
@@ -636,8 +636,8 @@ dove:
 
 \begin{itemize}
 	\item \textbf{env}: puntatore all'environment sul quale si \`e deciso di creare il modello;
-	\item \textbf{status\char`_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore;
-	\item \textbf{probname\char`_str}: rappresenta un array di caratteri che definisce il nome del modello creato.
+	\item \textbf{status\char`\_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore;
+	\item \textbf{probname\char`\_str}: rappresenta un array di caratteri che definisce il nome del modello creato.
 \end{itemize}
 
 Tale funzione ritorna un puntatore al modello creato: questo risulta vuoto poich\`e privo di funzione obbiettivo, variabili e vincoli.\\
@@ -771,9 +771,9 @@ Introduciamo ora una seconda interfaccia \textbf{ILinearNumExpr} che come si pu�
 
 La variabile \textbf{expr} rappresenta quindi una espressione lineare che deve essere definita come:
 
-$$\displaystyle{\sum_{i = 1}^n a_i x_i} $$
+$$\displaystyle{\sum\_{i = 1}^n a\_i x\_i} $$
 
-dove \textbf{$x_i$} sono variabili di tipo \textbf{INumVar} mentre \textbf{$a_i$} \'e un coefficiente di tipo \textbf{double}. Per aggiungere all'oggetto \textbf{expr} una variabile del modello \`e necessario utilizzare il metodo \textbf{AddTerm} la cui intestazione \`e:
+dove \textbf{$x\_i$} sono variabili di tipo \textbf{INumVar} mentre \textbf{$a\_i$} \'e un coefficiente di tipo \textbf{double}. Per aggiungere all'oggetto \textbf{expr} una variabile del modello \`e necessario utilizzare il metodo \textbf{AddTerm} la cui intestazione \`e:
 
 \begin{lstlisting}
                    void AddTerm(INumVar var,double coef)
@@ -1134,7 +1134,7 @@ Per tale ragione si è realizzato un codice in cui ogni thread che invoca la laz
 
 \begin{lstlisting}
 
-instance.InputFile + "_" + nodeId + ".dat"
+instance.InputFile + "\_" + nodeId + ".dat"
 
 \end{lstlisting}
 
@@ -1292,7 +1292,7 @@ Per installare la LazyConstraint callback in C è necessario, prima di risolvere
 
 \begin{lstlisting}
 
-CPXsetlazyconstraintcallbackfunc(CPXENVptr env,int(*)(CALLBACK_CUT_ARGS) lazyconcallback, void * cbhandle)
+CPXsetlazyconstraintcallbackfunc(CPXENVptr env,int(*)(CALLBACK\_CUT\_ARGS) lazyconcallback, void * cbhandle)
 
 \end{lstlisting}
 
@@ -1312,7 +1312,7 @@ Per impostare il numero di thread al numero di core bisogna prima ricavare quant
 \begin{lstlisting}
 
 CPXgetnumcores(env, int * nCore);
-CPXsetintparam(env, CPXPARAM_Threads, nCore);
+CPXsetintparam(env, CPXPARAM\_Threads, nCore);
 
 
 \end{lstlisting}
@@ -1323,7 +1323,7 @@ Passiamo ora a descrivere la funzione myLazyCallBack che identifica i subtourEli
 
 \begin{lstlisting}
 
-static int CPXPUBLIC myLazyCallBack(CPXCENVptr env, void *cbdata, int wherefrom, void *cbhandle, int *useraction_p)
+static int CPXPUBLIC myLazyCallBack(CPXCENVptr env, void *cbdata, int wherefrom, void *cbhandle, int *useraction\_p)
 
 \end{lstlisting}
 
@@ -1337,12 +1337,12 @@ La lista dei parametri è definita dai progettisti di Cplex poiché la chiamata 
 	\item \textbf{cbdata}: rappresenta il puntatore che è stato passato dall’ utente come parametro all’ atto della installazione della lazy e, come detto, punta all’ area di memoria contenente i dati che verranno utilizzati all’ interno della call back. In c i puntatori hanno un tipo poiché essi puntano sempre al primo elemento contenuto in una area di memoria e grazie al tipo è possibile interpretare correttamente i dati in essa contenuti. I progettisti di Cplex a priori non possono sconoscere il tipo della struttura dati che contiene i parametri utilizzati dall’ utente all’ interno della funzione: per tale ragione questo puntatore è di tipo void.
 	\item \textbf{wherefrom}:Definisce da che punto del Branch and bound è stata invocata la funzione, ai fini pratici tale parametro, per la lazy callback è risultato irrilevante. 
 	\item \textbf{cbhandle}: puntatore a dati privati utilizzato da Cplex
-	\item \textbf{useraction_p}:Puntatore ad un intero che contiene la specifica azione da prendere all’ interno della callback scritta dall’ utente. Tale parametro può assumere i seguenti tre valori:
+	\item \textbf{useraction\_p}:Puntatore ad un intero che contiene la specifica azione da prendere all’ interno della callback scritta dall’ utente. Tale parametro può assumere i seguenti tre valori:
 	
 	\begin{itemize}
-	\item \textbf{0}: Avente come costante simbolica CPX_CALLBACK_DEFAULT comunica a Cplex che fino a quel punto la callback non ha aggiunto tagli al modello.
-	\item \textbf{1}: Avente come costante simbolica CPX_CALLBACK_FAI impone a Cplex di uscire dall' ottimizzazione.
-	\item \textbf{2}: Avente come costante simbolica CPX_CALLBACK_SET_comunica a Cplex che sono stati aggiunti tagli.
+	\item \textbf{0}: Avente come costante simbolica CPX\_CALLBACK\_DEFAULT comunica a Cplex che fino a quel punto la callback non ha aggiunto tagli al modello.
+	\item \textbf{1}: Avente come costante simbolica CPX\_CALLBACK\_FAI impone a Cplex di uscire dall' ottimizzazione.
+	\item \textbf{2}: Avente come costante simbolica CPX\_CALLBACK\_SET\_comunica a Cplex che sono stati aggiunti tagli.
 	\end{itemize}
 
 \end{itemize}
@@ -1358,7 +1358,7 @@ instance *inst = (instance*)cbhandle;
 \end{lstlisting}
 
 
-Successivamente è necessario assegnare al parametro *useraction_p il valore CPX_CALLBACK_DEFAULT.
+Successivamente è necessario assegnare al parametro *useraction\_p il valore CPX\_CALLBACK\_DEFAULT.
 
 
 Per ottenere  la soluzione del rilassamento continuo  è necessario utilizzare il metodo CPXgetcallbacknodex avente come intestazione:
@@ -1387,8 +1387,8 @@ double *xstar = (double*)malloc(inst->nCols * sizeof(double));
 \end{lstlisting}
 
 Risulta necessario far ciò al fine di realizzare un codice che sia thread-safety: poiché inst è un puntatore accessibile a tutti i thread esiste il rischio che più thread contemporaneamente sovrascrivano il contenuto di bestLb ottenendo un bestLb che contiene coordinate appartenenti a soluzioni differenti.
-Ricavata la soluzione è necessario verificare se essa ha al suo interno dei sottocicli e in tal caso procedere con l’ aggiunta dei un vincoli di subtour per ogni subtour. A differenza di quanto fatto in C\#, per determinare i subtour, si è utilizzato Concorde\footnote{ In particolare la funzione CCcut_connect_components } che verrà presentato nel paragrafo successivo: poiché il codice che sfrutta Concorde per il calcolo dei vincoli di subtour si ritrova anche per la user cut callback la sua presentazione è rimandata al paragrafo X.Y.
-Una volta che abbiamo aggiunto tagli, è necessario impostare il parametro *useraction_p al valore CPX_CALLBACK_SET, al fine di comunicare a Cplex che sono stati aggiunti tagli. 
+Ricavata la soluzione è necessario verificare se essa ha al suo interno dei sottocicli e in tal caso procedere con l’ aggiunta dei un vincoli di subtour per ogni subtour. A differenza di quanto fatto in C\#, per determinare i subtour, si è utilizzato Concorde\footnote{ In particolare la funzione CCcut\_connect\_components } che verrà presentato nel paragrafo successivo: poiché il codice che sfrutta Concorde per il calcolo dei vincoli di subtour si ritrova anche per la user cut callback la sua presentazione è rimandata al paragrafo X.Y.
+Una volta che abbiamo aggiunto tagli, è necessario impostare il parametro *useraction\_p al valore CPX\_CALLBACK\_SET, al fine di comunicare a Cplex che sono stati aggiunti tagli. 
 
 
 \vspace{2\baselineskip}
@@ -1396,7 +1396,7 @@ MULTI-THREAD
 \vspace{2\baselineskip}
 
 La Usercut callback viene invocata da Cplex ogni volta che la soluzione del rilassamento continuo in un nodo dell' albero decisionale risulta frazionaria; qualora risulti intera viene invocata la Lazy discussa nel paragrafo precedente.  Aggiungere tagli  in un nodo è utile poiché migliora il lower bound rendendo il branch-and-cut più efficace, tuttavia un accumulo eccessivo di tagli peggiora le performance: di questo thread-off si è tenuto conto durante la realizzazione del codice.  
-Ciò che dovremmo andare ad implementare è un separatore che, ricevendo in ingresso la soluzione x* con almeno una componente frazionaria, fornisca in uscita un insieme S \subsetneq{V}, |S| \geq 2 tale per cui:
+Ciò che dovremmo andare ad implementare è un separatore che, ricevendo in ingresso la soluzione x* con almeno una componente frazionaria, fornisca in uscita un insieme $S\subsetneq{V}$, $|S|\geq{2}$ tale per cui:
 
 f1
 
@@ -1434,7 +1434,7 @@ Per poter utilizzare Concorde è stato prima necessario installarlo. In ambiente
 \begin{itemize}
 	\item \textbf{allocrus.c}
 	\item \textbf{connect.c}
-	\item \textbf{cut_st.c}
+	\item \textbf{cut\_st.c}
 	\item \textbf{mincut.c}
 	\item \textbf{shrink.c}
 	\item \textbf{sortrus.c}
@@ -1466,7 +1466,7 @@ Per installare la usercut callback è necessario utilizzare la routine CPXsetuse
 
 \begin{lstlisting}
 
-int CPXsetusercutcallbackfunc (CPXENVptr env, int(*)(CALLBACK_CUT_ARGS) lazyconcallback, void * cbhandle)
+int CPXsetusercutcallbackfunc (CPXENVptr env, int(*)(CALLBACK\_CUT\_ARGS) lazyconcallback, void * cbhandle)
 
 \end{lstlisting}
 
@@ -1479,7 +1479,7 @@ I parametri sono i medesimi descritti per la funzione CPXsetlazyconstraintcallba
 
 CPXgetnumcores(env, &nCore);
 	
-CPXsetintparam(env, CPXPARAM_Threads, nCore);
+CPXsetintparam(env, CPXPARAM\_Threads, nCore);
 
 \end{lstlisting}
 
@@ -1493,28 +1493,28 @@ La funzione che viene invocata da Cplex in corrispondenza di una soluzione frazi
 
 \begin{lstlisting}
 
-int CPXPUBLIC myUserCutCallBack(CPXCENVptr env, void *cbdata, int wherefrom, void *cbhandle, int *useraction_p)
+int CPXPUBLIC myUserCutCallBack(CPXCENVptr env, void *cbdata, int wherefrom, void *cbhandle, int *useraction\_p)
 
 \end{lstlisting}
 
 II significato dei parametri di ingresso di tale funzione è noto poiché tutti i parametri sono già stati descritti nel paragrafo X.Y. [ sono i medesimi descritti per la myLazyCallBack.]
 
 
-Esattamente quanto visto per la lazy callback, anche qui all' inizio è necessario settare il parametro *useraction_p al valore CPX_CALLBACK_DEFAULT. 
+Esattamente quanto visto per la lazy callback, anche qui all' inizio è necessario settare il parametro *useraction\_p al valore CPX\_CALLBACK\_DEFAULT. 
 
 
-Cplex, una volta calcolata una soluzione frazionara genera in automatico dei propri tagli (per esempio di Gomory). Quando il parametro wherefrom risulta pari a CPX_CALLBACK_MIP_CUT_LAST significa che Cplex non genererebbe più tagli e all’ iterazione successiva procederebbe ad effettuare l’operazione di branching: solo in questa condizione risulta conveniente generare vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro wherefrom risulti diverso da CPX_CALLBACK_MIP_CUT_LAST, il metodo effettua un return 0 senza eseguire alcuna operazione, altrimenti come già discusso per la lazy, è necessario recuperare il puntate all’ istanza.
+Cplex, una volta calcolata una soluzione frazionara genera in automatico dei propri tagli (per esempio di Gomory). Quando il parametro wherefrom risulta pari a CPX\_CALLBACK\_MIP\_CUT\_LAST significa che Cplex non genererebbe più tagli e all’ iterazione successiva procederebbe ad effettuare l’operazione di branching: solo in questa condizione risulta conveniente generare vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro wherefrom risulti diverso da CPX\_CALLBACK\_MIP\_CUT\_LAST, il metodo effettua un return 0 senza eseguire alcuna operazione, altrimenti come già discusso per la lazy, è necessario recuperare il puntate all’ istanza.
 A livello pratico, come intuitivamente è facile capire, aggiungere ad ogni nodo dell’ albero decisionale dei tagli(i quali si sommano ai tagli che Cplex genera in automatico) risulta una scelta sconsigliata che riduce in maniera drastica le performance di Cplex. Per tale ragione si è deciso di realizzare un codice che aggiunge i vincoli di subtour in un nodo nel quele viene invocata la UserCutCallback con una probabilità p = 0,1. Per realizzare ciò si è ricavato, utilizzando la funzione CPXgetcallbacknodeinfo, l’ indice del nodo sul quale tale funzione è stata invocata e solamente quando il resto della divisione per 10 di tale indice risulta nullo si aggiungono i vincoli al nodo. Successivamente invocando la nota funzione CPXgetcallbacknodex si ottiene la soluzione frazionaria. Prima di procedere con l’ analisi del cuore del metodo, riportiamo il codice fin qui discusso:
 
 
 \begin{lstlisting}
 
-*useraction_p = CPX_CALLBACK_DEFAULT;
+*useraction\_p = CPX\_CALLBACK\_DEFAULT;
 	
 int nodecount = 0;
-CPXgetcallbacknodeinfo(env, cbdata, wherefrom, 0, CPX_CALLBACK_INFO_NODE_DEPTH, &nodecount);
+CPXgetcallbacknodeinfo(env, cbdata, wherefrom, 0, CPX\_CALLBACK\_INFO\_NODE\_DEPTH, &nodecount);
 	
-if (wherefrom == CPX_CALLBACK_MIP_CUT_LAST 
+if (wherefrom == CPX\_CALLBACK\_MIP\_CUT\_LAST 
 {
 	instance *inst = (instance*)cbhandle;
 		
@@ -1537,7 +1537,7 @@ if (wherefrom == CPX_CALLBACK_MIP_CUT_LAST
 \end{lstlisting}
 
 
-Per aggiungere eventuali vincoli di subtour è necessario invocare in un primo momento la funzione CCcut_connect_components la quale identificare le componenti connesse di una soluzione, essa sia intera o frazionaria. Con il termine identificare si intende che determina per ogni componente quanti e quali nodi da essa costituita.
+Per aggiungere eventuali vincoli di subtour è necessario invocare in un primo momento la funzione CCcut\_connect\_components la quale identificare le componenti connesse di una soluzione, essa sia intera o frazionaria. Con il termine identificare si intende che determina per ogni componente quanti e quali nodi da essa costituita.
 
 Illustriamo i parametri che tale funzione riceve in input, si osserva che mentre i primi 4 parametri costituiscono l' effettivo input della funzione i rimanenti 3 sono i parametri che esse setta e quindi possono essere visti come l' output della funzione:
 
@@ -1569,7 +1569,7 @@ for (int i = 0; i < inst->nNodes;  i++)
 
 \end{lstlisting}
 
-Nonostante non fosse necessario, per rendere il codice maggiormente leggibile si è deciso definire variabili e puntatori con il medesimo nome con i quali sono poi utilizzati all’ interno di CCcut_connect_components.
+Nonostante non fosse necessario, per rendere il codice maggiormente leggibile si è deciso definire variabili e puntatori con il medesimo nome con i quali sono poi utilizzati all’ interno di CCcut\_connect\_components.
 
 \begin{lstlisting}
 
@@ -1583,8 +1583,8 @@ int ncomp;
 
 
 \begin{lstlisting}
-if (CCcut_connect_components(inst->nNodes, nLati, elist, xstar, &ncomp, &compscount, &comps))
-printError(" error in CCcut_connect_components() inside fractcutusercallback");
+if (CCcut\_connect\_components(inst->nNodes, nLati, elist, xstar, &ncomp, &compscount, &comps))
+printError(" error in CCcut\_connect\_components() inside fractcutusercallback");
 \end{lstlisting}
  
 Utilizzando i vettori ncomp compscount, comps è stato possibile realizzare un codice in grado di definire i vincoli di subtour per ogni componente connessa e successivamente di inserirli nel pool dei tagli tramite la funzione \textbf{CPXcutcallbackadd} la cui firma è:
@@ -1608,9 +1608,9 @@ CPXcutcallbackadd(CPXCENVptr env,void * cbdata,int  wherefrom,int  nzcnt, double
 	\item \textbf{purgeable}:Valore intero che specifica come Cplex tratta il taglio,i possibili valore che possono essere passati in input sono:
 	
 	\begin{itemize}
-	\item \textbf{CPX_USECUT_FORCE}:Il taglio una volta aggiunto al rilassamento non può essere più rimosso
-	\item \textbf{CPX_USECUT_PURGE}:Il taglio è aggiunto al rilassamento ma può essere eliminato in un secondo momento se giudicato inefficiente
-	\item \textbf{CPX_USECUT_FILTER}: Il taglio viene trattato come un taglio generato da Cplex il quale prima di aggiungerlo al rilassamento lo analizza e può decidere di non inserirlo 
+	\item \textbf{CPX\_USECUT\_FORCE}:Il taglio una volta aggiunto al rilassamento non può essere più rimosso
+	\item \textbf{CPX\_USECUT\_PURGE}:Il taglio è aggiunto al rilassamento ma può essere eliminato in un secondo momento se giudicato inefficiente
+	\item \textbf{CPX\_USECUT\_FILTER}: Il taglio viene trattato come un taglio generato da Cplex il quale prima di aggiungerlo al rilassamento lo analizza e può decidere di non inserirlo 
 	nel rilassamento(per esempio è già presente un taglio più efficiente)
 	
 	\end{itemize}
@@ -1649,9 +1649,9 @@ Per aggiungere un taglio per ogni componente connessa è stato necessario popola
 
 				k1 = k2 + 1;	
 				
-				CPXcutcallbackadd(env, cbdata, wherefrom, nzcnt, compscount[c] - 1, 'L', cutind, cutval, CPX_USECUT_FORCE);
+				CPXcutcallbackadd(env, cbdata, wherefrom, nzcnt, compscount[c] - 1, 'L', cutind, cutval, CPX\_USECUT\_FORCE);
 
-				*useraction_p = CPX_CALLBACK_SET; 
+				*useraction\_p = CPX\_CALLBACK\_SET; 
 				free(cutind);
 				free(cutval);
 			}
@@ -1668,15 +1668,15 @@ Per aggiungere un taglio per ogni componente connessa è stato necessario popola
 \end{lstlisting}
 
 
-Nel caso in cui la soluzione presenta una sola componente connessa, come in Fig. X, invocando la funzione \textbf{CCcut_violated_cuts} di Concorde è possibile individuare gli insiemi S che soddisfino la disuguaglianza (f2) : una volta individuato S risulta banale inserire il relativo vincolo di subtour. In particolare CCcut_violated_cuts è una funzione in grado di individuare sezioni di capacità inferiori ad una certa soglia. Descriviamo i 7 parametri che tale funzione riceve in input, si osserva che a differenza della funzione CCcut_connect_components i parametri sono effettivamente tutti di input:
+Nel caso in cui la soluzione presenta una sola componente connessa, come in Fig. X, invocando la funzione \textbf{CCcut\_violated\_cuts} di Concorde è possibile individuare gli insiemi S che soddisfino la disuguaglianza (f2) : una volta individuato S risulta banale inserire il relativo vincolo di subtour. In particolare CCcut\_violated\_cuts è una funzione in grado di individuare sezioni di capacità inferiori ad una certa soglia. Descriviamo i 7 parametri che tale funzione riceve in input, si osserva che a differenza della funzione CCcut\_connect\_components i parametri sono effettivamente tutti di input:
 
 
 \begin{itemize}
-	\item \textbf{ncount}: int ecount, int *elist: Il loro significato è già stato descritto per la CCcut_connect_components
+	\item \textbf{ncount}: int ecount, int *elist: Il loro significato è già stato descritto per la CCcut\_connect\_components
 	\item \textbf{dlen}: vettore contenente la capacità di ogni lato. 
-	\item \textbf{cutoff}:[Questo è il termine noto della disequazione f2, non ho capito perchè devo togliere a 2 un EPSILON, così è scritto nel pdf condiviso dal prof che si chiama 		RO2_TSPutilities]
-	\item \textbf{(*(doit_fn)(double,int,int *,void *) }:La peculiarità di questa funzione è rappresentata dal fatto che, quando viene invocata, viene installata una callback, il cui nome è rappresentato dal valore di questo parametro, che sarà evocata da Concorde tutte le volte che quest' ultimo individua un sottoinsieme S che soddisfa f2. Si osserva che i parametri di ingresso della callback, che si è chiamata doitFuncConcorde, sono stabiliti dai programmatori che hanno realizzato Concorde poiché essa viene invocata all' interno del codice da essi realizzato: sfruttando tali parametri all' interno di doitFuncConcorde si inserirà il relativo taglio al nodo. Tale parametri possono considerarsi l' output della funzione.
-	\item \textbf{pass_param}:puntatore alla struttura dati, di tipo InputCC, contenente variabili e puntatori che devono essere accessibili all’ interno della callback 
+	\item \textbf{cutoff}:[Questo è il termine noto della disequazione f2, non ho capito perchè devo togliere a 2 un EPSILON, così è scritto nel pdf condiviso dal prof che si chiama 		RO2\_TSPutilities]
+	\item \textbf{(*(doit\_fn)(double,int,int *,void *) }:La peculiarità di questa funzione è rappresentata dal fatto che, quando viene invocata, viene installata una callback, il cui nome è rappresentato dal valore di questo parametro, che sarà evocata da Concorde tutte le volte che quest' ultimo individua un sottoinsieme S che soddisfa f2. Si osserva che i parametri di ingresso della callback, che si è chiamata doitFuncConcorde, sono stabiliti dai programmatori che hanno realizzato Concorde poiché essa viene invocata all' interno del codice da essi realizzato: sfruttando tali parametri all' interno di doitFuncConcorde si inserirà il relativo taglio al nodo. Tale parametri possono considerarsi l' output della funzione.
+	\item \textbf{pass\_param}:puntatore alla struttura dati, di tipo InputCC, contenente variabili e puntatori che devono essere accessibili all’ interno della callback 
 \end{itemize}
 
 Poiché all' interno della callback si desidera aggiungere tagli, per poterlo fare si ha la necessità di accedere alle variabili e puntatori che la funzione CPXcutcallbackadd richiede come parametri di ingresso. Per tale ragione la struttura inputCC contiene al suo interno le seguenti variabili e puntatori tutti ampliamente descritti nei paragrafi precedenti:
@@ -1689,7 +1689,7 @@ typedef struct
 	CPXCENVptr env;
 	void *cbdata;
 	int wherefrom;
-	int *useraction_p;
+	int *useraction\_p;
 } inputCC;
 
 
@@ -1749,9 +1749,9 @@ int nzcnt = 0;
 			nzcnt++;
 		}
 	}
-CPXcutcallbackadd(in->env, in->cbdata, in->wherefrom, nzcnt, cutcount - 1, 'L', cutind, cutval, CPX_USECUT_FORCE);
+CPXcutcallbackadd(in->env, in->cbdata, in->wherefrom, nzcnt, cutcount - 1, 'L', cutind, cutval, CPX\_USECUT\_FORCE);
 
-*in->useraction_p = CPX_CALLBACK_SET;
+*in->useraction\_p = CPX\_CALLBACK\_SET;
 
 free(cutind);
 free(cutval);
