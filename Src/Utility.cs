@@ -485,7 +485,7 @@ namespace TSPCsharp
             //The repair method ensures that the child is a permissible path
             child = Repair(instance, pathChild, listArray);
 
-            //
+            
             if (ProbabilityTwoOpt(instance, rnd) == 1)
             {
                 child.path = InterfaceForTwoOpt(child.path);

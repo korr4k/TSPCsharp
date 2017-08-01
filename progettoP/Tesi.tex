@@ -1065,16 +1065,699 @@ Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato apparte
 CALLBACK 
 \vspace{2\baselineskip}
 
-Una modalit\`a avanzata di utilizzare Cplex prevede di agire all'interno del proprio algoritmo di Branch-and-cut; questo \`e reso possibile attraverso un meccanismo informatico che prende il nome di CallBack. Per ovvi motivi i codici sorgenti di Cplex non sono di libero accesso: \`e solo grazie alle CallBack che un programmatore esterno pu\`o interagire con il suo flusso esecutivo.\\
-Cplex \`e stato progettato in modo tale che in alcune sue sezioni invochi delle funzioni chiamate proprio CallBacks. Esse di dafault non sono installate risultando così trasparenti a Cplex, nel caso in cui si provvede ad installarle nei punti di codice in cui vengono invocate il flusso di programma passa da Cplex alle CallBack. Tipicamente le CallBack eseguono elaborazioni che verranno inoltrate a Cplex il quale le utilizza durante l' evoluzione dell' algoritmo di Branch-and-cut.
-Tra le varie CallBack che Cplex mette a disposizione c' \`e  ne sono due particolarmente importanti che saranno oggetto dei successivi paragrafi: LazyCallback e UserConstraintCallback.
+Una modalità avanzata di utilizzare Cplex prevede di interagire con il proprio algoritmo di Branch-and-cut; questo è reso possibile attraverso un meccanismo informatico che prende il nome
+di callBack. In termini generali una callback, è una funzione, o un "blocco di codice" che viene passata come parametro ad un'altra funzione. 
+
+In particolare, quando ci si riferisce alla callback richiamata da una funzione, la callback viene passata come parametro alla funzione chiamante.In questo modo la chiamante può realizzare un compito specifico (quello svolto dalla callback) che non è, molto spesso, noto al momento della scrittura del codice. 
+
+L’ esempio tipico di applicazione delle callback è quando un programmatore ha la necessità di interagire con un software di cui non ha accesso ai codici sorgenti. Per ovvi motivi i codici sorgenti di Cplex non sono di libero accesso, per consentire ad un programmatore esterno di interagire con il suo flusso esecutivo  in alcune sue sezioni vengono  invocatale delle callBack. Di dafault esse non sono installate risultando così trasparenti a Cplex, nel caso in cui si provvede ad installarle nei punti di codice in cui vengono invocate il flusso di programma passa da Cplex alle CallBack. 
+
+\begin{center}
+\includegraphics[scale=0.5]{Callback}  
+
+Figura 3: Soluzione frazionaria
+\end{center}
+
+
+Tipicamente le callBack eseguono elaborazioni che saranno inoltrate a Cplex il quale le sfrutta durante l' evoluzione dell' algoritmo di Branch and cut: tali elaborazioni possono essere specifiche del problema che si sta risolvendo aumentando così le performance del programma. Nel programma realizzato sono state utilizzate le callback di Cplex per aggiungere al volo tagli specifici per il problema del Commesso Viaggiatore durante l' evoluzione del Branch and Cut.
+Tra le varie CallBack che Cplex mette a disposizione c' è ne sono due particolarmente importanti che saranno oggetto dei successivi paragrafi: la \textbf{LazyCallback} e la \textbf{UserConstraintCallback}.
+
 
 \vspace{2\baselineskip}
 LAZYCALLBACK
 \vspace{2\baselineskip}
 
-Durante il processo di risoluzione del branch-and-cut, ogni volta che Cplex risolvendo il rilassamento continuo in un nodo calcola una soluzione ammissibile il cui costo \`e  inferiore rispetto all' incumbet attuale viene invocata la lazycontraintCallback prima di aggiornare l'incumbent. Poiché , come pi\`u volte ricordato, al modello di partenza non sono stati aggiunti i vincoli di subtour \`e possibile che la soluzione calcolata da Cplex sia ammissibile per il modello corrente ma contenga dei subtour al suo interno. Ciò che ci apprestiamo ad illustrare è sfruttale la lazycontraint callback per verificare se la soluzione calcolata sia priva di cicli e solo in questo caso aggiornare l' incumbent.
-Si osserva che a differenza del metodo Loop una volta che Cplex produce la soluzione ottima questa certamente \`e  ammissibile e corrisponde quindi al tour ottimo che si vuole cercare.  
-A livello implementativo sarà mostrato sia come installare la questa callBack in C\# sia in c poiché questo ci tornerà utile nel prosegui della tesi.
+Durante il processo di risoluzione del Branch-and-cut, ogni volta che Cplex risolvendo il rilassamento continuo in un nodo calcola una soluzione ammissibile il cui costo è inferiore rispetto all' incumbet attuale viene invocata la lazycontraint callback prima di aggiornare l'incumbent, qualora la soluzione intera ha un costo superiore all' incumbent, per il \textit{criterio di bounding} il nodo viene eliminato. Poichè , come più volte ricordato, al modello di partenza non sono stati aggiunti i vincoli di subtour è possibile che la soluzione calcolata da Cplex sia ammissibile per il modello corrente ma contenga dei subtour al suo interno.  Il codice che presenteremo nei prossimi paragrafi sfrutta la lazycontraint callback per consentire a Cplex di aggiornare l' incumbent  solo se la soluzione di un nodo per il quale viene invocata la lazycontraint callback non ha subtour al suo interno, altrimenti all' interno della callback si genera un taglio per ogni sottociclo.
+
+In generale i tagli possono essere \textbf{locali} o \textbf{globali}: mentre i primi hanno validità esclusiva al sottoalbero avente come radice il nodo per la quale sono stati generati , i secondi hanno validità per tutti i nodi dell' albero decisionale e vengono memorizzati in una struttura globale detta \textbf{pool di tagli}. Una volta che un taglio viene aggiunto al pool, se questo può essere rimosso in un secondo momento, poiché ritenuto inefficace, si dice che tale taglio è \textbf{purgeable}. Durante il proseguo della tesi i tagli saranno da considerarsi sempre globali e non purgeable: per tale ragione un taglio con queste caratteristiche è come se fosse aggiunto al modello non potendo essere più violato.
+Si osserva che a differenza del metodo Loop una volta che Cplex produce la soluzione ottima questa certamente è ammissibile e corrisponde quindi al tour ottimo che si vuole cercare. A livello implementativo sarà  mostrato sia come installare questa callBack in C\# sia in C poichè questo ci tornerà  utile nel proseguito della tesi.
+
+\vspace{2\baselineskip}
+MULTI-THREAD
+\vspace{2\baselineskip}
+
+Il software Cplex prima di risolvere il modello interroga il sistema operativo al fine di stabilire il numero di core presenti nel processore e pone il numero di thread al numero di core in esso presenti. Al giorno d' oggi i moderni processori dispongono almeno di due core: risulta quindi utile associare ad ognuno di essi un thread con il compito di risolvere il rilassamento continuo di un nodo dell' albero decisionale. Così facendo si sfrutta al massimo la potenza del processore incrementando in questo modo le performance del programma.  
+Nel momento in cui si installa una delle due callback, si ha la possibilità che due thread distinti invochino contemporaneamente la funzione da noi realizzata per aggiungere tagli al modello: qualora tale funzione modifichi variabili che sono condivise fra i vari thread si potrebbe andrebbe incontro ad eccezioni o anomalie  tali da non garantire più la correttezza della soluzione prodotta da Cplex. 
+Per evitare queste problematiche, i progettisti di Cplex hanno preferito  settare il numero di thread al valore 1 dopo l' installazione della Lazy o della UserCut callback. Naturalmente tale scelta inficia le performance: si è quindi deciso di riportare il numero di thread al numero di core presenti nel processore prestando attenzione a realizzare un codice thread-safety. Maggiori dettagli di quanto detto sono riportati nei successivi paragrafi.
+
+
+\vspace{2\baselineskip}
+INSTALLAZIONE LAZYCONSTRAINT CALLBACK C\#
+\vspace{2\baselineskip}
+
+
+Per poter installare la LazyConstraintCallback in C\# è prima necessario creare un classe che estenda Cplex.LazyConstraintCallback: tale classe è stata chiamata TSPLazyConsCallback. All' interno di essa è obbligatorio sovrascrivere il metodo Main della classe ereditata: al suo interno sarà realizzato il codice che, a partire dalla soluzione intera calcolata da Cplex in un nodo dell' albero decisionale avente un costo inferiore rispetto all' incumbent attuale, aggiunge per ogni subtour (se presente) il relativo taglio.
+Per installare la callback è necessario utilizzare il metodo \textbf{Use} sull' istanza della classe Cplex nella quale è stato definito il modello e passargli come parametro una istanza della classe \textbf{TSPLazyConsCallback}. 
+\begin{lstlisting}
+
+cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, true));
+
+\end{lstlisting}
+
+
+\textit{[Qui penso possa dare fastidio al prof aver messo direttamente true..conviene secondo me fare una variabile a parte , chiamarla BlockPrint e metterla a true… ]}
+
+I parametri che si vogliono rendere visibili all' interno della classe bisogna passarli come parametro all' atto della creazione dell' istanza della classe TSPLazyConsCallback. L' unico parametro il cui significato non è noto è BlockPrint: essa è una variabile booleano che indica se il grafo di supporto della soluzione intera in corrispondenza della quale è stata invocata la Lazy debba essere o meno stampato a video. Tale parametro è utile poiché la lazy verrà utilizzata anche all' interno di altri  algoritmi per i quali non risulta particolarmente interessante graficare a video il grafo di supporto della soluzione. 
+Come accennato nel paragrafo precedente, l' installazione della Lazy setta il numero di thread a 1: per riportare il numero di thread al numero di core è necessario utilizzare i metodi \textbf{SetParam} e \textbf{GetNumCores} entrambi sull' istanza cplex.
+
+
+\begin{lstlisting}
+
+cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+
+\end{lstlisting}
+
+Si osserva che, utilizzando la funzione GetNumCores, si è reso il codice indipendente dal numero di core del computer sul quale si andrà poi ad eseguire effettivamente il codice.
+Per mostrare a video il grafo di supporto di una soluzione con gnuplot è necessario, come discusso nel paragrafo X,  creare un file avente una determinata struttura. Poiché si è deciso di lavorare in un ambiente multi-thread, potrebbe essere fonte di anomalie creare un unico file accessibile da tutti i thread all' interno del quale quest' ultimi scrivono le coordinate della relativa soluzione intera calcolata.  Qualora almeno due thread nel medesimo istante invocano la callback si ritroverebbero a scrivere sullo stesso file coordinate appartenente a soluzioni differenti. 
+Per tale ragione si è realizzato un codice in cui ogni thread che invoca la lazycallback crea un proprio file sul quale scrivere le coordinate della soluzione calcolata. Per far ciò ad ogni file è stato attribuito un nume univoco avente la seguente struttura:
+
+
+\begin{lstlisting}
+
+instance.InputFile + "_" + nodeId + ".dat"
+
+\end{lstlisting}
+
+
+dove \textbf{nodeId} risulta essere una stringa che dipende dal nodo sul quale un thread ha invocato la lazy: in particolare rappresenta l' indice del nodo. Per ottenere tale stringa è stato necessario invocare il metodo \textbf{GetNodeId} ereditato dalla classe Cplex.LazyConstraintCallback:
+
+
+\begin{lstlisting}
+
+string nodeId = GetNodeId().ToString();
+
+\end{lstlisting}
+
+Prima di verificare se la soluzione al suo interno contiene o meno cicli bisogna naturalmente accedere a tale soluzione: a tal fine si deve utilizzare il metodo \textbf{GetValues} ereditato dalla classe Cplex.LazyConstraintCallback il quale riceve in input il vettore z e restituisce per ogni variabile il corrispondente valore.
+
+
+\begin{lstlisting}
+
+public class TSPLazyConsCallback : Cplex.LazyConstraintCallback
+{
+	…
+
+	public override void Main()
+	{
+         double[] actualZ = GetValues(z);
+    		…
+	}
+}
+
+
+\end{lstlisting}
+
+\textit{[Ho riportato sia il Main che la classe perchè dopo tante parole mi sembrava piu chiaro vedere poi il codice effettivo…]}
+
+
+Una volta ottenuta la soluzione per verificare se sono presenti cicli e definire i corrispondenti vincoli di subtour si sono utilizzati i metodi \textbf{InitCC} e \textbf{UpdateCC} e le medesime strutture dati ampliamene descritte nei paragrafi X.Y; solo per completezza si riporta il codice realizzato.
+
+
+
+ \textit{[Qui non ho capito perchè hai fatto un altro metodo BuildCC che fa le stesse cose di UpdateCC]}
+
+
+\begin{lstlisting}
+
+List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
+List<int> bufferCoeffCCLC = new List<int>(); ;
+
+int[] compConnLC = new int[instance.NNodes];
+
+Utility.InitCC(compConnLC);
+
+for (int i = 0; i < instance.NNodes; i++)
+            {
+                for (int j = i + 1; j < instance.NNodes; j++)
+                {
+                    //Retriving the correct index position for the current link inside z
+                    int position = Utility.zPos(i, j, instance.NNodes);
+
+                    //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                    if (actualZ[position] >= 0.5)
+                    {
+                        //Updating the model with the current subtours elimination
+                        BuildCC(i, j, ccExprLC, bufferCoeffCCLC, compConnLC);
+
+                        if (BlockPrint)
+                        {
+                            fileLC.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            fileLC.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                        }
+                    }
+                }
+            }
+
+
+\end{lstlisting}
+
+
+
+Una volta memorizzato l’ i-esimo taglio all’ interno di ccExprLC[i] e bufferCoeffCCLC[i], per aggiungerlo al modello è necessario utilizzare il metodo Add ereditato dalla classe Cplex.LazyConstraintCallback, tale metodo ha come firma:
+
+\begin{lstlisting}
+
+IloRange Add(IloRange cut, int cutmanagement) 
+
+\end{lstlisting}
+
+
+dove:
+
+\begin{itemize}
+	\item \textbf{cut}: Rapprerenta il vincolo che deve essere aggiunto come taglio globale. Il vincolo deve essere lineare.
+	\item \textbf{cutmanagement}: Valore intero che indica come il taglio deve essere gestito da Cpex. I possibili valori che può assumere tale parametro solo:
+	
+	\begin{itemize}
+	\item \textbf{0}: Il taglio è aggiunto al rilassamento in maniera permanente.
+	\item \textbf{1}: Il taglio è aggiunto al rilassamento, ma può essere eliminato successivamente se Cplex determina che risulta essere inefficiente. Il questo caso di 											parla di taglio \textbf{purgeable}. 
+	\item \textbf{2}: Il taglio viene trattato come i tagli generati da Cplex, ossia viene analizzato prima di aggiungerlo al rilassamento.  Qualora, per esempio, Cplex ritiene che esiste 							già un taglio più efficace questo non viene aggiunto.	
+	\end{itemize}
+
+\end{itemize}
+
+\textit{[Nella documentazione parlano di rilassamento, secondo me è più giusto pool di tagli]}
+
+Come riportato dalla documentazione, IloRange risulta essere una interfaccia utilizzata per modellare oggetti che rappresentano ranged constraints nel formato:
+
+
+$$lb <= expr <= ub$$ 
+
+
+Un oggetto di tipo IloRange può essere ottenuto utilizzando il metodo \textbf{Le} il quale crea e ritorna un vincolo che forza una data espressione ad essere minore o uguale di uno specifico valore. 
+
+\begin{lstlisting}
+
+public IloRange Le(IloNumExpr e, double v)
+
+\end{lstlisting}
+
+dove :
+
+\begin{itemize}
+	\item \textbf{e}: Espressione contenente una combinazione lineare delle variabili relative al vincolo..
+	\item \textbf{v}: Termine noto del vincolo. 
+\end{itemize}
+
+
+Riportiamo il codice realizzato per aggiungere il taglio:
+
+
+\begin{lstlisting}
+
+IRange[] cuts = new IRange[ccExprLC.Count];
+
+            if (cuts.Length > 1)
+            {
+                for (int i = 0; i < cuts.Length; i++)
+                {
+                    cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
+                    Add(cuts[i], 1);
+                }
+            }
+
+\end{lstlisting}
+
+
+\textit{[Il codice qui lo modificherei perché memorizziamo nel vettore cuts tutti i tagli ma questo poi non li usiamo mai..aggiungerei direttamente il taglio con Add al modello senza prima memorizzarlo nel vettore]}
+
+
+\vspace{2\baselineskip}
+LAZYCONSTRAINTCALLBACK IN C
+\vspace{2\baselineskip}
+
+
+
+Per installare la LazyConstraint callback in C è necessario, prima di risolvere il modello, invocare la routine \textbf{CPXsetlazyconstraintcallbackfunc} la cui firma è:
+
+\begin{lstlisting}
+
+CPXsetlazyconstraintcallbackfunc(CPXENVptr env,int(*)(CALLBACK_CUT_ARGS) lazyconcallback, void * cbhandle)
+
+\end{lstlisting}
+
+
+
+dove:
+
+\begin{itemize}
+	\item \textbf{env}: Espressione contenente una combinazione lineare delle variabili del vincolo.
+	\item \textbf{lazyconcallback}: Rappresenta il nome, attribuito dal programmatore esterno, della funzione che viene invocata da Cplex qualora la soluzione del rilassamento continuo di un 										nodo è intera e inferiore dell' incumbent. Come nome è stato scelto myLazyCallBack.
+	\item \textbf{cbhandle}: Puntatore ad una struttura dati passata dall' utente contenente dati che devono essere visibili all' interno della callback da noi scritta. Come parametro si è 								 passato il puntatore all' istanza. 
+\end{itemize}
+
+
+Per impostare il numero di thread al numero di core bisogna prima ricavare quanti core il processore dispone; a tal fine si sono utilizzati i metodi \textbf{CPXsetintparam} e \textbf{CPXgetnumcores}.
+
+\begin{lstlisting}
+
+CPXgetnumcores(env, int * nCore);
+CPXsetintparam(env, CPXPARAM_Threads, nCore);
+
+
+\end{lstlisting}
+
+
+Passiamo ora a descrivere la funzione myLazyCallBack che identifica i subtourElimination e aggiunge i relativi vincoli al modello. Essa, come previsto dal manuale, deve avere la seguente firma:
+
+
+\begin{lstlisting}
+
+static int CPXPUBLIC myLazyCallBack(CPXCENVptr env, void *cbdata, int wherefrom, void *cbhandle, int *useraction_p)
+
+\end{lstlisting}
+
+
+La lista dei parametri è definita dai progettisti di Cplex poiché la chiamata alla funzione myLazyCallBack avviene all’ interno del codice di Cplex (non accessibile) da essi realizzato: il programmatore esterno è dunque vincolato nella firma. Passiamo ora a descrivere i parametri di myLazyCallBack:
+
+
+
+\begin{itemize}
+	\item \textbf{env}: rappresenta l’ istanza dell’ enviroment  con il quale stiamo lavorando.
+	\item \textbf{cbdata}: rappresenta il puntatore che è stato passato dall’ utente come parametro all’ atto della installazione della lazy e, come detto, punta all’ area di memoria contenente i dati che verranno utilizzati all’ interno della call back. In c i puntatori hanno un tipo poiché essi puntano sempre al primo elemento contenuto in una area di memoria e grazie al tipo è possibile interpretare correttamente i dati in essa contenuti. I progettisti di Cplex a priori non possono sconoscere il tipo della struttura dati che contiene i parametri utilizzati dall’ utente all’ interno della funzione: per tale ragione questo puntatore è di tipo void.
+	\item \textbf{wherefrom}:Definisce da che punto del Branch and bound è stata invocata la funzione, ai fini pratici tale parametro, per la lazy callback è risultato irrilevante. 
+	\item \textbf{cbhandle}: puntatore a dati privati utilizzato da Cplex
+	\item \textbf{useraction_p}:Puntatore ad un intero che contiene la specifica azione da prendere all’ interno della callback scritta dall’ utente. Tale parametro può assumere i seguenti tre valori:
+	
+	\begin{itemize}
+	\item \textbf{0}: Avente come costante simbolica CPX_CALLBACK_DEFAULT comunica a Cplex che fino a quel punto la callback non ha aggiunto tagli al modello.
+	\item \textbf{1}: Avente come costante simbolica CPX_CALLBACK_FAI impone a Cplex di uscire dall' ottimizzazione.
+	\item \textbf{2}: Avente come costante simbolica CPX_CALLBACK_SET_comunica a Cplex che sono stati aggiunti tagli.
+	\end{itemize}
+
+\end{itemize}
+
+
+La prima operazione da compiere all' interno della Lazy consiste nell' effettuare un cast al puntatore cbhandle il qui tipo è noto solo al programmatore che ha installato la callback: nel nostro caso il puntatore è di tipo instance per cui si è effettuato il seguente cast:
+
+
+\begin{lstlisting}
+
+instance *inst = (instance*)cbhandle;
+
+\end{lstlisting}
+
+
+Successivamente è necessario assegnare al parametro *useraction_p il valore CPX_CALLBACK_DEFAULT.
+
+
+Per ottenere  la soluzione del rilassamento continuo  è necessario utilizzare il metodo CPXgetcallbacknodex avente come intestazione:
+
+\begin{lstlisting}
+
+int CPXgetcallbacknodex(CPXCENVptr env, void * cbdata, int wherefrom, double * x, int begin, int end) 
+
+\end{lstlisting}
+
+
+\begin{itemize}
+	\item Per quanto riguarda env, cbdata, wherefrom vale la descrizione vista per il metodo myLazyCallBack
+	\item \textbf{x}: Array che al termine del metodo conterrà la soluzione intera del rilassamento continuo.
+	\item \textbf{begin}: Indica l’ indice della prima variabile di cui si vuole conoscere il valore.
+	\item \textbf{end}: Indica l’ indice dell’ ultima variabile di cui si vuole conoscere il valore; poiché vogliamo conoscere il valore di tutte le variabili a begin sarà passato il valore 0 mentre ad end [n*(n-1)/2] – 1.
+\end{itemize}
+
+All' atto dell' invocazione del metodo CPXgetcallbacknodex non viene passato come parametro l' array \textbf{bestLb} contenuto in inst ma viene creato un opportuno array chiamato \textbf{xstar}:
+
+
+\begin{lstlisting}
+
+double *xstar = (double*)malloc(inst->nCols * sizeof(double));
+
+\end{lstlisting}
+
+Risulta necessario far ciò al fine di realizzare un codice che sia thread-safety: poiché inst è un puntatore accessibile a tutti i thread esiste il rischio che più thread contemporaneamente sovrascrivano il contenuto di bestLb ottenendo un bestLb che contiene coordinate appartenenti a soluzioni differenti.
+Ricavata la soluzione è necessario verificare se essa ha al suo interno dei sottocicli e in tal caso procedere con l’ aggiunta dei un vincoli di subtour per ogni subtour. A differenza di quanto fatto in C\#, per determinare i subtour, si è utilizzato Concorde\footnote{ In particolare la funzione CCcut_connect_components } che verrà presentato nel paragrafo successivo: poiché il codice che sfrutta Concorde per il calcolo dei vincoli di subtour si ritrova anche per la user cut callback la sua presentazione è rimandata al paragrafo X.Y.
+Una volta che abbiamo aggiunto tagli, è necessario impostare il parametro *useraction_p al valore CPX_CALLBACK_SET, al fine di comunicare a Cplex che sono stati aggiunti tagli. 
+
+
+\vspace{2\baselineskip}
+MULTI-THREAD
+\vspace{2\baselineskip}
+
+La Usercut callback viene invocata da Cplex ogni volta che la soluzione del rilassamento continuo in un nodo dell' albero decisionale risulta frazionaria; qualora risulti intera viene invocata la Lazy discussa nel paragrafo precedente.  Aggiungere tagli  in un nodo è utile poiché migliora il lower bound rendendo il branch-and-cut più efficace, tuttavia un accumulo eccessivo di tagli peggiora le performance: di questo thread-off si è tenuto conto durante la realizzazione del codice.  
+Ciò che dovremmo andare ad implementare è un separatore che, ricevendo in ingresso la soluzione x* con almeno una componente frazionaria, fornisca in uscita un insieme S \subsetneq{V}, |S| \geq 2 tale per cui:
+
+f1
+
+
+Tale sottoinsieme non è facilmente individuabile come nel caso di soluzione intere in cui era sufficiente individuare le componenti connesse. Per esempio in Figura 3 si è riportato il supporto di una soluzione x* frazionaria ove i lati colorati di rosso, blu e grigio indica che la corrispondente variabile ha come valore 1, 0.5 , 1. 5.
+
+\begin{center}
+\includegraphics[scale=0.5]{SoluzioneFrazionaria}  
+
+Figura 3: Soluzione frazionaria
+\end{center}
+
+Tale grafo risulta connesso; tuttavia è presente un sottoinsieme S = {1,2,3} per cui vale f1.
+
+Una seconda formulazione equivalente di f1 risulta essere la seguente:
+
+f2
+
+Si osserva che il primo membro della disuguaglianza può essere visto come la capacità di una sezione di una rete di flusso se si interpretano le x* come le capacità della rete.
+E' possibile calcolare una sezione di capacità minima risolvendo un problema di max flow che sappiamo essere un problema di programmazione lineare e quindi risolubile utilizzando un algoritmo polinomiale.
+Poichè però la sezione di capacità minima dipende dal nodo sorgente s e dal nodo di destinazione t, si devono in realtà risolvere n-1 problemi di max flow: per tale ragione è stato preferito utilizzare il software ottimizzato Concorde per identificare la sezione di capacità minima quando la soluzione del rilassamento continuo è frazionaria. 
+
+\vspace{2\baselineskip}
+CONCORDE
+\vspace{2\baselineskip}
+
+Concorde è un software, sviluppano in linguaggio c da David Applegate, Robert E. Bixby, Vašek Chvátal, e William J. Cook, specializzato nella risoluzione ottimizzata di istanze del problema del commesso viaggiatore. Concorde risulta un software open source solo se utilizzato a fini accademici e i sorgenti, contenuti in un file zip, sono scaricabili utilizzando il seguente link:
+
+
+
+
+Per poter utilizzare Concorde è stato prima necessario installarlo. In ambiente Windows è necessario importare ogni singolo file .c e .h che appartiene alla distribuzione: al fine di importare il minor numero possibile di file sono stati selezionati e importati solo i file che consentono di utilizzare le funzioni di cui si necessita. I file che si sono inclusi nel progetto sono:
+
+
+\begin{itemize}
+	\item \textbf{allocrus.c}
+	\item \textbf{connect.c}
+	\item \textbf{cut_st.c}
+	\item \textbf{mincut.c}
+	\item \textbf{shrink.c}
+	\item \textbf{sortrus.c}
+	\item \textbf{urandom.c}
+	\item \textbf{cut.h}
+	\item \textbf{machdefs.h}
+	\item \textbf{macrorus.h}
+	\item \textbf{util.h}
+	\item \textbf{end}
+\end{itemize}
+
+Affinché il programma compili, è necessario effettuare le seguenti modifiche:
+
+\begin{itemize}
+	\item \textbf{allocrus.c}: All' interno dei file allocrus.c e util.h è necessario importare tramite il comando import il file malloc.h.
+	\item \textbf{connect.c}: All' interno del file machdefs.h è necessario eliminare l' inclusione al file config.h.
+\end{itemize}
+
+\textit{[….Parlerei direttamente qui della DLL….]}
+
+
+\vspace{2\baselineskip}
+INSTALLAZIONE USERCUT CALLBACK
+\vspace{2\baselineskip}
+
+
+Per installare la usercut callback è necessario utilizzare la routine CPXsetusercutcallbackfunc la cui firma è:
+
+
+\begin{lstlisting}
+
+int CPXsetusercutcallbackfunc (CPXENVptr env, int(*)(CALLBACK_CUT_ARGS) lazyconcallback, void * cbhandle)
+
+\end{lstlisting}
+
+
+
+I parametri sono i medesimi descritti per la funzione CPXsetlazyconstraintcallbackfunc che è necessario comunque installare al fine di garantire la correttezza. Infine è sempre necessario reimpostare in numero di thread al numero di core presenti nel processore utilizzando le note funzioni \textbf{CPXgetnumcores} e \textbf{CPXsetintparam}:
+
+
+\begin{lstlisting}
+
+CPXgetnumcores(env, &nCore);
+	
+CPXsetintparam(env, CPXPARAM_Threads, nCore);
+
+\end{lstlisting}
+
+
+
+\vspace{2\baselineskip}
+FUNZIONE myUserCutCallBack
+\vspace{2\baselineskip}
+
+La funzione che viene invocata da Cplex in corrispondenza di una soluzione frazionaria è stata chiamata myUserCutCallBack: la sua firma, analogamente a quanto visto per la LazyCallBack, ci viene imposta dai progettisti di Cplex.
+
+\begin{lstlisting}
+
+int CPXPUBLIC myUserCutCallBack(CPXCENVptr env, void *cbdata, int wherefrom, void *cbhandle, int *useraction_p)
+
+\end{lstlisting}
+
+II significato dei parametri di ingresso di tale funzione è noto poiché tutti i parametri sono già stati descritti nel paragrafo X.Y. [ sono i medesimi descritti per la myLazyCallBack.]
+
+
+Esattamente quanto visto per la lazy callback, anche qui all' inizio è necessario settare il parametro *useraction_p al valore CPX_CALLBACK_DEFAULT. 
+
+
+Cplex, una volta calcolata una soluzione frazionara genera in automatico dei propri tagli (per esempio di Gomory). Quando il parametro wherefrom risulta pari a CPX_CALLBACK_MIP_CUT_LAST significa che Cplex non genererebbe più tagli e all’ iterazione successiva procederebbe ad effettuare l’operazione di branching: solo in questa condizione risulta conveniente generare vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro wherefrom risulti diverso da CPX_CALLBACK_MIP_CUT_LAST, il metodo effettua un return 0 senza eseguire alcuna operazione, altrimenti come già discusso per la lazy, è necessario recuperare il puntate all’ istanza.
+A livello pratico, come intuitivamente è facile capire, aggiungere ad ogni nodo dell’ albero decisionale dei tagli(i quali si sommano ai tagli che Cplex genera in automatico) risulta una scelta sconsigliata che riduce in maniera drastica le performance di Cplex. Per tale ragione si è deciso di realizzare un codice che aggiunge i vincoli di subtour in un nodo nel quele viene invocata la UserCutCallback con una probabilità p = 0,1. Per realizzare ciò si è ricavato, utilizzando la funzione CPXgetcallbacknodeinfo, l’ indice del nodo sul quale tale funzione è stata invocata e solamente quando il resto della divisione per 10 di tale indice risulta nullo si aggiungono i vincoli al nodo. Successivamente invocando la nota funzione CPXgetcallbacknodex si ottiene la soluzione frazionaria. Prima di procedere con l’ analisi del cuore del metodo, riportiamo il codice fin qui discusso:
+
+
+\begin{lstlisting}
+
+*useraction_p = CPX_CALLBACK_DEFAULT;
+	
+int nodecount = 0;
+CPXgetcallbacknodeinfo(env, cbdata, wherefrom, 0, CPX_CALLBACK_INFO_NODE_DEPTH, &nodecount);
+	
+if (wherefrom == CPX_CALLBACK_MIP_CUT_LAST 
+{
+	instance *inst = (instance*)cbhandle;
+		
+	double *xstar = (double*)malloc(inst->nCols * sizeof(double));
+
+ 	if ((nodecount % 10) != 0))//------------------------------------------------------------------------CORRETA RISPETTO A QUELLA PRESENTE NEL PROGRAMMA
+		return 0;
+
+	if (CPXgetcallbacknodex(env, cbdata, wherefrom, xstar, 0, inst->nCols - 1))
+	{
+		free(comps);
+		free(compscount);
+		free(xstar);
+		free(elist);
+		return 1; 
+		}
+	…
+}
+
+\end{lstlisting}
+
+
+Per aggiungere eventuali vincoli di subtour è necessario invocare in un primo momento la funzione CCcut_connect_components la quale identificare le componenti connesse di una soluzione, essa sia intera o frazionaria. Con il termine identificare si intende che determina per ogni componente quanti e quali nodi da essa costituita.
+
+Illustriamo i parametri che tale funzione riceve in input, si osserva che mentre i primi 4 parametri costituiscono l' effettivo input della funzione i rimanenti 3 sono i parametri che esse setta e quindi possono essere visti come l' output della funzione:
+
+\begin{itemize}
+	\item \textbf{ncount}:rappresenta il numero di nodi del grafo;
+	\item \textbf{econut}:rappresenta il numero di lati del grafo, ossia ncount*(ncount-1)/2
+	\item \textbf{*elist}:vettore avente dimensione 2 * econut. Tale vettore contiene al suo interno tutti i lati del grafo caratterizzati dai nodi sul quale esso incide memorizzati in locazioni consecutive dell’ array. Vedremo in seguito il codice realizzato per popolare questa struttura dati.
+	\item \textbf{*x}:soluzione per la quale si desiderano individuare le componenti connesse
+	\item \textbf{*ncomp}:rappresenta il numero di componenti connesse.
+	\item \textbf{**compscount}:vettore di vettori contenenti il numero di nodi per ciascuna componente connessa, in modo che compscount[i] contenga il numero di nodi presente nell’ i-esima componente connessa
+	\item \textbf{**comps}:vettore di vettori contenenti gli indici dei nodi presenti all' interno delle componenti.
+\end{itemize}
+
+
+Il codice realizzato per popolare elist risulta essere il seguente:
+
+
+\begin{lstlisting}
+
+int loader = 0;
+for (int i = 0; i < inst->nNodes;  i++)
+{
+	for (int j = i + 1; j < inst->nNodes;  j++) 
+	{
+	    elist[loader++] = i;
+	    elist[loader++] = j;
+	}
+}
+
+\end{lstlisting}
+
+Nonostante non fosse necessario, per rendere il codice maggiormente leggibile si è deciso definire variabili e puntatori con il medesimo nome con i quali sono poi utilizzati all’ interno di CCcut_connect_components.
+
+\begin{lstlisting}
+
+int *compscount = (int*)malloc(inst->nMaxCuts * sizeof(int));		
+int *comps = (int*)malloc(inst->nNodes * sizeof(int)); 
+int nLati = ((inst->nNodes - 1)*inst->nNodes / 2);
+int *elist = (int*)malloc((nLati * 2) * sizeof(int));		
+int ncomp; 
+
+\end{lstlisting}
+
+
+\begin{lstlisting}
+if (CCcut_connect_components(inst->nNodes, nLati, elist, xstar, &ncomp, &compscount, &comps))
+printError(" error in CCcut_connect_components() inside fractcutusercallback");
+\end{lstlisting}
+ 
+Utilizzando i vettori ncomp compscount, comps è stato possibile realizzare un codice in grado di definire i vincoli di subtour per ogni componente connessa e successivamente di inserirli nel pool dei tagli tramite la funzione \textbf{CPXcutcallbackadd} la cui firma è:
+
+\begin{lstlisting}
+
+CPXcutcallbackadd(CPXCENVptr env,void * cbdata,int  wherefrom,int  nzcnt, double  rhs,int sense,int cutind,double const *  cutval, int purgeable);
+
+\end{lstlisting}
+
+
+\begin{itemize}
+	\item \textbf{env,cbdata,wherefrom}: Questi sono parametri noti già discussi nella callback myLazyCallback
+	\item \textbf{nzcnt}:Numero di coefficienti diversi da zero del vincolo
+	\item \textbf{rhs}:Definisce il termine noto del vincolo
+	\item \textbf{sense}:Può assumere i seguenti valori:
+
+
+	\item \textbf{cutind}:Array di  nzcnt elementi contenenti gli indici delle variabili presenti nel vincolo
+	\item \textbf{cutval}:Array di  nzcnt elementi contenenti i corrispondenti valori dei coefficienti
+	\item \textbf{purgeable}:Valore intero che specifica come Cplex tratta il taglio,i possibili valore che possono essere passati in input sono:
+	
+	\begin{itemize}
+	\item \textbf{CPX_USECUT_FORCE}:Il taglio una volta aggiunto al rilassamento non può essere più rimosso
+	\item \textbf{CPX_USECUT_PURGE}:Il taglio è aggiunto al rilassamento ma può essere eliminato in un secondo momento se giudicato inefficiente
+	\item \textbf{CPX_USECUT_FILTER}: Il taglio viene trattato come un taglio generato da Cplex il quale prima di aggiungerlo al rilassamento lo analizza e può decidere di non inserirlo 
+	nel rilassamento(per esempio è già presente un taglio più efficiente)
+	
+	\end{itemize}
+
+    
+\end{itemize}
+
+Per aggiungere un taglio per ogni componente connessa è stato necessario popolare i vettori cutval, cutind e la variabile nzcnt opportunamente sfruttando le informazioni contenute in compscount, comps. Per stabilire quali nodi appartengono alla t-esima componente connessa si sono dichiarate due variabili intere k1,k2 che contengono sistematicamente l' indice del primo e dell' ultimo nodo dei nodi appartenenti alla t-esima componente connessa memorizzati in comps. Si osserva che k2 è stato dichiarato pari a -1 poichè gli indici all' interno dell' array parto da 0. 
+
+\begin{lstlisting}
+
+	if (ncomp > 1)
+		{
+			int k1 = 0;
+			int k2 = -1;
+
+			for (int c = 0; c < ncomp; c++)
+			{
+				int dimIndexValue = compscount[c] * (compscount[c] - 1) / 2; 
+				int *cutind = (int*)malloc(dimIndexValue * sizeof(int));
+				double *cutval = (double*)malloc(dimIndexValue * sizeof(double));
+				int nzcnt = 0;
+
+				
+				k2 += compscount[c];
+
+				for (int i = k1; i < k2; i++)
+				{
+					for (int j = i + 1; j <= k2; j++)
+					{
+						cutval[nzcnt] = 1.0;
+						cutind[nzcnt] = xPos(comps[i], comps[j], inst);
+						nzcnt++;
+					}
+				}
+
+				k1 = k2 + 1;	
+				
+				CPXcutcallbackadd(env, cbdata, wherefrom, nzcnt, compscount[c] - 1, 'L', cutind, cutval, CPX_USECUT_FORCE);
+
+				*useraction_p = CPX_CALLBACK_SET; 
+				free(cutind);
+				free(cutval);
+			}
+
+			free(elist);
+			free(comps);
+			free(compscount);
+			free(xstar);
+
+
+			return 0;
+		}
+
+\end{lstlisting}
+
+
+Nel caso in cui la soluzione presenta una sola componente connessa, come in Fig. X, invocando la funzione \textbf{CCcut_violated_cuts} di Concorde è possibile individuare gli insiemi S che soddisfino la disuguaglianza (f2) : una volta individuato S risulta banale inserire il relativo vincolo di subtour. In particolare CCcut_violated_cuts è una funzione in grado di individuare sezioni di capacità inferiori ad una certa soglia. Descriviamo i 7 parametri che tale funzione riceve in input, si osserva che a differenza della funzione CCcut_connect_components i parametri sono effettivamente tutti di input:
+
+
+\begin{itemize}
+	\item \textbf{ncount}: int ecount, int *elist: Il loro significato è già stato descritto per la CCcut_connect_components
+	\item \textbf{dlen}: vettore contenente la capacità di ogni lato. 
+	\item \textbf{cutoff}:[Questo è il termine noto della disequazione f2, non ho capito perchè devo togliere a 2 un EPSILON, così è scritto nel pdf condiviso dal prof che si chiama 		RO2_TSPutilities]
+	\item \textbf{(*(doit_fn)(double,int,int *,void *) }:La peculiarità di questa funzione è rappresentata dal fatto che, quando viene invocata, viene installata una callback, il cui nome è rappresentato dal valore di questo parametro, che sarà evocata da Concorde tutte le volte che quest' ultimo individua un sottoinsieme S che soddisfa f2. Si osserva che i parametri di ingresso della callback, che si è chiamata doitFuncConcorde, sono stabiliti dai programmatori che hanno realizzato Concorde poiché essa viene invocata all' interno del codice da essi realizzato: sfruttando tali parametri all' interno di doitFuncConcorde si inserirà il relativo taglio al nodo. Tale parametri possono considerarsi l' output della funzione.
+	\item \textbf{pass_param}:puntatore alla struttura dati, di tipo InputCC, contenente variabili e puntatori che devono essere accessibili all’ interno della callback 
+\end{itemize}
+
+Poiché all' interno della callback si desidera aggiungere tagli, per poterlo fare si ha la necessità di accedere alle variabili e puntatori che la funzione CPXcutcallbackadd richiede come parametri di ingresso. Per tale ragione la struttura inputCC contiene al suo interno le seguenti variabili e puntatori tutti ampliamente descritti nei paragrafi precedenti:
+
+\begin{lstlisting}
+
+typedef struct 
+{ 
+	instance *inst;
+	CPXCENVptr env;
+	void *cbdata;
+	int wherefrom;
+	int *useraction_p;
+} inputCC;
+
+
+\end{lstlisting}
+
+
+Passiamo ad analizzare il codice di doitFuncConcorde, la cui intestazione è:
+
+\begin{lstlisting}
+
+int doitFuncConcorde(double cutValue, int cutcount, int *cut, void *inParam)
+
+\end{lstlisting}
+
+dove:
+
+\begin{itemize}
+	\item \textbf{cutValue}: Rappresenta il valore del taglio,
+	\item \textbf{cutcount}: Rappresenta il numero dei nodi,
+	\item \textbf{cut}: Array contenente l' indice associato ai nodi,
+	\item \textbf{inParam}:struttura dati passata in input dal programmatore esterno.
+\end{itemize}
+
+Come ormai è noto, è necessario recuperare il puntatore alla struttura dati fornita in input alla callback:
+
+\begin{lstlisting}
+
+inputCC *in = (inputCC*)inParam;
+
+\end{lstlisting}
+
+Per aggiungere il taglio è necessario utilizzare la funzione CPXcutcallbackadd: si sono così definiti due array di interi cutind e cutval contenenti rispettivamente gli indici delle variabili che costituiscono il taglio e il relativo coefficiente. Si è inoltre dichiarata una variabile intera nzcnt che contiene il numero di variabili che partecipano taglio. 
+
+\begin{lstlisting}
+
+int dimIndexValue = inst->nNodes * (inst->nNodes - 1) / 2; 
+
+int *cutind = (int*)malloc(dimIndexValue * sizeof(int));
+double *cutval = (double*)malloc(dimIndexValue * sizeof(double));
+\end{lstlisting}
+
+
+Poiché il taglio è composto dalle variabili associate ai lati aventi entrambi gli estremi in S, l’ indice di tutte le variabili è ricavabile utilizzando la funzione xPos la quale riceve in input ad ogni iterazione un lati [i,j] con i<j e i,j nodi contenuti in cut. 
+
+\begin{lstlisting}
+
+int nzcnt = 0;
+
+	for (int i = 0; i < cutcount - 1; i++)
+	{
+		for (int j = i + 1; j <= cutcount - 1; j++)
+		{
+			int n1 = cut[i];
+			int n2 = cut[j];
+			cutind[nzcnt] = xPos(n1, n2, inst);
+			cutval[nzcnt] = 1.0;
+			nzcnt++;
+		}
+	}
+CPXcutcallbackadd(in->env, in->cbdata, in->wherefrom, nzcnt, cutcount - 1, 'L', cutind, cutval, CPX_USECUT_FORCE);
+
+*in->useraction_p = CPX_CALLBACK_SET;
+
+free(cutind);
+free(cutval);
+
+return 0;
+
+\end{lstlisting}
 
 \end{document}
