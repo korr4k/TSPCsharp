@@ -14,12 +14,12 @@ namespace TSPCsharp
         private Instance instance;
         private Process process;
 
-        public TSPLazyConsCallback(Cplex cplex, Instance instace, Process process, INumVar[] z, bool BlockPrint)
+        public TSPLazyConsCallback(Cplex cplex, INumVar[] z, Instance instance, Process process, bool BlockPrint)
         {
             this.cplex = cplex;
             this.z = z;
             this.BlockPrint = BlockPrint;
-            this.instance = instace;
+            this.instance = instance;
             this.process = process;
         }
 
@@ -59,7 +59,7 @@ namespace TSPCsharp
                     if (actualZ[position] >= 0.5)
                     {
                         //Updating the model with the current subtours elimination
-                        BuildCC(i, j, ccExprLC, bufferCoeffCCLC, compConnLC);
+                        Utility.UpdateCC(cplex, z, ccExprLC, bufferCoeffCCLC, compConnLC, i, j);
 
                         if (BlockPrint)
                         {
@@ -76,13 +76,16 @@ namespace TSPCsharp
                 fileLC.Close();
             }
 
+            string fileName = instance.InputFile + "_" + nodeId;
+
             //Accessing GNUPlot to read the file
             if (BlockPrint)
-                Utility.PrintGNUPlot(process, instance.InputFile + "_" + nodeId, 1, GetIncumbentObjValue(), GetBestObjValue());
+                Utility.PrintGNUPlot(process, fileName, 1, GetIncumbentObjValue(), GetBestObjValue());
 
-            //cuts will stores the user's cut
+            //cuts stores the user's cut
             IRange[] cuts = new IRange[ccExprLC.Count];
 
+            //if cuts.Length is 1 the graph has only one tour then cuts aren't needed
             if (cuts.Length > 1)
             {
                 for (int i = 0; i < cuts.Length; i++)
@@ -91,50 +94,6 @@ namespace TSPCsharp
                     Add(cuts[i], 1);
                 }
             }
-        }
-        
-        internal void BuildCC(int i, int j, List<ILinearNumExpr> ccExprLC, List<int> bufferCoeffCCLC, int[] compConnLC)
-        {
-            if (compConnLC[i] != compConnLC[j])//Same related component, the latter is not closed yet
-            {
-                for (int k = 0; k < compConnLC.Length; k++)// k>i poichè i > i
-                {
-                    if ((k != j) && (compConnLC[k] == compConnLC[j]))
-                    {
-                        //Same as Kruskal
-                        compConnLC[k] = compConnLC[i];
-                    }
-                }
-
-                //Finally also the vallue relative to the Point i are updated
-                compConnLC[j] = compConnLC[i];
-            }
-            else//Here the current releted component is complete and the relative subtout elimination constraint can be added to the model
-            {
-                ILinearNumExpr expr = cplex.LinearNumExpr();
-
-                int cnt = 0;
-
-                for (int h = 0; h < compConnLC.Length; h++)
-                {
-                    if (compConnLC[h] == compConnLC[i])
-                    {
-                        for (int k = h + 1; k < compConnLC.Length; k++)
-                        {
-                            if (compConnLC[k] == compConnLC[i])
-                            {
-                                expr.AddTerm(z[Utility.zPos(h, k, compConnLC.Length)], 1);
-                            }
-                        }
-
-                        cnt++;
-                    }
-                }
-
-                ccExprLC.Add(expr);
-                bufferCoeffCCLC.Add(cnt);
-            }
-
         }
     }
 }

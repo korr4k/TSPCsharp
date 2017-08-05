@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.8.1)  1 AUG 2017 17:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.8.1)  5 AUG 2017 12:40
 entering extended mode
 **./Tesi.tex
 (Tesi.tex
@@ -25,6 +25,331 @@ File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 Package: fullpage 1999/02/23 1.1 (PWD)
 \FP@margin=\skip43
 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2017/01/28 v1.1t UTF-8 support for inputenc
+Now handling font encoding OML ...
+... no UTF-8 mapping file for font encoding OML
+Now handling font encoding T1 ...
+... processing UTF-8 mapping file for font encoding T1
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1enc.dfu"
+File: t1enc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AB (decimal 171)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00BB (decimal 187)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C0 (decimal 192)
+   defining Unicode char U+00C1 (decimal 193)
+   defining Unicode char U+00C2 (decimal 194)
+   defining Unicode char U+00C3 (decimal 195)
+   defining Unicode char U+00C4 (decimal 196)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00C7 (decimal 199)
+   defining Unicode char U+00C8 (decimal 200)
+   defining Unicode char U+00C9 (decimal 201)
+   defining Unicode char U+00CA (decimal 202)
+   defining Unicode char U+00CB (decimal 203)
+   defining Unicode char U+00CC (decimal 204)
+   defining Unicode char U+00CD (decimal 205)
+   defining Unicode char U+00CE (decimal 206)
+   defining Unicode char U+00CF (decimal 207)
+   defining Unicode char U+00D0 (decimal 208)
+   defining Unicode char U+00D1 (decimal 209)
+   defining Unicode char U+00D2 (decimal 210)
+   defining Unicode char U+00D3 (decimal 211)
+   defining Unicode char U+00D4 (decimal 212)
+   defining Unicode char U+00D5 (decimal 213)
+   defining Unicode char U+00D6 (decimal 214)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00D9 (decimal 217)
+   defining Unicode char U+00DA (decimal 218)
+   defining Unicode char U+00DB (decimal 219)
+   defining Unicode char U+00DC (decimal 220)
+   defining Unicode char U+00DD (decimal 221)
+   defining Unicode char U+00DE (decimal 222)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E0 (decimal 224)
+   defining Unicode char U+00E1 (decimal 225)
+   defining Unicode char U+00E2 (decimal 226)
+   defining Unicode char U+00E3 (decimal 227)
+   defining Unicode char U+00E4 (decimal 228)
+   defining Unicode char U+00E5 (decimal 229)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00E7 (decimal 231)
+   defining Unicode char U+00E8 (decimal 232)
+   defining Unicode char U+00E9 (decimal 233)
+   defining Unicode char U+00EA (decimal 234)
+   defining Unicode char U+00EB (decimal 235)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F0 (decimal 240)
+   defining Unicode char U+00F1 (decimal 241)
+   defining Unicode char U+00F2 (decimal 242)
+   defining Unicode char U+00F3 (decimal 243)
+   defining Unicode char U+00F4 (decimal 244)
+   defining Unicode char U+00F5 (decimal 245)
+   defining Unicode char U+00F6 (decimal 246)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+00F9 (decimal 249)
+   defining Unicode char U+00FA (decimal 250)
+   defining Unicode char U+00FB (decimal 251)
+   defining Unicode char U+00FC (decimal 252)
+   defining Unicode char U+00FD (decimal 253)
+   defining Unicode char U+00FE (decimal 254)
+   defining Unicode char U+00FF (decimal 255)
+   defining Unicode char U+0100 (decimal 256)
+   defining Unicode char U+0101 (decimal 257)
+   defining Unicode char U+0102 (decimal 258)
+   defining Unicode char U+0103 (decimal 259)
+   defining Unicode char U+0104 (decimal 260)
+   defining Unicode char U+0105 (decimal 261)
+   defining Unicode char U+0106 (decimal 262)
+   defining Unicode char U+0107 (decimal 263)
+   defining Unicode char U+0108 (decimal 264)
+   defining Unicode char U+0109 (decimal 265)
+   defining Unicode char U+010A (decimal 266)
+   defining Unicode char U+010B (decimal 267)
+   defining Unicode char U+010C (decimal 268)
+   defining Unicode char U+010D (decimal 269)
+   defining Unicode char U+010E (decimal 270)
+   defining Unicode char U+010F (decimal 271)
+   defining Unicode char U+0110 (decimal 272)
+   defining Unicode char U+0111 (decimal 273)
+   defining Unicode char U+0112 (decimal 274)
+   defining Unicode char U+0113 (decimal 275)
+   defining Unicode char U+0114 (decimal 276)
+   defining Unicode char U+0115 (decimal 277)
+   defining Unicode char U+0116 (decimal 278)
+   defining Unicode char U+0117 (decimal 279)
+   defining Unicode char U+0118 (decimal 280)
+   defining Unicode char U+0119 (decimal 281)
+   defining Unicode char U+011A (decimal 282)
+   defining Unicode char U+011B (decimal 283)
+   defining Unicode char U+011C (decimal 284)
+   defining Unicode char U+011D (decimal 285)
+   defining Unicode char U+011E (decimal 286)
+   defining Unicode char U+011F (decimal 287)
+   defining Unicode char U+0120 (decimal 288)
+   defining Unicode char U+0121 (decimal 289)
+   defining Unicode char U+0122 (decimal 290)
+   defining Unicode char U+0123 (decimal 291)
+   defining Unicode char U+0124 (decimal 292)
+   defining Unicode char U+0125 (decimal 293)
+   defining Unicode char U+0128 (decimal 296)
+   defining Unicode char U+0129 (decimal 297)
+   defining Unicode char U+012A (decimal 298)
+   defining Unicode char U+012B (decimal 299)
+   defining Unicode char U+012C (decimal 300)
+   defining Unicode char U+012D (decimal 301)
+   defining Unicode char U+012E (decimal 302)
+   defining Unicode char U+012F (decimal 303)
+   defining Unicode char U+0130 (decimal 304)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0132 (decimal 306)
+   defining Unicode char U+0133 (decimal 307)
+   defining Unicode char U+0134 (decimal 308)
+   defining Unicode char U+0135 (decimal 309)
+   defining Unicode char U+0136 (decimal 310)
+   defining Unicode char U+0137 (decimal 311)
+   defining Unicode char U+0139 (decimal 313)
+   defining Unicode char U+013A (decimal 314)
+   defining Unicode char U+013B (decimal 315)
+   defining Unicode char U+013C (decimal 316)
+   defining Unicode char U+013D (decimal 317)
+   defining Unicode char U+013E (decimal 318)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0143 (decimal 323)
+   defining Unicode char U+0144 (decimal 324)
+   defining Unicode char U+0145 (decimal 325)
+   defining Unicode char U+0146 (decimal 326)
+   defining Unicode char U+0147 (decimal 327)
+   defining Unicode char U+0148 (decimal 328)
+   defining Unicode char U+014A (decimal 330)
+   defining Unicode char U+014B (decimal 331)
+   defining Unicode char U+014C (decimal 332)
+   defining Unicode char U+014D (decimal 333)
+   defining Unicode char U+014E (decimal 334)
+   defining Unicode char U+014F (decimal 335)
+   defining Unicode char U+0150 (decimal 336)
+   defining Unicode char U+0151 (decimal 337)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0154 (decimal 340)
+   defining Unicode char U+0155 (decimal 341)
+   defining Unicode char U+0156 (decimal 342)
+   defining Unicode char U+0157 (decimal 343)
+   defining Unicode char U+0158 (decimal 344)
+   defining Unicode char U+0159 (decimal 345)
+   defining Unicode char U+015A (decimal 346)
+   defining Unicode char U+015B (decimal 347)
+   defining Unicode char U+015C (decimal 348)
+   defining Unicode char U+015D (decimal 349)
+   defining Unicode char U+015E (decimal 350)
+   defining Unicode char U+015F (decimal 351)
+   defining Unicode char U+0160 (decimal 352)
+   defining Unicode char U+0161 (decimal 353)
+   defining Unicode char U+0162 (decimal 354)
+   defining Unicode char U+0163 (decimal 355)
+   defining Unicode char U+0164 (decimal 356)
+   defining Unicode char U+0165 (decimal 357)
+   defining Unicode char U+0168 (decimal 360)
+   defining Unicode char U+0169 (decimal 361)
+   defining Unicode char U+016A (decimal 362)
+   defining Unicode char U+016B (decimal 363)
+   defining Unicode char U+016C (decimal 364)
+   defining Unicode char U+016D (decimal 365)
+   defining Unicode char U+016E (decimal 366)
+   defining Unicode char U+016F (decimal 367)
+   defining Unicode char U+0170 (decimal 368)
+   defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0172 (decimal 370)
+   defining Unicode char U+0173 (decimal 371)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0178 (decimal 376)
+   defining Unicode char U+0179 (decimal 377)
+   defining Unicode char U+017A (decimal 378)
+   defining Unicode char U+017B (decimal 379)
+   defining Unicode char U+017C (decimal 380)
+   defining Unicode char U+017D (decimal 381)
+   defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+01CD (decimal 461)
+   defining Unicode char U+01CE (decimal 462)
+   defining Unicode char U+01CF (decimal 463)
+   defining Unicode char U+01D0 (decimal 464)
+   defining Unicode char U+01D1 (decimal 465)
+   defining Unicode char U+01D2 (decimal 466)
+   defining Unicode char U+01D3 (decimal 467)
+   defining Unicode char U+01D4 (decimal 468)
+   defining Unicode char U+01E2 (decimal 482)
+   defining Unicode char U+01E3 (decimal 483)
+   defining Unicode char U+01E6 (decimal 486)
+   defining Unicode char U+01E7 (decimal 487)
+   defining Unicode char U+01E8 (decimal 488)
+   defining Unicode char U+01E9 (decimal 489)
+   defining Unicode char U+01EA (decimal 490)
+   defining Unicode char U+01EB (decimal 491)
+   defining Unicode char U+01F0 (decimal 496)
+   defining Unicode char U+01F4 (decimal 500)
+   defining Unicode char U+01F5 (decimal 501)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+0232 (decimal 562)
+   defining Unicode char U+0233 (decimal 563)
+   defining Unicode char U+1E02 (decimal 7682)
+   defining Unicode char U+1E03 (decimal 7683)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2010 (decimal 8208)
+   defining Unicode char U+2011 (decimal 8209)
+   defining Unicode char U+2012 (decimal 8210)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2015 (decimal 8213)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201A (decimal 8218)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+   defining Unicode char U+201E (decimal 8222)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+2039 (decimal 8249)
+   defining Unicode char U+203A (decimal 8250)
+   defining Unicode char U+2423 (decimal 9251)
+   defining Unicode char U+1E20 (decimal 7712)
+   defining Unicode char U+1E21 (decimal 7713)
+)
+Now handling font encoding OT1 ...
+... processing UTF-8 mapping file for font encoding OT1
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ot1enc.dfu"
+File: ot1enc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00B8 (decimal 184)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+)
+Now handling font encoding OMS ...
+... processing UTF-8 mapping file for font encoding OMS
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omsenc.dfu"
+File: omsenc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+)
+Now handling font encoding OMX ...
+... no UTF-8 mapping file for font encoding OMX
+Now handling font encoding U ...
+... no UTF-8 mapping file for font encoding U
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+02C6 (decimal 710)
+   defining Unicode char U+02DC (decimal 732)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2026 (decimal 8230)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2423 (decimal 9251)
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1enc.def"
+File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\mathtools\empheq.sty"
 Package: empheq 2017/03/31 v2.15 Emphasizing equations
 
@@ -36,7 +361,7 @@ Package: mathtools 2017/05/24 v1.19 mathematical typesetting tools
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
+\KV@toks@=\toks16
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\calc.sty"
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
@@ -61,7 +386,7 @@ Package: amstext 2000/06/29 v2.01 AMS text
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks15
+\@emptytoks=\toks17
 \ex@=\dimen105
 ))
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
@@ -91,21 +416,21 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \dotsspace@=\muskip10
 \c@parentequation=\count97
 \dspbrk@lvl=\count98
-\tag@help=\toks16
+\tag@help=\toks18
 \row@=\count99
 \column@=\count100
 \maxfields@=\count101
-\andhelp@=\toks17
+\andhelp@=\toks19
 \eqnshift@=\dimen108
 \alignsep@=\dimen109
 \tagshift@=\dimen110
 \tagwidth@=\dimen111
 \totwidth@=\dimen112
 \lineht@=\dimen113
-\@envbody=\toks18
+\@envbody=\toks20
 \multlinegap=\skip48
 \multlinetaggap=\skip49
-\mathdisplay@stack=\toks19
+\mathdisplay@stack=\toks21
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
 )
@@ -153,7 +478,7 @@ File: pdftex.def 2017/06/24 v1.0g Graphics/color driver for pdftex
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.sty"
 \lst@mode=\count107
 \lst@gtempboxa=\box30
-\lst@token=\toks20
+\lst@token=\toks22
 \lst@length=\count108
 \lst@currlwidth=\dimen130
 \lst@column=\count109
@@ -237,6 +562,8 @@ Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
 File: pd1enc.def 2017/03/14 v6.85a Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
 )
 \Hy@SavedSpaceFactor=\count117
 
@@ -305,13 +632,13 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
 \LT@rows=\count127
 \c@LT@tables=\count128
 \c@LT@chunks=\count129
-\LT@p@ftn=\toks21
+\LT@p@ftn=\toks23
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\array.sty"
 Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
 \col@sep=\dimen139
 \extrarowheight=\dimen140
-\NC@list=\toks22
+\NC@list=\toks24
 \extratabsurround=\skip56
 \backup@length=\skip57
 )
@@ -330,7 +657,7 @@ Package: tabularx 2016/02/03 v2.11 `tabularx' package (DPC)
 \TX@target=\dimen144
 \TX@delta=\dimen145
 \TX@cols=\count130
-\TX@ftn=\toks23
+\TX@ftn=\toks25
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
@@ -346,7 +673,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \labelindent=\skip58
 \enit@outerparindent=\dimen146
-\enit@toks=\toks24
+\enit@toks=\toks26
 \enit@inbox=\box36
 \enitdp@description=\count131
 )
@@ -385,6 +712,8 @@ Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tipa\t3enc.def"
 File: t3enc.def 2001/12/31 T3 encoding
+Now handling font encoding T3 ...
+... no UTF-8 mapping file for font encoding T3
 LaTeX Font Info:    Try loading font information for T1+cmss on input line 357.
 
 
@@ -400,26 +729,26 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 ) (Tesi.aux)
 \openout1 = `Tesi.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 78.
-LaTeX Font Info:    Try loading font information for T3+cmr on input line 78.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 82.
+LaTeX Font Info:    Try loading font information for T3+cmr on input line 82.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tipa\t3cmr.fd"
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    ... okay on input line 82.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
@@ -445,12 +774,12 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 \scratchbox=\box37
 \nofMPsegments=\count138
 \nofMParguments=\count139
-\everyMPshowfont=\toks25
+\everyMPshowfont=\toks27
 \MPscratchCnt=\count140
 \MPscratchDim=\dimen164
 \MPnumerator=\count141
 \makeMPintoPDFobject=\count142
-\everyMPtoPDFconversion=\toks26
+\everyMPtoPDFconversion=\toks28
 ) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -466,7 +795,7 @@ G,.JBIG2,.JB2,.eps]
 )
 \c@lstlisting=\count143
 \AtBeginShipoutBox=\box38
-Package hyperref Info: Link coloring OFF on input line 78.
+Package hyperref Info: Link coloring OFF on input line 82.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -476,33 +805,33 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count144
 )
-LaTeX Info: Redefining \ref on input line 78.
-LaTeX Info: Redefining \pageref on input line 78.
-LaTeX Info: Redefining \nameref on input line 78.
+LaTeX Info: Redefining \ref on input line 82.
+LaTeX Info: Redefining \pageref on input line 82.
+LaTeX Info: Redefining \nameref on input line 82.
 
 (Tesi.out) (Tesi.out)
 \@outlinefile=\write3
 \openout3 = `Tesi.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 99.
+LaTeX Font Info:    Try loading font information for U+msa on input line 103.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 99.
+LaTeX Font Info:    Try loading font information for U+msb on input line 103.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/Corrado/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Overfull \hbox (6.88007pt too wide) in paragraph at lines 116--117
+Overfull \hbox (6.88007pt too wide) in paragraph at lines 120--121
 []\T1/cmr/m/n/10.95 Nella sua for-mal-iz-zazione più gen-erale, il prob-lema de
 l Commesso Vi-ag-gia-tore con-siste nell'individuare
  []
 
 
-Overfull \hbox (28.60007pt too wide) in paragraph at lines 116--117
+Overfull \hbox (9.24182pt too wide) in paragraph at lines 120--121
 \T1/cmr/m/n/10.95 un cir-cuito hamil-to-ni-ano di costo min-imo per un dato gra
 fo ori-en-tato $\OML/cmm/m/it/10.95 G \OT1/cmr/m/n/10.95 = (\OML/cmm/m/it/10.95
  V; A\OT1/cmr/m/n/10.95 )$\T1/cmr/m/n/10.95 , dove $\OML/cmm/m/it/10.95 V \OT1/
@@ -513,162 +842,174 @@ cmr/m/n/10.95 =$\T1/cmr/m/n/10.95 {$[]$}$$
 <subtour.jpg, id=25, 480.5955pt x 337.26pt>
 File: subtour.jpg Graphic file (type jpg)
 <use subtour.jpg>
-Package pdftex.def Info: subtour.jpg  used on input line 146. on input line 146
+Package pdftex.def Info: subtour.jpg  used on input line 150. on input line 150
 .
 Package pdftex.def Info: Requested size: 240.29716pt x 168.62958pt on input lin
-e 146.
+e 150.
  [3 <./subtour.jpg>] [4]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 203.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 207.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 203.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 232.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 207.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 236.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 ) [5]
-Underfull \hbox (badness 1127) in paragraph at lines 284--284
+Underfull \hbox (badness 1127) in paragraph at lines 288--288
 []\T1/cmr/m/n/10.95 Rappresenta il nome del file di in-put
  []
 
 
-Underfull \hbox (badness 2961) in paragraph at lines 284--284
+Underfull \hbox (badness 2961) in paragraph at lines 288--288
 \T1/cmr/m/n/10.95 con-te-nente l'istanza del prob-lema del
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 285--285
+Underfull \hbox (badness 10000) in paragraph at lines 289--289
 []\T1/cmr/m/n/10.95 Rappresenta i sec-ondi trascorsi
  []
 
 
-Underfull \vbox (badness 10000) detected at line 292
+Underfull \vbox (badness 10000) detected at line 296
  []
 
 [6] [7] [8]
-Overfull \hbox (6.3698pt too wide) in paragraph at lines 340--340
+Overfull \hbox (6.3698pt too wide) in paragraph at lines 344--344
  \T1/cmr/m/n/10.95 TICKS_PER_SECOND 
  []
 
-[9] [10] [11] [12] [13]
-Overfull \hbox (17.72476pt too wide) in paragraph at lines 610--611
+[9] [10] [11] [12] [13] [14]
+Overfull \hbox (17.72476pt too wide) in paragraph at lines 614--615
 \T1/cmr/bx/n/10.95 ment \T1/cmr/m/n/10.95 di Cplex uti-liz-zando la fun-zione \
 T1/cmr/bx/n/10.95 CPX-openC-PLEX \T1/cmr/m/n/10.95 la quale ri-torna un pun-ta-
 tore all'environment
  []
 
-[14]
-Underfull \hbox (badness 10000) in paragraph at lines 643--644
+
+Underfull \hbox (badness 10000) in paragraph at lines 647--648
 
  []
 
 [15]
-Underfull \hbox (badness 10000) in paragraph at lines 672--673
+Underfull \hbox (badness 10000) in paragraph at lines 676--677
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 674--677
+Underfull \hbox (badness 10000) in paragraph at lines 678--681
 
  []
 
 [16]
-Underfull \hbox (badness 10000) in paragraph at lines 704--705
+Underfull \hbox (badness 10000) in paragraph at lines 708--709
 
  []
 
 [17] [18] [19]
-Overfull \hbox (17.23354pt too wide) in paragraph at lines 859--860
+Overfull \hbox (17.23354pt too wide) in paragraph at lines 863--864
 []\T1/cmr/m/n/10.95 Spiegato come è pos-si-bile creare un mod-ello C# risulta c
 om-pren-si-bile la scelta di re-al-iz-zare un'opportuna
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 873--874
+Underfull \hbox (badness 10000) in paragraph at lines 877--878
 
  []
 
 [20]
-Underfull \hbox (badness 10000) in paragraph at lines 913--919
+Underfull \hbox (badness 10000) in paragraph at lines 917--923
 
  []
 
 
-Overfull \hbox (5.06567pt too wide) in paragraph at lines 920--923
+Overfull \hbox (5.06567pt too wide) in paragraph at lines 924--927
 []\T1/cmr/m/n/10.95 Per poter im-ple-mentare il metodo Loop risulta quindi ev-i
 -dente la ne-ces-sità di svilup-pare un'opportuna
  []
 
-[21] [22] [23] [24]
-<Callback.jpg, id=387, 376.40625pt x 140.32425pt>
+[21] [22] [23] [24] [25]
+<Callback.jpg, id=413, 376.40625pt x 140.32425pt>
 File: Callback.jpg Graphic file (type jpg)
 <use Callback.jpg>
-Package pdftex.def Info: Callback.jpg  used on input line 1076. on input line 1
-076.
+Package pdftex.def Info: Callback.jpg  used on input line 1079. on input line 1
+079.
 Package pdftex.def Info: Requested size: 188.20265pt x 70.16194pt on input line
- 1076.
- [25] [26 <./Callback.jpg>] [27] [28]
-Overfull \hbox (63.04808pt too wide) in paragraph at lines 1216--1217
-\T1/cmr/m/n/10.95 ag-giungerlo al mod-ello Ã¨ nec-es-sario uti-liz-zare il meto
-do Add ered-i-tato dalla classe Cplex.LazyConstraintCallback,
+ 1079.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1084--1085
+
  []
 
-[29] [30] [31]
-Overfull \hbox (49.33167pt too wide) in paragraph at lines 1361--1362
-[]\T1/cmr/m/n/10.95 Successivamente Ã¨ nec-es-sario as-seg-nare al parametro *u
-ser-ac-tion_p il val-ore CPX_CALLBACK_DEFAULT. 
+
+Overfull \hbox (2.62569pt too wide) in paragraph at lines 1088--1089
+[]\T1/cmr/m/n/10.95 Maggiore è il nu-mero di vin-coli che an-di-amo ad in-serir
+e, mag-giore di-venta il tempo di risoluzione
  []
 
-[32]
-<SoluzioneFrazionaria.jpg, id=531, 417.9615pt x 373.395pt>
+[26 <./Callback.jpg>] [27] [28] [29]
+<SoluzioneFrazionaria.jpg, id=462, 417.9615pt x 373.395pt>
 File: SoluzioneFrazionaria.jpg Graphic file (type jpg)
 <use SoluzioneFrazionaria.jpg>
-Package pdftex.def Info: SoluzioneFrazionaria.jpg  used on input line 1407. on 
-input line 1407.
+Package pdftex.def Info: SoluzioneFrazionaria.jpg  used on input line 1201. on 
+input line 1201.
 Package pdftex.def Info: Requested size: 208.98024pt x 186.69704pt on input lin
-e 1407.
- [33 <./SoluzioneFrazionaria.jpg>] [34]
-Overfull \hbox (15.65222pt too wide) in paragraph at lines 1506--1508
-\T1/cmr/m/n/10.95 pio di Go-mory). Quando il parametro where-from risulta pari 
-a CPX_CALLBACK_MIP_CUT_LAST
+e 1201.
+ [30 <./SoluzioneFrazionaria.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 1221--1222
+
  []
 
-[35]
-Overfull \hbox (136.00761pt too wide) in paragraph at lines 1523--1524
-[][][][][][][][][][][][][][] 
+[31] [32]
+Overfull \hbox (75.07999pt too wide) in paragraph at lines 1313--1314
+[]\T1/cmr/m/n/10.95 Successivamente è nec-es-sario as-seg-nare al parametro \T1
+/cmr/bx/n/10.95 *user-ac-tion_p \T1/cmr/m/n/10.95 il val-ore \T1/cmr/bx/n/10.95
+ CPX_CALLBACK_DEFAULT\T1/cmr/m/n/10.95 . 
  []
 
-[36] [37] [38]
-Overfull \hbox (59.0384pt too wide) in paragraph at lines 1675--1676
-[]\T1/cmr/bx/n/10.95 ncount\T1/cmr/m/n/10.95 : int ecount, int *elist: Il loro 
-sig-ni-fi-cato Ã¨ giÃ  stato de-scritto per la CC-cut_connect_components 
+
+LaTeX Warning: Command \textendash invalid in math mode on input line 1332.
+
+[33]
+Underfull \hbox (badness 6510) in paragraph at lines 1350--1350
+[][][]\T1/cmr/m/n/9 Notiamo in re-altà che l'implementazione delle \T1/cmr/m/it
+/9 user-cut call-back \T1/cmr/m/n/9 avviene sem-pre in con-comi-tanza
  []
 
-[39] [40]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1763.
- [41]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1763.
+[34] [35] [36] [37] [38] [39]
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1603--1604
+[][][][][]  
+ []
+
+
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1605--1606
+[][][][][]  
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1622.
+[40]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1622.
  (Tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1763.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1763.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1622.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1622.
 
 Package rerunfilecheck Info: File `Tesi.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1763.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1622.
  ) 
 Here is how much of TeX's memory you used:
- 10756 strings out of 493314
- 155268 string characters out of 3136264
- 283299 words of memory out of 3000000
- 13602 multiletter control sequences out of 15000+200000
- 21251 words of font info for 57 fonts, out of 3000000 for 9000
+ 11448 strings out of 493314
+ 160844 string characters out of 3136264
+ 295031 words of memory out of 3000000
+ 14312 multiletter control sequences out of 15000+200000
+ 21937 words of font info for 58 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,15n,40p,1317b,1718s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,13n,40p,1355b,1939s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
 C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:
 /Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/P
@@ -686,13 +1027,14 @@ TeX 2.9/fonts/type1/public/cm-super/sfbx1095.pfb><C:/Program Files (x86)/MiKTeX
 9/fonts/type1/public/cm-super/sfrm0800.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
 onts/type1/public/cm-super/sfrm0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
 s/type1/public/cm-super/sfrm1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
-ype1/public/cm-super/sfti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
-1/public/cm-super/sftt1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
-ublic/tipa/tipa10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tip
-a/tipabx10.pfb>
-Output written on Tesi.pdf (41 pages, 647691 bytes).
+ype1/public/cm-super/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/public/cm-super/sfti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
+ublic/cm-super/sftt1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
+ic/tipa/tipa10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/t
+ipabx10.pfb>
+Output written on Tesi.pdf (40 pages, 665053 bytes).
 PDF statistics:
- 897 PDF objects out of 1000 (max. 8388607)
- 548 named destinations out of 1000 (max. 500000)
+ 864 PDF objects out of 1000 (max. 8388607)
+ 510 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

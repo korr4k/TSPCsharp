@@ -396,7 +396,7 @@ namespace TSPCsharp
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
 
             //Adding lazycallback
-            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, true));
+            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, true));
 
             //Solving
             cplex.Solve();
@@ -870,7 +870,7 @@ namespace TSPCsharp
             }
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, BlockPrint));
+            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, BlockPrint));
 
             cplex.AddMIPStart(z, incumbentSol, "HeuristicPath");
             int x = cplex.GetMIPStartIndex("HeuristicPath");
@@ -988,7 +988,7 @@ namespace TSPCsharp
             cplex.AddCut(cut);
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, BlockPrint));
+            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, BlockPrint));
 
             do
             {
@@ -1070,7 +1070,7 @@ namespace TSPCsharp
             //cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
             cplex.SetParam(Cplex.DoubleParam.EpGap, 0.5);
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, false));//Installo la lazy 
+            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, false));//Installo la lazy 
 
             for (int i = 0; i < instance.SizePopulation; i++)
             {

@@ -1,5 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{empheq}
 \usepackage{color}
 \usepackage {listings}
@@ -41,6 +43,8 @@ morekeywords={partial, var, get, set,string,false,true},
 keywordstyle=\color{bluekeywords},
 stringstyle=\color{redstrings},
 basicstyle=\ttfamily\small,
+extendedchars=true,
+literate={à}{{\`a}}1 {è}{{\`e}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {é}{{\'e}}1,
 }
 \lstset%
 {%
@@ -81,51 +85,51 @@ ABSTRACT
 
 \vspace{2\baselineskip}
 
-Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema del Commesso Viaggiatore applicando differenti algoritmi risolutori. L'obiettivo di questo testo \`e quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bont\`a della soluzione prodotta. Verr\`a fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sar\`a analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
+Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema del Commesso Viaggiatore applicando differenti algoritmi risolutori. L'obiettivo di questo testo è quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bontà della soluzione prodotta. Verrà fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sarà analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
 
 \vspace{2\baselineskip}
 INTRODUZIONE 
 
 \vspace{2\baselineskip}
 
-Questa capitolo introduttivo \`e dedicato alla storia, alle applicazioni e alle correnti sfide riguardanti uno dei pi\`u importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem-TSP). 
-Il nome deriva dalla sua pi\`u tipica rappresentazione: data una rete di citt\`a, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le citt\`a una ed una sola volta e ritornare alla citt\`a di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le citt\`a relative al problema in questione mentre i possibili collegamenti tra le localit\`a sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall' arco. Chiaramente \`e possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o di eventuali pedaggi presenti nei singoli percorsi. Come \`e facile immaginare, il TSP pu\`o essere quindi utilizzato per una infinit\`a  di problemi pratici ma anche teorici.\\
+Questa capitolo introduttivo è dedicato alla storia, alle applicazioni e alle correnti sfide riguardanti uno dei più importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem-TSP). 
+Il nome deriva dalla sua più tipica rappresentazione: data una rete di città, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le città una ed una sola volta e ritornare alla città di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le città relative al problema in questione mentre i possibili collegamenti tra le località sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall' arco. Chiaramente è possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o di eventuali pedaggi presenti nei singoli percorsi. Come è facile immaginare, il TSP può essere quindi utilizzato per una infinità  di problemi pratici ma anche teorici.\\
 Il problema del commesso viaggiatore riveste un ruolo notevole nell' ambito di problemi di logistica distributiva, detti anche problemi di routing. Questi riguardano l'organizzazione di sistemi di distribuzione di beni e servizi. Esempi di problemi di questo genere sono la movimentazione di pezzi o semilavorati tra reparti di produzione, la raccolta e distribuzione di materiali, la distribuzione di merci da centri di produzione a centri di distribuzione.
-Sebbene le applicazioni nel contesto dei trasporti siano le pi\`u naturali per il TSP, la semplicit\`a del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio pu\`o essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le citt\`a  e il costo del viaggio \`e il tempo necessario per spostare la testa del trapano da un foro all'altro. 
-Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non \`e noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poich\`e esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non \`e sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
+Sebbene le applicazioni nel contesto dei trasporti siano le più naturali per il TSP, la semplicità del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città  e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
+Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poichè esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
 
 
 Problemi matematici riconducibili al TSP furono trattati nell' Ottocento dal matematico irlandese Sir William Rowan Hamilton e dal matematico Britannico Thomas Penyngton.  Nel 1857, a Dublino, Rowan Hamilton descrisse un gioco, detto Icosian game, a una riunione della British Association for the Advancement of Science. Il gioco consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro ha 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
-Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema \`e un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si pu\`o pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ citt\`a \`e facile da calcolare: data una citt\`a di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda citt\`a, $(n - 2)$ per la terza e cos\` via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo \`e dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a met\`a . Insomma, date n citt\`a, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
+Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema è un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ città è facile da calcolare: data una città di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda città, $(n - 2)$ per la terza e cos\` via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo è dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a metà . Insomma, date n città, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
 
-Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo pi\`u raffinato per risolvere il TSP  su un campione di $n = 49$ citt\`a: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
+Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP  su un campione di $n = 49$ città: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
 
-Nel 1962, Procter and Gamble bandì un concorso per 33 citt\`a, nel 1977 fu bandito un concorso che collegasse le 120 principali citt\`a della Germania Federale e la vittoria and\`o a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
+Nel 1962, Procter and Gamble bandì un concorso per 33 città, nel 1977 fu bandito un concorso che collegasse le 120 principali città della Germania Federale e la vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
 
-Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 citt\`a. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
-Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 citt\`a tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
-Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 citt\`a della Svezia. 
-Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unit\`a, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
-Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore \`e utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con pi\`u nodi in assoluto ha 85,900 citt\`a. 
+Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 città. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
+Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 città tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
+Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 città della Svezia. 
+Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unità, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
+Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore è utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con più nodi in assoluto ha 85,900 città. 
 
 \vspace{2\baselineskip}
 
 MODELLO MATEMATICO
 \vspace{2\baselineskip}
 
-Nella sua formalizzazione pi\`u generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v\_1,\dots,v\_n} $\}$ $ \`e un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ \`e un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
+Nella sua formalizzazione più generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ è un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ è un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
 
-Senza perdita di generalit\`a, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, che indicheremo con $c\_{ij}$, sia non negativo. Si osserva che aver imposto $c\_{ij} \ge 0$ non \`e limitativo poich\'e \`e sempre possibile sommare a tutti i costi una costante sufficientemente elevata che li renda positivi senza alterarne l'ordinamento delle soluzioni. 
+Senza perdita di generalità, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, che indicheremo con $c\_{ij}$, sia non negativo. Si osserva che aver imposto $c\_{ij} \ge 0$ non è limitativo poichè è sempre possibile sommare a tutti i costi una costante sufficientemente elevata che li renda positivi senza alterarne l'ordinamento delle soluzioni. 
 A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato: tale scelta deriva dal fatto che $c\_{ij}$ nel nostro lavoro rappresenta sempre la distanza (tipicamente euclidea) fra i vertici i e j si ha che:
-$$c\_{ij} = c\_{ji}$$
+$$c_{ij} = c_{ji}$$
 
-ossia il costo associato ad un arco non dipende dalla direzione dell'arco stesso. Quando il grafo \`e non orientato la famiglia di coppie non ordinate di elementi di V, ossia l'insieme degli archi, viene indicato con $E$.
+ossia il costo associato ad un arco non dipende dalla direzione dell'arco stesso. Quando il grafo è non orientato la famiglia di coppie non ordinate di elementi di V, ossia l'insieme degli archi, viene indicato con $E$.
 
 
 Definito il problema forniamo ora una sua possibile formulazione in termini di PLI. Introducendo le seguenti variabili decisionali:
 
 \[
-x\_{e}=
+x_{e}=
 \begin{cases}
 1 & \text{se il lato $e \in E$ viene scelto nel circuito ottimo} \\
 0 & \text{altrimenti}
@@ -135,12 +139,12 @@ x\_{e}=
 si ottiene il problema:
 
 \begin{eqnarray}
-& \text{min}\displaystyle\underbrace{\sum\_{e \in E} c\_e x\_e}\_{\text{costo circuito}} \\[1.5ex]
-&\displaystyle\underbrace{\sum\_{e \in \delta(V)} x\_e = 2}\_{\text{due lati incidenti in }v}\text{,  }\forall v \in V \\[1.5ex]
-&0\leq x\_e \leq 1 \text{ intera , }\forall e \in E
+& \text{min}\displaystyle\underbrace{\sum_{e \in E} c_e x_e}\_{\text{costo circuito}} \\[1.5ex]
+&\displaystyle\underbrace{\sum_{e \in \delta(V)} x_e = 2}_{\text{due lati incidenti in }v}\text{,  }\forall v \in V \\[1.5ex]
+&0\leq x_e \leq 1 \text{ intera , }\forall e \in E
 \end{eqnarray}
 
-L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidano esattamente due lati. In questa forma il modello \`e  compatto dato che il numero di vincoli \`e polinomiale rispetto alla dimensione dell'istanza ma non \`e completo poich\'e \`e sprovvisto dei vincoli di subtour che impediscono soluzioni il cui grafo risulta non connesso.
+L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidano esattamente due lati. In questa forma il modello è  compatto dato che il numero di vincoli è polinomiale rispetto alla dimensione dell'istanza ma non è completo poichè è sprovvisto dei vincoli di subtour che impediscono soluzioni il cui grafo risulta non connesso.
 
 \begin{center}
 \includegraphics[scale=0.5]{subtour}  
@@ -153,7 +157,7 @@ Figura 1: Soluzione con due subtour
 Una possibile formulazione per l'eliminazione dei subtour, detta appunto \textbf{subtour elimination}, risulta essere:
 
 \begin{eqnarray}
-&\displaystyle{\sum\_{e \in E(S)}x\_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
+&\displaystyle{\sum_{e \in E(S)}x_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
 \end{eqnarray}
 
 
@@ -163,13 +167,13 @@ Il vincolo (4) indica che se si considera un sottoinsieme $S \subsetneq V$, che 
 $\delta(S) = $\{$ {[i,j]\in E : i \in S, j \notin S} $\} $ $
 \end{center}
 
-deve contenere almeno un lato appartenente ad $E$: poich\'e tutti i subtour violano tale vincolo la soluzione ottima non potr\`a contenerne al suo interno.  
-Essendo il numero di questi vincoli pari ai sottoinsiemi $S$ distinti, il numero di tali vincoli risulta esponenziale rispetto alla dimensione dell'istanza. In particolare il valore di $S$, dato un numero $n$ di nodi, \`e $2^n$: questo perch\`e associando un bit ad ogni vertice (il cui valore definisce se appartiene o meno al sottoinsieme) un qualsiasi sottoinsieme risulta identificato da una sequenza di $n$ bit è quindi possibile definirne $2^n$ distinti. In realtà avendo noi imposto che il vertice 1 appartenga sempre ad ogni $S$ e che $S \subsetneq V$, si ha che il numero di vincoli di subtour risulti pari a  $2^{n-1} - 1$.
+deve contenere almeno un lato appartenente ad $E$: poichè tutti i subtour violano tale vincolo la soluzione ottima non potrà contenerne al suo interno.  
+Essendo il numero di questi vincoli pari ai sottoinsiemi $S$ distinti, il numero di tali vincoli risulta esponenziale rispetto alla dimensione dell'istanza. In particolare il valore di $S$, dato un numero $n$ di nodi, è $2^n$: questo perchè associando un bit ad ogni vertice (il cui valore definisce se appartiene o meno al sottoinsieme) un qualsiasi sottoinsieme risulta identificato da una sequenza di $n$ bit è quindi possibile definirne $2^n$ distinti. In realtà avendo noi imposto che il vertice 1 appartenga sempre ad ogni $S$ e che $S \subsetneq V$, si ha che il numero di vincoli di subtour risulti pari a  $2^{n-1} - 1$.
 
-Una seconda formulazione equivalente per esprimere i vincoli di subtour \`e la seguente:
+Una seconda formulazione equivalente per esprimere i vincoli di subtour è la seguente:
 
 \begin{eqnarray}
-&\displaystyle{\sum\_{e \in E(S)}x\_e \leq |S| - 1} \text{ , } \forall S \subsetneq V \text{ , } |S| \geq 2
+&\displaystyle{\sum_{e \in E(S)}x_e \leq |S| - 1} \text{ , } \forall S \subsetneq V \text{ , } |S| \geq 2
 \end{eqnarray}
 
 La gestione di un numero esponenziale di vincoli implica in genere tempi di risoluzione troppo elevati. Nella pratica però non è necessario utilizzare tutti i vincoli di subtour elimination, è sufficiente considerarne un numero molto più ridotto. Non potendo conoscere in anticipo quali siano quelli essenziali sarà nostro compito progettare un opportuno separatore: ossia una funzione che fornita in ingresso una soluzione x* ottima per il modello corrente generi tutti i vincoli violati.
@@ -186,7 +190,7 @@ Le istanze del problema del Commesso Viaggiatore fornite in input al programma s
 \href{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}
 \end{center}
 
-Ogni istanza è memorizzata in un file di testo in un formato ben preciso, \`e stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}. 
+Ogni istanza è memorizzata in un file di testo in un formato ben preciso, è stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}. 
 
 \vspace{2\baselineskip}
 
@@ -202,10 +206,10 @@ I file che compongono il programma realizzato sono stati organizzati nel modo se
 \begin{itemize}
 \item \textbf{Src} contenente il progetto di Visual Studio;
 \item \textbf{Data} include le istanze del problema del commesso viaggiatore appartenenti alla TSPlib;
-\item \textbf{Concorde} contenente i file sorgenti in linguaggio C del programma Concorde\footnote{Concorde è un software freeware sviluppato da \textbf{William Cook} per la risoluzione di problemi TSP} la cui trattazione \`e rimandata al Capitolo X.
+\item \textbf{Concorde} contenente i file sorgenti in linguaggio C del programma Concorde\footnote{Concorde è un software freeware sviluppato da \textbf{William Cook} per la risoluzione di problemi TSP} la cui trattazione è rimandata al Capitolo X.
 \end{itemize}
 
-Il software sviluppato \`e composto da dieci classi, riportiamo di seguito il nominativo di ognuna di esse:
+Il software sviluppato è composto da dieci classi, riportiamo di seguito il nominativo di ognuna di esse:
 
 \begin{itemize}
 \item Instances
@@ -220,14 +224,14 @@ Il software sviluppato \`e composto da dieci classi, riportiamo di seguito il no
 \item Utility
 \end{itemize}
 
-Per le classi Point, Instances, Program, TSP e Utility verr\`a fornita una descrizione in questo capitolo, le rimanenti classi verranno presentate nei capitoli successivi poich\'e una loro trattazione risulterebbe in questo momento prematura. 
+Per le classi Point, Instances, Program, TSP e Utility verrà fornita una descrizione in questo capitolo, le rimanenti classi verranno presentate nei capitoli successivi poichè una loro trattazione risulterebbe in questo momento prematura. 
 
 
 \vspace{2\baselineskip}
 CLASSE POINT
 \vspace{2\baselineskip}
 
-La classe Point \`e stata realizzate al fine di memorizzare le coordinate in due dimensioni di un singolo nodo $n$, a tal fine sono presenti due variabili private, accessibili attraverso i propri metodi get e set, di tipo \textbf{double} chiamate rispettivamente \textbf{x} e \textbf{y}. Il costruttore della classe non fa altro che ricevere in input i valori da assegnare a queste ultime. La classe presenta inoltre un ulteriore metodo pubblico e statico chiamato \textbf{Distance} che permette il calcolo della distanza tra due nodi:
+La classe Point è stata realizzate al fine di memorizzare le coordinate in due dimensioni di un singolo nodo $n$, a tal fine sono presenti due variabili private, accessibili attraverso i propri metodi get e set, di tipo \textbf{double} chiamate rispettivamente \textbf{x} e \textbf{y}. Il costruttore della classe non fa altro che ricevere in input i valori da assegnare a queste ultime. La classe presenta inoltre un ulteriore metodo pubblico e statico chiamato \textbf{Distance} che permette il calcolo della distanza tra due nodi:
 
 \begin{lstlisting}
     public static double Distance(Point p1, Point p2, string pointType)
@@ -236,15 +240,15 @@ La classe Point \`e stata realizzate al fine di memorizzare le coordinate in due
 \begin{itemize}
 \item \textbf{p1}: Rappresenta il primo nodo;
 \item \text{p2}: Rappresenta il secondo nodo;
-\item \textbf{pointType}: Rappresenta il modo con cui il costo relativo al lato che congiunge p1 con p2 viene calcolato; i valori che questo parametro pu\`o assumere sono i seguenti:
-	\begin{itemize}
-	\item EUC\char`\_2D
-	\item ATT
-	\item MAN\char`\_2D
-	\item GEO
-	\item MAX\char`\_2D	
-	\item CEIL\char`\_2D
-	\end{itemize}
+\item \textbf{pointType}: Rappresenta il modo con cui il costo relativo al lato che congiunge p1 con p2 viene calcolato; i valori che questo parametro può assumere sono i seguenti:
+    \begin{itemize}
+    \item EUC\char`\_2D
+    \item ATT
+    \item MAN\char`\_2D
+    \item GEO
+    \item MAX\char`\_2D    
+    \item CEIL\char`\_2D
+    \end{itemize}
 \end{itemize}
 
 A titolo di esempio riportiamo il codice eseguito nel caso in cui pointType risulti uguale a EUC\char`\_2D dove il costo del lato deve risultare pari alla distanza euclidea dei due nodi. 
@@ -268,7 +272,7 @@ Per quanto riguarda gli altri metodi di calcolo della distanza rimandiamo il let
 CLASSE INSTANCE
 \vspace{2\baselineskip}
 
-La classe Instance \`e stata creata per memorizzare tutti i dati caratterizzanti l'istanza del problema del Commesso Viaggiatore. La tabella sottostante fornisce un elenco di variabili ed array definite all'interno della classe assieme ad una loro breve descrizione. 
+La classe Instance è stata creata per memorizzare tutti i dati caratterizzanti l'istanza del problema del Commesso Viaggiatore. La tabella sottostante fornisce un elenco di variabili ed array definite all'interno della classe assieme ad una loro breve descrizione. 
 
 
 \begin{center}
@@ -279,12 +283,12 @@ La classe Instance \`e stata creata per memorizzare tutti i dati caratterizzanti
     \begin{center} \textbf{Descrizione} \end{center}\\ \hline
     \begin{center} int \end{center} & \begin{center} nNodes \end{center}& \vfill Rappresenta il numero di nodi dell' istanza del problema del Commesso Viaggiatore.\vfill \\ \hline
     \begin{center} Point[ ] \end{center} & \begin{center} coord \end{center}& \vfill Vettore di Point contenente le coordinate di tutti i vertici del grafo.\vfill\\ \hline
-    \begin{center} string \end{center} & \begin{center} edgeType \end{center}&\vfill Definisce la modalit\`a con cui calcolare la distanza fra due nodi.\vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} timeLimit \end{center}& \vfill Definisce la quantit\`a massima di tempo che il programma dispone per il calcolo della soluzione.\vfill \\ \hline
+    \begin{center} string \end{center} & \begin{center} edgeType \end{center}&\vfill Definisce la modalità con cui calcolare la distanza fra due nodi.\vfill \\ \hline
+    \begin{center} double \end{center} & \begin{center} timeLimit \end{center}& \vfill Definisce la quantità massima di tempo che il programma dispone per il calcolo della soluzione.\vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} inputFile \end{center}&\vfill Rappresenta il nome del file di input contenente l'istanza del problema del Commesso Viaggiatore. \vfill\\ \hline
     \begin{center} double \end{center} & \begin{center} tStart \end{center}& \vfill Rappresenta i secondi trascorsi dall'attivazione del cronometro al reale inizio delle operazioni di calcolo per la risoluzione del problema \vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} xBest \end{center}& \vfill Rappresenta il costo della soluzione ottima restituira da cplex.\vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} tBest \end{center}& \vfill Contiene la qantit\`a di tempo impiegata per il calcolo della soluzione ottima. \vfill \\ \hline
+    \begin{center} double \end{center} & \begin{center} tBest \end{center}& \vfill Contiene la qantità di tempo impiegata per il calcolo della soluzione ottima. \vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} bestSol \end{center}& \vfill Rappresenta la soluzione ottima ritornata da Cplex.\vfill \\ \hline
      \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
     \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
@@ -319,27 +323,27 @@ CLASSE PROGRAM
 
 \vspace{2\baselineskip}
 
-La classe Program contiene il metodo Main che, come noto, rappresenta il punto di inizio del programma: attraverso le funzionalità di Visual Studio esso riceve in input l'array \textbf{argv} di stringhe contenente i parametri di input forniti dall'utente come il nome del file contenente l'input ed il time limit per la sua risoluzione. Appartengono a questa classe anche i metodi \textbf{ParseInst} e \textbf{Populate}: rispettivamente forniscono il parser per \textbf{argv} ed il parser del file di ingresso indicato con conseguente inizializzazione delle coordinate dei nodi. Firma e implementazione di tali metodi \`e rimandata al successivo capitolo.\\
+La classe Program contiene il metodo Main che, come noto, rappresenta il punto di inizio del programma: attraverso le funzionalità di Visual Studio esso riceve in input l'array \textbf{argv} di stringhe contenente i parametri di input forniti dall'utente come il nome del file contenente l'input ed il time limit per la sua risoluzione. Appartengono a questa classe anche i metodi \textbf{ParseInst} e \textbf{Populate}: rispettivamente forniscono il parser per \textbf{argv} ed il parser del file di ingresso indicato con conseguente inizializzazione delle coordinate dei nodi. Firma e implementazione di tali metodi è rimandata al successivo capitolo.\\
 All'interno del metodo \textbf{Main} vengono eseguite in ordine le seguenti attività:
 \begin{itemize}
-	\item Creata una istanza della classe \textbf{Instance} ed invocati i due metodi precedentemente nominati.
-	\item Creato un oggetto della classe \textbf{Stopwatch}. Questa classe è fornita direttamente da Visual Studio appartenente al Namespace \textbf{System.Diagnostics} è fornisce le funzionalità di un cronometro compatibile al multithreading.
-	\item Invocato il metodo \textbf{TSPOpt} della classe \textbf{TSP} passandogli come parametri i due oggetti di tipo Instance e Stopwatch.
-	\item In caso di risultato positivo (una soluzione del problema è stata trovata) viene mostrato a video il risultato ottenuto ed il tempo di calcolo trascorso.
-	\item Viene effettuata una pulizia dei file creatisi durante l'esecuzione del problema.
+    \item Creata una istanza della classe \textbf{Instance} ed invocati i due metodi precedentemente nominati.
+    \item Creato un oggetto della classe \textbf{Stopwatch}. Questa classe è fornita direttamente da Visual Studio appartenente al Namespace \textbf{System.Diagnostics} è fornisce le funzionalità di un cronometro compatibile al multithreading.
+    \item Invocato il metodo \textbf{TSPOpt} della classe \textbf{TSP} passandogli come parametri i due oggetti di tipo Instance e Stopwatch.
+    \item In caso di risultato positivo (una soluzione del problema è stata trovata) viene mostrato a video il risultato ottenuto ed il tempo di calcolo trascorso.
+    \item Viene effettuata una pulizia dei file creatisi durante l'esecuzione del problema.
 \end{itemize}
 
 In tutto il nostro progetto si è cercato di utilizzare il minor numero possibile di variabili globali, in particolare solo all'interno di questa classe ne sono state definite due di seguito descritte:
 
 \begin{center}
-	
-	\begin{tabular}{ | p{1.5cm} | p{4cm} | p{2cm} | p{6.5cm} |}
-		\hline
-		\begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& \begin{center} \textbf{Valore} \end{center} & \begin{center} \textbf{Descrizione} \end{center}\\ \hline
-		\begin{center} int \end{center} & \begin{center} VERBOSE \end{center}& \begin{center} 5 \end{center} & Regola quanto output il programma mostra a video: si \`e scelto di condizionare l' esecuzione di molte righe di codice che producevano una stampa a video in base al valore assunto da questa variabile. Si \`e deciso di ristringere il suo valore da 1 a 9, quando assume il valore 9 viene riportato a video il maggior numero possibile di stampe. \\ \hline
-		\begin{center} int \end{center} & \begin{center} TICKS\char`\_PER\char`\_SECOND \end{center} &  \begin{center}1000  \end{center}& Cplex utilizza i così detti ticks come unità di misura per il tempo di calcolo, questa costante indica quanti ne trascorrono in un secondo.\\ \hline
-		
-	\end{tabular}
+    
+    \begin{tabular}{ | p{1.5cm} | p{4cm} | p{2cm} | p{6.5cm} |}
+        \hline
+        \begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& \begin{center} \textbf{Valore} \end{center} & \begin{center} \textbf{Descrizione} \end{center}\\ \hline
+        \begin{center} int \end{center} & \begin{center} VERBOSE \end{center}& \begin{center} 5 \end{center} & Regola quanto output il programma mostra a video: si è scelto di condizionare l' esecuzione di molte righe di codice che producevano una stampa a video in base al valore assunto da questa variabile. Si è deciso di ristringere il suo valore da 1 a 9, quando assume il valore 9 viene riportato a video il maggior numero possibile di stampe. \\ \hline
+        \begin{center} int \end{center} & \begin{center} TICKS\char`\_PER\char`\_SECOND \end{center} &  \begin{center}1000  \end{center}& Cplex utilizza i così detti ticks come unità di misura per il tempo di calcolo, questa costante indica quanti ne trascorrono in un secondo.\\ \hline
+        
+    \end{tabular}
 \end{center}
 
 \vspace{2\baselineskip}
@@ -366,12 +370,12 @@ La classe Utility può essere considerata come una libreria: contiene al suo int
 INTERPRETAZIONE FILE DI INPUT
 \vspace{2\baselineskip}
 
-Lo sviluppo del programma \`e iniziato realizzando una opportuna funzione per interpretare correttamente i parametri di ingresso forniti dall'utente. Oltre al nome del file di testo contenente i dati relativi  all'istanza del problema che si vuole risolvere, all'utente \`e richiesto di fornite un time limit(espresso in secondi) e di scegliere con quale algoritmo risolvere l'istanza da esso fornita. Si \`e deciso di ricevere da riga di comando il nome del file e il time limit; per quanto riguarda la scelta dell'algoritmo risolutore ed eventuali parametri da esso richiesti si \`e preferito realizzare una semplice interfaccia grafica per favorire l'utente. 
+Lo sviluppo del programma è iniziato realizzando una opportuna funzione per interpretare correttamente i parametri di ingresso forniti dall'utente. Oltre al nome del file di testo contenente i dati relativi  all'istanza del problema che si vuole risolvere, all'utente è richiesto di fornite un time limit(espresso in secondi) e di scegliere con quale algoritmo risolvere l'istanza da esso fornita. Si è deciso di ricevere da riga di comando il nome del file e il time limit; per quanto riguarda la scelta dell'algoritmo risolutore ed eventuali parametri da esso richiesti si è preferito realizzare una semplice interfaccia grafica per favorire l'utente. 
 Visual Studio, all'interno delle proprietà del progetto, permette di definire una stringa come parametro di ingresso per il programma. Questa viene automaticamente separata in sottostringhe utilizzando come separatore il carattere di spazio e fornito in ingresso al metodo Main. Allo stato attutale è gestita solamente la possibilità di fornire in ingresso il nome del file contenente i dati ed il timelimit per la ricerca della soluzione. Per ottenere una migliore organizzazione e chiarezza per il nostro lavoro è stato deciso di utilizzare questa regola per la costruzione della stringa di ingresso: ogni parametro inseritovi deve essere preceduto da una parola chiave che lo identifica il cui primo carattere deve essere '-'. Questa tecnica si rileverà utile anche in futuro nel caso si decidesse di ampliare la lista di parametri di ingresso.\\
-La funzione che interpreta correttamente gli argomenti forniti in input dalla riga di comando \`e stata chiamata ParseInst ed ha la seguente intestazione:
+La funzione che interpreta correttamente gli argomenti forniti in input dalla riga di comando è stata chiamata ParseInst ed ha la seguente intestazione:
 
 \begin{lstlisting}
-	  static void ParseInst(Instance inst, string[] input) 
+      static void ParseInst(Instance inst, string[] input) 
 \end{lstlisting}
 
 
@@ -381,7 +385,7 @@ La funzione che interpreta correttamente gli argomenti forniti in input dalla ri
 \end{itemize}
 
 
-Il metodo \`e composto da un semplice ciclo for che scandisce il vettore \textbf{input} cercando una parola chiave, se trovata la stringa successiva viene memorizzata correttamente dentro \textbf{inst}: 
+Il metodo è composto da un semplice ciclo for che scandisce il vettore \textbf{input} cercando una parola chiave, se trovata la stringa successiva viene memorizzata correttamente dentro \textbf{inst}: 
 
 \begin{lstlisting}
 
@@ -399,7 +403,7 @@ for (int i = 0; i < input.Length; i++)
        inst.TimeLimit = Convert.ToDouble(input[++i]);
        continue;
     }
-}   			
+}               
 \end{lstlisting}
 
 Nel caso in cui l' utente non fornisca il nome del file di input oppure il time limit viene lanciata una eccezione:
@@ -416,8 +420,8 @@ if (inst.InputFile == null || inst.TimeLimit == 0)
 METODO POPULATE
 \vspace{2\baselineskip}
 
-Il metodo Populate \`e utilizzato per la lettura dei dati contenuti all'interno del file di input e soprattutto alla loro memorizzazione all'interno di un oggetto di tipo \textbf{Instance} in modo tale che una volta conclusosi il metodo questo contenga tutte le informazioni necessarie per la creazione del modello matematico.\\
-I file di input presenta una struttura pressoché identica tra loro e cioè una divisione in sezioni identificate da parole chiave. Fatta eccezione per la sezione che descrive le coordinate dei nodi, tutte le altre si sviluppano in una sola riga la cui struttura \'e del tipo:
+Il metodo Populate è utilizzato per la lettura dei dati contenuti all'interno del file di input e soprattutto alla loro memorizzazione all'interno di un oggetto di tipo \textbf{Instance} in modo tale che una volta conclusosi il metodo questo contenga tutte le informazioni necessarie per la creazione del modello matematico.\\
+I file di input presenta una struttura pressoché identica tra loro e cioè una divisione in sezioni identificate da parole chiave. Fatta eccezione per la sezione che descrive le coordinate dei nodi, tutte le altre si sviluppano in una sola riga la cui struttura è del tipo:
 
 \begin{center}
 <parolaChiave> : < valore> 
@@ -426,47 +430,47 @@ I file di input presenta una struttura pressoché identica tra loro e cioè una 
 Di seguito sono riportati i valori che possono essere assunti dalle parole chiavi e il significato del contenuto della relativa sezione: 
 
 \begin{itemize}
-	\item NAME:<string> 
-	\begin{itemize}
-	\item nome con cui l' istanza \`e nota in letteratura.
-	\end{itemize}
-	\item TYPE:<string>
-	
-	\begin{itemize}	 
-	\item indica il tipo dell' istanza. Nel nostro ambito sar\`a sempre TSP.    
-    \end{itemize}	
-	 
-	\item \textbf{COMMENT:<string>} 
-	\begin{itemize}	
-	\item include informazioni aggiuntive, solitamente contiene il nome deli gli autori che hanno proposto l'  				istanza.
-	\end{itemize}	
-	
-		
-	\item \textbf{DIMENSION:<integer>} 
-	\begin{itemize}
-	\item indica il numero di nodi.
-	\end{itemize}	
-	
-	\item \textbf{EDGE WEIGHT TYPE:<string>}
-	\begin{itemize} 
-	\item Definisce il modo con cui il costo del lato deve essere calcolato, i possibili valori  che pu\'o assumere    		     il contenuto di questa sezione sono stati gi\`a presentati a pagina 7 durante la descrizione del metodo Distance.
-	\end{itemize}	
-	
-	\item \textbf{NODE COORD SECTION}: 
-	\begin{itemize}	
-	
-	\item Il contenuto di questa sezione si sviluppa in pi\`u righe; in ogni riga troviamo nell' ordine:
-	\begin{itemize}
-	\item Un numero progressivo intero positivo che comincia da 1 e che identifica il nodo. Osserviamo che anche se in input il primo nodo \`e numerato a partire da 1, nel vettore Point di inst le coordinate saranno memorizzate a partire dall'indice 0\footnote{Tale scelta \'e per mantenere una conformit\'a con la metrica adottata dal linguaggio C\# per l'enumerazione degli elementi dei vettori, nel caso in cui le coordinate vengano visualizzate a video il loro indice viene comunque incrementato di uno}.
-	\item Un numero reale positivo che definisce la coordinata x del nodo.
-	\item Un numero reale positivo che identifica la coordinata y del nodo.
-	\end{itemize}		
-	\end{itemize}	
+    \item NAME:<string> 
+    \begin{itemize}
+    \item nome con cui l' istanza è nota in letteratura.
+    \end{itemize}
+    \item TYPE:<string>
+    
+    \begin{itemize}     
+    \item indica il tipo dell' istanza. Nel nostro ambito sarà sempre TSP.    
+    \end{itemize}    
+     
+    \item \textbf{COMMENT:<string>} 
+    \begin{itemize}    
+    \item include informazioni aggiuntive, solitamente contiene il nome deli gli autori che hanno proposto l'                  istanza.
+    \end{itemize}    
+    
+        
+    \item \textbf{DIMENSION:<integer>} 
+    \begin{itemize}
+    \item indica il numero di nodi.
+    \end{itemize}    
+    
+    \item \textbf{EDGE WEIGHT TYPE:<string>}
+    \begin{itemize} 
+    \item Definisce il modo con cui il costo del lato deve essere calcolato, i possibili valori  che può assumere                 il contenuto di questa sezione sono stati già presentati a pagina 7 durante la descrizione del metodo Distance.
+    \end{itemize}    
+    
+    \item \textbf{NODE COORD SECTION}: 
+    \begin{itemize}    
+    
+    \item Il contenuto di questa sezione si sviluppa in più righe; in ogni riga troviamo nell' ordine:
+    \begin{itemize}
+    \item Un numero progressivo intero positivo che comincia da 1 e che identifica il nodo. Osserviamo che anche se in input il primo nodo è numerato a partire da 1, nel vettore Point di inst le coordinate saranno memorizzate a partire dall'indice 0\footnote{Tale scelta è per mantenere una conformità con la metrica adottata dal linguaggio C\# per l'enumerazione degli elementi dei vettori, nel caso in cui le coordinate vengano visualizzate a video il loro indice viene comunque incrementato di uno}.
+    \item Un numero reale positivo che definisce la coordinata x del nodo.
+    \item Un numero reale positivo che identifica la coordinata y del nodo.
+    \end{itemize}        
+    \end{itemize}    
 \end{itemize}
 
 Il file di testo termina sempre con la stringa \textbf{EOF} che indica la fine del file di testo.
 
-Per poter leggere il contenuto di un file \`e necessario inizializzare una nuova istanza della classe StreamReader passando come parametro al costruttore il percorso ove tale file \`e  collocato.
+Per poter leggere il contenuto di un file è necessario inizializzare una nuova istanza della classe StreamReader passando come parametro al costruttore il percorso ove tale file è  collocato.
 
 
 \begin{lstlisting}
@@ -476,29 +480,29 @@ StreamReader sr = new StreamReader("..\\..\\..\\..\\Data\\" + inst.InputFile)
 \end{lstlisting}
 
 
-Il metodo ReadLine() della classe StreamReader ritorna, come stringa, il contenuto di una intera riga del file la quale viene memorizzata all'interno di una variabile di tipo string chiamata \textbf{line}. Poich\'e si vuole leggere tutto il contenuto del file, \`e necessario invocare ReadLine() ciclicamente sull' oggetto \textbf{sr} finch\`e line risulta diversa da null oppure viene incontrata la parola chiave \textbf{EOF}.
+Il metodo ReadLine() della classe StreamReader ritorna, come stringa, il contenuto di una intera riga del file la quale viene memorizzata all'interno di una variabile di tipo string chiamata \textbf{line}. Poichè si vuole leggere tutto il contenuto del file, è necessario invocare ReadLine() ciclicamente sull' oggetto \textbf{sr} finchè line risulta diversa da null oppure viene incontrata la parola chiave \textbf{EOF}.
 
 \begin{lstlisting}
 
 while ((line = sr.ReadLine()) != null)
 {
-	...
-	
-	//This line signals the end of the file
-	if (line.StartsWith("EOF"))
-	{
-	Instance.Print(inst);
-	Console.WriteLine(line);
-	//Correct end of the file
-	break;
-	}
-	
-	...
+    ...
+    
+    //This line signals the end of the file
+    if (line.StartsWith("EOF"))
+    {
+    Instance.Print(inst);
+    Console.WriteLine(line);
+    //Correct end of the file
+    break;
+    }
+    
+    ...
 }
 \end{lstlisting}
 
 
-Poich\'e ogni riga inizia con una nota parola chiave, per prelevare il contenuto di una sezione e memorizzarlo in un opportuno campo di inst, \`e sufficiente confrontare la prima stringa di ogni riga con una delle noti parole chiavi. Per far ci\`o si \`e  usato il metodo StartWith della classe String, la cui firma \`e:
+Poichè ogni riga inizia con una nota parola chiave, per prelevare il contenuto di una sezione e memorizzarlo in un opportuno campo di inst, è sufficiente confrontare la prima stringa di ogni riga con una delle noti parole chiavi. Per far ciò si è  usato il metodo StartWith della classe String, la cui firma è:
 
 \begin{lstlisting}
 
@@ -506,7 +510,7 @@ Poich\'e ogni riga inizia con una nota parola chiave, per prelevare il contenuto
 
 \end{lstlisting}
 
-Questo metodo, applicato alla variabile line, determina se la prima stringa di line corrisponde alla stringa value specificata all'atto dell' invocazione del metodo. Nel caso in cui il confronto dia esito positivo, per prelevare il contenuto della sezione \`e necessario applicare i metodi IndexOf e Remove sempre alla variabile line; l'intestazione di tali metodi \`e riportata di seguito:
+Questo metodo, applicato alla variabile line, determina se la prima stringa di line corrisponde alla stringa value specificata all'atto dell' invocazione del metodo. Nel caso in cui il confronto dia esito positivo, per prelevare il contenuto della sezione è necessario applicare i metodi IndexOf e Remove sempre alla variabile line; l'intestazione di tali metodi è riportata di seguito:
 
 
 \begin{lstlisting}
@@ -518,8 +522,8 @@ Questo metodo, applicato alla variabile line, determina se la prima stringa di l
 dove:
 
 \begin{itemize}
-	\item \textbf{value}: stringa da cercare.
-	\item \textbf{startIndex}: posizione iniziale della ricerca.
+    \item \textbf{value}: stringa da cercare.
+    \item \textbf{startIndex}: posizione iniziale della ricerca.
 \end{itemize}
 
 \begin{lstlisting}
@@ -532,8 +536,8 @@ dove:
 dove:
 
 \begin{itemize}
-	\item \textbf{startIndex}: posizione da cui iniziare l'eliminazione dei caratteri.
-	\item \textbf{count}: numero di caratteri da eliminare.
+    \item \textbf{startIndex}: posizione da cui iniziare l'eliminazione dei caratteri.
+    \item \textbf{count}: numero di caratteri da eliminare.
 \end{itemize}
 
 Per quanto detto, risulta immediata la comprensione del codice necessario per prelevare il contenuto della sezione e memorizzarlo dentro un oggetto di tipo \textbf{Instance} chiamando il metodo setter adeguato:
@@ -557,7 +561,7 @@ int i = Convert.ToInt32(elements[0]);
 inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".",",")));
 \end{lstlisting}
 
-Il metodo Split della classe String ritorna un array contenente in ogni elemento una sottostringa della stringa a cui tale metodo \`e applicato. Le sottostringhe vengono estratte dalla stringa in base ai caratteri delimitatori specificati all'atto dell'invocazione del metodo, quest'ultimo ha diversi overload: quello di nostro interesse \`e riportato di seguito.
+Il metodo Split della classe String ritorna un array contenente in ogni elemento una sottostringa della stringa a cui tale metodo è applicato. Le sottostringhe vengono estratte dalla stringa in base ai caratteri delimitatori specificati all'atto dell'invocazione del metodo, quest'ultimo ha diversi overload: quello di nostro interesse è riportato di seguito.
 
 \begin{lstlisting}
 
@@ -592,22 +596,22 @@ Come nota conclusiva specifichiamo che C\# utilizza come separatore tra parte in
 \end{lstlisting}
 dove:
 \begin{itemize}
-	\item \textbf{oldValue}: stringa sa sostituire;
-	\item \textbf{newValue}: stringa con cui sostituire tutte le occorrenze di oldValue.
+    \item \textbf{oldValue}: stringa sa sostituire;
+    \item \textbf{newValue}: stringa con cui sostituire tutte le occorrenze di oldValue.
 \end{itemize}
 
 \vspace{2\baselineskip}
 COSTRUZIONE DEL MODELLO
 \vspace{2\baselineskip}
 
-In questo paragrafo vedremo come \`e possibile creare da programma un modello matematico attraverso l'uso di alcune routine appartenenti alla libreria di Cplex. Esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di Cplex da iterativo.
+In questo paragrafo vedremo come è possibile creare da programma un modello matematico attraverso l'uso di alcune routine appartenenti alla libreria di Cplex. Esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di Cplex da iterativo.
 
 
 \vspace{2\baselineskip}
 COSTRUZIONE MODELLO IN C
 \vspace{2\baselineskip}
 
-Per istanziare un nuovo modello di programmazione lineare \`e necessario inizializzare un \textbf{environment} di Cplex utilizzando la funzione \textbf{CPXopenCPLEX} la quale ritorna un puntatore all'environment creato, la firma di tale funzione \`e:
+Per istanziare un nuovo modello di programmazione lineare è necessario inizializzare un \textbf{environment} di Cplex utilizzando la funzione \textbf{CPXopenCPLEX} la quale ritorna un puntatore all'environment creato, la firma di tale funzione è:
 
 
 \begin{lstlisting}
@@ -623,7 +627,7 @@ dove:
 \end{itemize}
 
 
-Ad un enviroment è possibile associare uno o pi\`u modelli attraverso il comando \textbf{CPXcreateprob}, la cui intestazione \`e:
+Ad un enviroment è possibile associare uno o più modelli attraverso il comando \textbf{CPXcreateprob}, la cui intestazione è:
 
 \begin{lstlisting}
 
@@ -635,14 +639,14 @@ Ad un enviroment è possibile associare uno o pi\`u modelli attraverso il comand
 dove:
 
 \begin{itemize}
-	\item \textbf{env}: puntatore all'environment sul quale si \`e deciso di creare il modello;
-	\item \textbf{status\char`\_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore;
-	\item \textbf{probname\char`\_str}: rappresenta un array di caratteri che definisce il nome del modello creato.
+    \item \textbf{env}: puntatore all'environment sul quale si è deciso di creare il modello;
+    \item \textbf{status\char`\_p}: puntatore ad una variabile di tipo intero usato per ritornare un eventuale codice di errore;
+    \item \textbf{probname\char`\_str}: rappresenta un array di caratteri che definisce il nome del modello creato.
 \end{itemize}
 
-Tale funzione ritorna un puntatore al modello creato: questo risulta vuoto poich\`e privo di funzione obbiettivo, variabili e vincoli.\\
+Tale funzione ritorna un puntatore al modello creato: questo risulta vuoto poichè privo di funzione obbiettivo, variabili e vincoli.\\
 
-Procediamo quindi al loro inserimento partendo definendo contemporaneamente le variabili e il loro coefficiente nella funzione obiettivo; è possibile procedere in più modi, quello da noi scelto è di utilizzare la funzione \textbf{CPXnewcols} la cui firma \`e:
+Procediamo quindi al loro inserimento partendo definendo contemporaneamente le variabili e il loro coefficiente nella funzione obiettivo; è possibile procedere in più modi, quello da noi scelto è di utilizzare la funzione \textbf{CPXnewcols} la cui firma è:
 
 
 \begin{lstlisting}
@@ -660,11 +664,11 @@ dove:
 \item \textbf{obj} : array contenente per ogni variabile il relativo coefficiente 
 \item \textbf{lb} : array di lunghezza ccnt contenente il lower bound di ogni variabile aggiunta.
 \item \textbf{ub} : array contenente l'upper bound di ogni variabile aggiunta.
-\item \textbf{ctype} : array di lunghezza ccnt contenente il tipo di ogni variabile. I valori che un elemento di questo array pu\`o assumere sono:
+\item \textbf{ctype} : array di lunghezza ccnt contenente il tipo di ogni variabile. I valori che un elemento di questo array può assumere sono:
 \begin{itemize}
-	\item \textbf{\textipa{"}C\textipa{"}}: variabile continua
-	\item \textbf{\textipa{"}B\textipa{"}}: variabile binaria
-	\item \textbf{\textipa{"}I\textipa{"}}: variabile intera
+    \item \textbf{\textipa{"}C\textipa{"}}: variabile continua
+    \item \textbf{\textipa{"}B\textipa{"}}: variabile binaria
+    \item \textbf{\textipa{"}I\textipa{"}}: variabile intera
 \end{itemize}
 \item \textbf{colname} : array di lunghezza ccnt contenente puntatori ad array di char, a sua volta ognuno di essi deve contenere il nome della variabile aggiunta al modello.
 \end{itemize}
@@ -673,37 +677,37 @@ Per motivi di semplicità non andremo ad inserire tutte le variabili contemporan
 
 E' giunto quindi il momento di parlare di quali variabili vogliamo aggiungere al nostro modello tenendo presente che il medesimo discorso sarà applicato anche per la parte in C\#. Sappiamo che per ogni coppia di nodi (i,j)\footnote{Ricordiamo che i deve essere diverso da j in quanto per i problemi da noi considerati i cappi non sono ammessi} esiste un unico lato che li collega e che quest'ultimo è privo di direzione. Si presenta quindi la necessità di definire una convenzione per l'assegnazione del nome ai vari lati. La scelta adottata è la seguente: considerando due generici nodi \textbf{i} e \textbf{j} allora il loro lato sarà chiamato \textbf{x(i,j)} se $i<j$ oppure \textbf{x(j,i)} se $j<i$\footnote{Notiamo che per quanto espresso nella nota precedente non ha senso considerare il caso $i=j$}.\\
 Questa convenzione offre anche un importante spunto per decidere con quale ordine memorizzare i vari parametri delle variabili (nome, coefficiente, lower bound ecc..): date due coppie distinti di nodi (i,j) e (v,w)\footnote{dove assumiamo $i<j \& v<W$} la posizione di memoria in cui viene memorizzata l'informazione riguardante la prima coppia è \textbf{inferiore} rispetto alla seconda se e solo se $(i<v) || (i==v \& j<w)$. In altre parole saranno memorizzate in ordine le informazioni per i nodi (1,2), (1,3), ..., (2,3), (2,4), ..., (n-1,n).\\
-Una ulteriore considerazione necessaria \'e la seguente: come mostrato poco fa il metodo \textbf{CPXnewcols} si aspetta il passaggio di diversi array mentre noi vorremmo utilizzare semplici variabili. La soluzione \'e molto semplice e consiste nell'anteporre il carattere \& prima di ogni variabile in questo modo stiamo in realtà passando un puntatore alla sua locazione di memoria.\\
+Una ulteriore considerazione necessaria è la seguente: come mostrato poco fa il metodo \textbf{CPXnewcols} si aspetta il passaggio di diversi array mentre noi vorremmo utilizzare semplici variabili. La soluzione è molto semplice e consiste nell'anteporre il carattere \& prima di ogni variabile in questo modo stiamo in realtà passando un puntatore alla sua locazione di memoria.\\
 
 Le operazioni descritte sono state realizzate tramite il seguente codice:
 
 \begin{lstlisting}
 
-double zero = 0.0; // one = 1.0; 	
+double zero = 0.0; // one = 1.0;     
 char binary = 'B';
 
-char **cname = (char **)calloc(1, sizeof(char *));		// (char **) required by cplex...
+char **cname = (char **)calloc(1, sizeof(char *));        // (char **) required by cplex...
 cname[0] = (char *)calloc(100, sizeof(char));
 
 // add binary var.s y(i,j)      
 
 for (int i = 0; i < inst->nNodes; i++)
 {
-	for (int j = i + 1; j < inst->nNodes; j++)//Mi interessano solo le coppie con i<j
-	{
-		sprintf(cname[0], "x(%d,%d)", i + 1, j + 1);
-		double obj = dist(inst->coord[i], inst->coord[j], inst->edgeType);
-		double ub = 1.0;
-		if (CPXnewcols(env, lp, 1, &obj, &zero, &ub, &binary, cname)) printError(" ... errato CPXnewcols su x");//Aggiugo una variabile al modello
-		if (CPXgetnumcols(env, lp) - 1 != xPos(i, j, inst)) printError(" ... errata posizione per x");//Serve solo per controllare se la funzione xPos è corretta
-	}
+    for (int j = i + 1; j < inst->nNodes; j++)//Mi interessano solo le coppie con i<j
+    {
+        sprintf(cname[0], "x(%d,%d)", i + 1, j + 1);
+        double obj = dist(inst->coord[i], inst->coord[j], inst->edgeType);
+        double ub = 1.0;
+        if (CPXnewcols(env, lp, 1, &obj, &zero, &ub, &binary, cname)) printError(" ... errato CPXnewcols su x");//Aggiugo una variabile al modello
+        if (CPXgetnumcols(env, lp) - 1 != xPos(i, j, inst)) printError(" ... errata posizione per x");//Serve solo per controllare se la funzione xPos è corretta
+    }
 }
 
 \end{lstlisting}
 
-La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile Cplex associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice \`e  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C\#.\\
+La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile Cplex associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice è  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C\#.\\
 
-Una volta definite le variabili \`e necessario creare i vincoli: per far ci\`o si \`e utilizzata la funzione \textbf{CPXnewrows}, la cui firma \`e:
+Una volta definite le variabili è necessario creare i vincoli: per far ciò si è utilizzata la funzione \textbf{CPXnewrows}, la cui firma è:
 
 \begin{lstlisting}
 int CPXnewrows(CPXCENVptr env, CPXLPptr lp, int rcnt, const double * rhs, const char * sense, const double * rngval, char ** rowname)
@@ -719,23 +723,23 @@ dove:
 \item \textbf{sense}: array di lunghezza rcnt i cui elementi possono assumere i seguenti valori:
 
 \begin{itemize}
-\item \textbf{\textipa{"}L\textipa{"}}: indica che il vincolo \`e una disuguaglianza il cui segno \`e  $\leq$
-\item \textbf{\textipa{"}E\textipa{"}}: indica che il vincolo \`e una uguaglianza
-\item \textbf{\textipa{"}G\textipa{"}}: indica che il vincolo \`e una disuguaglianza il cui segno \`e $\geq$
-\item \textbf{\textipa{"}R\textipa{"}} : indica che il vincolo \`e limitato 
+\item \textbf{\textipa{"}L\textipa{"}}: indica che il vincolo è una disuguaglianza il cui segno è  $\leq$
+\item \textbf{\textipa{"}E\textipa{"}}: indica che il vincolo è una uguaglianza
+\item \textbf{\textipa{"}G\textipa{"}}: indica che il vincolo è una disuguaglianza il cui segno è $\geq$
+\item \textbf{\textipa{"}R\textipa{"}} : indica che il vincolo è limitato 
 \end{itemize}
 
 \item \textbf{rngval}: variabile di tipo double contenente il valore 1.0;
 \item \textbf{rowname}: variabile di tipo char che assume il valore costante \textipa{"}B\textipa{"};
 \end{itemize}
 
-Anche in questo caso anzich\`e aggiungere tutti i vincoli in una singola iterazione, risulta pi\`u semplice aggiungere un vincolo per volta invocando il metodo tante volte quante sono i vincoli da aggiungere.
+Anche in questo caso anzichè aggiungere tutti i vincoli in una singola iterazione, risulta più semplice aggiungere un vincolo per volta invocando il metodo tante volte quante sono i vincoli da aggiungere.
 
 \vspace{2\baselineskip}
 COSTRUZIONE E RISOLUZIONE DEL MODELLO MATEMATICO IN C\#
 \vspace{2\baselineskip}
 
-Per poter creare un modello matematico in Cplex, utilizzando come linguaggio di programmazione C\# \`e necessario creare inizialmente una istanza della classe \textbf{Cplex}:
+Per poter creare un modello matematico in Cplex, utilizzando come linguaggio di programmazione C\# è necessario creare inizialmente una istanza della classe \textbf{Cplex}:
 
 \begin{lstlisting}
                            Cplex cplex = new Cplex();
@@ -754,7 +758,7 @@ dove:
 \begin{itemize}
 \item \textbf{lb}: Rappresenta il lower bound della variabile creata;
 \item \textbf{ub}: Rappresenta l' upper bound della variabile creata;
-\item \textbf{type}: Questo campo determina il tipo della variabile, pu\`o assumere i seguenti valori:
+\item \textbf{type}: Questo campo determina il tipo della variabile, può assumere i seguenti valori:
 \begin{itemize}
 \item \textbf{NumVarType.Int}: Nel caso di variabile intera;
 \item \textbf{NumVarType.Int}: Nel caso di variabile binaria;
@@ -771,9 +775,9 @@ Introduciamo ora una seconda interfaccia \textbf{ILinearNumExpr} che come si pu�
 
 La variabile \textbf{expr} rappresenta quindi una espressione lineare che deve essere definita come:
 
-$$\displaystyle{\sum\_{i = 1}^n a\_i x\_i} $$
+$$\displaystyle{\sum_{i = 1}^n a_i x_i} $$
 
-dove \textbf{$x\_i$} sono variabili di tipo \textbf{INumVar} mentre \textbf{$a\_i$} \'e un coefficiente di tipo \textbf{double}. Per aggiungere all'oggetto \textbf{expr} una variabile del modello \`e necessario utilizzare il metodo \textbf{AddTerm} la cui intestazione \`e:
+dove \textbf{$x\_i$} sono variabili di tipo \textbf{INumVar} mentre \textbf{$a\_i$} è un coefficiente di tipo \textbf{double}. Per aggiungere all'oggetto \textbf{expr} una variabile del modello è necessario utilizzare il metodo \textbf{AddTerm} la cui intestazione è:
 
 \begin{lstlisting}
                    void AddTerm(INumVar var,double coef)
@@ -786,7 +790,7 @@ dove:
 \item  \textbf{coeff}: coefficiente della variabile aggiunta all'espressione.
 \end{itemize}
 
-L'implementazione da noi fornita per quanto riguarda la funzione obiettivo \'e la seguente:
+L'implementazione da noi fornita per quanto riguarda la funzione obiettivo è la seguente:
 
 \begin{lstlisting}
 //Populating objective function
@@ -817,8 +821,8 @@ Nel primo caso risulta sufficiente invocare i metodi non statici \textbf{AddMini
                          cplex.AddMinimize(expr);         
 \end{lstlisting}
 
-Per quanto riguarda i vincoli \'e necessario utilizzare i metodi \textbf{AddEq}, \textbf{AddLe}, \textbf{AddGe} che rispettivamente aggiungono al modello una equazione, una disequazione avente segno $\leq$, una disequazione avente segno $\geq$.\\
-Nel nostro caso poich\'e ogni vincolo \`e una equazione riportiamo di seguito la firma della relativa funzione:
+Per quanto riguarda i vincoli è necessario utilizzare i metodi \textbf{AddEq}, \textbf{AddLe}, \textbf{AddGe} che rispettivamente aggiungono al modello una equazione, una disequazione avente segno $\leq$, una disequazione avente segno $\geq$.\\
+Nel nostro caso poichè ogni vincolo è una equazione riportiamo di seguito la firma della relativa funzione:
 
 \begin{lstlisting}
 public virtual IRange AddEq(INumExpr e,double v,string name)
@@ -827,9 +831,9 @@ public virtual IRange AddEq(INumExpr e,double v,string name)
 dove:
 
 \begin{itemize}
-	\item \textbf{e}: Espressione contenente le variabili del vincolo;
-	\item \textbf{v}: Termine noto del vincolo;
-	\item \textbf{name}: Nome identificativo del vincolo.
+    \item \textbf{e}: Espressione contenente le variabili del vincolo;
+    \item \textbf{v}: Termine noto del vincolo;
+    \item \textbf{name}: Nome identificativo del vincolo.
 \end{itemize}
 
 Il codice completo diventa quindi:
@@ -856,7 +860,7 @@ cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
 
 \end{lstlisting}
 
-Spiegato come \`e possibile creare un modello C\# risulta comprensibile la scelta di realizzare un'opportuna funzione, chiamata \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che produce il modello matematico del Commesso Viaggiatore risolubile da Cplex:
+Spiegato come è possibile creare un modello C\# risulta comprensibile la scelta di realizzare un'opportuna funzione, chiamata \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che produce il modello matematico del Commesso Viaggiatore risolubile da Cplex:
 
 \begin{lstlisting}
 public static INumVar[] BuildModel(Cplex cplex, Instance instance, int n)
@@ -867,25 +871,25 @@ dove:
 \begin{itemize}
 \item \textbf{cplex}: oggetto sul quale si definirà il modello matematico(funzione obbiettivo,variabili e vincoli)
 \item \textbf{instance}: oggetto contenente tutti i dati inerenti all'istanza del Commesso Viaggiatore fornita in ingresso dall' utente.
-\item \textbf{n}: Parametro la cui spiegazione \`e rimandata al capitolo...
+\item \textbf{n}: Parametro la cui spiegazione è rimandata al capitolo...
 \end{itemize}
 
 Passiamo infine a descrivere i metodi necessari per risolvere il modello, ottenere il costo e la soluzione ottima calcolata da Cplex.\\
 
-Per risolvere il modello \`e sufficiente invocare, sull'oggetto di classe Cplex dove \`e stato definito, il metodo \textbf{Solve}:
+Per risolvere il modello è sufficiente invocare, sull'oggetto di classe Cplex dove è stato definito, il metodo \textbf{Solve}:
 
 \begin{lstlisting}
                          cplex.Solve();
 \end{lstlisting}
 
 Una volta avviata la risoluzione, Cplex fornisce in automatico informazioni sul processo stampate nello standard output da noi definito\footnote{Se non viene modificato di default risulta essere la classica console del progetto C\#}: inizialmente troviamo le impostazioni di risoluzione selezionate come ad esempio il numero di Thread .., successivamente ..  .\\
-Terminata l'operazione il costo della soluzione \`e memorizzato all'interno della variabile \textbf{ObjValue} di tipo \textbf{double} del solito oggetto \textbf{cplex}:
+Terminata l'operazione il costo della soluzione è memorizzato all'interno della variabile \textbf{ObjValue} di tipo \textbf{double} del solito oggetto \textbf{cplex}:
 
 \begin{lstlisting}
                         cplex.ObjValue; 
 \end{lstlisting}
 
-Naturalmente \'e anche possibile conoscere il valore assunto da ogni variabile nella soluzione fornitaci da Cplex tramite il metodo \textbf{GetValues} della classe \textbf{Cplex}:
+Naturalmente è anche possibile conoscere il valore assunto da ogni variabile nella soluzione fornitaci da Cplex tramite il metodo \textbf{GetValues} della classe \textbf{Cplex}:
 
 \begin{lstlisting}
                 public virtual double GetValues(INumVar[] var)
@@ -897,7 +901,7 @@ dove:
 \item \textbf: rappresenta il vettore contenente tutte le variabile appartenenti al modello.
 \end{itemize}
 
-\'E presente anche l'analogo metodo per accedere al valore di una sola variabile \textbf{GetValue}. Il suo utilizzo \'e da noi altamente sconsigliato in quanto sperimentalmente \'e stato da verificato che ciclare quest'ultimo metodo impiega un tempo molto maggiore rispetto al semplice \textbf{getValues}.
+\'E presente anche l'analogo metodo per accedere al valore di una sola variabile \textbf{GetValue}. Il suo utilizzo è da noi altamente sconsigliato in quanto sperimentalmente è stato da verificato che ciclare quest'ultimo metodo impiega un tempo molto maggiore rispetto al semplice \textbf{getValues}.
 
 
 
@@ -912,14 +916,14 @@ METODO LOOP
 
 Il primo metodo sperimentato prende il nome di \textbf{LOOP}.
 -------------------------------------------------------------
-Va messa un p\'o di storia!!!!!!
+Va messa un pò di storia!!!!!!
 -------------------------------------------------------------
-L'idea alla sua base \'e molto semplice ed \'e la seguente: inizialmente il modello fornito non deve contiene alcun vincolo di subtour elimination ed una volta risolto si procedere ad analizzare la soluzione ottima trovata. Se questa presenta dei subtour il modello viene ampliato inserendovi gli appositi vincoli per eliminarli e si procede ad una sua nuova risoluzione. Viene da se che quest'ultimo passo va ripetuto fino a quando la soluzione proposta non risulta accettabile e quindi priva di subtour\footnote{Da qui deriva il nome del metodo in quanto la soluzione consiste in un loop delle stesse operazioni}.\\\'E importante far notare che ogni iterazione del loop i vincoli aggiunti nella precedente sono ovviamente mantenuti.\\
+L'idea alla sua base è molto semplice ed è la seguente: inizialmente il modello fornito non deve contiene alcun vincolo di subtour elimination ed una volta risolto si procedere ad analizzare la soluzione ottima trovata. Se questa presenta dei subtour il modello viene ampliato inserendovi gli appositi vincoli per eliminarli e si procede ad una sua nuova risoluzione. Viene da se che quest'ultimo passo va ripetuto fino a quando la soluzione proposta non risulta accettabile e quindi priva di subtour\footnote{Da qui deriva il nome del metodo in quanto la soluzione consiste in un loop delle stesse operazioni}.\\\'E importante far notare che ogni iterazione del loop i vincoli aggiunti nella precedente sono ovviamente mantenuti.\\
 In questo modo siamo sicuri di aver aggiunto al nostro modello solo i vincoli strettamente necessari il che non assicura che essi non siano un numero esponenziale.\\
 
-Per poter implementare il metodo Loop risulta quindi evidente la necessit\`a di sviluppare un'opportuna funzione in grado di individuare la presenza di subtour all'interno di una generica soluzione proposta e di generarne gli opportuni vincoli per eliminarli.\\
-In letteratura esistono molteplici modi per eseguire tali operazioni, quella da noi adottata si rif\'a all'algoritmo di \text{Kruskal} per trovare un albero a costo minimo in un grafo connesso con lati non orientati\footnote{Nello specifico la parte di nostro interesse \'e quella che impedisce la formazione di più componenti connesse}.\\
-La tecnica da noi adottata \'e stata quella di creare due metodi chiamati \textbf{InitCC} e \textbf{UpdateCC}: il primo serve solamente come inizializzazione per le strutture dati utilizzate dal secondo il quale, se invocato una volta per ogni lato appartenente alla soluzione attuale ne trova tutte le componenti connesse indicando anche quali lati sono a loro appartenenti. I dettagli riguardo le loro implementazioni sono visibili nella appendice di questo testo, per ora specifichiamo solamente che al termine dell'utilizzo del metodo \textbf{UpdateCC} i seguenti oggetti:
+Per poter implementare il metodo Loop risulta quindi evidente la necessità di sviluppare un'opportuna funzione in grado di individuare la presenza di subtour all'interno di una generica soluzione proposta e di generarne gli opportuni vincoli per eliminarli.\\
+In letteratura esistono molteplici modi per eseguire tali operazioni, quella da noi adottata si rifà all'algoritmo di \text{Kruskal} per trovare un albero a costo minimo in un grafo connesso con lati non orientati\footnote{Nello specifico la parte di nostro interesse è quella che impedisce la formazione di più componenti connesse}.\\
+La tecnica da noi adottata è stata quella di creare due metodi chiamati \textbf{InitCC} e \textbf{UpdateCC}: il primo serve solamente come inizializzazione per le strutture dati utilizzate dal secondo il quale, se invocato una volta per ogni lato appartenente alla soluzione attuale ne trova tutte le componenti connesse indicando anche quali lati sono a loro appartenenti. I dettagli riguardo le loro implementazioni sono visibili nella appendice di questo testo, per ora specifichiamo solamente che al termine dell'utilizzo del metodo \textbf{UpdateCC} i seguenti oggetti:
 
 \begin{lstlisting}
 
@@ -929,7 +933,7 @@ La tecnica da noi adottata \'e stata quella di creare due metodi chiamati \textb
 \end{lstlisting}
 
 risultano essere costruiti, in particolare \textbf{rcExpr} contiene le espressioni dei subtour elimination mentre invece \textbf{bufferCoeffRC} contiene il numero di lati appartenenti ad ogni subtour e quindi il termine noto delle precedenti espressioni\footnote{Il codice assume che l'espressione di indice $i$ presente all'interno di \textbf{rcExpr} abbia il proprio termine noto nella posizione di indice $i$ dentro \textbf{bufferCoeffRC}}.\\
-Se all'interno di \textbf{rcExpr} \'e presente una espressione sola significa che la soluzione attuale \'e valida e quindi ottima per il problema, al contrario si deve procedere all'inserimento dei vincoli con un semplice ciclo for:
+Se all'interno di \textbf{rcExpr} è presente una espressione sola significa che la soluzione attuale è valida e quindi ottima per il problema, al contrario si deve procedere all'inserimento dei vincoli con un semplice ciclo for:
 
 \begin{lstlisting}
                 
@@ -943,20 +947,20 @@ METODI UpdateCC e InitCC
 \vspace{2\baselineskip}
 
 Come già specificato nella sezione riguardo il metodo \textbf{LOOP} questi due metodi di supporto appartenenti alla classe \textbf{Utility} hanno il compito di individuare tutte le componenti connesse (che da ora in avanti abbrevieremo con \textbf{cc}) di una generica soluzione proposta.\\
-Prima di passare alla implementazione vera e propria introduciamoli ad alto livello: inizialmente si vuole assumere l'esistenza di $n$ \textbf{cc} distinte, ognuna di esse contenente un nodo della soluzione. Questo \'e il compito della dalla funzione \textbf{InitCC}.\\
+Prima di passare alla implementazione vera e propria introduciamoli ad alto livello: inizialmente si vuole assumere l'esistenza di $n$ \textbf{cc} distinte, ognuna di esse contenente un nodo della soluzione. Questo è il compito della dalla funzione \textbf{InitCC}.\\
 Successivamente per ogni lato della soluzione si vuole analizzare a quali \textbf{cc} sono assegnati i due nodi che lo caratterizzano. Se queste sono differenti vanno unificate in modo tale che tutti i nodi appartenenti, ad esempio
-, alla seconda ora appartengano tutti alla prima. Nel caso in cui invece le due \textbf{cc} coincidano significa che abbiamo trovato un subtour e il relativo vincolo di eliminazione deve essere definito. Tutte questo \'e invece compito del metodo \textbf{UpdateCC}.
+, alla seconda ora appartengano tutti alla prima. Nel caso in cui invece le due \textbf{cc} coincidano significa che abbiamo trovato un subtour e il relativo vincolo di eliminazione deve essere definito. Tutte questo è invece compito del metodo \textbf{UpdateCC}.
 
-Iniziamo quindi l'analisi del codice necessario. Per prima cosa si necessita di un vettore di interi che contenga all'indice $i-esimo$ l'identificativo della \textbf{cc} alla quale appartiene il nodo $i$\footnote{Per semplicit\'a si \'e deciso di identificare ogni \textbf{cc} con un valore intero univoco}. L'inizializzazione di questo vettore viene fornita da \textbf{InitCC}:
+Iniziamo quindi l'analisi del codice necessario. Per prima cosa si necessita di un vettore di interi che contenga all'indice $i-esimo$ l'identificativo della \textbf{cc} alla quale appartiene il nodo $i$\footnote{Per semplicità si è deciso di identificare ogni \textbf{cc} con un valore intero univoco}. L'inizializzazione di questo vettore viene fornita da \textbf{InitCC}:
 
 \begin{lstlisting}
 
 public static void InitCC(int[] cc)
 {
-	for (int i = 0; i < cc.Length; i++)
-	{
-		cc[i] = i;
-	}
+    for (int i = 0; i < cc.Length; i++)
+    {
+        cc[i] = i;
+    }
 }
 
 \end{lstlisting}
@@ -972,18 +976,18 @@ public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExp
 dove:
 
 \begin{itemize}
-	\item \textbf{cplex}: oggetto contenente il modello matematico corrente, eventualmente necessario per la creazione del vincolo di subtour elimination;
-	\item \textbf{z}: vettore contenente le variabili del modello, eventualmente necessario per la creazione del vincolo di subtour elimination;
-	\item \textbf{rcExpr}: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
-	\item \textbf{bufferCoeffRC}: Lista contenente i termini noti dei vincoli di subtour;
-	\item \textbf{relatedComponents}: vettore che definisce per ogni nodo del grafo la relativa componente connessa;
-	\item \textbf{i}: Nodo che con il parametro j forma il lato (i,j);
-	\item \textbf{j}: Nodo che con il parametro i forma il lato (i,j).
+    \item \textbf{cplex}: oggetto contenente il modello matematico corrente, eventualmente necessario per la creazione del vincolo di subtour elimination;
+    \item \textbf{z}: vettore contenente le variabili del modello, eventualmente necessario per la creazione del vincolo di subtour elimination;
+    \item \textbf{rcExpr}: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
+    \item \textbf{bufferCoeffRC}: Lista contenente i termini noti dei vincoli di subtour;
+    \item \textbf{relatedComponents}: vettore che definisce per ogni nodo del grafo la relativa componente connessa;
+    \item \textbf{i}: Nodo che con il parametro j forma il lato (i,j);
+    \item \textbf{j}: Nodo che con il parametro i forma il lato (i,j).
 \end{itemize}
 
-La funzione UpdateCC viene invocata dal metodo Loop $n$ volte, alla k-esima invocazione riceve in ingresso il k-esimo lato appartenente alla soluzione ottima del modello corrente. Per verificare se il lato ricevuto genera un subtour nel grafo G=(V,T*), dove T* contiene i precedenti $k-1$ lati controllati, si verifica se i vertici del lato appartengono alla medesima componente connessa. Nel caso in cui i due vertici non appartengono alla medesima componente connessa, \`e necessario aggiornare le componenti connesse dei vertici per l' invocazione successiva del metodo, viceversa si \`e  individuato un subtour caratterizzato dai nodi aventi come componente connessa la medesima dei nodi i e j.
+La funzione UpdateCC viene invocata dal metodo Loop $n$ volte, alla k-esima invocazione riceve in ingresso il k-esimo lato appartenente alla soluzione ottima del modello corrente. Per verificare se il lato ricevuto genera un subtour nel grafo G=(V,T*), dove T* contiene i precedenti $k-1$ lati controllati, si verifica se i vertici del lato appartengono alla medesima componente connessa. Nel caso in cui i due vertici non appartengono alla medesima componente connessa, è necessario aggiornare le componenti connesse dei vertici per l' invocazione successiva del metodo, viceversa si è  individuato un subtour caratterizzato dai nodi aventi come componente connessa la medesima dei nodi i e j.
 
-A livello implementativo si \`e utilizzato un array di interi chiamato relatedComponents, di dimensione pari al numero di vertici del grafo, come struttura dati necessaria per fotografare le componenti connesse del grafo G=(V,T*); relatedComponents contiene all' indice j la componente connessa del nodo j. La funzione InitCC, invocata ad ogni iterazione del metodo Loop, ha il compito di inizializzare relatedComponents associando ad ogni nodo una componente connessa diversa: in particolare si \`e  scelto di associare al nodo j la componente connessa j. Passiamo ora ad analizzare come \`e  stato nella pratica implementato il metodo UpdateCC, la sua intestazione \`e la seguente:
+A livello implementativo si è utilizzato un array di interi chiamato relatedComponents, di dimensione pari al numero di vertici del grafo, come struttura dati necessaria per fotografare le componenti connesse del grafo G=(V,T*); relatedComponents contiene all' indice j la componente connessa del nodo j. La funzione InitCC, invocata ad ogni iterazione del metodo Loop, ha il compito di inizializzare relatedComponents associando ad ogni nodo una componente connessa diversa: in particolare si è  scelto di associare al nodo j la componente connessa j. Passiamo ora ad analizzare come è  stato nella pratica implementato il metodo UpdateCC, la sua intestazione è la seguente:
 
 \begin{lstlisting}
 
@@ -1002,59 +1006,59 @@ dove:
 \item j: Nodo che con il parametro i forma il lato [i,j].
 \end{itemize}
 
-Il caso in cui non si crei un subtour \'e gestito molto semplicemente in questo modo:
+Il caso in cui non si crei un subtour è gestito molto semplicemente in questo modo:
 
 \begin{lstlisting}
 
 if (relatedComponents[i] != relatedComponents[j])
 {
-	for (int k = 0; k < relatedComponents.Length; k++)
-	{
-		if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
-		{
-			//Same as Kruskal
-			relatedComponents[k] = relatedComponents[i];
-		}
-	}
-	//Finally also the vallue relative to the Point i are updated
-	relatedComponents[j] = relatedComponents[i];
+    for (int k = 0; k < relatedComponents.Length; k++)
+    {
+        if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
+        {
+            //Same as Kruskal
+            relatedComponents[k] = relatedComponents[i];
+        }
+    }
+    //Finally also the vallue relative to the Point i are updated
+    relatedComponents[j] = relatedComponents[i];
 }
 
 \end{lstlisting}
 
-Dove per convenzione si \'e deciso di inglobare la \textbf{cc} del nodo $j$ in quella del nodo $i$.\\
-Il secondo caso \'e invece gestito nel seguente modo:
+Dove per convenzione si è deciso di inglobare la \textbf{cc} del nodo $j$ in quella del nodo $i$.\\
+Il secondo caso è invece gestito nel seguente modo:
 
 \begin{lstlisting}
 
 else
 {
-	ILinearNumExpr expr = cplex.LinearNumExpr();
+    ILinearNumExpr expr = cplex.LinearNumExpr();
 
-	//cnt stores the # of nodes of the current related components
-	int cnt = 0;
+    //cnt stores the # of nodes of the current related components
+    int cnt = 0;
 
-	for (int h = 0; h < relatedComponents.Length; h++)
-	{
-		//Only nodes of the current related components are considered
-		if (relatedComponents[h] == relatedComponents[i])
-		{
-			//Each link involving the node with index h is analized
-			for (int k = h + 1; k < relatedComponents.Length; k++)
-			{
-				//Testing if the link is valid
-				if (relatedComponents[k] == relatedComponents[i])
-				{
-					//Adding the link to the expression with coefficient 1
-					expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
-				}
-			}
-			cnt++;
-		}
-	}
-	//Adding the objects to the buffers
-	rcExpr.Add(expr);
-	bufferCoeffRC.Add(cnt);
+    for (int h = 0; h < relatedComponents.Length; h++)
+    {
+        //Only nodes of the current related components are considered
+        if (relatedComponents[h] == relatedComponents[i])
+        {
+            //Each link involving the node with index h is analized
+            for (int k = h + 1; k < relatedComponents.Length; k++)
+            {
+                //Testing if the link is valid
+                if (relatedComponents[k] == relatedComponents[i])
+                {
+                    //Adding the link to the expression with coefficient 1
+                    expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
+                }
+            }
+            cnt++;
+        }
+    }
+    //Adding the objects to the buffers
+    rcExpr.Add(expr);
+    bufferCoeffRC.Add(cnt);
 }
 
 \end{lstlisting}
@@ -1062,64 +1066,64 @@ else
 Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente ci assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per implementare i subtour elimination desiderati.
 
 \vspace{2\baselineskip}
-CALLBACK 
+CALLBACK
 \vspace{2\baselineskip}
 
-Una modalità avanzata di utilizzare Cplex prevede di interagire con il proprio algoritmo di Branch-and-cut; questo è reso possibile attraverso un meccanismo informatico che prende il nome
-di callBack. In termini generali una callback, è una funzione, o un "blocco di codice" che viene passata come parametro ad un'altra funzione. 
-
-In particolare, quando ci si riferisce alla callback richiamata da una funzione, la callback viene passata come parametro alla funzione chiamante.In questo modo la chiamante può realizzare un compito specifico (quello svolto dalla callback) che non è, molto spesso, noto al momento della scrittura del codice. 
-
-L’ esempio tipico di applicazione delle callback è quando un programmatore ha la necessità di interagire con un software di cui non ha accesso ai codici sorgenti. Per ovvi motivi i codici sorgenti di Cplex non sono di libero accesso, per consentire ad un programmatore esterno di interagire con il suo flusso esecutivo  in alcune sue sezioni vengono  invocatale delle callBack. Di dafault esse non sono installate risultando così trasparenti a Cplex, nel caso in cui si provvede ad installarle nei punti di codice in cui vengono invocate il flusso di programma passa da Cplex alle CallBack. 
+In questa sezione esponiamo una tecnica alternativa per l'inserimento delle espressioni di subtour elimination all'interno di un sistema. Ciò che varia rispetto al metodo \textbf{Loop} presentato in precedenza è il \textbf{momento} in cui tali espressioni vengono definite.\\
+L'idea è di sfruttare il fatto che Cplex come metodo di risoluzione per i problemi di \textbf{PLI} utilizza la tecnica del \textbf{Branch\&Cut}\footnote{Da ora in avanti sarà abbreviato con la sigla \textbf{B\&C}}. Viene inoltre offerta la possibilità di conoscere la soluzione trovata, sia essa frazionaria o intera, per ogni nodo dell'albero decisione ma soprattuto la possibilità di ampliare il modello matematico come meglio crediamo.\\
+Quello che vogliamo fare risulta a questo punto molto chiaro: se alla analisi della soluzione di un nodo sono presenti subtour il modello matematico deve essere modificato per eliminarli.\\
+A livello pratico Cplex permette l'implementazione distinta di callback che vengono eseguite nel momento in cui viene trovata una soluzione intera oppure frazionaria\footnote{In informatica una callback è una funzione definita dall'utente che viene eseguita in automatico dal sistema ogniqualvolta scatta un particolare evento.}: nel primo caso è necessario implementare una \textbf{"lazy constraint callback"} mentre nel secondo caso una \textbf{"user cut callback"}. Da notare che in realtà solo soluzioni valide per i criteri di fathoming possono far scattare una callback, ciò non avviene ad esempio se il valore della soluzione di un nodo risulta maggiore rispetto a quello dell'incumbent\footnote{Per incumbent si intende il valore migliore trovato fino a questo momento relativo ad un soluzione accettabile.}.\\
+In generale i tagli possono essere definiti \textbf{locali} o \textbf{globali}: mentre i primi hanno validità esclusiva all'interno del sottoalbero avente come radice il nodo per la quale sono stati generati, i secondi hanno validità per tutti i nodi dell'albero decisionale e vengono memorizzati in una struttura globale detta \textbf{pool di tagli}. Cplex inoltre fornisce la possibilità di definire un taglio \textbf{purgeable} o meno: nel primo caso significa che può essere rimosso in un secondo momento poiché ritenuto inefficace. Durante il proseguo della tesi i tagli saranno da considerarsi sempre globali e non purgeable.
 
 \begin{center}
-\includegraphics[scale=0.5]{Callback}  
-
-Figura 3: Soluzione frazionaria
+    \includegraphics[scale=0.5]{Callback}  
+    
+    Figura 3: Soluzione frazionaria
 \end{center}
 
+Prima di procedere con l'esposizione dei dattagli riguardanti l'implementare di tali procedure, è possibile effettuare le seguenti considerazioni:\\
 
-Tipicamente le callBack eseguono elaborazioni che saranno inoltrate a Cplex il quale le sfrutta durante l' evoluzione dell' algoritmo di Branch and cut: tali elaborazioni possono essere specifiche del problema che si sta risolvendo aumentando così le performance del programma. Nel programma realizzato sono state utilizzate le callback di Cplex per aggiungere al volo tagli specifici per il problema del Commesso Viaggiatore durante l' evoluzione del Branch and Cut.
-Tra le varie CallBack che Cplex mette a disposizione c' è ne sono due particolarmente importanti che saranno oggetto dei successivi paragrafi: la \textbf{LazyCallback} e la \textbf{UserConstraintCallback}.
-
-
-\vspace{2\baselineskip}
-LAZYCALLBACK
-\vspace{2\baselineskip}
-
-Durante il processo di risoluzione del Branch-and-cut, ogni volta che Cplex risolvendo il rilassamento continuo in un nodo calcola una soluzione ammissibile il cui costo è inferiore rispetto all' incumbet attuale viene invocata la lazycontraint callback prima di aggiornare l'incumbent, qualora la soluzione intera ha un costo superiore all' incumbent, per il \textit{criterio di bounding} il nodo viene eliminato. Poichè , come più volte ricordato, al modello di partenza non sono stati aggiunti i vincoli di subtour è possibile che la soluzione calcolata da Cplex sia ammissibile per il modello corrente ma contenga dei subtour al suo interno.  Il codice che presenteremo nei prossimi paragrafi sfrutta la lazycontraint callback per consentire a Cplex di aggiornare l' incumbent  solo se la soluzione di un nodo per il quale viene invocata la lazycontraint callback non ha subtour al suo interno, altrimenti all' interno della callback si genera un taglio per ogni sottociclo.
-
-In generale i tagli possono essere \textbf{locali} o \textbf{globali}: mentre i primi hanno validità esclusiva al sottoalbero avente come radice il nodo per la quale sono stati generati , i secondi hanno validità per tutti i nodi dell' albero decisionale e vengono memorizzati in una struttura globale detta \textbf{pool di tagli}. Una volta che un taglio viene aggiunto al pool, se questo può essere rimosso in un secondo momento, poiché ritenuto inefficace, si dice che tale taglio è \textbf{purgeable}. Durante il proseguo della tesi i tagli saranno da considerarsi sempre globali e non purgeable: per tale ragione un taglio con queste caratteristiche è come se fosse aggiunto al modello non potendo essere più violato.
-Si osserva che a differenza del metodo Loop una volta che Cplex produce la soluzione ottima questa certamente è ammissibile e corrisponde quindi al tour ottimo che si vuole cercare. A livello implementativo sarà  mostrato sia come installare questa callBack in C\# sia in C poichè questo ci tornerà  utile nel proseguito della tesi.
-
-\vspace{2\baselineskip}
-MULTI-THREAD
-\vspace{2\baselineskip}
-
-Il software Cplex prima di risolvere il modello interroga il sistema operativo al fine di stabilire il numero di core presenti nel processore e pone il numero di thread al numero di core in esso presenti. Al giorno d' oggi i moderni processori dispongono almeno di due core: risulta quindi utile associare ad ognuno di essi un thread con il compito di risolvere il rilassamento continuo di un nodo dell' albero decisionale. Così facendo si sfrutta al massimo la potenza del processore incrementando in questo modo le performance del programma.  
-Nel momento in cui si installa una delle due callback, si ha la possibilità che due thread distinti invochino contemporaneamente la funzione da noi realizzata per aggiungere tagli al modello: qualora tale funzione modifichi variabili che sono condivise fra i vari thread si potrebbe andrebbe incontro ad eccezioni o anomalie  tali da non garantire più la correttezza della soluzione prodotta da Cplex. 
-Per evitare queste problematiche, i progettisti di Cplex hanno preferito  settare il numero di thread al valore 1 dopo l' installazione della Lazy o della UserCut callback. Naturalmente tale scelta inficia le performance: si è quindi deciso di riportare il numero di thread al numero di core presenti nel processore prestando attenzione a realizzare un codice thread-safety. Maggiori dettagli di quanto detto sono riportati nei successivi paragrafi.
+\begin{itemize}
+    \item La soluzione ottima fornita da Cplex risulta per costruzione priva di subtour: non è quindi più necessario, al contrario del metodo \textbf{Loop}, lanciare molteplici risoluzioni. A livello pratico è sufficiente invocare solo una volta il metodo \textbf{Cplex.Solve()}.
+    \item Maggiore è il numero di vincoli che andiamo ad inserire, maggiore diventa il tempo di risoluzione per i vari nodi successivi dell'albero decisionale.
+    \item Il numero di nodi che forniscono soluzioni frazionarie risulta di molto superiore rispetto a quelli con soluzione intera. Tenendo conto di quanto detto al punto precedente, non è quindi saggio andare ad analizzare tutte le soluzioni frazionarie ma solo una loro minima percentuale. Senza questo accorgimento si andrebbe inevitabilmente ad inserire innumerevoli vincoli superflui per l'ottenenimento della soluzione ottima con conseguenti tempi di risoluzione eccessivamente elevati.
+    \item I moderni processori hanno a disposizione molteplici core sia reali che virtuali e quindi sfruttare tecniche di multi-threading. In particolare Cplex permette di settare il numero di thread utilizzabili, in modo tale che ognuno di essi si occupi dalla risoluzione di un nodo dell'albero decisionale: in questo modo, in linea teorica, si drovrebbe ottenere un boost delle prestazioni con conseguente riduzione dei tempi di calcolo. D'altro canto, come per qualsiasi applicazione informatica, l'utilizzo del multi-threading risulta rischioso in quanto l'accesso contemporaneo ai medesimi dati può portare ad una loro inconsistenza. Nel nostro caso può capitare che più callback eseguite contemporaneamente vadano a modificare variabili condivise andando così incontro ad eccezioni o anomalie tali da non garantire più la correttezza della soluzione prodotta da Cplex.\\
+    Per evitare queste problematiche, i progettisti di Cplex hanno preferito settare il numero di thread al valore \textbf{1} dopo l' installazione di una callback. \'E quindi nostro compito modificare tale parametro così da renderlo pari al numero di processori virtuali a nostra disposizione e di conseguenza assicurarci che le callback risultino \textbf{thread-safe}. Maggiori dettagli sono riportati nei successivi paragrafi.
+\end{itemize}
 
 
 \vspace{2\baselineskip}
-INSTALLAZIONE LAZYCONSTRAINT CALLBACK C\#
+LAZYCONSTRAINT CALLBACK C\#
 \vspace{2\baselineskip}
 
 
-Per poter installare la LazyConstraintCallback in C\# è prima necessario creare un classe che estenda Cplex.LazyConstraintCallback: tale classe è stata chiamata TSPLazyConsCallback. All' interno di essa è obbligatorio sovrascrivere il metodo Main della classe ereditata: al suo interno sarà realizzato il codice che, a partire dalla soluzione intera calcolata da Cplex in un nodo dell' albero decisionale avente un costo inferiore rispetto all' incumbent attuale, aggiunge per ogni subtour (se presente) il relativo taglio.
-Per installare la callback è necessario utilizzare il metodo \textbf{Use} sull' istanza della classe Cplex nella quale è stato definito il modello e passargli come parametro una istanza della classe \textbf{TSPLazyConsCallback}. 
+Per poter utilizzare una \textbf{lazy constraint callback} in \textbf{C\#} Cplex fornisce all'interno delle proprie librerie la classe astratta \textbf{LazyConstraintCallback} che a sua volta estende \textbf{ControlCallback}. \'E quindi necessario creare una propria classe che estenda quest'ultima, nel nostro caso è stato deciso di chiamarla \textbf{TSPLazyConsCallback}, in questo modo è necessario definire al suo interno il metodo \textbf{Main} che verrà invocato automaticamente dal sistema ogniqualvolta scatta la callback\footnote{Rocordiamo che tutti i metodi astratti presenti all'interno di una classe astratta devono essere obbligatoriamente definiti da tutte le classi che estendono quest'ultima}.\\
+Una volta terminato questo processo l'installazione della callback viene eseguita nel seguente modo:
+
 \begin{lstlisting}
 
-cplex.Use(new TSPLazyConsCallback(cplex, instance, process, z, true));
+cplex.Use(new TSPLazyConsCallback(...));
 
 \end{lstlisting}
 
+Dove, come al solito, cplex è l'instanza della classe \textbf{Cplex} sulla quale definiamo il modello matematico privo dei vincoli di subtour elimination.\\
+Mostriamo ora la firma del costruttore della classe \textbf{TSPLazyConsCallback} riportando una breve descrizione dei parametri di ingresso:
 
-\textit{[Qui penso possa dare fastidio al prof aver messo direttamente true..conviene secondo me fare una variabile a parte , chiamarla BlockPrint e metterla a true… ]}
+\begin{lstlisting}
 
-I parametri che si vogliono rendere visibili all' interno della classe bisogna passarli come parametro all' atto della creazione dell' istanza della classe TSPLazyConsCallback. L' unico parametro il cui significato non è noto è BlockPrint: essa è una variabile booleano che indica se il grafo di supporto della soluzione intera in corrispondenza della quale è stata invocata la Lazy debba essere o meno stampato a video. Tale parametro è utile poiché la lazy verrà utilizzata anche all' interno di altri  algoritmi per i quali non risulta particolarmente interessante graficare a video il grafo di supporto della soluzione. 
-Come accennato nel paragrafo precedente, l' installazione della Lazy setta il numero di thread a 1: per riportare il numero di thread al numero di core è necessario utilizzare i metodi \textbf{SetParam} e \textbf{GetNumCores} entrambi sull' istanza cplex.
+public TSPLazyConsCallback(Cplex cplex, INumVar[] z, Instance instance, Process process, bool BlockPrint)
 
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{cplex}: necessario per l'individuazione dei vincoli di subtour elimination, contiene i dati del modello matematico utilizzato;
+    \item \textbf{z}: identico al punto precedente, contiene i riferimenti alla variabili del modello matematico;
+    \item \textbf{instance}: necessario nel caso in cui si desideri stampare attraverso GNUPlot le soluzioni intere che hanno fatto scattare la callback;
+    \item \textbf{process}: identico al punto precedente;
+    \item \textbf{BlockPrint}: è il parametro booleano che determina se procedere o meno con le stampe delle soluzioni intere (se \textbf{true} si procede con la stampa);
+\end{itemize}
+
+Come accennato nel paragrafo precedente, l'installazione di una callback setta automaticamente il numero di thread ad uno. Per modificare tale valore, ponendolo pari al numero logico di cores messi a disposizione dal processo in uso, è sufficiente eseguire la seguente riga di codice:
 
 \begin{lstlisting}
 
@@ -1127,168 +1131,127 @@ cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
 
 \end{lstlisting}
 
-Si osserva che, utilizzando la funzione GetNumCores, si è reso il codice indipendente dal numero di core del computer sul quale si andrà poi ad eseguire effettivamente il codice.
-Per mostrare a video il grafo di supporto di una soluzione con gnuplot è necessario, come discusso nel paragrafo X,  creare un file avente una determinata struttura. Poiché si è deciso di lavorare in un ambiente multi-thread, potrebbe essere fonte di anomalie creare un unico file accessibile da tutti i thread all' interno del quale quest' ultimi scrivono le coordinate della relativa soluzione intera calcolata.  Qualora almeno due thread nel medesimo istante invocano la callback si ritroverebbero a scrivere sullo stesso file coordinate appartenente a soluzioni differenti. 
-Per tale ragione si è realizzato un codice in cui ogni thread che invoca la lazycallback crea un proprio file sul quale scrivere le coordinate della soluzione calcolata. Per far ciò ad ogni file è stato attribuito un nume univoco avente la seguente struttura:
-
-
-\begin{lstlisting}
-
-instance.InputFile + "\_" + nodeId + ".dat"
-
-\end{lstlisting}
-
-
-dove \textbf{nodeId} risulta essere una stringa che dipende dal nodo sul quale un thread ha invocato la lazy: in particolare rappresenta l' indice del nodo. Per ottenere tale stringa è stato necessario invocare il metodo \textbf{GetNodeId} ereditato dalla classe Cplex.LazyConstraintCallback:
+Come sarà possibile vedere più avanti, la tecnica da noi utilizzata per l'individuazione di subtour risulta thread-safe in quanto non vengono utilizzate variabili condivise da più threads se non nella sola modalità di lettura. L'aggiunta di eventuali tagli, d'altro canto, viene gestita in modo automatico da Cplex assicurandoci, anche in questo caso, una procedura thread-safe. Un discorso apparte deve invece essere fatto nel caso in cui la variabile \textbf{BlockPrint} descritta in precedenza sia stata posta a \textbf{true}. Come era logico aspettarsi, abbiamo verificato che spesso la procedura di stampa attraverso GNUPlot di una qualsiasi soluzione richiede un tempo di esecuzione maggiore rispetto la frequenza con cui le callback sono effettuate. Ricordando inoltre che, il metodo da noi utilizzato per comunicare a GNUPlot le coordinate cartesiane dei punti del grafo cartesiano prevede la scrittura di queste ultime in un apposito file di testo, è stato necessario individuare un modo per evitare problemi riguardanti il multi-threading: utilizzare sempre lo stesso file di testo causa infatti errori nella stampa dei grafi, in particolare la lettura delle coordinate da parte di GNUPlot risulta troppo lenta e durante questo processo più thread rischiano di modificare il file con le proprie coordinate.\\
+Per evitare questo problema è stato quindi necessario stampare le coordinate prodotte dai vari nodi dell'albero decisionale in differenti files. A tal proposito la tecnica da noi scelta è stata quella di inserire nel nome di questi ultimi anche l'id numerico del nodo a loro associato che viene fornito dirretamente da Cplex:
 
 
 \begin{lstlisting}
 
 string nodeId = GetNodeId().ToString();
 
-\end{lstlisting}
+...
 
-Prima di verificare se la soluzione al suo interno contiene o meno cicli bisogna naturalmente accedere a tale soluzione: a tal fine si deve utilizzare il metodo \textbf{GetValues} ereditato dalla classe Cplex.LazyConstraintCallback il quale riceve in input il vettore z e restituisce per ogni variabile il corrispondente valore.
-
-
-\begin{lstlisting}
-
-public class TSPLazyConsCallback : Cplex.LazyConstraintCallback
-{
-	…
-
-	public override void Main()
-	{
-         double[] actualZ = GetValues(z);
-    		…
-	}
-}
-
+string fileName = instance.InputFile + "_" + nodeId;
 
 \end{lstlisting}
 
-\textit{[Ho riportato sia il Main che la classe perchè dopo tante parole mi sembrava piu chiaro vedere poi il codice effettivo…]}
-
-
-Una volta ottenuta la soluzione per verificare se sono presenti cicli e definire i corrispondenti vincoli di subtour si sono utilizzati i metodi \textbf{InitCC} e \textbf{UpdateCC} e le medesime strutture dati ampliamene descritte nei paragrafi X.Y; solo per completezza si riporta il codice realizzato.
-
-
-
- \textit{[Qui non ho capito perchè hai fatto un altro metodo BuildCC che fa le stesse cose di UpdateCC]}
-
-
-\begin{lstlisting}
-
-List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
-List<int> bufferCoeffCCLC = new List<int>(); ;
-
-int[] compConnLC = new int[instance.NNodes];
-
-Utility.InitCC(compConnLC);
-
-for (int i = 0; i < instance.NNodes; i++)
-            {
-                for (int j = i + 1; j < instance.NNodes; j++)
-                {
-                    //Retriving the correct index position for the current link inside z
-                    int position = Utility.zPos(i, j, instance.NNodes);
-
-                    //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
-                    if (actualZ[position] >= 0.5)
-                    {
-                        //Updating the model with the current subtours elimination
-                        BuildCC(i, j, ccExprLC, bufferCoeffCCLC, compConnLC);
-
-                        if (BlockPrint)
-                        {
-                            fileLC.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                            fileLC.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
-                        }
-                    }
-                }
-            }
-
-
-\end{lstlisting}
-
-
-
-Una volta memorizzato l’ i-esimo taglio all’ interno di ccExprLC[i] e bufferCoeffCCLC[i], per aggiungerlo al modello è necessario utilizzare il metodo Add ereditato dalla classe Cplex.LazyConstraintCallback, tale metodo ha come firma:
-
-\begin{lstlisting}
-
-IloRange Add(IloRange cut, int cutmanagement) 
-
-\end{lstlisting}
-
-
-dove:
-
-\begin{itemize}
-	\item \textbf{cut}: Rapprerenta il vincolo che deve essere aggiunto come taglio globale. Il vincolo deve essere lineare.
-	\item \textbf{cutmanagement}: Valore intero che indica come il taglio deve essere gestito da Cpex. I possibili valori che può assumere tale parametro solo:
-	
-	\begin{itemize}
-	\item \textbf{0}: Il taglio è aggiunto al rilassamento in maniera permanente.
-	\item \textbf{1}: Il taglio è aggiunto al rilassamento, ma può essere eliminato successivamente se Cplex determina che risulta essere inefficiente. Il questo caso di 											parla di taglio \textbf{purgeable}. 
-	\item \textbf{2}: Il taglio viene trattato come i tagli generati da Cplex, ossia viene analizzato prima di aggiungerlo al rilassamento.  Qualora, per esempio, Cplex ritiene che esiste 							già un taglio più efficace questo non viene aggiunto.	
-	\end{itemize}
-
-\end{itemize}
-
-\textit{[Nella documentazione parlano di rilassamento, secondo me è più giusto pool di tagli]}
-
-Come riportato dalla documentazione, IloRange risulta essere una interfaccia utilizzata per modellare oggetti che rappresentano ranged constraints nel formato:
-
-
-$$lb <= expr <= ub$$ 
-
-
-Un oggetto di tipo IloRange può essere ottenuto utilizzando il metodo \textbf{Le} il quale crea e ritorna un vincolo che forza una data espressione ad essere minore o uguale di uno specifico valore. 
-
-\begin{lstlisting}
-
-public IloRange Le(IloNumExpr e, double v)
-
-\end{lstlisting}
-
-dove :
-
-\begin{itemize}
-	\item \textbf{e}: Espressione contenente una combinazione lineare delle variabili relative al vincolo..
-	\item \textbf{v}: Termine noto del vincolo. 
-\end{itemize}
-
-
-Riportiamo il codice realizzato per aggiungere il taglio:
-
+La funzione \textbf{GetNodeId} risulta disponibile in quanto ereditata dalla classe \textbf{ControlCallback}.\\
+Dopo i dovuti chiarimenti riguardanti il multi-threading passiamo ora a descrivere nei dettagli come è stata realizzato il metodo Main della classe TSPLazyConsCallback. Prima di tutto per verificare l'eventuale presenza di subtour bisogna naturalmente accedere alla soluzione fornita per il nodo dell'albero decisionale in questione: a tal fine si possono utilizzare i metodi \textbf{GetValues} e \textbf{GetValue}, ereditati entrambi dalla classe ControlCallback, che ricevono in input rispettivamente un vettore di riferimenti per variabili del modello matematico e un singolo riferimento ad una variabile di quest'ultimo. Dopo pochi test ci si accorge immediatamente che invocare più volte il metodo \textbf{GetValue}, ad esempio dentro un ciclo for, risulta molto più oneroso in termini temporali rispetto una singola evocazione del metodo \textbf{GetValues}: si può quindi dedurre che è molto più dispendioso effettuare multiplici accessi all'interfaccia fornita da Cplex rispetto alla quantità di dati che ad essa richiediamo.\\
+Per quanto appena detto la nostra scelta è ricaduta nel metodo \textbf{GetValues} che restituisce un vettori di \textbf{double} contenente il valore dell variabili (il cui riferimento è ricevuto come ingresso) nella soluzione corrente del modello matematico. Da notare che anche in questo caso anche se ci aspettiamo tutti valori interi, in particolare pari a 0 oppure 1, è possibile che ci siano in realtà discostamenti infinitesimi pertanto quando controlliamo il valore di una variabile verifichiamo semplicemente se è maggiore o minore del valore 0,5.\\
+I metodi utilizzati per l'individuazione di eventuali subtour e la eventuale stampa del grafo attraverso GNUPlot sono identici a quelli utilizzati per il metodo \textbf{Loop} pertanto non sono qui riportarti.\\
+Una volta ottenute tutte le informazioni riguardanti i subtour, al contrario di quanto viene fatto nel metodo Loop non è richiesto di ampliare direttamente il modello con nuovi vincoli ma, come era già stato accennato in precedenza, deve essere popolato il pool di tagli associato al modello matematico:
 
 \begin{lstlisting}
 
 IRange[] cuts = new IRange[ccExprLC.Count];
 
-            if (cuts.Length > 1)
-            {
-                for (int i = 0; i < cuts.Length; i++)
-                {
-                    cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
-                    Add(cuts[i], 1);
-                }
-            }
+//if cuts.Length is 1 the graph has only one tour then cuts aren't needed
+if (cuts.Length > 1)
+{
+    for (int i = 0; i < cuts.Length; i++)
+    {
+        cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
+        Add(cuts[i], 1);
+    }
+}
 
 \end{lstlisting}
 
+Dove:
 
-\textit{[Il codice qui lo modificherei perché memorizziamo nel vettore cuts tutti i tagli ma questo poi non li usiamo mai..aggiungerei direttamente il taglio con Add al modello senza prima memorizzarlo nel vettore]}
+\begin{itemize}
+    \item \textbf{cuts}: è un vettore di \textbf{IRange} che sono la struttura di dati base fornita da Cplex per memorizzare espressioni lineari;
+    \item \textbf{ccExprLC[i]}: analogamente per quanto avviene nel metodo Loop, contiene i dati delle variabili dell'i-esimo taglio memorizzati come \textbf{ILinearNumExpr} (struttura dati fornita da Cplex);
+    \item \textbf{bufferCoeffCCLC[i]}: analogamente per quanto avviene nel metodo Loop, contiene il numero di variabili che definiscono l'i-esimo taglio;
+    \item \textbf{cplex.Le}: è la funzione definita da Cplex che restituisce una espressione lineare che impone le variabili, ricevute come primo parametro, minori oppure uguali del secondo parametro ricevuto;
+    \item \textbf{Add}: è la funzione eraditata dalla classe \textbf{LazyConstraintCallback} che permette di aggiungere un taglio \textbf{globale}. Come parametri riceve quindi il taglio stesso ed un valore intero che indica a Cplex come debba gestire quest'ultimo:
+    \begin{itemize}
+        \item \textbf{0}: il taglio è aggiunto al pool in maniera permanente;
+        \item \textbf{1}: il taglio è definito come \textbf{purgeable} quindi eliminabile nel caso in cui non risulti più efficiente;
+        \item \textbf{2}: il taglio viene trattato come se fosse stato generato da Cplex, quindi ad esempio prima di essere aggiunto al pool viene analizzata la sua efficacia e di conseguenza l'operazione va quindi a buon fino o meno;
+    \end{itemize}
 
+\end{itemize}
+
+
+\vspace{2\baselineskip}
+CONCORDE
+\vspace{2\baselineskip}
+
+L'utilizzo di una \textbf{user cut callback} risulta molto più complicato rispetto a quanto appena visto per la \textbf{lazy constraint callback}: dato che tali callback scattano nel momento in cui viene trovata una soluzione frazionaria, l'individuazione di eventuali subtour non può essere eseguita con le tecniche esposte fino ad ora.\\
+Per effetturare tale operazione si necessita di un separatore che, ricevendo in ingresso la soluzione x* con almeno una componente frazionaria, fornisca in uscita un insieme $S\subsetneq{V}$, $|S|\geq{2}$ tale per cui:
+
+\begin{equation}\label{eq:concorde1}
+\displaystyle{\sum_{\left ( i,j \right )\in E\left ( S \right )} x_{i,j}^{*}\nleqslant \left | \widehat{S} \right |-1}
+\end{equation}
+
+Tale sottoinsieme non è facilmente individuabile come nel caso di soluzione intere in cui era sufficiente individuare le componenti connesse. Per esempio in Figura 3 si è riportato il supporto di una soluzione x* frazionaria ove i lati colorati di rosso, blu e grigio indicano che la corrispondente variabile assumme rispettivamente i valori 1, 0.5 , 1.5.
+
+\begin{center}
+    \includegraphics[scale=0.5]{SoluzioneFrazionaria}  
+    
+    Figura 3: Soluzione frazionaria
+\end{center}
+
+Tale grafo risulta connesso; tuttavia è presente un sottoinsieme S = {1,2,3} per cui vale \eqref{eq:concorde1}.\\
+Una seconda formulazione equivalente alla \eqref{eq:concorde1} risulta essere la seguente:
+
+\begin{equation}\label{eq:concorde2}
+\displaystyle{\sum_{\left ( i,j \right )\in \delta \left ( S \right )} x_{i,j}^{*}\ngeqslant 2}
+\end{equation}
+
+Si osserva che il primo membro di \eqref{eq:concorde2} può essere visto come la capacità di una sezione di una rete di flusso se si interpretano le x* come le capacità della rete.
+E' possibile calcolare una sezione di capacità minima risolvendo un problema di max flow che sappiamo essere di programmazione lineare e quindi risolubile attraverso un algoritmo polinomiale.\\
+Poichè però la sezione di capacità minima dipende dal nodo sorgente \textit{s} e dal nodo di destinazione \textit{t}, si devono in realtà risolvere \textbf{n-1} problemi di max flow: per tale ragione è stato preferito utilizzare una porzione del software \textbf{Concorde} che offre, attraverso le proprie librerie, la possibilità di risolvere tale problema con tempi di esecuzione molto brevi ed allo stesso tempo di alleggerire il nostro carico di lavoro che in ogni caso non avrebbe prodotto risultati migliori.\\
+Concorde è un software, sviluppano in linguaggio \textbf{C} da David Applegate, Robert E. Bixby, Vašek Chvátal, e William J. Cook, specializzato nella risoluzione ottimizzata di istanze del problema del commesso viaggiatore. Per fini accademici la distribuzione e l'utilizzo è fornita in modo gratuito e le librerei possono essere scaricate direttamente dal seguente indirizzo:
+\begin{center}
+\href{http://www.math.uwaterloo.ca/tsp/concorde/downloads/downloads.htm}{http://www.math.uwaterloo.ca/tsp/concorde/downloads/downloads.htm}
+\end{center}
+
+Come accennato poco fa il linguaggio utilizzato da Concorde non è \textbf{C\#} bensì \textbf{C} pertanto una implementazione diretta del software non è possibile. La soluzione da noi adottata è la seguente: abbiamo creato un nuovo progetto Visual Studio in linguaggio \textbf{C/C++} ed al suo interno abbiamo creato un codice che soddisfacesse unicamente alla funzionalità ambedue i tipi di callback proposti interfacciandosi alle librerie di Concorde per trovare i vincoli di subtour elimination ed aggiungerli al modello matematico. Successivamente il tutto è stato impachettato all'interno di una \textbf{DLL} compatibile con il linguaggio \textbf{C\#}. Il processo di creazione della DLL è stato spiegato nel seguente paragrafo LINK!!!!!!!!!!!!!!!!!!!!, d'ora in avanti quindi ci focalizzeremo unicamente nel contenuto della libreria dinamica da noi creata.\\
+
+Per poter utilizzare Concorde in ambiente Windows è necessario importare ogni singolo file .c e .h che appartiene alla distribuzione: nel nostro caso però solo una minima parte delle sue funzionalità è di nostro interesse e pertanto solamente i seguenti file sono stati da noi utilizzati:
+
+
+\begin{itemize}
+    \item \textbf{allocrus.c}
+    \item \textbf{connect.c}
+    \item \textbf{cut\_st.c}
+    \item \textbf{mincut.c}
+    \item \textbf{shrink.c}
+    \item \textbf{sortrus.c}
+    \item \textbf{urandom.c}
+    \item \textbf{cut.h}
+    \item \textbf{machdefs.h}
+    \item \textbf{macrorus.h}
+    \item \textbf{util.h}
+    \item \textbf{end}
+\end{itemize}
+
+Dove affinché il programma compili correttamente, è necessario effettuare le seguenti modifiche:
+
+\begin{itemize}
+    \item All'interno dei file \textbf{allocrus.c} e \textbf{util.h} è necessario importare tramite il comando \textbf{import} l'header \textbf{malloc.h}.
+    \item All' interno del file \textbf{machdefs.h} è necessario eliminare l'inclusione di \textbf{config.h}.
+\end{itemize}
 
 \vspace{2\baselineskip}
 LAZYCONSTRAINTCALLBACK IN C
 \vspace{2\baselineskip}
 
 
-
-Per installare la LazyConstraint callback in C è necessario, prima di risolvere il modello, invocare la routine \textbf{CPXsetlazyconstraintcallbackfunc} la cui firma è:
+In questa mostreremo solamente i dettagli per l'installazione e l'utilizzo delle \textbf{lazyconstraint callback} in linguaggio \textbf{C} in quanto un discorso più ampio è stato precedentemente in LINK!!!!!!!!!.
+L'installazione di questo tipo di callback avviene attraverso l'invocazione della routine \textbf{CPXsetlazyconstraintcallbackfunc} la cui firma è:
 
 \begin{lstlisting}
 
@@ -1296,18 +1259,15 @@ CPXsetlazyconstraintcallbackfunc(CPXENVptr env,int(*)(CALLBACK\_CUT\_ARGS) lazyc
 
 \end{lstlisting}
 
-
-
-dove:
+Dove:
 
 \begin{itemize}
-	\item \textbf{env}: Espressione contenente una combinazione lineare delle variabili del vincolo.
-	\item \textbf{lazyconcallback}: Rappresenta il nome, attribuito dal programmatore esterno, della funzione che viene invocata da Cplex qualora la soluzione del rilassamento continuo di un 										nodo è intera e inferiore dell' incumbent. Come nome è stato scelto myLazyCallBack.
-	\item \textbf{cbhandle}: Puntatore ad una struttura dati passata dall' utente contenente dati che devono essere visibili all' interno della callback da noi scritta. Come parametro si è 								 passato il puntatore all' istanza. 
+    \item \textbf{env}: Espressione contenente una combinazione lineare delle variabili del vincolo; SIAMO SICURI!!!!???!??!
+    \item \textbf{lazyconcallback}: Rappresenta il nome, attribuito dal programmatore esterno, della funzione che viene invocata da Cplex qualora la soluzione del rilassamento continuo di un nodo abbia valore intero ed inferiore all'incumbent. Nel nostro caso il nome assunto è \textbf{myLazyCallBack};
+    \item \textbf{cbhandle}: Puntatore ad una struttura dati passata dall'utente contenente le informazioni che devono essere visibili all'interno della callback \textit{myLazyCallBack}. Come parametro si è passato il puntatore all'istanza;
 \end{itemize}
 
-
-Per impostare il numero di thread al numero di core bisogna prima ricavare quanti core il processore dispone; a tal fine si sono utilizzati i metodi \textbf{CPXsetintparam} e \textbf{CPXgetnumcores}.
+In modo del tutto analogo a quanto fatto per \textbf{C\#}, per impostare il numero di thread pari ai core virtuali offerti dalla macchina in utilizzo si sono utilizzati i metodi \textbf{CPXsetintparam} e \textbf{CPXgetnumcores}:
 
 \begin{lstlisting}
 
@@ -1317,9 +1277,7 @@ CPXsetintparam(env, CPXPARAM\_Threads, nCore);
 
 \end{lstlisting}
 
-
-Passiamo ora a descrivere la funzione myLazyCallBack che identifica i subtourElimination e aggiunge i relativi vincoli al modello. Essa, come previsto dal manuale, deve avere la seguente firma:
-
+Passiamo ora a descrivere la funzione \textit{myLazyCallBack} che identifica i subtour ed aggiunge i relativi vincoli al modello, ricordando che la sua firma deve rispettare specifici parametri definiti da Cplex stesso\footnote{Essendo tali funzioni invocate automaticamente da Cplex i tipi di parametri che esse ricevono sono stati definiti a priori e non risultano modificabili}:
 
 \begin{lstlisting}
 
@@ -1327,28 +1285,23 @@ static int CPXPUBLIC myLazyCallBack(CPXCENVptr env, void *cbdata, int wherefrom,
 
 \end{lstlisting}
 
-
-La lista dei parametri è definita dai progettisti di Cplex poiché la chiamata alla funzione myLazyCallBack avviene all’ interno del codice di Cplex (non accessibile) da essi realizzato: il programmatore esterno è dunque vincolato nella firma. Passiamo ora a descrivere i parametri di myLazyCallBack:
-
-
+Dove:
 
 \begin{itemize}
-	\item \textbf{env}: rappresenta l’ istanza dell’ enviroment  con il quale stiamo lavorando.
-	\item \textbf{cbdata}: rappresenta il puntatore che è stato passato dall’ utente come parametro all’ atto della installazione della lazy e, come detto, punta all’ area di memoria contenente i dati che verranno utilizzati all’ interno della call back. In c i puntatori hanno un tipo poiché essi puntano sempre al primo elemento contenuto in una area di memoria e grazie al tipo è possibile interpretare correttamente i dati in essa contenuti. I progettisti di Cplex a priori non possono sconoscere il tipo della struttura dati che contiene i parametri utilizzati dall’ utente all’ interno della funzione: per tale ragione questo puntatore è di tipo void.
-	\item \textbf{wherefrom}:Definisce da che punto del Branch and bound è stata invocata la funzione, ai fini pratici tale parametro, per la lazy callback è risultato irrilevante. 
-	\item \textbf{cbhandle}: puntatore a dati privati utilizzato da Cplex
-	\item \textbf{useraction\_p}:Puntatore ad un intero che contiene la specifica azione da prendere all’ interno della callback scritta dall’ utente. Tale parametro può assumere i seguenti tre valori:
-	
-	\begin{itemize}
-	\item \textbf{0}: Avente come costante simbolica CPX\_CALLBACK\_DEFAULT comunica a Cplex che fino a quel punto la callback non ha aggiunto tagli al modello.
-	\item \textbf{1}: Avente come costante simbolica CPX\_CALLBACK\_FAI impone a Cplex di uscire dall' ottimizzazione.
-	\item \textbf{2}: Avente come costante simbolica CPX\_CALLBACK\_SET\_comunica a Cplex che sono stati aggiunti tagli.
-	\end{itemize}
+    \item \textbf{env}: rappresenta l’istanza dell’ enviroment con il quale stiamo lavorando. DIVERSO DA SOPRA!!!!!!!!
+    \item \textbf{cbdata}: come accennato poco fa questo parametro è quello specificato dall'utente durante l'installazione della callback, non essendo noto a priori il tipo di dato che l'utente desidera ricevere si utilizza \textbf{void};
+    \item \textbf{wherefrom}: definisce da che punto del \textit{B\&C} è stata invocata la funzione, ai fini pratici tale parametro, per la lazy callback è risultato irrilevante;
+    \item \textbf{cbhandle}: puntatore a dati privati utilizzato da Cplex;
+    \item \textbf{useraction\_p}: puntatore ad un intero utilizzato dall'utente per comunicare a Cplex diverse informazioni. Tale parametro può assumere i seguenti tre valori:
+    \begin{itemize}
+    \item \textbf{0}: avente come costante simbolica CPX\_CALLBACK\_DEFAULT comunica a Cplex che fino a quel punto la callback non ha aggiunto tagli al modello;
+    \item \textbf{1}: avente come costante simbolica CPX\_CALLBACK\_FAI impone a Cplex di uscire dall'ottimizzazione;
+    \item \textbf{2}: avente come costante simbolica CPX\_CALLBACK\_SET comunica a Cplex che sono stati aggiunti tagli;
+    \end{itemize}
 
 \end{itemize}
 
-
-La prima operazione da compiere all' interno della Lazy consiste nell' effettuare un cast al puntatore cbhandle il qui tipo è noto solo al programmatore che ha installato la callback: nel nostro caso il puntatore è di tipo instance per cui si è effettuato il seguente cast:
+La prima operazione da compiere consiste nell effettuare un cast al puntatore \textbf{cbhandle} il cui tipo è noto solo al programmatore che ha installato la callback: nel nostro caso il puntatore è di tipo \textbf{instance} per cui:
 
 
 \begin{lstlisting}
@@ -1357,11 +1310,9 @@ instance *inst = (instance*)cbhandle;
 
 \end{lstlisting}
 
+Successivamente è necessario assegnare al parametro \textbf{*useraction\_p} il valore \textbf{CPX\_CALLBACK\_DEFAULT}.
 
-Successivamente è necessario assegnare al parametro *useraction\_p il valore CPX\_CALLBACK\_DEFAULT.
-
-
-Per ottenere  la soluzione del rilassamento continuo  è necessario utilizzare il metodo CPXgetcallbacknodex avente come intestazione:
+Per ottenere la soluzione del rilassamento continuo è necessario utilizzare il metodo \textbf{CPXgetcallbacknodex} avente come intestazione:
 
 \begin{lstlisting}
 
@@ -1369,16 +1320,18 @@ int CPXgetcallbacknodex(CPXCENVptr env, void * cbdata, int wherefrom, double * x
 
 \end{lstlisting}
 
+Dove:
 
 \begin{itemize}
-	\item Per quanto riguarda env, cbdata, wherefrom vale la descrizione vista per il metodo myLazyCallBack
-	\item \textbf{x}: Array che al termine del metodo conterrà la soluzione intera del rilassamento continuo.
-	\item \textbf{begin}: Indica l’ indice della prima variabile di cui si vuole conoscere il valore.
-	\item \textbf{end}: Indica l’ indice dell’ ultima variabile di cui si vuole conoscere il valore; poiché vogliamo conoscere il valore di tutte le variabili a begin sarà passato il valore 0 mentre ad end [n*(n-1)/2] – 1.
+    \item Per quanto riguarda env, cbdata, wherefrom vale la descrizione vista per il metodo myLazyCallBack;
+    \item \textbf{x}: array che al termine del metodo conterrà la soluzione intera del rilassamento continuo;
+    \item \textbf{begin}: indica l’indice della prima variabile di cui si vuole conoscere il valore;
+    \item \textbf{end}: indica l’indice dell’ultima variabile di cui si vuole conoscere il valore;
 \end{itemize}
 
-All' atto dell' invocazione del metodo CPXgetcallbacknodex non viene passato come parametro l' array \textbf{bestLb} contenuto in inst ma viene creato un opportuno array chiamato \textbf{xstar}:
+Nel nostro caso dato che vogliamo conoscere tutte le variabili, assegniamo i valori \textbf{$0$} e \textbf{$[n*(n-1)/2] – 1$} rispettivamente ai parametri \textbf{begin} ed \textbf{end}.
 
+All'atto dell'invocazione del metodo \textit{CPXgetcallbacknodex} non viene passato come parametro l'array \textbf{bestLb} contenuto in \textit{inst} ma viene creato un opportuno array chiamato \textbf{xstar}:
 
 \begin{lstlisting}
 
@@ -1386,83 +1339,17 @@ double *xstar = (double*)malloc(inst->nCols * sizeof(double));
 
 \end{lstlisting}
 
-Risulta necessario far ciò al fine di realizzare un codice che sia thread-safety: poiché inst è un puntatore accessibile a tutti i thread esiste il rischio che più thread contemporaneamente sovrascrivano il contenuto di bestLb ottenendo un bestLb che contiene coordinate appartenenti a soluzioni differenti.
-Ricavata la soluzione è necessario verificare se essa ha al suo interno dei sottocicli e in tal caso procedere con l’ aggiunta dei un vincoli di subtour per ogni subtour. A differenza di quanto fatto in C\#, per determinare i subtour, si è utilizzato Concorde\footnote{ In particolare la funzione CCcut\_connect\_components } che verrà presentato nel paragrafo successivo: poiché il codice che sfrutta Concorde per il calcolo dei vincoli di subtour si ritrova anche per la user cut callback la sua presentazione è rimandata al paragrafo X.Y.
-Una volta che abbiamo aggiunto tagli, è necessario impostare il parametro *useraction\_p al valore CPX\_CALLBACK\_SET, al fine di comunicare a Cplex che sono stati aggiunti tagli. 
-
-
-\vspace{2\baselineskip}
-MULTI-THREAD
-\vspace{2\baselineskip}
-
-La Usercut callback viene invocata da Cplex ogni volta che la soluzione del rilassamento continuo in un nodo dell' albero decisionale risulta frazionaria; qualora risulti intera viene invocata la Lazy discussa nel paragrafo precedente.  Aggiungere tagli  in un nodo è utile poiché migliora il lower bound rendendo il branch-and-cut più efficace, tuttavia un accumulo eccessivo di tagli peggiora le performance: di questo thread-off si è tenuto conto durante la realizzazione del codice.  
-Ciò che dovremmo andare ad implementare è un separatore che, ricevendo in ingresso la soluzione x* con almeno una componente frazionaria, fornisca in uscita un insieme $S\subsetneq{V}$, $|S|\geq{2}$ tale per cui:
-
-f1
-
-
-Tale sottoinsieme non è facilmente individuabile come nel caso di soluzione intere in cui era sufficiente individuare le componenti connesse. Per esempio in Figura 3 si è riportato il supporto di una soluzione x* frazionaria ove i lati colorati di rosso, blu e grigio indica che la corrispondente variabile ha come valore 1, 0.5 , 1. 5.
-
-\begin{center}
-\includegraphics[scale=0.5]{SoluzioneFrazionaria}  
-
-Figura 3: Soluzione frazionaria
-\end{center}
-
-Tale grafo risulta connesso; tuttavia è presente un sottoinsieme S = {1,2,3} per cui vale f1.
-
-Una seconda formulazione equivalente di f1 risulta essere la seguente:
-
-f2
-
-Si osserva che il primo membro della disuguaglianza può essere visto come la capacità di una sezione di una rete di flusso se si interpretano le x* come le capacità della rete.
-E' possibile calcolare una sezione di capacità minima risolvendo un problema di max flow che sappiamo essere un problema di programmazione lineare e quindi risolubile utilizzando un algoritmo polinomiale.
-Poichè però la sezione di capacità minima dipende dal nodo sorgente s e dal nodo di destinazione t, si devono in realtà risolvere n-1 problemi di max flow: per tale ragione è stato preferito utilizzare il software ottimizzato Concorde per identificare la sezione di capacità minima quando la soluzione del rilassamento continuo è frazionaria. 
+Questa operazione risulta necessaria al fine di realizzare un codice che risulti thread-safety: poiché \textit{inst} è un puntatore accessibile da tutti i thread esiste il rischio di accessi multipli sia in modalità di lettura popolando così \textit{bestLb} con valori appartenti a soluzioni differenti.
+A questo punto entra in gioco Concorde per l'individuazione e l'introduzione dei vincoli di subtour elination, dato che il metodo da utilizzare è il medesimo che vedremo per le \textit{usercut callback} rimandiamo al paragrafo seguente per maggiori dettagli.
+Una volta completato tale passaggio non rimane altro che impostare il parametro \textbf{*useraction\_p} al valore \textbf{CPX\_CALLBACK\_SET} al fine di comunicare a Cplex che sono stati aggiunti tagli.
 
 \vspace{2\baselineskip}
-CONCORDE
+USERCUT CALLBACK IN C
 \vspace{2\baselineskip}
 
-Concorde è un software, sviluppano in linguaggio c da David Applegate, Robert E. Bixby, Vašek Chvátal, e William J. Cook, specializzato nella risoluzione ottimizzata di istanze del problema del commesso viaggiatore. Concorde risulta un software open source solo se utilizzato a fini accademici e i sorgenti, contenuti in un file zip, sono scaricabili utilizzando il seguente link:
+Come già anticipato nei precedenti paragrafi questo tipo di callback sono utilizzate per gestire soluzioni frazionarie ottenute per i vari nodidell'albero decisionale durante una risoluzione di tipo \textit{B\&C} per problemi di programmazione lineare da parte di Cplex. A livello concettuale sono del tutto simili a quanto visto nel paragrafo precedente per le \textit{lazy callback} in linguaggio \textbf{C}, è raccomandata una lettura del paragrafo precedente a loro dedicato in quanto di seguito saranno esposti estensivamente solamente i dettagli riguardanti la gestione dei tagli.\footnote{Notiamo in realtà che l'implementazione delle \textit{usercut callback} avviene sempre in concomitanza all'implementazione delle \textit{lazy callback} per tanto il settaggio del numero di thread è necessario solamente una volta}.
 
-
-
-
-Per poter utilizzare Concorde è stato prima necessario installarlo. In ambiente Windows è necessario importare ogni singolo file .c e .h che appartiene alla distribuzione: al fine di importare il minor numero possibile di file sono stati selezionati e importati solo i file che consentono di utilizzare le funzioni di cui si necessita. I file che si sono inclusi nel progetto sono:
-
-
-\begin{itemize}
-	\item \textbf{allocrus.c}
-	\item \textbf{connect.c}
-	\item \textbf{cut\_st.c}
-	\item \textbf{mincut.c}
-	\item \textbf{shrink.c}
-	\item \textbf{sortrus.c}
-	\item \textbf{urandom.c}
-	\item \textbf{cut.h}
-	\item \textbf{machdefs.h}
-	\item \textbf{macrorus.h}
-	\item \textbf{util.h}
-	\item \textbf{end}
-\end{itemize}
-
-Affinché il programma compili, è necessario effettuare le seguenti modifiche:
-
-\begin{itemize}
-	\item \textbf{allocrus.c}: All' interno dei file allocrus.c e util.h è necessario importare tramite il comando import il file malloc.h.
-	\item \textbf{connect.c}: All' interno del file machdefs.h è necessario eliminare l' inclusione al file config.h.
-\end{itemize}
-
-\textit{[….Parlerei direttamente qui della DLL….]}
-
-
-\vspace{2\baselineskip}
-INSTALLAZIONE USERCUT CALLBACK
-\vspace{2\baselineskip}
-
-
-Per installare la usercut callback è necessario utilizzare la routine CPXsetusercutcallbackfunc la cui firma è:
-
+L'installazione delle callback avviene tramite la funzione \textbf{CPXsetusercutcallbackfunc}:
 
 \begin{lstlisting}
 
@@ -1470,26 +1357,7 @@ int CPXsetusercutcallbackfunc (CPXENVptr env, int(*)(CALLBACK\_CUT\_ARGS) lazyco
 
 \end{lstlisting}
 
-
-
-I parametri sono i medesimi descritti per la funzione CPXsetlazyconstraintcallbackfunc che è necessario comunque installare al fine di garantire la correttezza. Infine è sempre necessario reimpostare in numero di thread al numero di core presenti nel processore utilizzando le note funzioni \textbf{CPXgetnumcores} e \textbf{CPXsetintparam}:
-
-
-\begin{lstlisting}
-
-CPXgetnumcores(env, &nCore);
-	
-CPXsetintparam(env, CPXPARAM\_Threads, nCore);
-
-\end{lstlisting}
-
-
-
-\vspace{2\baselineskip}
-FUNZIONE myUserCutCallBack
-\vspace{2\baselineskip}
-
-La funzione che viene invocata da Cplex in corrispondenza di una soluzione frazionaria è stata chiamata myUserCutCallBack: la sua firma, analogamente a quanto visto per la LazyCallBack, ci viene imposta dai progettisti di Cplex.
+La funzione invocata da Cplex in corrispondenza di una soluzione frazionaria è stata da noi chiamata \textbf{myUserCutCallBack} la cui firma, che anche in questo caso viene imposta dai progettisti di Cplex, risulta essere:
 
 \begin{lstlisting}
 
@@ -1497,97 +1365,90 @@ int CPXPUBLIC myUserCutCallBack(CPXCENVptr env, void *cbdata, int wherefrom, voi
 
 \end{lstlisting}
 
-II significato dei parametri di ingresso di tale funzione è noto poiché tutti i parametri sono già stati descritti nel paragrafo X.Y. [ sono i medesimi descritti per la myLazyCallBack.]
-
-
-Esattamente quanto visto per la lazy callback, anche qui all' inizio è necessario settare il parametro *useraction\_p al valore CPX\_CALLBACK\_DEFAULT. 
-
-
-Cplex, una volta calcolata una soluzione frazionara genera in automatico dei propri tagli (per esempio di Gomory). Quando il parametro wherefrom risulta pari a CPX\_CALLBACK\_MIP\_CUT\_LAST significa che Cplex non genererebbe più tagli e all’ iterazione successiva procederebbe ad effettuare l’operazione di branching: solo in questa condizione risulta conveniente generare vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro wherefrom risulti diverso da CPX\_CALLBACK\_MIP\_CUT\_LAST, il metodo effettua un return 0 senza eseguire alcuna operazione, altrimenti come già discusso per la lazy, è necessario recuperare il puntate all’ istanza.
-A livello pratico, come intuitivamente è facile capire, aggiungere ad ogni nodo dell’ albero decisionale dei tagli(i quali si sommano ai tagli che Cplex genera in automatico) risulta una scelta sconsigliata che riduce in maniera drastica le performance di Cplex. Per tale ragione si è deciso di realizzare un codice che aggiunge i vincoli di subtour in un nodo nel quele viene invocata la UserCutCallback con una probabilità p = 0,1. Per realizzare ciò si è ricavato, utilizzando la funzione CPXgetcallbacknodeinfo, l’ indice del nodo sul quale tale funzione è stata invocata e solamente quando il resto della divisione per 10 di tale indice risulta nullo si aggiungono i vincoli al nodo. Successivamente invocando la nota funzione CPXgetcallbacknodex si ottiene la soluzione frazionaria. Prima di procedere con l’ analisi del cuore del metodo, riportiamo il codice fin qui discusso:
+Cplex, una volta calcolata una soluzione frazionara, genera in automatico dei propri tagli\footnote{Ad esempio taglio di \textit{Gomory}}. Quando il parametro \textit{wherefrom} risulta pari a \textbf{CPX\_CALLBACK\_MIP\_CUT\_LAST} significa che l'iterazione successiva da parte di Cplex consisterebbe nell'operazione di branching sul nodo in questione: solo in questa condizione risulta conveniente generare i propri vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro \textit{wherefrom} assuma invece altri valori, si effettua una semplice \textbf{return 0} senza eseguire alcuna operazione, altrimenti come già discusso per le lazy, è necessario recuperare il puntate all’istanza.
+Riprendendo quanto detto nel paragrafo LINK PARAGRAFO CALLBACK||||| è sconsigliato aggiungere \textit{manualmente} ad ogni nodo dell’albero decisionale dei tagli in quanto il loro numero complessivo risulterebbe troppo elevato andando quindi a \textbf{peggiorare} le prestazioni di Cplex. Per tale ragione, dopo alcuni test e secondo le linee guida discusse durante il corso, si è deciso che solamente con una probabilità del \textbf{$10\%$} la \textit{usercut callback} da noi definita entra in gioco. Dato che l'id numerico assegnato ai nodi dell'albero decisionale, ottenuto attraverso al funzione \textbf{CPXgetcallbacknodeinfo}, non ha alcuna relazione diretta alla probabilità che venga generata una soluzione intera oppure frazionaria, è sufficiente effettuare una operazione di modulo dieci a tale valore: nel caso in cui il risultato sia pari a zero si procede con il calcolo dei tagli. Successivamente, invocando la nota funzione \textbf{CPXgetcallbacknodex} si ottiene la soluzione frazionaria. Prima di procedere con la parte principale di questo metodo, per ragioni di chiarezza riportiamo il codice che esegue quanto finora descritto:
 
 
 \begin{lstlisting}
 
 *useraction\_p = CPX\_CALLBACK\_DEFAULT;
-	
+    
 int nodecount = 0;
 CPXgetcallbacknodeinfo(env, cbdata, wherefrom, 0, CPX\_CALLBACK\_INFO\_NODE\_DEPTH, &nodecount);
-	
-if (wherefrom == CPX\_CALLBACK\_MIP\_CUT\_LAST 
+    
+if (wherefrom == CPX\_CALLBACK\_MIP\_CUT\_LAST)
 {
-	instance *inst = (instance*)cbhandle;
-		
-	double *xstar = (double*)malloc(inst->nCols * sizeof(double));
+    instance *inst = (instance*)cbhandle;
+        
+    double *xstar = (double*)malloc(inst->nCols * sizeof(double));
 
- 	if ((nodecount % 10) != 0))//------------------------------------------------------------------------CORRETA RISPETTO A QUELLA PRESENTE NEL PROGRAMMA
-		return 0;
+     if ((nodecount % 10) != 0)
+        return 0;
 
-	if (CPXgetcallbacknodex(env, cbdata, wherefrom, xstar, 0, inst->nCols - 1))
-	{
-		free(comps);
-		free(compscount);
-		free(xstar);
-		free(elist);
-		return 1; 
-		}
-	…
+    if (CPXgetcallbacknodex(env, cbdata, wherefrom, xstar, 0, inst->nCols - 1))
+    {
+        free(comps);
+        free(compscount);
+        free(xstar);
+        free(elist);
+        return 1; 
+    }
 }
 
 \end{lstlisting}
 
 
-Per aggiungere eventuali vincoli di subtour è necessario invocare in un primo momento la funzione CCcut\_connect\_components la quale identificare le componenti connesse di una soluzione, essa sia intera o frazionaria. Con il termine identificare si intende che determina per ogni componente quanti e quali nodi da essa costituita.
+Da questo momento inizieremo ad utilizzare le funzionalità offerta da \textit{Concorde}, tutte le funzioni il cuo nome inizia con la sigla \textbf{"CC"} sono importate da quest'ultimo.
+L'aggiunta di eventuali vincoli di \textit{subtour elimination} avviene tramite l'invocazione in un primo momento della funzione \textbf{CCcut\_connect\_components} la quale identifica le componenti connesse della soluzione ricevuta come parametro indipendentemente dal fatto che sia intera o frazionaria.
 
-Illustriamo i parametri che tale funzione riceve in input, si osserva che mentre i primi 4 parametri costituiscono l' effettivo input della funzione i rimanenti 3 sono i parametri che esse setta e quindi possono essere visti come l' output della funzione:
+Di seguito sono riportati nel dettaglio tutti i parametri che tale funzione vuole ricevere in ingresso, si osserva che mentre i primi 4 costituiscono l'effettivo input della funzione i rimanenti 3 sono in realtà settata al suo interno e quindi possono essere visti come parametri di output:
 
 \begin{itemize}
-	\item \textbf{ncount}:rappresenta il numero di nodi del grafo;
-	\item \textbf{econut}:rappresenta il numero di lati del grafo, ossia ncount*(ncount-1)/2
-	\item \textbf{*elist}:vettore avente dimensione 2 * econut. Tale vettore contiene al suo interno tutti i lati del grafo caratterizzati dai nodi sul quale esso incide memorizzati in locazioni consecutive dell’ array. Vedremo in seguito il codice realizzato per popolare questa struttura dati.
-	\item \textbf{*x}:soluzione per la quale si desiderano individuare le componenti connesse
-	\item \textbf{*ncomp}:rappresenta il numero di componenti connesse.
-	\item \textbf{**compscount}:vettore di vettori contenenti il numero di nodi per ciascuna componente connessa, in modo che compscount[i] contenga il numero di nodi presente nell’ i-esima componente connessa
-	\item \textbf{**comps}:vettore di vettori contenenti gli indici dei nodi presenti all' interno delle componenti.
+    \item \textbf{ncount}: rappresenta il numero di nodi del grafo;
+    \item \textbf{econut}: rappresenta il numero di lati del grafo, ossia ncount*(ncount-1)/2;
+    \item \textbf{*elist}: vettore di dimensione $2*econut$, contiene al suo interno tutti i lati del grafo caratterizzati dai nodi sul quale esso incide memorizzati in locazioni consecutive dell’array, è stato da noi realizzato nel seguente modo:
+    
+    \begin{lstlisting}
+    
+    int loader = 0;
+    for (int i = 0; i < inst->nNodes;  i++)
+    {
+        for (int j = i + 1; j < inst->nNodes;  j++) 
+        {
+            elist[loader++] = i;
+            elist[loader++] = j;
+        }
+    }
+    
+    \end{lstlisting}
+    
+    \item \textbf{*x}: soluzione per la quale si desiderano individuare le componenti connesse;
+    \item \textbf{*ncomp}: rappresenta il numero di componenti connesse;
+    \item \textbf{**compscount}: vettore di vettori contenenti il numero di nodi per ciascuna componente connessa, è strutturato in modo che compscount[i] contenga il numero di nodi presente nell’i-esima componente connessa;
+    \item \textbf{**comps}: vettore di vettori contenenti gli indici dei nodi presenti all'interno delle componenti;
 \end{itemize}
 
-
-Il codice realizzato per popolare elist risulta essere il seguente:
-
+Nonostante non risulti necessario, al fine di rendere il codice maggiormente leggibile, si è deciso di assegnare sia alle variabili che ai puntatori il medesimo nome che assumono all’interno di \textit{CCcut\_connect\_components}.
 
 \begin{lstlisting}
 
-int loader = 0;
-for (int i = 0; i < inst->nNodes;  i++)
-{
-	for (int j = i + 1; j < inst->nNodes;  j++) 
-	{
-	    elist[loader++] = i;
-	    elist[loader++] = j;
-	}
-}
-
-\end{lstlisting}
-
-Nonostante non fosse necessario, per rendere il codice maggiormente leggibile si è deciso definire variabili e puntatori con il medesimo nome con i quali sono poi utilizzati all’ interno di CCcut\_connect\_components.
-
-\begin{lstlisting}
-
-int *compscount = (int*)malloc(inst->nMaxCuts * sizeof(int));		
-int *comps = (int*)malloc(inst->nNodes * sizeof(int)); 
+int *compscount = (int*)malloc(inst->nMaxCuts * sizeof(int));
+int *comps = (int*)malloc(inst->nNodes * sizeof(int));
 int nLati = ((inst->nNodes - 1)*inst->nNodes / 2);
-int *elist = (int*)malloc((nLati * 2) * sizeof(int));		
+int *elist = (int*)malloc((nLati * 2) * sizeof(int));
 int ncomp; 
 
 \end{lstlisting}
 
+La chiamata alla funzione risulta quindi essere:
 
 \begin{lstlisting}
 if (CCcut\_connect\_components(inst->nNodes, nLati, elist, xstar, &ncomp, &compscount, &comps))
-printError(" error in CCcut\_connect\_components() inside fractcutusercallback");
+    printError(" error in CCcut\_connect\_components() inside fractcutusercallback");
 \end{lstlisting}
- 
-Utilizzando i vettori ncomp compscount, comps è stato possibile realizzare un codice in grado di definire i vincoli di subtour per ogni componente connessa e successivamente di inserirli nel pool dei tagli tramite la funzione \textbf{CPXcutcallbackadd} la cui firma è:
+
+Al suo termine, in modo del tutto trasparente, otteniamo le tre variabili \textbf{ncomp}, \textbf{compscount} e \textbf{comps} che forniscono tutte le informazioni necessarie all'aggiunta dei tagli all'interno dell'apposito pool fornito da Cplex.
+Completiamo quest'ultima operazione tramite la routine fornita da Cplex \textbf{CPXcutcallbackadd} la cui firma è:
 
 \begin{lstlisting}
 
@@ -1595,108 +1456,111 @@ CPXcutcallbackadd(CPXCENVptr env,void * cbdata,int  wherefrom,int  nzcnt, double
 
 \end{lstlisting}
 
+Dove:
 
 \begin{itemize}
-	\item \textbf{env,cbdata,wherefrom}: Questi sono parametri noti già discussi nella callback myLazyCallback
-	\item \textbf{nzcnt}:Numero di coefficienti diversi da zero del vincolo
-	\item \textbf{rhs}:Definisce il termine noto del vincolo
-	\item \textbf{sense}:Può assumere i seguenti valori:
-
-
-	\item \textbf{cutind}:Array di  nzcnt elementi contenenti gli indici delle variabili presenti nel vincolo
-	\item \textbf{cutval}:Array di  nzcnt elementi contenenti i corrispondenti valori dei coefficienti
-	\item \textbf{purgeable}:Valore intero che specifica come Cplex tratta il taglio,i possibili valore che possono essere passati in input sono:
-	
-	\begin{itemize}
-	\item \textbf{CPX\_USECUT\_FORCE}:Il taglio una volta aggiunto al rilassamento non può essere più rimosso
-	\item \textbf{CPX\_USECUT\_PURGE}:Il taglio è aggiunto al rilassamento ma può essere eliminato in un secondo momento se giudicato inefficiente
-	\item \textbf{CPX\_USECUT\_FILTER}: Il taglio viene trattato come un taglio generato da Cplex il quale prima di aggiungerlo al rilassamento lo analizza e può decidere di non inserirlo 
-	nel rilassamento(per esempio è già presente un taglio più efficiente)
-	
-	\end{itemize}
-
+    \item \textbf{env,cbdata,wherefrom}: parametri noti già discussi nella callback myLazyCallback;
+    \item \textbf{nzcnt}: numero di coefficienti diversi da zero del vincolo;
+    \item \textbf{rhs}: definisce il termine noto del vincolo;
+    \item \textbf{sense}: può assumere i seguenti valori:
     
+    \begin{itemize}
+    \item \textbf{cutind}: array di \textit{nzcnt} elementi contenenti gli indici delle variabili presenti nel vincolo;
+    \item \textbf{cutval}: array di \textit{nzcnt} elementi contenenti i corrispondenti valori dei coefficienti;
+    \item \textbf{purgeable}: valore intero che specifica come Cplex deve trattare il taglio:
+    
+        \begin{itemize}
+        \item \textbf{CPX\_USECUT\_FORCE}: il taglio una volta aggiunto al rilassamento non può essere più rimosso;
+        \item \textbf{CPX\_USECUT\_PURGE}: il taglio è aggiunto al rilassamento ma può essere eliminato in un secondo momento se giudicato inefficiente;
+        \item \textbf{CPX\_USECUT\_FILTER}: il taglio deve essere trattato come se generato da Cplex il quale prima di aggiungerlo al rilassamento lo analizza e può quindi decidere di abortire l'operazione di aggiunta.
+        nel rilassamento(per esempio è già presente un taglio più efficiente);
+        \end{itemize}
+    \end{itemize}
 \end{itemize}
 
-Per aggiungere un taglio per ogni componente connessa è stato necessario popolare i vettori cutval, cutind e la variabile nzcnt opportunamente sfruttando le informazioni contenute in compscount, comps. Per stabilire quali nodi appartengono alla t-esima componente connessa si sono dichiarate due variabili intere k1,k2 che contengono sistematicamente l' indice del primo e dell' ultimo nodo dei nodi appartenenti alla t-esima componente connessa memorizzati in comps. Si osserva che k2 è stato dichiarato pari a -1 poichè gli indici all' interno dell' array parto da 0. 
+Per aggiungere un taglio per ogni componente connessa è necessario popolare i vettori \textbf{cutval}, \textbf{cutind} e la variabile \textbf{nzcnt} opportunamente sfruttando le informazioni fornite da \textit{Concorde}. Per stabilire quali nodi appartengono alla t-esima componente connessa si sono dichiarate due variabili intere \textbf{k1} e \textbf{k2} che contengono sistematicamente l'indice del \textbf{primo} e dell'\textbf{ultimo} nodo tra quelli appartenenti alla t-esima componente connessa memorizzata in \textit{comps}. Si osserva che \textit{k2} è inizializzato al valore \textbf{$-1$} in quanto gli indici di un qualsiasi vettore partono da $0$.
 
 \begin{lstlisting}
 
-	if (ncomp > 1)
-		{
-			int k1 = 0;
-			int k2 = -1;
+    if (ncomp > 1)
+        {
+            int k1 = 0;
+            int k2 = -1;
 
-			for (int c = 0; c < ncomp; c++)
-			{
-				int dimIndexValue = compscount[c] * (compscount[c] - 1) / 2; 
-				int *cutind = (int*)malloc(dimIndexValue * sizeof(int));
-				double *cutval = (double*)malloc(dimIndexValue * sizeof(double));
-				int nzcnt = 0;
+            for (int c = 0; c < ncomp; c++)
+            {
+                int dimIndexValue = compscount[c] * (compscount[c] - 1) / 2; 
+                int *cutind = (int*)malloc(dimIndexValue * sizeof(int));
+                double *cutval = (double*)malloc(dimIndexValue * sizeof(double));
+                int nzcnt = 0;
 
-				
-				k2 += compscount[c];
+                
+                k2 += compscount[c];
 
-				for (int i = k1; i < k2; i++)
-				{
-					for (int j = i + 1; j <= k2; j++)
-					{
-						cutval[nzcnt] = 1.0;
-						cutind[nzcnt] = xPos(comps[i], comps[j], inst);
-						nzcnt++;
-					}
-				}
+                for (int i = k1; i < k2; i++)
+                {
+                    for (int j = i + 1; j <= k2; j++)
+                    {
+                        cutval[nzcnt] = 1.0;
+                        cutind[nzcnt] = xPos(comps[i], comps[j], inst);
+                        nzcnt++;
+                    }
+                }
 
-				k1 = k2 + 1;	
-				
-				CPXcutcallbackadd(env, cbdata, wherefrom, nzcnt, compscount[c] - 1, 'L', cutind, cutval, CPX\_USECUT\_FORCE);
+                k1 = k2 + 1;
+                
+                CPXcutcallbackadd(env, cbdata, wherefrom, nzcnt, compscount[c] - 1, 'L', cutind, cutval, CPX\_USECUT\_FORCE);
 
-				*useraction\_p = CPX\_CALLBACK\_SET; 
-				free(cutind);
-				free(cutval);
-			}
+                *useraction\_p = CPX\_CALLBACK\_SET; 
+                free(cutind);
+                free(cutval);
+            }
 
-			free(elist);
-			free(comps);
-			free(compscount);
-			free(xstar);
+            free(elist);
+            free(comps);
+            free(compscount);
+            free(xstar);
 
 
-			return 0;
-		}
+            return 0;
+        }
 
 \end{lstlisting}
 
-
-Nel caso in cui la soluzione presenta una sola componente connessa, come in Fig. X, invocando la funzione \textbf{CCcut\_violated\_cuts} di Concorde è possibile individuare gli insiemi S che soddisfino la disuguaglianza (f2) : una volta individuato S risulta banale inserire il relativo vincolo di subtour. In particolare CCcut\_violated\_cuts è una funzione in grado di individuare sezioni di capacità inferiori ad una certa soglia. Descriviamo i 7 parametri che tale funzione riceve in input, si osserva che a differenza della funzione CCcut\_connect\_components i parametri sono effettivamente tutti di input:
-
+Nel caso in cui la soluzione presenti una sola componente connessa, come in Fig. X, invocando la funzione \textbf{CCcut\_violated\_cuts} di \textit{Concorde} è possibile individuare gli insiemi $S$ che soddisfino la disuguaglianza \eqref{eq:concorde2}: noto $S$ risulta poi banale inserire il relativo vincolo di subtour. In particolare \textit{CCcut\_violated\_cuts} è una funzione in grado di individuare sezioni di capacità inferiori ad una certa soglia. Descriviamo quindi i 7 parametri che tale funzione riceve in input:
 
 \begin{itemize}
-	\item \textbf{ncount}: int ecount, int *elist: Il loro significato è già stato descritto per la CCcut\_connect\_components
-	\item \textbf{dlen}: vettore contenente la capacità di ogni lato. 
-	\item \textbf{cutoff}:[Questo è il termine noto della disequazione f2, non ho capito perchè devo togliere a 2 un EPSILON, così è scritto nel pdf condiviso dal prof che si chiama 		RO2\_TSPutilities]
-	\item \textbf{(*(doit\_fn)(double,int,int *,void *) }:La peculiarità di questa funzione è rappresentata dal fatto che, quando viene invocata, viene installata una callback, il cui nome è rappresentato dal valore di questo parametro, che sarà evocata da Concorde tutte le volte che quest' ultimo individua un sottoinsieme S che soddisfa f2. Si osserva che i parametri di ingresso della callback, che si è chiamata doitFuncConcorde, sono stabiliti dai programmatori che hanno realizzato Concorde poiché essa viene invocata all' interno del codice da essi realizzato: sfruttando tali parametri all' interno di doitFuncConcorde si inserirà il relativo taglio al nodo. Tale parametri possono considerarsi l' output della funzione.
-	\item \textbf{pass\_param}:puntatore alla struttura dati, di tipo InputCC, contenente variabili e puntatori che devono essere accessibili all’ interno della callback 
+    \item \textbf{int ncount}, \textbf{int ecount}, \textbf{int *elist}: il loro significato è già stato descritto per la funzione \textit{CCcut\_connect\_components};
+    \item \textbf{dlen}: vettore contenente la capacità di ogni lato;
+    \item \textbf{cutoff}:[Questo è il termine noto della disequazione f2, non ho capito perchè devo togliere a 2 un EPSILON, così è scritto nel pdf condiviso dal prof che si chiama         RO2\_TSPutilities]
+    \item \textbf{(*(doit\_fn)(double, int, int *, void *) }: è una funzione creata da noi che risulta essere una vera e propria callback: ogniqualvolta \textit{Concorde} individua un insieme $S$ cercato tale funzione viene invocata. Al suo interno, grazie ai parametri forniti\footnote{Maggiori dettagli riguardo i quattro parametri di ingresso saranno forniti a breve durante la descrizione di come l'implementazione di tale funzione è stata da noi realizzata.} è nostro compito procedere all'ampliamento del pool di tagli di \textit{Cplex}.
+    \item \textbf{pass\_param}: puntatore ad una struttura dati contenente variabili e puntatori che devono essere accessibili all’interno della callback;
 \end{itemize}
 
-Poiché all' interno della callback si desidera aggiungere tagli, per poterlo fare si ha la necessità di accedere alle variabili e puntatori che la funzione CPXcutcallbackadd richiede come parametri di ingresso. Per tale ragione la struttura inputCC contiene al suo interno le seguenti variabili e puntatori tutti ampliamente descritti nei paragrafi precedenti:
+Nel nostro caso l'invocazione di tale metodo avviene nel seguente modo:
+
+\begin{lstlisting}
+
+CCcut_violated_cuts(inst->nNodes, inst->nCols, elist, xstar, 2.0 - cutThreshold, doitFuncConcorde, (void*)&in)
+
+\end{lstlisting}
+
+Dove occorre solamente far notare che la funzione callback da noi definita prende il nome \textbf{doitFuncConcorde} mentre l'ultimo parametro è una \textbf{struct} da noi creata contenente al suo interno tutte le informazioni occorrenti per invocare il metodo \textbf{CPXcutcallbackadd}, descritto in precedenza, all'interno della callback.
 
 \begin{lstlisting}
 
 typedef struct 
-{ 
-	instance *inst;
-	CPXCENVptr env;
-	void *cbdata;
-	int wherefrom;
-	int *useraction\_p;
+{
+    instance *inst;
+    CPXCENVptr env;
+    void *cbdata;
+    int wherefrom;
+    int *useraction\_p;
 } inputCC;
-
 
 \end{lstlisting}
 
-
-Passiamo ad analizzare il codice di doitFuncConcorde, la cui intestazione è:
+Per concludere questo paragrafo non rimane altro che parlare più in dettagli riguardo la realizzazione della callback \textbf{doitFuncConcorde}, per prima cosa forniamo la sua firma:
 
 \begin{lstlisting}
 
@@ -1704,16 +1568,16 @@ int doitFuncConcorde(double cutValue, int cutcount, int *cut, void *inParam)
 
 \end{lstlisting}
 
-dove:
+Dove:
 
 \begin{itemize}
-	\item \textbf{cutValue}: Rappresenta il valore del taglio,
-	\item \textbf{cutcount}: Rappresenta il numero dei nodi,
-	\item \textbf{cut}: Array contenente l' indice associato ai nodi,
-	\item \textbf{inParam}:struttura dati passata in input dal programmatore esterno.
+    \item \textbf{cutValue}: rappresenta il valore del taglio;
+    \item \textbf{cutcount}: rappresenta il numero dei nodi;
+    \item \textbf{cut}: array contenente l'indice associato ai nodi;
+    \item \textbf{inParam}: struttura dati appena descritta;
 \end{itemize}
 
-Come ormai è noto, è necessario recuperare il puntatore alla struttura dati fornita in input alla callback:
+Dopo aver effettuato la classica operazione di recupero del puntatore alla struttura dati fornita in ingresso alla callback
 
 \begin{lstlisting}
 
@@ -1721,34 +1585,29 @@ inputCC *in = (inputCC*)inParam;
 
 \end{lstlisting}
 
-Per aggiungere il taglio è necessario utilizzare la funzione CPXcutcallbackadd: si sono così definiti due array di interi cutind e cutval contenenti rispettivamente gli indici delle variabili che costituiscono il taglio e il relativo coefficiente. Si è inoltre dichiarata una variabile intera nzcnt che contiene il numero di variabili che partecipano taglio. 
+possiamo procedere con l'aggiunta del taglio  attraverso \textit{CPXcutcallbackadd}: si sono così definiti due array di interi \textbf{cutind} e \textbf{cutval} contenenti rispettivamente gli indici delle variabili che costituiscono il taglio ed il relativo coefficiente. Si è inoltre dichiarata una variabile intera \textbf{nzcnt} che contiene il numero di variabili caratterizzanti il taglio:
 
 \begin{lstlisting}
 
-int dimIndexValue = inst->nNodes * (inst->nNodes - 1) / 2; 
-
+int dimIndexValue = inst->nNodes * (inst->nNodes - 1) / 2;
 int *cutind = (int*)malloc(dimIndexValue * sizeof(int));
 double *cutval = (double*)malloc(dimIndexValue * sizeof(double));
-\end{lstlisting}
-
-
-Poiché il taglio è composto dalle variabili associate ai lati aventi entrambi gli estremi in S, l’ indice di tutte le variabili è ricavabile utilizzando la funzione xPos la quale riceve in input ad ogni iterazione un lati [i,j] con i<j e i,j nodi contenuti in cut. 
-
-\begin{lstlisting}
-
 int nzcnt = 0;
 
-	for (int i = 0; i < cutcount - 1; i++)
-	{
-		for (int j = i + 1; j <= cutcount - 1; j++)
-		{
-			int n1 = cut[i];
-			int n2 = cut[j];
-			cutind[nzcnt] = xPos(n1, n2, inst);
-			cutval[nzcnt] = 1.0;
-			nzcnt++;
-		}
-	}
+    for (int i = 0; i < cutcount - 1; i++)
+    {
+        for (int j = i + 1; j <= cutcount - 1; j++)
+        {
+            int n1 = cut[i];
+            int n2 = cut[j];
+            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            METTI QUA IL COMMENTO A xPos che avevi fatto... il codice va commentato !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            cutind[nzcnt] = xPos(n1, n2, inst);
+            cutval[nzcnt] = 1.0;
+            nzcnt++;
+        }
+    }
 CPXcutcallbackadd(in->env, in->cbdata, in->wherefrom, nzcnt, cutcount - 1, 'L', cutind, cutval, CPX\_USECUT\_FORCE);
 
 *in->useraction\_p = CPX\_CALLBACK\_SET;
