@@ -52,7 +52,7 @@ namespace TSPCsharp
         public static INumVar[] BuildModel(Cplex cplex, Instance instance, int n)
         {
             //Init the model's variables
-            INumVar[] z = new INumVar[(instance.NNodes - 1) * instance.NNodes / 2];
+            INumVar[] x = new INumVar[(instance.NNodes - 1) * instance.NNodes / 2];
 
             /*
              *expr will hold all the expressions that needs to be added to the model
@@ -72,13 +72,13 @@ namespace TSPCsharp
                     //Only links (i,i) with i < i are correct
                     for (int j = i + 1; j < instance.NNodes; j++)
                     {
-                        //zPos return the correct position where to store the variable corresponding to the actual link (i,i)
-                        int position = zPos(i, j, instance.NNodes);
+                        //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
+                        int position = xPos(i, j, instance.NNodes);
                         if ((listArray[i]).IndexOf(j) < n)
-                            z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
+                            x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
                         else
-                            z[position] = cplex.NumVar(0, 0, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
-                        expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                            x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+                        expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
                     }
                 }
                 else
@@ -86,10 +86,10 @@ namespace TSPCsharp
                     //Only links (i,i) with i < i are correct
                     for (int j = i + 1; j < instance.NNodes; j++)
                     {
-                        //zPos return the correct position where to store the variable corresponding to the actual link (i,i)
-                        int position = zPos(i, j, instance.NNodes);
-                        z[position] = cplex.NumVar(0, 1, NumVarType.Int, "z(" + (i + 1) + "," + (j + 1) + ")");
-                        expr.AddTerm(z[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                        //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
+                        int position = xPos(i, j, instance.NNodes);
+                        x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+                        expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
                     }
                 }
             }
@@ -107,9 +107,9 @@ namespace TSPCsharp
                 for (int j = 0; j < instance.NNodes; j++)
                 {
                     //For each row i only the links (i,i) or (i,i) have coefficent 1
-                    //zPos return the correct position where link is stored inside the vector z
+                    //xPos return the correct position where link is stored inside the vector x
                     if (i != j)//No loops wioth only one node
-                        expr.AddTerm(z[zPos(i, j, instance.NNodes)], 1);
+                        expr.AddTerm(x[xPos(i, j, instance.NNodes)], 1);
                 }
 
                 //Adding to Ax the current equation with known term 2 and name degree(<current i node>)
@@ -120,18 +120,18 @@ namespace TSPCsharp
             if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
 
-            return z;
+            return x;
 
         }
 
         //Used to evaluete the correct position to store and read the variables for the model
-        public static int zPos(int i, int j, int nNodes)
+        public static int xPos(int i, int j, int nNodes)
         {
             if (i == j)
                 return -1;
 
             if (i > j)
-                return zPos(j, i, nNodes);
+                return xPos(j, i, nNodes);
 
             return i * nNodes + j - (i + 1) * (i + 2) / 2;
         }
@@ -160,10 +160,10 @@ namespace TSPCsharp
         //--------------------------------------------LOOP UTILITYES--------------------------------------------
 
         //Setting Upper Bounds of each cplex model's variable to 1
-        public static void ResetVariables(INumVar[] z)
+        public static void ResetVariables(INumVar[] x)
         {
-            for (int i = 0; i < z.Length; i++)
-                z[i].UB = 1;
+            for (int i = 0; i < x.Length; i++)
+                x[i].UB = 1;
         }
 
         //Initialization of the arrays used to keep track of the related components
@@ -176,7 +176,7 @@ namespace TSPCsharp
         }
 
         //Updating the related components
-        public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
+        public static void UpdateCC(Cplex cplex, INumVar[] x, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
         {
             if (relatedComponents[i] != relatedComponents[j])//Same related component, the latter is not closed yet
             {
@@ -210,7 +210,7 @@ namespace TSPCsharp
                             if (relatedComponents[k] == relatedComponents[i])
                             {
                                 //Adding the link to the expression with coefficient 1
-                                expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
+                                expr.AddTerm(x[xPos(h, k, relatedComponents.Length)], 1);
                             }
                         }
 
@@ -227,7 +227,7 @@ namespace TSPCsharp
 
         //--------------------------------------------HEURISTIC UTILITYES--------------------------------------------
 
-        public static PathGenetic NearestNeightbor(Instance instance, Random rnd)
+        public static PathGenetic NearestNeightbor(Instance instance, Random rnd, List<int>[] listArray)
         {
             // heuristicSolution is the path of the current heuristic solution generate
             int[] heuristicSolution = new int[instance.NNodes];
@@ -239,8 +239,6 @@ namespace TSPCsharp
             bool[] availableIndexes = new bool[instance.NNodes];
 
             availableIndexes[currentIndex] = true;
-
-            List<int>[] listArray = BuildSLComplete(instance);
 
             for (int i = 0; i < instance.NNodes - 1; i++)
             {
@@ -304,7 +302,7 @@ namespace TSPCsharp
             {
                 bool found = false;
                 int plus = RndGenetic(rnd);
-                int nextNode = listArray[currenNode][0 + plus];
+                int nextNode = listArray[currenNode][plus];
 
                 do
                 {
@@ -404,9 +402,9 @@ namespace TSPCsharp
         {
             double tmp = rnd.NextDouble();
 
-            if (tmp < 0.8)
+            if (tmp < 0.9)
                 return 0;
-            else if (tmp < 0.95)
+            else if (tmp < 0.99)
                 return 1;
             else
                 return 2;
@@ -496,7 +494,7 @@ namespace TSPCsharp
             return child;
         }
 
-        public static List<PathGenetic> NextPopulation(Instance instance, List<PathGenetic> FatherGeneration, List<PathGenetic> ChildGeneration)
+        public static List<PathGenetic> NextPopulation(Instance instance, int sizePopulation, List<PathGenetic> FatherGeneration, List<PathGenetic> ChildGeneration)
         {
             List<PathGenetic> nextGeneration = new List<PathGenetic>();
             //Data structure used to generate a population 
@@ -514,7 +512,7 @@ namespace TSPCsharp
             //FillRoulette return the size of the roultette
             int upperExtremity = FillRoulette(roulette, FatherGeneration);
 
-            for (int i = 0; i < instance.SizePopulation; i++)
+            for (int i = 0; i < sizePopulation; i++)
             {
                 do
                 {
@@ -747,22 +745,22 @@ namespace TSPCsharp
 
         //--------------------------------------------MATH HEURISTIC UTILITYES--------------------------------------------
 
-        public static void ModifyModel(Instance instance, INumVar[] z, Random rnd, int percentageFixing, double[] values, List<int[]> fixedEdges)
+        public static void ModifyModel(Instance instance, INumVar[] x, Random rnd, int percentageFixing, double[] values, List<int[]> fixedEdges)
         {
-            for (int i = 0; i < z.Length; i++)//Inutile la prima volta
+            for (int i = 0; i < x.Length; i++)//Inutile la prima volta
             {
-                z[i].LB = 0;
-                z[i].UB = 1;
+                x[i].LB = 0;
+                x[i].UB = 1;
             }
 
-            for (int i = 0; i < z.Length; i++)
+            for (int i = 0; i < x.Length; i++)
             {
                 if ((values[i] == 1))
                 {
                     if (RandomSelect(rnd, percentageFixing) == 1)
                     {
-                        z[i].LB = 1;
-                        fixedEdges.Add((zPosInv(i, instance.NNodes)));
+                        x[i].LB = 1;
+                        fixedEdges.Add((xPosInv(i, instance.NNodes)));
                     }
                 }
             }
@@ -776,19 +774,19 @@ namespace TSPCsharp
                 return 0;
         }
 
-        static int[] zPosInv(int index, int nNodes)
+        static int[] xPosInv(int index, int nNodes)
         {
             for (int i = 0; i < nNodes; i++)
             {
                 for (int j = i + 1; j < nNodes; j++)
-                    if (zPos(i, j, nNodes) == index)
+                    if (xPos(i, j, nNodes) == index)
                         return new int[] { i, j };
             }
 
             return null;
         }
 
-        public static void PreProcessing(Instance instance, INumVar[] z, List<int[]> fixedVariables)
+        public static void PreProcessing(Instance instance, INumVar[] x, List<int[]> fixedVariables)
         {
             int nodeLeft = 0;
             int nodeRight = 0;
@@ -849,28 +847,11 @@ namespace TSPCsharp
 
                 }
                 if (nodeLeft != currentEdge[0] || nodeRight != currentEdge[1])
-                    z[zPos(nodeLeft, nodeRight, instance.NNodes)].UB = 0;
+                    x[xPos(nodeLeft, nodeRight, instance.NNodes)].UB = 0;
             }
-
-            /* for (int i = 0; i < z.Length; i++)
-              {
-                  if (z[i].LB == 1)
-                  {
-                      Console.WriteLine("Fissate a 1");
-                      int[] x = zPosInv(i, instance.NNodes);
-                      Console.WriteLine(x[0] +"-"+x[1]);
-                  }
-                  if (z[i].UB == 0)
-                  {
-                      Console.WriteLine("Fissate a 0");
-                      int[] x = zPosInv(i, instance.NNodes);
-                      Console.WriteLine(x[0] + "-" + x[1]);
-
-                  }
-              }*/
         }
 
-        public static PathGenetic GenerateChildRins(Cplex cplex, Instance instance, Process process, INumVar[] z, PathGenetic mother, PathGenetic father)
+        public static PathGenetic GenerateChildRins(Cplex cplex, Instance instance, Process process, INumVar[] x, PathGenetic mother, PathGenetic father)
         {
             PathGenetic child;
             int[] path = new int[instance.NNodes];
@@ -883,12 +864,12 @@ namespace TSPCsharp
             for (int i = 0; i < m.Length; i++)
             {
                 if (m[i] == f[i] || f[m[i]] == i)
-                    z[zPos(i, m[i], m.Length)].LB = 1;
+                    x[xPos(i, m[i], m.Length)].LB = 1;
             }
 
             cplex.Solve();
 
-            double[] actualZ = cplex.GetValues(z);
+            double[] actualX = cplex.GetValues(x);
 
             int tmp = 0;
             int[] available = new int[instance.NNodes];
@@ -899,9 +880,9 @@ namespace TSPCsharp
                 {
                     if (tmp != j && available[j] == 0)
                     {
-                        int position = zPos(tmp, j, instance.NNodes);
+                        int position = xPos(tmp, j, instance.NNodes);
 
-                        if (actualZ[position] >= 0.5)
+                        if (actualX[position] >= 0.5)
                         {
                             path[tmp] = j;
                             tmp = j;
@@ -917,7 +898,7 @@ namespace TSPCsharp
             for (int i = 0; i < m.Length; i++)
             {
                 if (m[i] == f[i] || i == f[m[i]])
-                    z[zPos(i, m[i], m.Length)].LB = 0;
+                    x[xPos(i, m[i], m.Length)].LB = 0;
             }
 
             return child;

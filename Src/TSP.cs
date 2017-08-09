@@ -120,8 +120,8 @@ namespace TSPCsharp
                                 {
                                     //Restarting the clock
                                     clock.Restart();
-                                    instance.ZBest = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
-                                    Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
+                                    instance.XBest = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
+                                    Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.XBest, -1);
                                     Console.WriteLine("Best solution: " + instance.BestLb);
                                     break;
                                 }
@@ -135,7 +135,7 @@ namespace TSPCsharp
                         //Random seed for random variable
                         Random rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
 
-                        Console.Write("\nInsert 1 to use multi start 2OPT, 2 to use multi start 3OPT, 3 to use Tabu-Search, 4 to use VNS or  5 to use Genetic algorithm: ");
+                        Console.Write("\nInsert 1 to use multi start 2OPT, 2 to use Tabu-Search, 3 to use VNS or 4 to use Genetic algorithm: ");
                         switch (Console.ReadLine())
                         {
                             case "1":
@@ -143,7 +143,7 @@ namespace TSPCsharp
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic(instance, process, rnd, clock, "Multi Start 2OPT");
+                                    MultiStart(instance, process, rnd, clock, "Multi Start 2OPT");
                                     break;
                                 }
                             case "2":
@@ -151,7 +151,7 @@ namespace TSPCsharp
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic(instance, process, rnd, clock, "Multi Start 3OPT");
+                                    TabuSearch(instance, process, rnd, clock, "Tabu-Search");
                                     break;
                                 }
                             case "3":
@@ -159,25 +159,17 @@ namespace TSPCsharp
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic(instance, process, rnd, clock, "Tabu-Search");
+                                    VNS(instance, process, rnd, clock, "VNS");
                                     break;
                                 }
                             case "4":
                                 {
-                                    //Clock restart
-                                    clock.Start();
-                                    //Calling the proper resolution method
-                                    Heuristic(instance, process, rnd, clock, "VNS");
-                                    break;
-                                }
-                            case "5":
-                                {
                                     Console.Write("\nWrite the size of the population : ");
                                     //storing the percentage selected
-                                    instance.SizePopulation = Convert.ToInt32(Console.ReadLine());
+                                    int sizePopulation = Convert.ToInt32(Console.ReadLine());
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Heuristic(instance, process, rnd, clock, "GeneticAlgorithm");
+                                    GeneticAlgorithm(instance, process, rnd, clock, sizePopulation,"GeneticAlgorithm");
                                     break;
                                 }
                             default:
@@ -215,11 +207,11 @@ namespace TSPCsharp
                                 {
                                     Console.Write("\nWrite the size of the population : ");
                                     //storing the percentage selected
-                                    instance.SizePopulation = Convert.ToInt32(Console.ReadLine());
+                                    int sizePopulation = Convert.ToInt32(Console.ReadLine());
                                     //Clock restart
                                     clock.Start();
                                     //Calling the proper resolution method
-                                    Polishing(cplex, instance, process, rnd, clock);
+                                    Polishing(cplex, instance, process, rnd, sizePopulation, clock);
 
                                     break;
                                 }                          
@@ -265,7 +257,7 @@ namespace TSPCsharp
             }
 
             //Building the maximum # of links that involves each node
-            INumVar[] z = Utility.BuildModel(cplex, instance, numb);
+            INumVar[] x = Utility.BuildModel(cplex, instance, numb);
 
             //Allocating the correct space to store the optimal solution
             //Only links from node i to i with i < i are considered
@@ -275,6 +267,9 @@ namespace TSPCsharp
             int[] relatedComponents = new int[instance.NNodes];
             List<ILinearNumExpr> rcExpr = new List<ILinearNumExpr>();
             List<int> bufferCoeffRC = new List<int>();
+
+            //Temporary variable
+            double[] linksDistances = new double[(instance.NNodes - 1) * instance.NNodes / 2]; ;
 
             do
             {
@@ -287,7 +282,7 @@ namespace TSPCsharp
 
                     cplex.SetParam(Cplex.DoubleParam.EpGap, 1e-06);
 
-                    Utility.ResetVariables(z);
+                    Utility.ResetVariables(x);
 
                     typeSol = 1;
                 }
@@ -305,7 +300,7 @@ namespace TSPCsharp
                 StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
 
                 //Storing the optimal value of the objective function
-                instance.ZBest = cplex.ObjValue;
+                instance.BestLb = cplex.ObjValue;
 
                 //Blank line
                 Console.WriteLine();
@@ -316,15 +311,15 @@ namespace TSPCsharp
                     for (int j = i + 1; j < instance.NNodes; j++)
                     {
 
-                        //Retriving the correct index position for the current link inside z
-                        int position = Utility.zPos(i, j, instance.NNodes);
+                        //Retriving the correct index position for the current link inside x
+                        int position = Utility.xPos(i, j, instance.NNodes);
 
                         //Reading the optimal solution for the actual link (i,i)
-                        instance.BestSol[position] = cplex.GetValue(z[position]);
+                        linksDistances[position] = cplex.GetValue(x[position]);
 
 
                         //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
-                        if (instance.BestSol[position] >= 0.5)
+                        if (linksDistances[position] >= 0.5)
                         {
                             /*
                              *Current GNUPlot format is:
@@ -339,7 +334,7 @@ namespace TSPCsharp
                             file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
 
                             //Updating the model with the current subtours elimination
-                            Utility.UpdateCC(cplex, z, rcExpr, bufferCoeffRC, relatedComponents, i, j);
+                            Utility.UpdateCC(cplex, x, rcExpr, bufferCoeffRC, relatedComponents, i, j);
                         }
                     }
                 }
@@ -356,16 +351,19 @@ namespace TSPCsharp
 
                 //Accessing GNUPlot to read the file
                 if (Program.VERBOSE >= -1)
-                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
+                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.BestLb, -1);
 
                 //Blank line
                 cplex.Output().WriteLine();
 
                 //Writing the value
-                cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+                cplex.Output().WriteLine("xOPT = " + instance.BestLb + "\n");
 
             } while (rcExpr.Count > 1 || epGap || !allEdges); //if there is more then one related components the solution is not optimal 
-            
+
+            instance.BestSol = linksDistances;
+            instance.XBest = instance.BestLb;
+
             //Exporting the updated model
             if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
@@ -375,7 +373,7 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
+                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.XBest, -1);
         }
 
         //Handle the callback resolution method
@@ -384,19 +382,19 @@ namespace TSPCsharp
             int typeSol = 1;
 
             //-1 means that all links are enabled
-            INumVar[] z = Utility.BuildModel(cplex, instance, -1);
+            INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
             //Initializing the vector
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+            //Adding lazycallback
+            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, true));
 
             // Turn on traditional search for use with control callbacks
             cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Auto);
 
             //Setting cplex # of threads
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-
-            //Adding lazycallback
-            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, true));
 
             //Solving
             cplex.Solve();
@@ -405,7 +403,7 @@ namespace TSPCsharp
             StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
 
             //Storing the optimal value of the objective function
-            instance.ZBest = cplex.ObjValue;
+            instance.XBest = cplex.ObjValue;
 
             //Blank line
             cplex.Output().WriteLine();
@@ -417,10 +415,10 @@ namespace TSPCsharp
                 {
 
                     //Retriving the correct index position for the current link inside z
-                    int position = Utility.zPos(i, j, instance.NNodes);
+                    int position = Utility.xPos(i, j, instance.NNodes);
 
                     //Reading the optimal solution for the actual link (i,i)
-                    instance.BestSol[position] = cplex.GetValue(z[position]);
+                    instance.BestSol[position] = cplex.GetValue(x[position]);
 
                     //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
                     if (instance.BestSol[position] >= 0.5)
@@ -445,13 +443,13 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.ZBest, -1);
+                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.XBest, -1);
 
             //Blank line
             cplex.Output().WriteLine();
 
             //Writing the value
-            cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+            cplex.Output().WriteLine("xOPT = " + instance.XBest + "\n");
 
             //Exporting the updated model
             if (Program.VERBOSE >= -1)
@@ -459,144 +457,125 @@ namespace TSPCsharp
 
         }
 
-        //Handle the heuristic resolution method
-        static void Heuristic(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+        static void MultiStart(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
         {
-            switch (choice)
+            PathStandard incumbentSol = new PathStandard();
+            PathStandard heuristicSol;
+            int typeSol = 0;
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
+
+            do
             {
-                case "Multi Start 2OPT":
-                    {
-                        PathStandard incumbentSol = new PathStandard();
-                        PathStandard heuristicSol;
-                        int typeSol = 0;
+                heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
 
-                        incumbentSol = Utility.NearestNeightbor(instance, rnd);
+                TwoOpt(instance, heuristicSol);
 
-                        do
-                        {
-                            heuristicSol = Utility.NearestNeightbor(instance, rnd);
+                if (incumbentSol.cost > heuristicSol.cost)
+                {
+                    incumbentSol = heuristicSol;
+                    Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
 
-                            if (incumbentSol.cost > heuristicSol.cost)
-                            {
-                                incumbentSol = (PathStandard)heuristicSol.Clone();
+                    Console.WriteLine("Incumbed changed");
+                }
+                else
+                    Console.WriteLine("Incumbed not changed");
 
-                                Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
-                                Console.WriteLine("Incumbed changed");
-                            }
+            Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+        }
 
-                            TwoOpt(instance, heuristicSol);
+        static void TabuSearch(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+        {
+            int typeSol = 0;
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            PathStandard incumbentSol;
+            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            incumbentSol = (PathStandard)solHeuristic.Clone();
 
-                            if (incumbentSol.cost > heuristicSol.cost)
-                            {
-                                incumbentSol = heuristicSol;
-                                Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+            Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
 
-                                Console.WriteLine("Incumbed changed");
-                            }
-                            else
-                                Console.WriteLine("Incumbed not changed");
+            Tabu tabu = new Tabu("A", instance, 100);
+            TabuSearch(instance, process, tabu, solHeuristic, incumbentSol, clock);
 
-                        } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            solHeuristic = (PathStandard)incumbentSol.Clone();
+            TwoOpt(instance, solHeuristic);
 
-                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
-                        break;
-                    }
-                case "Tabu-Search":
-                    {
-                        int typeSol = 0;
-                        PathStandard incumbentSol;
-                        PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd);
-                        incumbentSol = (PathStandard)solHeuristic.Clone();
+            Utility.PrintHeuristicSolution(instance, process, solHeuristic, incumbentSol.cost, typeSol);
 
-                        Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+            Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+        }
 
-                        Tabu tabu = new Tabu("A", instance, 100);
-                        TabuSearch(instance, process, tabu, solHeuristic, incumbentSol, clock);
+        static void VNS(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+        {
+            int typeSol = 0;
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            PathStandard incumbentSol;
+            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            incumbentSol = (PathStandard)solHeuristic.Clone();
+            Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
 
-                        solHeuristic = (PathStandard)incumbentSol.Clone();
-                        TwoOpt(instance, solHeuristic);
+            do
+            {
+                TwoOpt(instance, solHeuristic);
 
-                        Utility.PrintHeuristicSolution(instance, process, solHeuristic, incumbentSol.cost, typeSol);
+                if (incumbentSol.cost > solHeuristic.cost)
+                {
+                    incumbentSol = (PathStandard)solHeuristic.Clone();
 
-                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
-                        break;
-                    }
-                case "VNS":
-                    {
-                        int typeSol = 0;
-                        PathStandard incumbentSol;
-                        PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd);
-                        incumbentSol = (PathStandard)solHeuristic.Clone();
-                        Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+                    Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
 
-                        do
-                        {
-                            TwoOpt(instance, solHeuristic);
+                    Console.WriteLine("Incumbed changed");
+                }
+                else
+                    Console.WriteLine("Incumbed not changed");
 
-                            if (incumbentSol.cost > solHeuristic.cost)
-                            {
-                                incumbentSol = (PathStandard)solHeuristic.Clone();
+                VNS(instance, solHeuristic, rnd);
 
-                                Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
-                                Console.WriteLine("Incumbed changed");
-                            }
-                            else
-                                Console.WriteLine("Incumbed not changed");
+            Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+        }
 
-                            VNS(instance, solHeuristic, rnd);
+        static void GeneticAlgorithm(Instance instance, Process process, Random rnd, Stopwatch clock, int sizePopulation, string choice)
+        {
+            PathGenetic incumbentSol = new PathGenetic();
+            PathGenetic currentBestPath = null;
 
-                        } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
+            List<PathGenetic> ChildPoulation = new List<PathGenetic>();
 
-                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-                        break;
-                    }
-                case "GeneticAlgorithm":
-                    {
-                        PathGenetic incumbentSol = new PathGenetic();
-                        PathGenetic currentBestPath = null;
+            //Generate the first population
+            for (int i = 0; i < sizePopulation; i++)
+                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));
+            do
+            {
+                //Generate the child 
+                for (int i = 0; i < sizePopulation; i++)
+                {
+                    if (i % 2 != 0)
+                        ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
+                }
 
-                        List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
-                        List<PathGenetic> ChildPoulation = new List<PathGenetic>();
+                OriginallyPopulated = Utility.NextPopulation(instance, sizePopulation, OriginallyPopulated, ChildPoulation);
 
-                        List<int>[] listArray = Utility.BuildSLComplete(instance);
+                //currentBestPath contains the best path of the current population
+                currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
 
-                        //Generate the first population
-                        for (int i = 0; i < instance.SizePopulation; i++)
-                            OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));
-                        do
-                        {
-                            //Generate the child 
-                            for (int i = 0; i < instance.SizePopulation; i++)
-                            {
-                                if (i % 2 != 0)
-                                    ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
-                            }
+                if (currentBestPath.cost < incumbentSol.cost)
+                {
+                    incumbentSol = (PathGenetic)currentBestPath.Clone();
+                    Utility.PrintGeneticSolution(instance, process, incumbentSol);
+                }
 
-                            OriginallyPopulated = Utility.NextPopulation(instance, OriginallyPopulated, ChildPoulation);
+                // We empty the list that contain the child
+                ChildPoulation.RemoveRange(0, ChildPoulation.Count);
 
-                            //currentBestPath contains the best path of the current population
-                            currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
-                            if (currentBestPath.cost < incumbentSol.cost)
-                            {
-                                incumbentSol = (PathGenetic)currentBestPath.Clone();
-                                Utility.PrintGeneticSolution(instance, process, incumbentSol);
-                            }
-
-                            // We empty the list that contain the child
-                            ChildPoulation.RemoveRange(0, ChildPoulation.Count);
-
-                        } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
-
-                        Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
-
-                        break;
-
-                    }
-            }
+            Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
         }
 
         public static void TwoOpt(Instance instance, PathStandard pathG)
@@ -815,6 +794,7 @@ namespace TSPCsharp
             StreamWriter file;
             double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
             double incumbentCost = Double.MaxValue;
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
 
             List<int[]> fixedVariables = new List<int[]>();
 
@@ -824,27 +804,27 @@ namespace TSPCsharp
 
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
-            INumVar[] z = Utility.BuildModel(cplex, instance, -1);
+            INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
-            PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd);
+            PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
 
             for (int i = 0; i < instance.NNodes; i++)
             {
-                int position = Utility.zPos(i, heuristicSol.path[i], instance.NNodes);
+                int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
                 incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
             }
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, BlockPrint));
+            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
 
-            cplex.AddMIPStart(z, incumbentSol, "HeuristicPath");
-            int x = cplex.GetMIPStartIndex("HeuristicPath");
+            cplex.AddMIPStart(x, incumbentSol, "HeuristicPath");
+            int z = cplex.GetMIPStartIndex("HeuristicPath");
             do
             {
 
-                Utility.ModifyModel(instance, z, rnd, percentageFixing, incumbentSol, fixedVariables);
+                Utility.ModifyModel(instance, x, rnd, percentageFixing, incumbentSol, fixedVariables);
                 if ((fixedVariables.Count != instance.NNodes - 1) && (fixedVariables.Count != instance.NNodes))
-                    Utility.PreProcessing(instance, z, fixedVariables);
+                    Utility.PreProcessing(instance, x, fixedVariables);
 
                 cplex.Solve();
 
@@ -853,13 +833,13 @@ namespace TSPCsharp
                     file = new StreamWriter(instance.InputFile + ".dat", false);
 
                     incumbentCost = cplex.ObjValue;
-                    incumbentSol = cplex.GetValues(z);
+                    incumbentSol = cplex.GetValues(x);
 
                     for (int i = 0; i < instance.NNodes; i++)
                     {
                         for (int j = i + 1; j < instance.NNodes; j++)
                         {
-                            int position = Utility.zPos(i, j, instance.NNodes);
+                            int position = Utility.xPos(i, j, instance.NNodes);
 
                             if (incumbentSol[position] >= 0.5)
                             {
@@ -872,7 +852,7 @@ namespace TSPCsharp
                     file.Close();
 
                     Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
-                    cplex.ChangeMIPStart(x, z, incumbentSol);
+                    cplex.ChangeMIPStart(z, x, incumbentSol);
                 }
             
                 fixedVariables.RemoveRange(0, fixedVariables.Count);
@@ -891,7 +871,7 @@ namespace TSPCsharp
 
             } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
-            instance.ZBest = incumbentCost;
+            instance.XBest = incumbentCost;
             instance.BestSol = incumbentSol;
 
             file = new StreamWriter(instance.InputFile + ".dat", false);
@@ -901,7 +881,7 @@ namespace TSPCsharp
             {
                 for (int j = i + 1; j < instance.NNodes; j++)
                 {
-                    int position = Utility.zPos(i, j, instance.NNodes);
+                    int position = Utility.xPos(i, j, instance.NNodes);
 
                     if (instance.BestSol[position] >= 0.5)
                     {
@@ -914,10 +894,10 @@ namespace TSPCsharp
             file.Close();
 
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.ZBest, -1);
+                Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.XBest, -1);
 
             cplex.Output().WriteLine();
-            cplex.Output().WriteLine("zOPT = " + instance.ZBest + "\n");
+            cplex.Output().WriteLine("xOPT = " + instance.XBest + "\n");
 
             if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
@@ -931,15 +911,16 @@ namespace TSPCsharp
             IRange cut;
             double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
             double incumbentCost = double.MaxValue;
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
 
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
-            INumVar[] z = Utility.BuildModel(cplex, instance, -1);//Costruisco il modello la prima volta
+            INumVar[] x = Utility.BuildModel(cplex, instance, -1);//Costruisco il modello la prima volta
 
-            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd);
+            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
             //incumbentSol = ConvertIntArrayToDoubleArray(solHeuristic.path);
             for (int i = 0; i < instance.NNodes; i++)
             {
-                int position = Utility.zPos(i, solHeuristic.path[i], instance.NNodes);
+                int position = Utility.xPos(i, solHeuristic.path[i], instance.NNodes);
                 incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
             }
 
@@ -947,23 +928,23 @@ namespace TSPCsharp
             ILinearNumExpr expr = cplex.LinearNumExpr();
 
             for (int i = 0; i < instance.NNodes; i++)
-                expr.AddTerm(z[Utility.zPos(i, solHeuristic.path[i], instance.NNodes)], 1);
+                expr.AddTerm(x[Utility.xPos(i, solHeuristic.path[i], instance.NNodes)], 1);
 
             cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local brnching constraint");
             cplex.AddCut(cut);
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, BlockPrint));
+            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
 
             do
             {
-                cplex.AddMIPStart(z, incumbentSol);
+                cplex.AddMIPStart(x, incumbentSol);
                 cplex.Solve();
 
                 if (incumbentCost > cplex.ObjValue)
                 {
                     incumbentCost = cplex.ObjValue;
-                    incumbentSol = cplex.GetValues(z);
+                    incumbentSol = cplex.GetValues(x);
 
                     StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
 
@@ -971,7 +952,7 @@ namespace TSPCsharp
                     {
                         for (int j = i + 1; j < instance.NNodes; j++)
                         {
-                            int position = Utility.zPos(i, j, instance.NNodes);
+                            int position = Utility.xPos(i, j, instance.NNodes);
 
                             if (incumbentSol[position] >= 0.5)
                             {
@@ -990,7 +971,7 @@ namespace TSPCsharp
                     for (int i = 0; i < instance.NNodes; i++)
                     {
                         if (incumbentSol[i] == 1)
-                            expr.AddTerm(z[i], 1);
+                            expr.AddTerm(x[i], 1);
                     }
 
                     currentRange = 0;
@@ -1019,7 +1000,7 @@ namespace TSPCsharp
             instance.BestLb = incumbentCost;
         }
 
-        static void Polishing(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
+        static void Polishing(Cplex cplex, Instance instance, Process process, Random rnd, int sizePopulation, Stopwatch clock)
         {
 
             PathGenetic incumbentSol = new PathGenetic();
@@ -1030,14 +1011,14 @@ namespace TSPCsharp
 
             List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-            INumVar[] z = Utility.BuildModel(cplex, instance, -1);
+            INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
             //cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
             cplex.SetParam(Cplex.DoubleParam.EpGap, 0.5);
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, z, instance, process, false));//Installo la lazy 
+            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, false));//Installo la lazy 
 
-            for (int i = 0; i < instance.SizePopulation; i++)
+            for (int i = 0; i < sizePopulation; i++)
             {
                 OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false, listArray));
                 //OriginallyPopulated[i].path = Utility.InterfaceForTwoOpt(OriginallyPopulated[i].path);
@@ -1049,13 +1030,13 @@ namespace TSPCsharp
 
             do
             {
-                for (int i = 0; i < instance.SizePopulation; i++)
+                for (int i = 0; i < sizePopulation; i++)
                 {
                     if ((i != 0) && (i % 2 != 0))
-                        ChildPoulation.Add(Utility.GenerateChildRins(cplex, instance, process, z, OriginallyPopulated[i], OriginallyPopulated[i - 1]));
+                        ChildPoulation.Add(Utility.GenerateChildRins(cplex, instance, process, x, OriginallyPopulated[i], OriginallyPopulated[i - 1]));
                 }
 
-                OriginallyPopulated = Utility.NextPopulation(instance, OriginallyPopulated, ChildPoulation);
+                OriginallyPopulated = Utility.NextPopulation(instance, sizePopulation, OriginallyPopulated, ChildPoulation);
                 currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
 
                 if (currentBestPath.cost < incumbentSol.cost)

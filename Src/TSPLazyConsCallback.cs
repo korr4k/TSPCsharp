@@ -10,14 +10,14 @@ namespace TSPCsharp
     {
         private bool BlockPrint;
         private Cplex cplex;
-        private INumVar[] z;
+        private INumVar[] x;
         private Instance instance;
         private Process process;
 
-        public TSPLazyConsCallback(Cplex cplex, INumVar[] z, Instance instance, Process process, bool BlockPrint)
+        public TSPLazyConsCallback(Cplex cplex, INumVar[] x, Instance instance, Process process, bool BlockPrint)
         {
             this.cplex = cplex;
-            this.z = z;
+            this.x = x;
             this.BlockPrint = BlockPrint;
             this.instance = instance;
             this.process = process;
@@ -34,8 +34,8 @@ namespace TSPCsharp
 
             Utility.InitCC(compConnLC);
 
-            //To call GetValues for each value in z is a lot more expensive for unknown reasons
-            double[] actualZ = GetValues(z);
+            //To call GetValues for each value in x is a lot more expensive for unknown reasons
+            double[] actualX = GetValues(x);
 
             //Node's is that generated the callback, used to create an unique nome for the GNUPlot files
             string nodeId = GetNodeId().ToString();
@@ -52,14 +52,14 @@ namespace TSPCsharp
             {
                 for (int j = i + 1; j < instance.NNodes; j++)
                 {
-                    //Retriving the correct index position for the current link inside z
-                    int position = Utility.zPos(i, j, instance.NNodes);
+                    //Retriving the correct index position for the current link inside x
+                    int position = Utility.xPos(i, j, instance.NNodes);
 
                     //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
-                    if (actualZ[position] >= 0.5)
+                    if (actualX[position] >= 0.5)
                     {
                         //Updating the model with the current subtours elimination
-                        Utility.UpdateCC(cplex, z, ccExprLC, bufferCoeffCCLC, compConnLC, i, j);
+                        Utility.UpdateCC(cplex, x, ccExprLC, bufferCoeffCCLC, compConnLC, i, j);
 
                         if (BlockPrint)
                         {

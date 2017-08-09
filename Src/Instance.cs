@@ -16,11 +16,10 @@ namespace TSPCsharp
 
         // global data
         double tStart;                          // real starting time 
-        double zBest;                           // best sol. available  
+        double xBest;                           // best sol. available  
        
         double[] bestSol;                       // best sol. available    
         double bestLb;                          // best lower bound available
-        int sizePopulation;
 
 
         // model:   
@@ -31,7 +30,7 @@ namespace TSPCsharp
         //int bigSStart;
         //int yStart;
         //int fStart;
-        int zStart;
+        int xStart;
 
         // parameters used to build GNUPlot panel
         double xMin = Double.MaxValue;
@@ -107,16 +106,16 @@ namespace TSPCsharp
             }
         }
 
-        public double ZBest
+        public double XBest
         {
             get
             {
-                return zBest;
+                return xBest;
             }
 
             set
             {
-                zBest = value;
+                xBest = value;
             }
         }
 
@@ -160,16 +159,16 @@ namespace TSPCsharp
             }
         }
 
-        public int ZStart
+        public int XStart
         {
             get
             {
-                return zStart;
+                return xStart;
             }
 
             set
             {
-                zStart = value;
+                xStart = value;
             }
         }
 
@@ -223,22 +222,6 @@ namespace TSPCsharp
             {
                 yMax = value;
             }
-        }
-
-
-        public int SizePopulation
-
-        {
-            get
-            {
-                return sizePopulation;
-            }
-
-            set
-            {
-                sizePopulation = value;
-            }
-
         }
     
         //Used to print the points stored in instance.Coord vector
