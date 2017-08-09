@@ -233,7 +233,8 @@ namespace TSPCsharp
             int[] heuristicSolution = new int[instance.NNodes];
             double distHeuristic = 0;
 
-            int currentIndex = 0;
+            int currentIndex = rnd.Next(instance.NNodes);
+            int startindex = currentIndex;
 
             int[] availableIndexes = new int[instance.NNodes];
 
@@ -277,7 +278,7 @@ namespace TSPCsharp
                 } while (!found);
             }
 
-            distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[0], instance.EdgeType);
+            distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[startindex], instance.EdgeType);
 
             return new PathGenetic(heuristicSolution, distHeuristic);
         }
@@ -405,9 +406,9 @@ namespace TSPCsharp
         {
             double tmp = rnd.NextDouble();
 
-            if (tmp < 0.9)
+            if (tmp < 0.8)
                 return 0;
-            else if (tmp < 0.99)
+            else if (tmp < 0.95)
                 return 1;
             else
                 return 2;

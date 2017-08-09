@@ -28,3 +28,13 @@ C:\Users\Corrado Di Blasio\Desktop\TSPCsharp\Src\bin\x64\Debug\ILOG.CPLEX.xml
 C:\Users\Corrado Di Blasio\Desktop\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.csprojResolveAssemblyReference.cache
 C:\Users\Corrado Di Blasio\Desktop\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.exe
 C:\Users\Corrado Di Blasio\Desktop\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.pdb
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\TSPCsharp.exe.config
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\TSPCsharp.exe
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\TSPCsharp.pdb
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\ILOG.Concert.dll
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\ILOG.CPLEX.dll
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\ILOG.Concert.xml
+E:\Documenti\TSPCsharp\Src\bin\x64\Debug\ILOG.CPLEX.xml
+E:\Documenti\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.csprojResolveAssemblyReference.cache
+E:\Documenti\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.exe
+E:\Documenti\TSPCsharp\Src\obj\x64\Debug\TSPCsharp.pdb
