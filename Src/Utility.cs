@@ -236,12 +236,9 @@ namespace TSPCsharp
             int currentIndex = rnd.Next(instance.NNodes);
             int startindex = currentIndex;
 
-            int[] availableIndexes = new int[instance.NNodes];
+            bool[] availableIndexes = new bool[instance.NNodes];
 
-            for (int i = 0; i < availableIndexes.Length; i++)
-                availableIndexes[i] = -1;
-
-            availableIndexes[currentIndex] = 1;
+            availableIndexes[currentIndex] = true;
 
             List<int>[] listArray = BuildSLComplete(instance);
 
@@ -255,11 +252,11 @@ namespace TSPCsharp
 
                 do
                 {
-                    if (availableIndexes[nextIndex] == -1)
+                    if (availableIndexes[nextIndex] == false)
                     {
                         heuristicSolution[currentIndex] = nextIndex;
                         distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[nextIndex], instance.EdgeType);
-                        availableIndexes[nextIndex] = 1;
+                        availableIndexes[nextIndex] = true;
                         currentIndex = nextIndex;
                         found = true;
                     }
@@ -278,6 +275,7 @@ namespace TSPCsharp
                 } while (!found);
             }
 
+            heuristicSolution[currentIndex] = startindex;
             distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[startindex], instance.EdgeType);
 
             return new PathGenetic(heuristicSolution, distHeuristic);
