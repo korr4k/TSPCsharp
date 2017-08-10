@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+  \documentclass[11pt]{article}
 \usepackage{fullpage}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -1617,6 +1617,660 @@ free(cutval);
 
 return 0;
 
+\end{lstlisting}
+
+
+
+\vspace{2\baselineskip}
+ALGORITMI GENETICI
+\vspace{2\baselineskip}
+
+
+Gli Algoritmi Genetici (AG), proposti nel 1975 da J.H. Holland, sono un modello computazionale idealizzato dall'evoluzione naturale darwinista. L'aggettivo "genetico" deriva dal fatto che il modello evolutivo darwiniano trova spiegazioni nella branca della biologia detta genetica e dal fatto che gli algoritmi genetici attuano dei meccanismi concettualmente simili a quelli dei processi biochimici scoperti da questa scienza. I principi fondamentali che consentono la nascita e lo sviluppo di un processo evolutivo che porta l' evoluzione della specie sono la selezione naturale e la varietà del genotipo \footnote{Il termine genotipo indica la costituzione genetica di un organismo o di un gruppo di individui} della popolazione
+ 
+La selezione naturale è il meccanismo grazie al quale si ha un progressivo e cumulativo aumento della frequenza degli individui aventi caratteristiche ottimali per l'ambiente in cui vivono poiché solo gli individui che meglio si adattano ad un certo habitat riescono a sopravvivere e a riprodursi. I meccanismi generatori della variazione del genotipo della popolazione sono sostanzialmente due: 
+
+\begin{itemize}
+    \item Un processo di \textbf{riproduzione} nel quale gli individui(genitori) si accoppiano producendo nuovi individui(figli) il cui patrimonio genetico è una combinazione di quello dei genitori;
+    \item Un processo di \textbf{mutazione} che colpisce i figli i quali subiscono una modifica del patrimonio genetico ereditato dai genitori per effetto dell' ambiente che li circonda.
+\end{itemize}
+
+I cambiamenti che si verificano da una generazione all' altra sono molto piccoli ma essendo che quelli positivi si accumulano, nell'arco di tempi lunghissimi, danno origine a cambiamenti enormi.  
+Gli algoritmi genetici sono algoritmi euristici il cui obbiettivo è quello di trovare una soluzione ottimale di un determinato problema di ricerca, simulando le meccaniche precedentemente discusse. La ricerca parte da una popolazione iniziale di individui, detti cromosomi, che rappresentano ipotetiche soluzioni al problema dato. Ogni individuo della popolazione è codificato da un vettore\footnote{Oltre alla codifica vettoriale in letteratura si può trovare anche la codifica ad albero. Tuttavia essa viene utilizzata per codificare gli individui della popolazione nell' ambito della programmazione genetica.} i cui elementi contengono simboli appartenenti ad un alfabeto finito, detti geni. Ad ogni soluzione è associato un valore da una funzione chiamata Fitness; essa valuta la bontà di un individuo nel risolvere il problema in questione. 
+Così come nella natura solamente gli individui che meglio si adattano all’ambiente sono in grado di sopravvivere e di riprodursi, anche negli algoritmi genetici le soluzioni migliori sono quelle che hanno la maggiore probabilità di trasmettere i propri geni alle generazioni future. Individui con valore di fitness elevata (rispetto alla fitness media della popolazione) probabilmente verranno selezionati come genitori per la futura generazione di soluzioni. Dopo aver selezionato un numero $n$ di individui, l’algoritmo genetico emula la riproduzione sessuale che avviene in natura e ricombina il materiale genetico dei genitori, dando vita ai figli, ovvero alla futura generazione di soluzioni. 
+
+
+\vspace{2\baselineskip}
+OPERATORI GENETICI
+\vspace{2\baselineskip}
+
+In questo paragrafo tratteremo i principali operatori genetici applicabili ai cromosomi. Per ogni operatore verranno descritte le sue principali varianti che si possono trovare in letteratura.
+
+
+\vspace{2\baselineskip}
+OPERATORI DI SELEZIONE
+\vspace{2\baselineskip}
+
+A causa di complessi fenomeni di interazione non lineare, non è sempre vero che da due soluzioni promettenti ne nasca una terza più promettente né che da due soluzioni con valori di fitness basso ne venga generata una terza con valore di fitness più basso. Per ovviare a questi problemi, durante la scelta delle soluzioni candidate all'evoluzione, oltre che sul parametro ottenuto dalla funzione di fitness ci si basa anche su particolari tecniche di "selezione". Le più comuni sono:
+
+\begin{itemize}
+    \item \textbf{Selezione a roulette}:la probabilità che una soluzione venga scelta per farla evolvere è direttamente proporzionale al valore restituito dalla funzione di fitness. Ad ogni individuo si assegna una fetta di una ruota di una roulette e la grandezza di questa fetta è proporzionale all’idoneità dell' individuo. La ruota viene azionata N volte, dove N è il numero di
+individui della popolazione. Ad ogni iterazione, all' individuo prescelto è concesso di essere tra i genitori della generazione successiva Questa tecnica presenta dei problemi nel caso in cui ci siano delle grosse differenze di valori perché le soluzioni peggiori verrebbero selezionate troppo raramente.  
+
+\item \textbf{Selezione di Boltzmann}:le soluzioni vengono scelte con un grado di probabilità che, agli inizi dell'algoritmo, favorisce l'esplorazione e che poi tende a stabilizzarsi. Questa tecnica ritiene utile, in un primo momento, consentire agli individui meno idonei di riprodursi quasi quanto quelli più idonei, e far procedere lentamente la selezione per mantenere la diversità nella popolazione. In seguito si rafforza la selezione per favorire maggiormente gli individui ad alta idoneità, presumendo che la fase iniziale, con grande diversità e poca selezione, abbia consentito alla popolazione di individuare la zona giusta nello spazio di ricerca. 
+
+\item \textbf{Selezione a torneo}: Nel tipo più comune di selezione a torneo, si scelgono a caso due individui e si genera un numero casuale $c \in [0, 1]$. Se c risulta minore di un parametro $k \in [0, 1]$ fissato si seleziona il piu’ idoneo, altrimenti si sceglie il meno idoneo.
+\end{itemize}
+
+
+In generale, la scelta di quale metodica di selezione  utilizzare all' interno del proprio algoritmo dipende dalla dimensione del problema e da eventuali vincoli che devono essere rispettati: per esempio se si ha l' esigenza di trovare in tempi brevi una buona soluzione è sconsigliato utilizzare la selezione di Boltzmann.
+
+
+\vspace{2\baselineskip}
+OPERATORE DI CROSSOVER
+\vspace{2\baselineskip}
+
+Il crossover è una metafora della riproduzione in cui il materiale genetico dei discendenti è una combinazione di quello dei genitori.Esistono diversi modi per ottenere un figlio a partire da due genitori; i metodi maggiormente utilizzati sono:
+
+\begin{itemize}
+    \item \textbf{Crossover ad un punto}: Date due soluzioni adatte all'evoluzione si tagliano i loro vettori di codifica in un punto casuale o predefinito per ottenere due teste e due code. La prima nuova soluzione ottenuta sarà data dalla combinazione della testa della prima soluzione con la coda della seconda, mentre la seconda nuova soluzione sarà data dalla coda della prima soluzione con la testa della seconda.
+    \item \textbf{Crossover a due punti}: Date due soluzioni si tagliano i loro vettori di codifica in due punti predefiniti o casuali al fine di ottenere una testa, una parte centrale ed una coda dalla prima e dalla seconda soluzione. La prima nuova soluzione sarà data dalla testa e della coda della prima soluzione e dalla parte centrale della seconda soluzione. La seconda nuova soluzione sarà data dalla parte centrale della prima soluzione e dalla testa e dalla coda della seconda soluzione.
+	\item \textbf{Crossover uniforme}: consiste nello scambiare casualmente dei bit tra le soluzioni candidate all'evoluzione;
+	\item \textbf{Crossover aritmetico}: consiste nell'utilizzare un'operazione aritmetica per creare la nuova soluzione. (es. XOR o un AND).
+\end{itemize}
+
+\begin{center}
+\includegraphics[scale=0.5]{selezioneSP}  
+
+Figura 3: Esempio di operatore di crossover 
+\end{center}
+
+\vspace{2\baselineskip}
+MUTAZIONE
+\vspace{2\baselineskip}
+
+L' operatore di mutazione prevede che in funzione di una prefissata e usualmente piccola probabilità p_{mutation}, il valore di un bit del figlio venga cambiato: questo serve per simulare quanto avviene in natura in cui raramente è possibile che vi sia una variazione del genotipo durante l' evoluzione di un essere vivente.
+La figura x.y illustra un esempio di mutazione.
+
+
+\begin{center}
+\includegraphics[scale=0.5]{Mutazione}  
+
+Figura 3: Esempio di mutazione 
+\end{center}
+
+
+\vspace{2\baselineskip}
+ALGORITMO GENETICO REALZIZZATO PER TSP
+\vspace{2\baselineskip}
+
+Gli AG risolvono un determinato problema ricorrendo a una popolazione di soluzioni\footnote{Si osserva che gli algoritmi visti precedentemente utilizzano tutti una singola soluzione} che, inizialmente casuali e quindi con fitness bassa, vengono poi fatte evolvere per un certo numero di generazioni successive, sino all’apparizione di soluzioni con fitness elevata. Per poter applicare l'algoritmo genetico, occorre anzitutto codificare numericamente le soluzioni e individuare una opportuna funzione di fitness. La codifica vettoriale scelta per i cromosomi, che meglio si sposa con in problema del Commesso Viaggiatore, risulta essere un vettore di interi: ogni elemento del vettore identifica in maniera univoca una delle città da visitare mentre il suo posizionamento identifica l'ordine di visita. 
+Per quanto riguarda la popolazione iniziale e i figli, questi nel nostro lavoro saranno sempre soluzioni ammissibili del problema del commesso viaggiatore. La funzione di fitness realizzata ha come dominio l' insieme dei circuiti ammissibili appartenenti ad una istanza del problema del commesso viaggiatore e come codominio l' insieme dei numeri reali e associa ad ogni circuito un valore di fitness pari al reciproco del suo costo.  
+Fra le varie possibilità, si è deciso di utilizzare la selezione a roulette (avendo soluzioni i cui costi hanno il medesimo ordine di grandezza),come operatore di crossover si è scelto quello ad un punto e si è applicata al figlio una mutazione con una probabilità p_{mutex} pari dell' $1%$. 
+
+\vspace{2\baselineskip}
+CLASSE PATHGENETIC
+\vspace{2\baselineskip}
+
+La classe PathGenetic estende PathStandard già discussa nel paragrafo X.Y. Durante lo sviluppo del codice è nata l' esigenza di creare tale classe poiché un percorso che appartiene ad una generica generazione $i$ ha associato un valore di fitness, che è stato memorizzato in un campo di tipo double chiamato fitness, e un valore intero  memorizzato in un campo chiamato nRoulette che identifica il circuito all' atto dell' estrazione dei percorsi che formeranno la generazione $i + 1$. 
+Essendo tali quantità utilizzate esclusivamente all' interno dell' algoritmo generico, inserirle come campi all' interno di PathStandard significava dover settarle ad un valore di default per tutti gli algoritmi che utilizzano istanze di PathStandard: ciò da un punto di vista della programmazione non sarebbe risultato particolarmente elegante.
+La classe ha un metodo privato chiamato \textbf{CalculateFitness} il quale semplicemente setta la variabile fitness.
+
+
+\begin{lstlisting}
+
+private void CalculateFitness()
+{
+     fitness = 1 / cost;         
+}
+
+\end{lstlisting}
+
+La variabile \textbf{cost} e l’ array \textbf{path} sono ereditati da PathStandard e sono settati utilizzando uno dei tre costruttori realizzati.
+
+\begin{lstlisting}
+
+public PathGenetic(int[] path, double cost) : base()
+{
+     this.path = path;
+     this.cost = cost;
+     CalculateFitness();
+     nRoulette = -1;
+}
+
+public PathGenetic(int[] path, Instance inst) : base(path, inst)
+{
+    CalculateFitness();
+    nRoulette = -1;
+}
+
+       
+public PathGenetic(): base()
+{
+    fitness = -1;
+    nRoulette = -1;
+}
+
+
+\end{lstlisting}
+
+
+\vspace{2\baselineskip}
+FUNZIONE GENETIC ALGORITHM
+\vspace{2\baselineskip}
+
+
+Per la creazione della generazione padre si è applicato l' algoritmo euristico Nearest Neightbor implementato nel metodo chiamato \textbf{NearestNeightborGenetic}. Si sono definite due liste di tipo PathGenetic: \textbf{OriginallyPopulated} contiene al suo interno l' insieme dei circuiti hamiltoniani che compongono la generazione padre all' iterazione $i$ dell' algoritmo mentre \textbf{ChildPoulation} contiene l' insieme dei percorsi figli prodotti utilizzando il metodo \textbf{GenerateChild}. Poiché l' indice in cui è memorizzato un circuito all' interno di OriginallyPopulated è casuale_{Con casuale si intende che non è presente alcuna forma di correlazione fra l' indice e il costo della soluzione.} si è deciso di accoppiare circuiti memorizzati in celle adiacenti; la casualità di OriginallyPopulated consente di combinare fra loro soluzioni buone con altre meno buone e ciò statisticamente risulta particolarmente vantaggioso.
+Una volta prodotti i figli è necessario procedere con la creazione della nuova generazione padre: questo viene eseguito dal metodo \textbf{NextPopulation}. Per identificare il miglio circuito della generazione corrente si è realizzato il metodo BestSolution, qualora il costo della miglior soluzione della generazione corrente risulta minore dell’ incumbent_{Con incumbent si intende la miglio soluzione fin ora calcolata} quest' ultimo viene aggiornato. L' algoritmo termina quanto scade il time limit fornito dall' utente.  Riportiamo di seguito il codice realizzato:
+
+\begin{lstlisting}
+
+PathGenetic incumbentSol = new PathGenetic();
+PathGenetic currentBestPath = null;
+
+List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
+List<PathGenetic> ChildPoulation = new List<PathGenetic>();
+List<int>[] listArray = Utility.BuildSLComplete(instance);
+
+//Generate the first population
+for (int i = 0; i < instance.SizePopulation; i++)
+     OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));
+      
+do
+{
+     //Generate the child 
+     for (int i = 0; i < instance.SizePopulation; i++)
+     {
+             if (i % 2 != 0)
+               ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
+     }
+
+     OriginallyPopulated = Utility.NextPopulation(instance, OriginallyPopulated, ChildPoulation);
+
+     //currentBestPath contains the best path of the current population
+      currentBestPath = Utility.BestSolution(OriginallyPopulated);
+      
+      if (currentBestPath.cost < incumbentSol.cost)
+      {
+           incumbentSol = (PathGenetic)currentBestPath.Clone();
+           Utility.PrintGeneticSolution(instance, process, incumbentSol);
+      }
+
+     // We empty the list that contain the child
+     ChildPoulation.RemoveRange(0, ChildPoulation.Count);
+
+} while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+
+\end{lstlisting}
+
+
+\vspace{2\baselineskip}
+NEARESTNEIGHTBORGENETIC 
+\vspace{2\baselineskip}
+
+Il corrente metodo è simile alla funzione NearestNeight discussa nel paragrafo X.Y ma con due differenze significative:
+
+\begin{itemize}
+    \item La sequenza degli elementi nell' array che codifica il percorso creato dal metodo indicano l' ordine con cui il circuito visita i nodi. Si ricorda invece che il metodo NearestNeight produce percorsi codificati in array in cui alla generica posizione \textbf{i} è collocato il nodo successivo al nodo \textbf{i}. 
+    
+    \item Poiché un algoritmo genetico è tanto migliore quanto gli individui che formano la popolazione di partenza hanno caratteristiche dissimili fra di loro, si è fatto in modo che i circuiti fossero il più possibili diversi gli uni dagli altri. 
+\end{itemize}
+
+
+L' intestazione del metodo risulta essere:
+
+\begin{lstlisting}
+
+public static PathGenetic NearestNeightborGenetic(Instance instance, Random rnd, bool rndStartPoint, List<int>[] listArray)
+
+\end{lstlisting}
+
+
+Dove:
+
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe Instance contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' utente;
+    \item \textbf{rnd}: istanza della classe Random,;
+    \item \textbf{rndStartPoint}: variabile booleana che determina se il nodo di partenza sul quale viene applicato l' algoritmo nearest neightbor risulta essere casuale (in tal caso assume il valore true) oppure sia il nodo di default 0;
+    \item \textbf{listArray}: lista in cui all' indice \textbf{i} è presente un vettore di dimensione instance.Nnodes al cui interno sono, in ordine crescente rispetto alla distanza assunta dal nodo \textbf{i}, presenti gli indici associati ai nodi del grafo.
+\end{itemize}
+
+
+Il circuito prodotto dal metodo viene memorizzato all' interno del vettore \textbf{heuristicSolution} avente una dimensione pari al numero di nodi del grafo. Poiché si vogliono soluzioni che siano il più possibile dissimili tra loro, si è scelto casualmente il primo nodo sul quale l' algoritmo nearest neightbor viene applicato. A tal fine si è avuto l' accortezza, all' atto dell' invocazione del metodo, di porre a \textbf{true} il parametro rndStartPoint. Il vettore \textbf{VisitedNodes} di tipo bool è un vettore di supporto che memorizza all' indice \textbf{i} il valore logico true se il nodo \textbf{i} è già stato visitato, false altrimenti.
+
+\begin{lstlisting}
+
+ // heuristicSolution is the path of the current heuristic solution generate
+    int[] heuristicSolution = new int[instance.NNodes];
+
+    bool[] VisitedNodes = new bool[instance.NNodes];
+
+    int firstNode = 0;
+
+    //rndStartPoint define if the starting point is random or always the node 0 
+    if (rndStartPoint)
+        firstNode = rnd.Next(0, instance.NNodes);
+
+    heuristicSolution[0] = firstNode;
+    VisitedNodes[firstNode] = true;
+
+\end{lstlisting}
+
+
+Una volta definito il nodo di partenza si è realizzato un ciclo for (la variabile contatore de ciclo for è inizializzata al valore 1, quindi il heuristicSolution[i-1] è memorizzato l' ultimo nodo visitato} in cui nel suo interno si popolano i rimanenti $n-1$ elementi di heuristicSolution in modo che heuristicSolution codifichi un circuito hamiltoniano. Alla generica iterazione \textbf{i} del ciclo, sfruttando la struttura dati listArray e la funzione RndGenetic si memorizza all' interno della variabile \textbf{nextNode} il nodo canditato ad essere il successivo  visitato dal percorso. Per verificare se nextNode è già stato visitato si utilizza l' array  VisitedNodes. Qualora nextNode sia già stato visitato, nell' ordine  si esaminano iterativamente  i successivi nodi che distano meno da heuristicSolution[i-1]; il primo tra questi che non è stato già visitato sarà il successivo ad essere visitato dal percorso.
+
+\begin{lstlisting}
+
+for (int i = 1; i < instance.NNodes; i++)
+{
+     bool found = false;
+     int candPos = RndGenetic(rnd);
+     int nextNode = listArray[heuristicSolution[i - 1]][candPos];
+      do
+      {
+         //We control that the selected node has never been visited
+          if (VisitedNodes[nextNode] == false)
+          {
+              VisitedNodes[nextNode] = true;
+              heuristicSolution[i] = nextNode;
+              found = true;
+          }
+          else
+          {
+              candPos++;
+              if (candPos >= instance.NNodes - 1)
+              {
+                  nextNode = listArray[heuristicSolution[i - 1]][0];
+                  candPos = 0;
+              }
+              else
+                  nextNode = listArray[heuristicSolution[i - 1]][candPos];
+          }
+
+     } while (!found);
+}
+
+\end{lstlisting}
+
+
+\vspace{2\baselineskip}
+GENERATECHILD 
+\vspace{2\baselineskip}
+
+Per generare un figlio si è realizzato il metodo GenerateChild, appartenente alla classe Utility, avente la seguente intestazione:
+
+\begin{lstlisting}
+
+public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father, List<int>[] listArray)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe Instance contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' utente;
+    \item \textbf{rnd}: istanza della classe Random;
+    \item \textbf{father}: circuito hamiltoniamo che sarà accopiato con il parametro mather;
+    \item \textbf{mather}:circuito hamiltoniamo che sarà accopiato con il parametro father;
+    \item \textbf{listArray}: lista in cui all’ indice i è presente un vettore di dimensione instance.Nnodes al cui interno sono, in ordine crescente rispetto alla distanza assunta dal nodo i, presenti gli indici associati ai nodi del grafo.
+\end{itemize}
+
+
+Come precedentemente accennato il seguente metodo produce un figlio utilizzando l' operatore di crossover a singolo punto. 
+
+
+\begin{lstlisting}
+
+int crossover = (rnd.Next(0, instance.NNodes));
+
+for (int i = 0; i < instance.NNodes; i++)
+{
+   if (i > crossover)
+      pathChild[i] = mother.path[i];
+   else
+      pathChild[i] = father.path[i];
+}
+
+\end{lstlisting}
+
+
+Una volta creato il figlio, con una probabilità p = 0.01 viene effettuata su di esso una mutazione utilizzando il metodo \textbf{Mutation}. 
+
+
+\begin{lstlisting}
+
+if (rnd.Next(0, 101) == 100)
+      Mutation(instance, rnd, pathChild);
+
+
+\end{lstlisting}
+
+Il figlio ottenuto quasi certamente non risulta essere un circuito ammissibile, per tale motivo si è progettato un metodo chiamato \textbf{Repair} il quale trasforma il figlio in un circuito hamiltoniano. Il metodo Repair non è stato progettato con lo scopo di ottenere dei figli aventi un costo particolarmente buono ma con lo scopo di essere il più efficiente possibile in termini di tempo poiché eseguito un numero considerevole di volte. Per tale ragione il figlio tipicamente avrà un costo che con bassa probabilità risulta migliore rispetto al costo dei genitori e ciò porterebbe in saturazione l' algoritmo dopo poche iterazioni. Per tale ragione un una probabilità p = 1 / (n/2), dove n è il numero dei nodi, si è deciso di applicare l' algoritmo \textbf{TwoOpt} per migliorare il costo del figlio. La ragione per cui la probabilità di applicare TwoOpt è inversamente proporzionale al numero di nodi è dovuta al fatto che tale metodo ha complessità computazionale O()[quando faccio il multistart controllo meglio quanto è la sua complessità] e quindi si è deciso di invocarlo con una probabilità bassa quando la taglia dell' istanza è alta per non compromettere le performance dell' algoritmo. 
+
+\begin{lstlisting}
+
+if (ProbabilityTwoOpt(instance, rnd) == 1)
+{
+      child.path = InterfaceForTwoOpt(child.path);
+      TSP.TwoOpt(instance, child);
+      child.path = Reverse(child.path);
+}
+
+\end{lstlisting}
+
+Poiché il metodo TwoOpt riceve in input circuiti codificati da vettori in cui alla posizione \textbf{i} è presente il nodo che viene visitato dopo il nodo \textbf{i} è stato necessario realizzare due metodi chiamati \textbf{InterfaceForTwoOpt} e \textbf{Reverse} i quali traducono la codifica vettoriale che la funzione TwoOpt si aspetta con quella utilizzata all' interno del metodo GeneticAlgorithm e viceversa.
+
+\vspace{2\baselineskip}
+NEXTPOPULATION
+\vspace{2\baselineskip}
+
+La seguente funzione consente di definire la nuova generazione padre a partire dalla generazione padre corrente e dai figli prodotti da essa. La firma di tale funzione risulta essere:
+
+\begin{lstlisting}
+
+public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father, List<int>[] listArray)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe Instance contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' utente;
+    \item \textbf{FatherGeneration}: Lista contenente i circuiti che definiscono la generazione corrente;
+    \item \textbf{ChildGeneration}: Lista contenente i circuiti figli originati dai circuiti contenuti FatherGeneration utilizzando la funzione GenerateChild.
+
+\end{itemize}
+
+Per prima cosa si sono uniti in un'unica lista i circuiti appartenenti alla generazione padre con i circuiti appartenenti alla generazione figlia: in particolare si è scelto di inserire i circuiti figli nella lista dei circuiti padre.
+
+\begin{lstlisting}
+
+for (int i = 0; i < ChildGeneration.Count; i++)
+    FatherGeneration.Add(ChildGeneration[i]);
+\end{lstlisting}
+
+Fra le possibili logiche di selezione si è utilizzata,come detto, la selezione a roulette: per implementarla si è utilizzata una lista di interi che simula una roulette e si è realizzato un metodo \textbf{FillRoulette} il quale associa ad ogni circuito un numero intero progressivo e inserisce all' interno della roulette tale valore un numero di volte proporzionale al valore della fitness del circuito, infine ritorna la dimensione della roulette. 
+
+\begin{lstlisting}
+
+List<PathGenetic> nextGeneration = new List<PathGenetic>();
+List<int> roulette = new List<int>();
+Random rouletteValue = new Random();
+int upperExtremity = FillRoulette(roulette, FatherGeneration);
+
+\end{lstlisting}
+
+A questo punto non rimane che effettuare l' estrazione dei circuiti contenuti in FatherGeneration per stabilire quali circuiti formeranno la generazione padre nell' iterazione successiva prestando attenzione a non considerare valide estrazione il cui numero sia già stato precedentemente estratto.
+
+\begin{lstlisting}
+
+List<int> NumbersExtracted = new List<int>();
+bool find = false;
+int numberExtracted;
+
+for (int i = 0; i < instance.SizePopulation; i++)
+{
+    do
+    {
+       find = true;
+       numberExtracted = rouletteValue.Next(0, upperExtremity);
+       //A path can't be sorted more than one time
+       if (NumbersExtracted.Contains(roulette[numberExtracted]) == false)
+       {
+          find = false;
+          NumbersExtracted.Add(roulette[numberExtracted]);
+          nextGeneration.Add(FatherGeneration.Find(x => x.NRoulette == roulette[numberExtracted]));
+       }
+  } while (find);
+}
+return nextGeneration;
+
+\end{lstlisting}
+
+\vspace{2\baselineskip}
+\textbf{APPENDICE}
+\vspace{2\baselineskip}
+
+
+\vspace{2\baselineskip}
+FILL ROULETTE
+\vspace{2\baselineskip}
+
+Il metodo FillRoulette ha il compito di popolare la roulette in modo tale che la selezione sia proporzionale alla fitness. Associa ad ogni circuito un numero intero progressivo e inserisce all' interno della roulette tale valore un numero di volte proporzionale al valore della fitness del circuito, infine ritorna la dimensione della roulette. La sua firma risulta essere:
+
+\begin{lstlisting}
+
+static int FillRoulette(List<int> roulette, List<PathGenetic> CurrentGeneration)
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{roulette}: Lista che rappresenta la roulette e che viene popolata dal metodo;
+    \item \textbf{CurrentGeneration}:Lista contenente n + n/2 circuiti da cui vengono sorteggiati i circuiti che formeranno la generazione successiva;
+\end{itemize}
+
+Utilizzando il metodo \textbf{Estimate} si ottiene una costante intera che viene memorizzata all' interno della variabile \textbf{proportionalityConstant}: essa moltiplicata per il valore della fitness di un circuito ritorna quante volte il numero associato al circuito viene inserito all' interno della roulette. Poiché all' interno di una generazione i valori della fitness non variano per ordini di grandezza, tale costante viene calcolata sempre utilizzato il valore della fitness del circuito memorizzato in CurrentGeneration[0].
+\begin{lstlisting}
+
+int sizeRoulette = 0;
+            
+int proportionalityConstant = Estimate(CurrentGeneration[0].Fitness);
+
+for (int i = 0; i < CurrentGeneration.Count; i++)         
+{
+   int prob = (int)(CurrentGeneration[i].Fitness * proportionalityConstant);
+   CurrentGeneration[i].NRoulette = i;
+   sizeRoulette += prob;
+   
+   for (int j = 0; j < prob; j++)
+     roulette.Add(i);
+}
+return sizeRoulette;
+
+
+\end{lstlisting}
+
+\vspace{2\baselineskip}
+ESTIMATE
+\vspace{2\baselineskip}
+
+Il metodo Estimate genera una costante di proporzionalità in modo tale che eseguendo il prodotto fra tale costante e il valore della fitness di un circuito si ottenga una quantità maggiore di 100 che rappresenta il numero di volte che il numero associato ad un circuito viene inserito all' interno di roulette. La sua firma risulta essere:
+
+\begin{lstlisting}
+
+static int Estimate(double sample)
+
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{sample}: Valore della fitness presa come campione. 
+\end{itemize}
+
+Il codice risulta piuttosto semplice: iterativamente si moltiplica per 10 il valore della fitness campione finchè non si ottiene una quantità maggiore di 100.
+
+\begin{lstlisting}
+
+int k = 1;
+while (sample*k < 100)
+{
+   k = k * 10;
+}
+return k;
+
+\end{lstlisting}
+
+\vspace{2\baselineskip}
+REPAIR
+\vspace{2\baselineskip}
+
+Il metodo Repair è stato progettato per trasformare un percorso che non risulta essere un circuito hamiltoniano in un circuito hamiltoniano. Un circuito non hamiltoniano è caratterizzato dalla presenza di \textbf{nodi duplicati}_{Nodi visitati più di una volta dal percorso} e da \textbf{nodi isolati}_{Nodi che non sono mai visitati dal percorso}. L' algoritmo si sviluppa in due fasi: in un primo momento si eliminano dal vettore di codifica  tutti i nodi duplicati, successivamente si fa in modo che ogni nodo isolato sia connesso al nodo ad esso più vicino. Un esempio di funzionamento dell' algoritmo è riportato nei tre grafici sottostanti.
+
+\begin{center}
+\includegraphics[scale=0.5]{circuitoF}  
+
+Figura 1: Circuito non hamiltoniano figlio
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.5]{circuitoH}  
+
+Figura 2: Circuito hamiltoniano incompleto
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.5]{circuitoC}  
+
+Figura 3: Circuito hamiltoniano figlio 
+\end{center}
+
+Discutiamo ora il codice prodotto. Si sono dichiarate due liste di interi chiamate rispettivamente \textbf{isolatedNodes} e \textbf{nearlestIsolatedNodes} che contengono rispettivamente all' interno dell' i-esimo elemento l' indice dell' i-esimo nodo isolato e l' indice del nodo ad esso più vicino_{In realtà non sempre sarà il nodo fisicamente più vicino per via di situazioni particolari che discuteremo nel seguito. Per la comprensione di questo metodo tali situazioni possiamo immaginare non si verifichino e quindi sempre nearlestIsolatedNodes[i] contenga effettivamente il nodo più vicino del nodo isolato isolatedNodes[i]}.
+Per popolare tali liste si sono utilizzati i metodo \textbf{FindIsolatedNodes} e \textbf{FindNearestNode}.
+Successivamente si sono scanditi tutti gli elementi contenuti in pathChild e sono stati inseriti in una lista chiamata \textbf{pathIncomplete} solamente i nodi non duplicati. Infine si è dichiarato un vettore \textbf{pathComplete} di interi che rappresenta il vettore con il quale il figlio viene codificato. Per popolarlo si sono scanditi ciclicamente tutti i nodi appartenenti a pathIncomplete.  All' iterazione \textbf{i} il nodo pathIncomplete[i] viene aggiunto  a pathComplete: qualora pathIncomplete[i] risulta essere il nodo più vicino di un nodo isolato in pathComplete[i+1] viene collocato l' indice del nodo isolato. In questo modo ogni nodo isolato viene visitato immediatamente dopo al nodo ad esso più vicino.
+
+\begin{lstlisting}
+
+int positionInsertNode = 0;
+
+for (int i = 0; i < pathIncomplete.Count; i++)
+{
+    if (nearlestIsolatedNodes.Contains(pathIncomplete[i]))
+    {
+        pathComplete[positionInsertNode] = pathIncomplete[i];
+        pathComplete[positionInsertNode + 1] = isolatedNodes[nearlestIsolatedNodes.IndexOf(pathIncomplete[i])];
+        positionInsertNode++;
+     }
+     else
+        pathComplete[positionInsertNode] = pathIncomplete[i];
+
+  positionInsertNode++;
+}
+return new PathGenetic(pathComplete, instance);
+\end{lstlisting}
+
+\vspace{2\baselineskip}
+FINDISOLATEDNODES
+\vspace{2\baselineskip}
+
+Tale funzione viene utilizzata per identificare tutti i nodi isolati presenti in un generico percorso.
+La sua firma risulta essere:
+
+\begin{lstlisting}
+static void FindIsolatedNodes(Instance instance, int[] pathChild, List<int> isolatedNodes)
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe Instance contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' utente;
+    \item \textbf{isolatedNodes}: Lista contenente gli indici di tutti i nodi isolati;
+\end{itemize}
+
+
+Data la semplicità del metodo non si ritiene utile far nessuna considerazione, riportiamo direttamente il codice realizzato. 
+
+\begin{lstlisting}
+
+bool nodeIsVisited = false;
+
+for (int i = 0; i < instance.NNodes; i++)
+{
+    for (int j = 0; j < instance.NNodes; j++)
+    {
+         if (pathChild[j] == i)
+         {
+            nodeIsVisited = true;
+            //If the node is visited can exit to for
+            break;
+         }
+    }
+
+    //If the node has nevere been visited is a isolated noode
+    if (nodeIsVisited == false)
+       isolatedNodes.Add(i);
+
+  //Configure nodeIsVisited to its default value
+  nodeIsVisited = false;
+}
+
+\end{lstlisting}
+
+\vspace{2\baselineskip}
+FINDNEARESTNODE
+\vspace{2\baselineskip}
+
+Il metodo FindNearestNode viene utilizzato per definire per ogni nodo isolato il nodo ad esso più vicino il quale deve essere valido, ossia deve rispettare le seguenti condizioni:
+
+\begin{itemize}
+    \item  Non deve essere un nodo isolato, 
+    \item  Non deve essere il nodo più vicino di un nodo isolato precedentemente analizzato. In altre parole se n_3 è un nodo non isolato e risulta il nodo più vicino dei nodi isolati n_1 e n_2 non è possibile avere://nearestNeighIsolNode[i] = n3 //nearestNeighIsolNode[j] = n3//
+    
+dove i e j sono rispettivamente gli indici in cui n_1 e n_2 sono memorizati all’ interno del vettore isolatedNodes. Supponendo i<j, si è deciso che// nearestNeighIsolNode[i] = n3//
+
+mentre nearestNeighIsolNode[j] conterrà il secondo nodo più vicino(se valido) di n_2.
+
+\end{itemize}
+
+All' interno della funzione si scandiscono tutti i nodi contenuti in isolatedNodes e all’ i-esima scansione, sfruttano listArray, si ottiene il nodo più vicino, che indichiamo con n_p, dell’ i-esimo nodo isolato n_i. 
+Qualora n_p sia un nodo valido viene memorizzato in nearestNeighIsolNode[i], altrimenti si itera il procedimento finché non viene identificato e successivamente memorizzato in nearestNeighIsolNode[i] il nodo più vicino e valido di n_i.
+
+\begin{lstlisting}
+
+int nextNode = 0;
+int nearestNode = 0;
+bool find = true;
+
+for (int i = 0; i < isolatedNodes.Count; i++)
+{
+    find = false;
+    nextNode = 0;
+    do
+    {
+       nearestNode = listArray[isolatedNodes[i]][nextNode];
+
+       if (((isolatedNodes.Contains(nearestNode)) == false) && (nearestNeighIsolNode.Contains(nearestNode) == false))
+       {
+          nearestNeighIsolNode.Add(nearestNode);
+          find = false;
+       }
+       else
+       {
+           nextNode++;
+           find = true;
+       }
+   } while (find);
+}
+
+\end{lstlisting}
+
+\vspace{2\baselineskip}
+BESTSOLUTION
+\vspace{2\baselineskip}
+
+Il metodo best solution determina semplicemente il cammino avente il minor costo fra quelli appartenenti alla popolazione corrente, la sua intestazione risulta essere:
+\begin{lstlisting}
+
+ public static PathGenetic BestSolution(List<PathGenetic> population)
+        
+\end{lstlisting}  
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{population}: Insieme di cammini che appartengono alla generazione corrente.
+\end{itemize}
+  
+\begin{lstlisting}
+ 
+PathGenetic currentBestPath = population[0];
+
+for (int i = 1; i < population.Count; i++)
+{
+   if (population[i].cost < currentBestPath.cost)
+      currentBestPath = population[i];
+}
+
+return currentBestPath;
+           
 \end{lstlisting}
 
 \end{document}
