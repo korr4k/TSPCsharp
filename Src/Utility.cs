@@ -518,7 +518,7 @@ namespace TSPCsharp
                 {
                     find = true;
                     numberExtracted = rouletteValue.Next(0, upperExtremity);
-                    //A path can't be sorted more than one time
+                    //A path can't be extracted more than one time
                     if (NumbersExtracted.Contains(roulette[numberExtracted]) == false)
                     {
                         find = false;
