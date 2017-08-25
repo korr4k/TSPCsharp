@@ -49,7 +49,7 @@ namespace TSPCsharp
         }
 
         //Building initial model
-        public static INumVar[] BuildModel(Cplex cplex, Instance instance, int n)
+        public static INumVar[] BuildModel(Cplex cplex, Instance instance, int nEdges)
         {
             //Init the model's variables
             INumVar[] x = new INumVar[(instance.NNodes - 1) * instance.NNodes / 2];
@@ -65,7 +65,7 @@ namespace TSPCsharp
             //Populating objective function
             for (int i = 0; i < instance.NNodes; i++)
             {
-                if (n >= 0)
+                if (nEdges >= 0)
                 {
                     List<int>[] listArray = BuildSL(instance);
 
@@ -74,7 +74,7 @@ namespace TSPCsharp
                     {
                         //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
                         int position = xPos(i, j, instance.NNodes);
-                        if ((listArray[i]).IndexOf(j) < n)
+                        if ((listArray[i]).IndexOf(j) < nEdges)
                             x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
                         else
                             x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
@@ -442,7 +442,7 @@ namespace TSPCsharp
                  *-- next link --
                 */
                 file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                file.WriteLine(instance.Coord[pathG.path[i]].X + " " + instance.Coord[pathG.path[i]].Y + " " + (pathG.path[i] + 1) + "\n");
+                file.WriteLine(instance.Coord[pathG.path[i]].X + " " + instance.Coord[pathG.path[i]].Y + " " + (pathG.path[i] + 1) + "\nEdges");
             }
 
             //GNUPlot input file needs to be closed
@@ -582,10 +582,10 @@ namespace TSPCsharp
                 int vertice1 = Heuristic.path[i];
                 int vertice2 = Heuristic.path[i + 1];
                 file.WriteLine(instance.Coord[vertice1].X + " " + instance.Coord[vertice1].Y + " " + (vertice1 + 1));
-                file.WriteLine(instance.Coord[vertice2].X + " " + instance.Coord[vertice2].Y + " " + (vertice2 + 1) + "\n");
+                file.WriteLine(instance.Coord[vertice2].X + " " + instance.Coord[vertice2].Y + " " + (vertice2 + 1) + "\nEdges");
             }
             file.WriteLine(instance.Coord[Heuristic.path[0]].X + " " + instance.Coord[Heuristic.path[0]].Y + " " + (Heuristic.path[0] + 1));
-            file.WriteLine(instance.Coord[Heuristic.path[instance.NNodes - 1]].X + " " + instance.Coord[Heuristic.path[instance.NNodes - 1]].Y + " " + (Heuristic.path[instance.NNodes - 1] + 1) + "\n");
+            file.WriteLine(instance.Coord[Heuristic.path[instance.NNodes - 1]].X + " " + instance.Coord[Heuristic.path[instance.NNodes - 1]].Y + " " + (Heuristic.path[instance.NNodes - 1] + 1) + "\nEdges");
 
             //GNUPlot input file needs to be closed
             file.Close();

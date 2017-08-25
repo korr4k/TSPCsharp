@@ -863,7 +863,7 @@ cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
 Spiegato come è possibile creare un modello C\# risulta comprensibile la scelta di realizzare un'opportuna funzione, chiamata \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che produce il modello matematico del Commesso Viaggiatore risolubile da Cplex:
 
 \begin{lstlisting}
-public static INumVar[] BuildModel(Cplex cplex, Instance instance, int n)
+public static INumVar[] BuildModel(Cplex cplex, Instance instance, int nEdges)
 \end{lstlisting}
 
 dove:
@@ -871,7 +871,7 @@ dove:
 \begin{itemize}
 \item \textbf{cplex}: oggetto sul quale si definirà il modello matematico(funzione obbiettivo,variabili e vincoli)
 \item \textbf{instance}: oggetto contenente tutti i dati inerenti all'istanza del Commesso Viaggiatore fornita in ingresso dall' utente.
-\item \textbf{n}: Parametro la cui spiegazione è rimandata al capitolo...
+\item \textbf{nEdges}: Parametro la cui spiegazione è rimandata al capitolo...
 \end{itemize}
 
 Passiamo infine a descrivere i metodi necessari per risolvere il modello, ottenere il costo e la soluzione ottima calcolata da Cplex.\\
@@ -991,7 +991,7 @@ A livello implementativo si è utilizzato un array di interi chiamato relatedCom
 
 \begin{lstlisting}
 
-public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,                int[] relatedComponents, int i, int j)
+public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,int[] relatedComponents, int i, int j)
 
 \end{lstlisting}
 
@@ -1064,6 +1064,272 @@ else
 \end{lstlisting}
 
 Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente ci assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per implementare i subtour elimination desiderati.
+
+
+\vspace{2\baselineskip} 
+METODO LOOP CON PRIMA FASE EURISTICA 
+\vspace{2\baselineskip} 
+
+Il metodo Loop, essendo un algoritmo esatto, produce sistematicamente una soluzione che risulta essere un ottimo globale per l' istanza del Problema del Commesso Viaggiatore che si presta a risolvere. L' inconveniente principale, che tipicamente accomuna questa categoria di algoritmi, riguarda l' elevato tempo che essi impiegano nel calcolare un ottimo globale per istanze con un numero di nodi elevato. In particolare, per quanto riguarda il problema del Commesso Viaggiatore, ciò è dovuto nella crescita esponenziale del numero di vincoli di subtour all' aumentare del numero di nodi del grafo. Nonostante il metodo Loop aggiunga al modello solamente i vincoli strettamente necessari, il numero di iterazione che deve compiere per determinarli tutti, per istanze di grandi dimensioni, risulta notevole. Per tale ragione si è pensato di progettare una \textbf{fase euristica} dell' algoritmo che anticipi la \textbf{fase esatta}. La fase euristica è caratterizzata dalla riduzione del numero di vincoli di interezza; in particolare per ogni nodo, si \textbf{fissano} a 0 tutte le variabili corrispondenti a lati che incidono su di esso tranne per le \textbf{m} variabili relative agli \textbf{m} lati più corti. Dato un MIP, qualora si rilassa uno o più vincoli del modello, il problema che si ottiene prende il nome di subMIP.
+
+Fissando la stragrande maggioranza delle variabili, che passano da O(n^2) ad al più 10m, il numero di nodi dell' albero decisionale diminuisce (poichè diminuiranno le operazioni di branching) velocizzando così l' algoritmo Branch and cut eseguito da Cplex. In questa fase del metodo Loop, il modello si arricchisce di tagli i quali saranno molto buoni poichè le variabili che partecipano al taglio sono le principali candidate a far parte della soluzione ottimale. 
+
+Una volta che Cplex termine di calcolare la soluzione del subMIP, che indicheremo con \textbf{x*}, l' upper bound di tutte le variabili viene ripristinato al valore 1: il modello così ottenuto risulta essere quello originale contenente però tutti i vincoli di subtour ereditati dalla fase euristica. Ha così inizio la fase esatta dell' algoritmo in cui a Cplex si fornisce tale modello: qualora \textbf{x*} coincida con l' ottimo globale è sufficiente una sola iterazione del metodo Loop, altrimenti saranno necessarie \textbf{t} iterazioni. Il valore di \textit{t} determina la bontà o meno dell' metodo: se \textit{t} risulta, relativamente all' istanza,  grande significa che il tempo impiegato nella fase euristica dell' algoritmo non è risultato particolarmente produttivo. 
+
+Al fine di confrontare le prestazioni e verificare se effettivamente con una prima fase euristica mediamente migliorano, quest' ultima risulta attivabile o meno dall' utente tramite l' interfaccia grafica realizzata.
+
+Il parametro \textit{m} non può essere definito a priori poichè è un parametro euristico il cui valore "ottimale" dipende dall' istanza che si vuole risolvere: in particolare dipende da come sono posizionati i nodi e dal numero di quest' ultimi. Per i motivi esposti, il valore di tale parametro viene fornito in input dall' utente. 
+
+\vspace{2\baselineskip} 
+EpGAP 
+\vspace{2\baselineskip} 
+
+EpGap risulta essere un parametro interno di Cplex, il cui valore di default è 1e^{-06}. Indicano con \textbf{bestnode} il miglio valore della funzione obiettivo calcolata ad un nodo dell' albero decisionale e con \textbf{bestInteger} il costo della miglior soluzione intera trovata fino a quel momento, ossia il costo dell' incumbent, qualora la seguente quantità:
+
+$$|bestNode - bestInteger|/(1e-10 + |bestInteger|)$$
+
+risulti inferiore ad EpGap il solver si arresta.
+
+[https://www.ibm.com/support/knowledgecenter/en/SS9UKU_12.4.0/com.ibm.cplex.zos.help/Parameters/topics/EpGap.html
+secondo questo link la differenza è  1e^{-04}]
+
+Poichè l' obbiettivo della fase euristica non è tanto quello di calcolare la soluzione ottima ma quanto quello di calcolare vincoli di subtour nel più breve tempo possibile, una tecnica euristica valida può essere quella di aumentare il valore di EpGap invocando il metodo SetParam sull' istanza di classe Cplex su cui è definito il modello.
+
+\begin{lstlisting}
+
+Cplex cplex = new Cplex();
+cplex.SetParam(Cplex.DoubleParam.EpGap, newValue);
+
+\end{lstlisting}
+
+Qualora newValue rappresenta una quantità non compresa fra 0 e 1, viene sollevata una eccezione.
+
+In questo modo Cplex non certifica più l' ottimo; per esempio se si fissa il parametro EpGap al valore 0.05, significa che fra bestInteger e bestNode è presente una differenza del $5%$, ciò nonostante il solver si arresta e ritorna come soluzione l' incumbent. Questo velocizza parecchio Cplex poichè la maggior parte del tempo di calcolo lo impiega normalmente per certificare l' ottimo.
+
+Naturamente una volta terminata la fase euristica, il valore di EpGap viene ripristinato al valore di default garantendo così l' ottimalità della soluzione prodotta da Cplex.
+Poichè il valore di EpGap è difficilmente predicibile, si è deciso che il suo valore debba essere fornito in input dall' utente. 
+Al fine di garantire la maggiore scelta possibile, l' utente tramite interfaccia può scegliere se durante la fase euristica venga utilizzata la tecnica euristica esposta nel paragrafo precedente, in tal caso deve fornire il valore di m, modificare solo l' EpGap,e in tal caso deve fornire il suo valore, oppure di utilizzare entrambi. 
+
+\begin{center}
+\includegraphics[scale=0.5]{InterfacciaGrafica}  
+Figura X: Output 
+\end{center}
+
+\vspace{2\baselineskip} 
+IMPLEMENTAZIONE FASE EURISTICA 
+\vspace{2\baselineskip} 
+
+Nel paragrafo X, si è presentato il metodo BuildModel il cui compito è quello di creare il modello matematico risolubile da Cplex. Durante la presentazione della sua firma, si è lasciato in sospeso la spiegazione del parametro \textit{nEdges} poichè prematura in quel punto della tesi. Il parametro nEdges contiene il valore \textbf{m} fornito in input dall' utente. Qualora l' utente non voglia attivare la prima fase euristica, da programma si assegna a nEdges il valore -1: in questo modo, all' interno di BuildModel, è possibile, attraverso l' utilizzo del costrutto if, creare il modello a seconda se è presente o meno la fase euristica. 
+
+\textbf{[Lo avevi chiamato n il parametro.. ma durante la spiegazione faceva casino con n numero di nodi, quindi ho pensato di rinominare il parametro n in nEdges. Ho modificato anche l' intestazione di BuildModel sopra]}
+
+A livello pratico, per fissare a 0 una variabile, esistono due soluzioni possibili: la prima è, banalmente, non inserire tale variabile nel modello mentre la seconda è fissale il lower bound e l'upper bound di tale variabili a 0. Si è preferito utilizzare questa seconda strategia poichè risulta molto più semplice sia la costruzione del modello(in cui si aggiungono comunque tutte le variabili) sia il ripristino, che precede la fase esatta dell' algoritmo, dell' upper bound al valore 1.
+Per poter fissare le variabili congruentemente a quanto detto nel precedente paragrafo, si è realizzato il metodo \textbf{BuildSL} il quale restituisce una lista di vettori di interi, chiamata \textbf{listArray}, in cui il vettore posizionato all' indice $i$ della lista contiene,in ordine crescente in base alla distanza con $i$, gli $n-1$ vertici. In questo modo, per ogni nodo $i$, le variabili che non saranno fissate a 0 saranno quelle associate ai lati [i,k], dove $k$, per costruzione, rappresenta uno dei primi $m$ nodi contenuti nell' i-esimo vettore della lista. 
+
+\begin{lstlisting}
+
+//Init the model's variables
+INumVar[] x = new INumVar[(instance.NNodes - 1) * instance.NNodes / 2];
+
+/*
+*expr will hold all the expressions that needs to be added to the model
+*initially it will be the optimality's functions
+*later it will be Ax's rows 
+*/
+ILinearNumExpr expr = cplex.LinearNumExpr();
+
+for (int i = 0; i < instance.NNodes; i++)
+{
+    if (nEdges >= 0)
+    {
+          List<int>[] listArray = BuildSL(instance);
+
+          //Only links (i,i) with i < i are correct
+            for (int j = i + 1; j < instance.NNodes; j++)
+            {
+              //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
+              int position = xPos(i, j, instance.NNodes);
+            
+              if ((listArray[i]).IndexOf(j) < nEdges)
+                   x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+               else
+                   x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+               expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+            }
+     }
+     else
+     {
+          //Only links (i,i) with i < i are correct
+           for (int j = i + 1; j < instance.NNodes; j++)
+           {
+               //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
+               int position = xPos(i, j, instance.NNodes);
+               x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+               expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+           }
+     }
+     
+     ...
+}
+
+\end{lstlisting}
+
+
+Riportiamo di seguito il codice contenuto nel metodo Loop. Si osserva che una volta che Cplex termina la fase euristica, si è riportato contemporaneamente il valore di EpGap al valore di default e si sono ripristinati gli upper bound di tutte le variabili al valore 1 utilizzando il metodo \textbf{ResetVariables} appartenente alla classe Utility.
+
+\begin{lstlisting}
+
+//COMMENTO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+int typeSol = 1;
+
+//epGap is false when EpGap parameter is at default
+bool epGap = false;
+
+//allEdges is true when all possible links have their upper bound to 1
+bool allEdges = true;
+
+//Setting EpGap if a valid percentage is specified
+if (perc >= 0 && perc <= 1)
+{
+     cplex.SetParam(Cplex.DoubleParam.EpGap, perc);
+     epGap = true;
+     typeSol = 0;
+}
+
+//numb is equal to -1 when all links upper bound are 1
+if (numb != -1)
+{
+     allEdges = false;
+     typeSol = 0;
+}
+
+//Building the maximum # of links that involves each node
+INumVar[] x = Utility.BuildModel(cplex, instance, numb);
+
+//Allocating the correct space to store the optimal solution
+//Only links from node i to i with i < i are considered
+instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Init buffers
+int[] relatedComponents = new int[instance.NNodes];
+List<ILinearNumExpr> rcExpr = new List<ILinearNumExpr>();
+List<int> bufferCoeffRC = new List<int>();
+
+//Temporary variable
+double[] linksDistances = new double[(instance.NNodes - 1) * instance.NNodes / 2]; ;
+
+do
+{
+     //When only one related component is found and ehuristics methods are active they are disabled
+      if (rcExpr.Count == 1)
+      {
+           epGap = false;
+           allEdges = true;
+           cplex.SetParam(Cplex.DoubleParam.EpGap, 1e-06);
+           Utility.ResetVariables(x);
+           typeSol = 1;
+      }
+
+      //Cplex solves the current model
+       cplex.Solve();
+
+       //Initializing the arrays used to eliminate the subtour
+       Utility.InitCC(relatedComponents);
+
+       rcExpr = new List<ILinearNumExpr>();
+       bufferCoeffRC = new List<int>();
+
+       //Init the StreamWriter for the current solution
+        StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+
+        //Storing the optimal value of the objective function
+         instance.BestLb = cplex.ObjValue;
+
+         //Blank line
+         Console.WriteLine();
+
+         //Printing the optimal solution and the GNUPlot input file
+         for (int i = 0; i < instance.NNodes; i++)
+         {
+              for (int j = i + 1; j < instance.NNodes; j++)
+              {
+
+                 //Retriving the correct index position for the current link inside x
+                  int position = Utility.xPos(i, j, instance.NNodes);
+
+                  //Reading the optimal solution for the actual link (i,i)
+                  linksDistances[position] = cplex.GetValue(x[position]);
+
+                  //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                  if (linksDistances[position] >= 0.5)
+                  {                 
+                        //Retriving the correct index position for the current link inside x
+                        int position = Utility.xPos(i, j, instance.NNodes);
+
+                        //Reading the optimal solution for the actual link (i,i)
+                        linksDistances[position] = cplex.GetValue(x[position]);
+
+                        //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
+                        if (linksDistances[position] >= 0.5)
+                        {
+                            /*
+                             *Current GNUPlot format is:
+                             *-- previus link --
+                             *<Blank line>
+                             *Xi Yi <index(i)>
+                             *Xj Yj <index(i)>
+                             *<Blank line> 
+                             *-- next link --
+                            */
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                  
+                 
+                            //Updating the model with the current subtours elimination
+                            Utility.UpdateCC(cplex, x, rcExpr, bufferCoeffRC, relatedComponents, i, j);
+                  }
+               }
+          } 
+
+         //Only when more than one related components are found they are added to the model
+         if (rcExpr.Count > 1)
+         {
+                    for (int i = 0; i < rcExpr.Count; i++)
+                        cplex.AddLe(rcExpr[i], bufferCoeffRC[i] - 1);
+          }
+
+         //GNUPlot input file needs to be closed
+         file.Close();
+
+         //Accessing GNUPlot to read the file
+         if (Program.VERBOSE >= -1)
+            Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.BestLb, -1);
+
+          //Blank line
+          cplex.Output().WriteLine();
+
+          //Writing the value
+          cplex.Output().WriteLine("xOPT = " + instance.BestLb + "\n");
+
+} while (rcExpr.Count > 1 || epGap || !allEdges); //if there is more then one related components the solution is not optimal 
+
+instance.BestSol = linksDistances;
+instance.XBest = instance.BestLb;
+
+//Exporting the updated model
+if (Program.VERBOSE >= -1)
+   cplex.ExportModel(instance.InputFile + ".lp");
+
+//Closing Cplex link
+cplex.End();
+
+//Accessing GNUPlot to read the file
+if (Program.VERBOSE >= -1)
+  Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.XBest, -1);
+  
+\end{lstlisting}
+
+
 
 \vspace{2\baselineskip}
 CALLBACK
@@ -1622,9 +1888,359 @@ return 0;
 
 
 \vspace{2\baselineskip}
-ALGORITMI GENETICI
+INTRODUZIONE EURISTICI
 \vspace{2\baselineskip}
 
+Nei paragrafi precedenti sono stati presentati metodi che garantiscono di risolvere una generica istanza del problema del commesso viaggiatore in modo esatto, ovvero restituendo sempre un ottimo globale come soluzione.
+L'applicazione di metodi esatti non è sempre possibile: ciò non è dovuto solamente alla complessità intrinseca del problema, che come noto è NP-hard, ma anche dal tempo che l' algoritmo dispone per calcolare una soluzione. 
+Per tali ragioni, nelle applicazioni reali, spesso l' unica strada percorribile è ricorrere a metodi che permettono di trovare delle "buone" soluzioni senza garantire la loro ottimalità ma garantendo un tempo di calcolo relativamente breve: tali metodi prendono il nome di \textbf{metodi euristici} o \textbf{semplicemente euristiche}. I metodi euristici possono essere classificati in \textbf{costruttivi}, \textbf{migliorativi}, \textbf{metaeuristici} e matheuristics\footnote{La trattazione di quest' ultimi è rimandata al capitolo successivo}. 
+Gli euristici costruttivi determinano (costruiscono) una soluzione ammissibile per passi partendo inizialmente da una soluzione vuota. Ad ogni iterazione selezionano in modo iterativo nuovi elementi da aggiungere alla soluzione parziale corrente sino ad arrivare ad una soluzione completa (criterio di espansione). Gli euristici migliorativi, invece, a partire da una soluzione ammissibile, cercano possibili soluzioni ammissibili migliori in termini di funzione obbiettivo apportando "piccole" modifiche alla soluzione data.
+Spesso algoritmi che appartengono a queste due classi di euristici vengono utilizzati in sequenza: si ricorre ad un euristico costruttivo per generare una soluzione ammissibile e successivamente si tenta di migliorarla attraverso l' utilizzo di un euristico di miglioramento. 
+Poiché la soluzione prodotta dai metodi di miglioramento spesso risulta essere un ottimo locale, si concluderà il capitolo con la presentazione di algoritmi metaeuristici i quali sono stati sviluppati per "sfuggire" in maniera "intelligente" dai minimi locali al fine di calcolare soluzioni migliori.
+
+\vspace{2\baselineskip}
+ALGORITMI GREEDY
+\vspace{2\baselineskip}
+
+Tra i vari tipi di euristici costruttivi noti in letteratura, nel resto della tesi ci concentreremo sugli algoritmi \textbf{greedy}.  
+Gli algoritmi greedy determinano la soluzione attraverso una sequenza di decisioni "localmente ottime" adottando un criterio di espansione basato sulla scelta più conveniente in quel momento, compatibilmente con i vincoli del problema. Ad ogni iterazione viene aggiunto, e mai più tolto, alla soluzione l'elemento che produce il miglioramento maggiore della funzione obiettivo. Il fatto di non privarsi in un secondo momento di elementi precedentemente scelti rende gli algoritmi greedy estremamente veloci.
+Uno schema generale di questo algoritmo, adatto a tutti quei casi in cui l'insieme ammissibile può essere rappresentato come una famiglia $ F \subset 2^E$ di sottoinsiemi di un dato insieme "base" \textbf{E}, può essere descritto dalla seguente procedura greedy:
+
+\begin{center}
+\includegraphics[scale=0.5]{ProceduraGreedy}  
+
+Figura X: Algoritmo Greedy 
+\end{center}
+
+
+Nella procedura, \textbf{S} è l'insieme degli elementi di \textbf{E} che sono stati inseriti nella soluzione parziale corrente mentre \textbf{Q} è l'insieme degli elementi appartenenti ad \textbf{E} ancora da esaminare.
+La procedura fa uso della sottoprocedura \textbf{Best} la quale fornisce il miglio elemento di \textbf{E} tra quelli ancora in \textbf{Q} sulla base di un prefissato criterio euristico. Nei successivi paragrafi presenteremo l' algoritmo greedy \textbf{nearest neighbour}, il quale rappresenta l' algoritmo costruttivo di riferimento per tutto il resto della tesi.
+
+\vspace{2\baselineskip}
+ALGORITMo NEAREST NEIGHBOUR
+\vspace{2\baselineskip}
+
+L' algoritmo nearest neighbour è stato uno dei primi algoritmi usati per determinare una soluzione del problema del commesso viaggiatore.
+Partendo dal nodo etichettato 1, ad ogni iterazione esamina il nodo corrente \textit{i} e tutti gli archi che lo uniscono a nodi che non sono ancora visitati dal ciclo parziale: tra di essi seleziona l'arco [i, j], avente fra tutti la lunghezza minima, lo aggiunge alla soluzione parziale e definisce \textbf{j} come nuovo nodo corrente. L'algoritmo termina quando tutti i nodi sono stati visitati. 
+Essendo un algoritmo greedy esso ricade nello schema generale precedentemente illustrato:\textbf{ E} è l'insieme degli archi del grafo, \textbf{Best} determina l'arco più promettente tra tutti quelli uscenti dal nodo corrente, il controllo "S $ \cup $ {e} $\in$ F " corrisponde a verificare che il nodo terminale \textbf{j} dell'arco [i, j] non sia già stato visitato.
+Di seguito viene riportato un esempio di applicazione dell' algoritmo.
+
+\begin{center}
+\includegraphics[scale=0.5]{ng}  
+
+Figura X:Esempio di algoritmo Nearest Neightbor
+\end{center}
+
+L'algoritmo risulta di semplice implementazione e di complessità ridotta (O(n^2), migliorabile con particolari strutture dati) ma ha prestazioni scadenti in termini di soluzioni prodotte. 
+Lo svantaggio di applicare questo algoritmo sta nell'impossibilità di prevedere gli sviluppi finali che esso comporta. Dai vantaggi immediati in termini di lunghezza comportano degli svantaggi ai passi successivi: le iterazioni successive producono archi molto dispendiosi che oltretutto si intersecano tra di loro. Quest' ultimo fatto è matematicamente dimostrabile essere sinonimo di non ottimalità. 
+
+\textit{[Non ho messo qui l' implementazione dell' algoritmo perchè noi non abbiamo implementato il Nearest Neightbor come lo ho presentato qui perchè è stata randomizzata la scelta della Best.]}
+
+\vspace{2\baselineskip}
+ALGORITMI MIGLIORATIVI
+\vspace{2\baselineskip}
+
+Gli algoritmi migliorativi sono basati su un'idea estremamente semplice ed intuitiva: data una soluzione ammissibile \textbf{x}, relativa ad un problema di ottimizzazione, si esaminano le soluzioni ad essa "vicine" in cerca di una soluzione ammissibile migliore in termine di funzione obiettivo. 
+Per poter definire il concetto di "vicinanza" è necessario definire prima il concetto di \textbf{mossa}. Una mossa è una operazione di modifica (caratteristica dell' algoritmo migliorativo) che viene eseguita su \textbf{x} e che ha come conseguenza la generazione di un insieme di soluzioni ammissibili le quali costituiscono l' intorno di \textbf{x}, che verrà indicato con \textbf{N(x)}. Le soluzioni che appartengono a N(x), in termini informali, sono dette "vicine" ad \textbf{x} poiché differiscono da \textbf{x} "solo per una mossa". 
+
+Una volta definito N(x) questo viene esplorato secondo due possibili strategie che sono \textbf{first improvement} e \textbf{steepest descent}. Nel primo caso l'esplorazione dell' intorno termina non appena si trova una soluzione migliore di quella corrente. Nel secondo caso, invece, lo si esplora comunque tutto cercando il massimo miglioramento che quel vicinato consente di ottenere. 
+
+Qualora esista una soluzione \textbf{y} migliore di \textbf{x}, il procedimento viene iterato esplorando N(y); viceversa  l'algoritmo si arresta. Se la soluzione determinata dall'algoritmo non coincide con la soluzione ottima del problema, questa risulta essere un \textbf{ottimo locale}. Poiché da un punto di vista matematico il processo di ricerca analizza, ad ogni interazione, un intorno della soluzione corrente, gli algoritmi migliorativi vengono anche chiamati\emph{ algoritmi di ricerca locale}.
+
+Tranne alcuni casi particolari in cui la funzione obiettivo ha determinate caratteristiche di convessità, nella grande maggioranza dei problemi reali la funzione obiettivo da minimizzare presenta un grande numero di minimi locali, talora anche molto lontani dal minimo globale. In effetti, una delle fortunate eccezioni è il metodo del simplesso per la programmazione lineare. Il metodo del simplesso è infatti un algoritmo di ricerca locale, in cui si visitano le basi ammissibili di un sistema del tipo Ax = b, e l'intorno è composto da tutte le basi che differiscono per una sola variabile dalla  base corrente. La convessità della funzione obiettivo ci garantisce che il minimo locale trovato dal simplesso è anche globale.
+
+\vspace{2\baselineskip}
+ALGORITMO K-OPT
+\vspace{2\baselineskip}
+
+L' algoritmo migliorativo più consolidato per il TSP  prende il nome di \textbf{k-opt} la cui mossa, applicata ad un circuito hamiltoniano, consiste in uno scambio di \textbf{k} archi producendo \textbf{k} percorsi differenti che vengono ricollegati tra loro con l' introduzione di altri \textbf{k} archi. La mossa che produce la variazione minima coinvolge lo scambio di \emph{coppie} di archi in soluzione con archi non in soluzione: in questo caso l' algoritmo prende il nome di 2-opt. Data una soluzione ammissibile \textbf{x}, l'intorno N(x) contiene al suo interno tutti i cicli Hamiltoniani che si possono ottenere da \textbf{x} selezionando due archi  [i,j] e [h, k] non consecutivi\footnote{Se i due archi eliminati fossero adiacenti l'unico modo di riottenere una soluzione ammissibile riproporrebbe la soluzione di partenza.} del ciclo e sostituendoli con [i,h] e [j,k] o con [i,k] e [j,k]. Fra le due possibilità solamente una è lecita poiché consente di riottenere un ciclo hamiltoniano: supponendo (senza perdita di generalità) che i lati siano sostituiti con [i,h] e [j,k] , lo scambio produce una soluzione avente un costo minore(e quindi migliore) se: 
+
+$$c_{ih} + c_{kj} < c_{ij} + c_{hk}$$
+
+
+Poiche' gli archi in un ciclo hamiltoniano sono \textit{n}, la dimensione del vicinato di una soluzione (e dunque il tempo necessario a esplorarlo) è O(n^2). Tale complessità è ancora accettabile, e dunque un algoritmo di ricerca locale basato su questo vicinato risulta abbastanza efficiente. Chiaramente, all'aumentare di \textit{k} aumenta anche la grandezza del vicinato, e dunque il tempo di calcolo necessario a esplorarlo, che sarà ovviamente O(n^k).Tuttavia, se la grandezza di un vicinato aumenta, si può sperare che aumenti pure l'efficacia del singolo passo di ricerca locale. Trovare il miglior compromesso tra complessità dell'esplorazione del vicinato e qualità della soluzione è uno dei punti chiave di un approccio di ricerca locale.
+Nel caso del TSP, alcuni esperimenti fatti da Lin alla fine degli anni '50 hanno mostrato che, passando da k =2 a k = 3 si ha un miglioramento sensibile della qualità della soluzione trovata, che giustifica pienamente l'aumento di carico computazionale. Miglioramenti praticamente trascurabili si hanno invece per $k > 3$.
+
+\vspace{2\baselineskip}
+METODO TwoOpt
+\vspace{2\baselineskip}
+
+Il metodo TwoOpt implementa l' algoritmo 2-Opt discusso nel paragrafo precedente e ha la seguente intestazione:
+
+\begin{lstlisting}
+public static void TwoOpt(Instance instance, PathStandard pathG)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: rappresenta il valore del taglio;
+    \item \textbf{pathG}: rappresenta il percorso sul quale l' algoritmo viene eseguito.
+\end{itemize}
+
+Sia \textbf{x} la soluzione corrente e N(x) il suo intorno, la ricerca di una soluzione migliore x* in N(x) avviene per enumerazione e termina una volta identificato uno scambio migliorativo, ossia si applica la politica first improvement. Poichè il vettore che codifica x ne induce una orientazione che viene perduta all' atto delle scambio dei lati, è stato necessario realizzare un metodo \textbf{SwapRoute}, appartenente alla classe Utility, il quale fornisce una orientazione a x*. Il metodo termina quando non è più possibile effettuare miglioramenti, in generale in un ottimo locale.
+
+\begin{lstlisting}
+
+int indexStart = 0;
+int cnt = 0;
+bool found = false;
+
+do
+{
+   found = false;
+   int a = indexStart;
+   int b = pathG.path[a];
+   int c = pathG.path[b];
+   int d = pathG.path[c];
+
+   for (int i = 0; i < instance.NNodes - 3; i++)
+   {
+      double distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
+      double distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
+      double distAD = Point.Distance(instance.Coord[a], instance.Coord[d], instance.EdgeType);
+      double distBC = Point.Distance(instance.Coord[b], instance.Coord[c], instance.EdgeType);
+
+      double distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
+      Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
+
+      if (distAC + distBD < distTotABCD)
+      {
+            Utility.SwapRoute(c, b, pathG);
+            pathG.path[a] = c;
+            pathG.path[b] = d;
+            pathG.cost = pathG.cost - distTotABCD + distAC + distBD;
+            indexStart = 0;
+            cnt = 0;
+            found = true;
+            break;
+      }
+            c = d;
+            d = pathG.path[c];
+    }
+
+    if (!found)
+    {
+        indexStart = b;
+        cnt++;
+    }
+
+} while (cnt < instance.NNodes);
+    
+
+\end{lstlisting}
+
+
+\vspace{2\baselineskip}
+MULTISTART
+\vspace{2\baselineskip}
+ 
+Qualora l' algoritmo di ricerca locale converga rapidamente verso un ottimo locale, potrebbe rimanere tempo a disposizione per esplorare altre zone della regione ammissibile nella speranza di trovare soluzioni migliori. Poichè  l'ottimo locale determinato da un algoritmo di ricerca locale dipende dalla \textbf{soluzione ammissibile iniziale}, il modo più semplice per esplorare zone differenti della regione ammissibile è quello di generare un' insieme di soluzioni iniziali ed eseguire l'algoritmo di ricerca locale a partire da ciascuna di esse, quindi selezionare la migliore delle soluzioni così ottenute. 
+Per quanto riguarda l' algoritmo nearest neightbor, un possibile modo per ottenere \textbf{n} soluzioni differenti, dove n è il numero dei nodi del grafo, è randomizzare il punto di partenza. Questa tecnica di randomizzazione non è particolarmente efficiente poichè se il grafo non ha molti nodi si hanno pochi circuiti a disposizione su cui eseguire gli algoritmi di ricerca locale. 
+Un secondo modo per generare soluzioni differenti fra loro,valido per tutti gli algoritmi greedy, consiste nel rendere non deterministica la scelta della Best, in modo che, se l'algoritmo viene richiamato più volte, almeno in linea di principio, ad ogni esecuzione vengono fatte scelte differenti e generate soluzioni alternative. Algoritmi greedy in cui la funzione  Best è non deterministica prendono il nome di \textbf{GRASP} (Greedy Randomly Adaptive Search Procedure). Naturalmente rendere non deterministica la scelta della Best non significa rendere completamente casuale la scelta dell' elemento da aggiungere alla soluzione corrente; significa semplicemente che con una probabilità non nulla l' algoritmo può selezionare elementi che, anche se non sono la miglior scelta possibile, non si discostano di molto da essa. La combinazione di un algoritmo di ricerca locale e di un'euristica randomizzata viene denominato metodo \textbf{multistart}: il multistart da noi realizzato prevede di utilizzare l' algoritmo nearest neightbor, opportunamente randomizzato, per produrre circuiti hamiltoniani, ai quali viene applicato il metodo  2-opt. Prima di discutere il codice prodotto, nel successivo paragrafo si illustra come in linguaggio C# avviene la generazione dei numeri random utilizzati per randomizzare l' algoritmo  nearest neightbor. 
+
+\vspace{2\baselineskip}
+GENERAZIONE NUMERI CASUALI - SEMERANDOM
+\vspace{2\baselineskip}
+
+Per generare un numero casuale è sufficiente istanziare la classe Random ed invocare sull' istanza creata il metodo \textbf{Next} o \textbf{NextDouble}. Per esempio nel caso in cui si voglia generare un numero casuale intero tra 1 e 99 è necessario scrivere le seguenti righe di codice:
+
+\begin{lstlisting}
+
+Random random = new Random();
+int nun = random.Next(1,100);
+
+\end{lstlisting}
+
+I numeri random sono generati, a partire da un valore d' inizializzazione chiamato \textbf{seme}, da un algoritmo matematico. Per sua natura l' algoritmo è deterministico: se si fornisce in input lo stesso seme genererà sempre la medesima sequenza di numeri. Per tale ragione il valore del seme viene derivato dall'orologio di sistema all' atto della  creazione dell' istanza della classe Random qualora si utilizza il costruttore di default. In questo modo, non essendo predicibile il valore del seme, la sequenza di numeri generati dall' algoritmo risulta essere sistematicamente casuale. 
+
+L' orologio di sistema non sempre risulta un buon valore da utilizzare per settare il seme. Si supponga di avere la necessità di creare due oggetti diversi della classe Random: qualora quest’ ultimi siano creati uno di seguito all’ altro avranno entrambi il medesimo seme poichè l' orologio di sistema risulta lo stesso nel lasso di tempo che il processore impiega ad eseguire le due istruzioni.
+
+Per constatare ciò si è realizzato il seguente programma:
+
+\begin{lstlisting}
+
+Random rdn1 = new Random();
+Random rdn2 = new Random();
+
+for (int i = 0; i < 10; i++)
+{
+    Console.WriteLine(rdn1.Next(1, 10) + "-" + rdn2.Next(1, 10));
+}
+Console.ReadLine();
+
+\end{lstlisting}
+
+Il cui output, come previsto, risulta mostrato in Fig C.
+
+\begin{center}
+\includegraphics[scale=0.5]{output}  
+
+Figura X: Output 
+
+\end{center}
+
+Per ovviare a questa problematica la classe Random dispone di un secondo costruttore che riceve come parametro un intero che setta il valore del seme: sarà a questo punto compito del programmatore passare valori casuali e  differenti all' atto della creazione delle due istanze della classe Random.
+
+\vspace{2\baselineskip}
+FUNZIONE NEAREST NEIGHTBOR
+\vspace{2\baselineskip}
+
+L' intestazione del metodo risulta essere:
+
+\begin{lstlisting}
+
+ public static PathGenetic NearestNeightbor(Instance instance, Random rnd, List<int>[] listArray)
+
+\end{lstlisting}
+
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe \textit{Instance} contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' utente;
+    \item \textbf{rnd}: istanza della classe \textit{Random} precedentemente inizializzato con un seme random diverso per ogni iterazione del programma;
+    \item \textbf{listArray}: lista in cui all'indice \textbf{i} è presente un vettore di dimensione instance.Nnodes al cui interno sono, in ordine crescente rispetto alla distanza assunta dal nodo \textbf{i}, presenti gli indici associati ai nodi del grafo.
+\end{itemize}
+
+Il circuito prodotto dal metodo viene memorizzato all'interno del vettore \textbf{heuristicSolution} in cui alla generica posizione \textbf{i} è collocato il nodo successivo al nodo \textbf{i}.Il vettore \textbf{availableIndexes} di tipo bool è un vettore di supporto che memorizza all'indice \textbf{i} il valore logico \textbf{true} se il nodo \textbf{i} è già stato visitato, \textbf{false} altrimenti. Il nodo di partenza sul quale l' algoritmo comincia la costruzione della soluzione si è scelto di renderlo casuale per i motivi forniti precedentemente. Per quanto riguarda la randomizzazione della scelta locale
+\begin{lstlisting}
+
+...
+
+\end{lstlisting}
+
+Una volta definito il nodo di partenza i restanti nodi son ottenuti attraverso un ciclo \textit{for}: alla generica iterazione \textbf{i} del ciclo, sfruttando la struttura dati \textbf{listArray} e la funzione \textbf{RndPlus} si memorizza all'interno della variabile \textbf{nextIndex} il nodo successivo visitato dal percorso sempre che questo sia stato ancora visitato. Per verificarne la disponibilità si utilizza l'array \textit{availableIndexes}, qualora non sia possibile utilizzare tale nodo si passa al successivo più vicino.
+
+
+\begin{lstlisting}
+
+....
+\end{lstlisting}
+
+
+\vspace{2\baselineskip}
+METAEURISTICI
+\vspace{2\baselineskip}
+
+L' algoritmo multistart è una tecnica per sfuggire ai minimi locali ma, tipicamente, non risulta essere la tecnica più efficiente a tal scopo. 
+
+In generale infatti, una ripartenza da un punto casuale "cancella la storia" dell'algoritmo: l'evoluzione successiva è completamente indipendente da tutto quello che è accaduto prima della ripartenza. In altri termini, il metodo multistart non è in grado di sfruttare in alcun modo l'informazione generata durante le ricerche locali precedenti per "guidare" la ricerca locale corrente. 
+
+E' noto che per molti problemi le soluzioni di buona qualità sono normalmente abbastanza  "vicine" (in termini di numero di mosse) le une alle altre; quindi, l'aver determinato una "buona" soluzione fornisce una qualche forma di informazione che il metodo multistart non tiene in alcun modo in considerazione. Al contrario, la ricerca locale ha un qualche tipo di informazione sulla "storia" dell'algoritmo, data proprio dalla soluzione corrente. 
+Quanto detto ha portato, a partire dagli anni '80, la ricerca di metodi sistematici per generalizzare la ricerca locale e sfuggire ai minimi locali ha prodotto numerosi risultati, chiamati \textbf{metaeuristici}. 
+Il meccanismo di base utilizzato da questi algoritmi per muoversi nello spazio di ricerca è quello visto per la ricerca locale, cioè l'esplorazione di vicinati, nel quale però sono consentite\textbf{ mosse peggiorative}.
+Quest'ultime risultano molto utili per spostarsi da un ottimo locale ad un ottimo locale ad esso vicino ma posso anche essere fonte di loop infiniti: ciò accade quando ripetutamente si ritorna in una soluzione precedentemente esplorata dopo un certo numero di mosse. 
+Esistono diversi metaeuristici il letteratura, la nostra attenzione sarà focalizzata sul Variable neighborhood descent (VNS) e la Tabu Search; per ciascuno di essi sarà descritto il loro funzionamento,il meccanismo (caratteristico dell' algoritmo) implementato per evitare la creazione di loop e il codice realizzato per implementarli.
+
+\vspace{2\baselineskip}
+TABU
+\vspace{2\baselineskip}
+
+\vspace{2\baselineskip}
+VNS
+\vspace{2\baselineskip}
+
+\vspace{2\baselineskip}
+MATHEURISTICS
+\vspace{2\baselineskip}
+
+In termini generali possiamo definire gli algoritmi \textbf{matheuristics} come algoritmi euristici di miglioramento che, partendo da una o più soluzioni ammissibili, sfruttano il \textbf{modello matematico} per calcolare soluzioni migliori.
+In particolare sfruttare il modello matematico significa poter utilizzare un solver e, poichè essi sono estremamente efficienti anche nel risolvere istanze grandi a costo di semplificare il modello, è possibile realizzare algoritmi euristici che producono soluzioni particolarmente buone in brevissimo tempo.
+Per quanto possa risultare semplice tale idea, algoritmi di questo tipo sono stati implementati solamente a partire dagli anni 2000. Il punto saliente i questi metodi consta nella determinazione del vicinato di una soluzione di partenza \textbf{x}. Tale scelta è tutt'altro che banale, ed è la chiave per ottenere un metodo efficiente. Uno schema comunemente usato è di scegliere un certo numero di variabili della soluzione di riferimento \textbf{x} e fissarle, lasciando libere altre. Questo modo di procedere è detto\textbf{ hard variable fixing}; il suo principale svantaggio è rappresentato nel difficile problema della scelta di quali variabili sia opportuno fissare e quali lasciare libere. In contrapposizione a questa tecnica è possibile pensare ad un differente modo di procedere, il cosiddetto \textbf{soft variable fixing}, che consiste invece nel far sì che un certo numero di variabili restino immutate, ma senza conoscere a priori quali siano, lasciando che sia il solver ad effettuare la scelta ottimale fra tutte quelle possibili.
+
+\vspace{2\baselineskip}
+HARD FIXING
+\vspace{2\baselineskip} 
+
+L' hard fixing è una tecnica euristica che, data una soluzione ammissibile di riferimento \textbf{x_H}, consiste nel fissare in soluzione variabili che fanno parte di \textbf{x_H}. La soluzione \textbf{x_H} può essere ottenuta utilizzando un qualunque algoritmo costruttivo oppure Cplex fornendogli un time limit che ragionevolmente possa essere considerato breve per l' istanza che si vuole risolvere. Esistono varie politiche di fissaggio dei lati. Una strategia possibile consiste nello scansionare tutti i lati che costituiscono x_H e fissare in soluzione le variabili ad essi associati con probabilità \textbf{p}. Maggiore è il numero di variabili fissate, minore saranno le operazioni di branching e quindi conseguentemente i nodi dell' albero decisionale.
+Si osserva che qualora si fissi le variabili corrispondenti ai due lati che incidono in un nodo, Cplex nella fase di preprocessing fissa a 0 le variabili corrispondente ai rimanenti n-3 lati uscenti dal nodo grazie ai vincoli di grado inseriti nel modello. 
+Fissare alcune variabili induce la definizione di un intorno N(x_H) al cui interno sono presenti tutti i tour aventi tali variabili fissate: l' esplorazione dell' intorno non avviene più tramite enumerazione come visto per gli algorimi migliorativi, ma avviene utilizzando Cplex fornendo a quest' ultimo il modello matematico modificato.
+ 
+\vspace{2\baselineskip} 
+WARM-START
+\vspace{2\baselineskip} 
+
+Il solver Cplex consente di fornirgli in input una soluzione euristica del problema: tale soluzione prende il nome di \textbf{warm-start} o \textbf{MIP start}. Risulta possibile, in generale, fornire più MIP start, in tal caso si parla di MIP starts multiplo. Quando si fornisce un MIP start, esso viene processato da Cplex durante la fase di ottimizzazione prima di iniziare il branch and cut. Qualora uno o più MIP start rappresenti una soluzione ammissibile, CPLEX installa la migliore di queste soluzioni come incumbent. Poter disporre di un incumbent fin dall'inizio del branch and cut è molto importante poichè consente a Cplex di dichiarare sondati nodi il cui costo della soluzione del rilassamento continuo risulta essere superiore rispetto al costo dell' incumbent(criterio di bounding). Avere un incumbent consente inoltre a Cplex di utilizzare euristici che necessitano di esso, come ad esempio gli euristici \textbf{RINS} e \textbf{polishing} che saranno discussi nel paragrafo X.
+
+
+\vspace{2\baselineskip}
+PREPROCESSING
+\vspace{2\baselineskip} 
+
+Per migliorare le performance dell' algoritmo risulta molto utile eseguire una fase di fissaggio di variabili ulteriore chiamato pre-processing caratteristica per il problema del Commesso Viaggiatore. Si consideri la figura X:
+
+\begin{center}
+\includegraphics[scale=0.5]{PreProcessing}  
+
+Figura X: Output 
+
+\end{center}
+
+La variabile x_{z,j} dovrà necessariamente assumere il valore 0 essendo x_{z,j} e x_{z,h} al valore 1 altrimenti ci sarà un subtour. Poichè i vincoli di subtour elimination, a differenza dei vincoli di grado, non sono stati inseriti nel modello iniziale, durante il preprocessing non fissa a 0 la variabile x_{z,j}. Qualora il lato venisse scelto poco male, la funzione di separazione che si è implementata aggiungerà il corrispondente vincolo di subtour: tuttavia visto che è noto a priori che tale variabile deve essere fissata a 0, al fine di aumentare le prestazioni del metodo, si è realizzato un metodo chiamato PreProcessing appartenente alla classe Utility.
+
+
+\vspace{2\baselineskip}
+IMPLEMENTAZIONE HARD FIXING
+\vspace{2\baselineskip} 
+
+La tecnica euristica precedentemente esposta è stata implementata all' interno del metodo HardFixing appartenente alla classe TSP. La sua intestazione risulta essere:
+
+\begin{lstlisting}
+
+public static PathGenetic NearestNeightbor(Instance instance, Random rnd, List<int>[] listArray)
+
+\end{lstlisting}
+
+dove:
+
+\begin{itemize}
+    \item \textbf{cplex}: 
+    \item \textbf{instance}: 
+    \item \textbf{process}: 
+    \item \textbf{rdn}: 
+    \item \textbf{clock}: 
+\end{itemize}
+
+
+La soluzione ammissibile è stata ottenuta applicando il metodo NearestNeightbor precedentemente discusso e codificata all' interno del vettore \textbf{heuristicSol} di tipo \textbf{PathStandard}. Inizialmente si è deciso 
+di fissare mediamente l' $80%$ dei lati: i miglioramenti saranno così molto frequenti ma tipicamente piccoli avendo fissato la stragrande maggioranza d elle variabili. 
+
+Qualora Cplex, dopo k esecuzioni in cui ha migliorato la soluzione, non  produce nessuna soluzione migliore, una strategia potrebbe essere quella di passare subito a fissare una percentuale inferiore di lati; questo tipicamente non viene fatto e si preferisce riprovare \textbf{t} volte prima di diminuire la percentuale di fissaggio in modo da avere, almeno nella fase iniziale, più miglioramenti possibili. Il valore di \textbf{t} dipende ovviamente dall' applicazione e da quali sono lo esigenze: all' interno dell' algoritmo realizzato si è ritenuto ragionevole fissate t = 10. 
+
+\vspace{2\baselineskip}
+RINS
+\vspace{2\baselineskip}
+
+Nell’esplorazione di un albero di ricerca, generalmente due soluzioni sono a disposizione: la soluzione incumbent che è ammissibile rispetto al vincolo di interezza, ma non è ottima finché l’ottimizzazione non ha termine e la soluzione è caratterizzata da un valore migliore di quello della soluzione incumbentdel rilassamento continuo del nodo corrente che molto spesso non è intera, ma che è caratterizzata da un valore migliore di quello della soluzione incumbent.
+
+L' algoritmo \textbf{RINS}(Relaxation Induced Neighborhood Search) è un algoritmo euristico che utilizza la tecnica dell' hard fixing ed è implementato all' interno di Cplex. 
+Quali variabili fissare risulta essere un scelta molto importante poichè determina l' intorno che verrà da cplex esplorato. L' algoritmo RINS necessità di due soluzioni ammissibili come input e fissa in soluzione le variabili comuni sia ad x1 che a x2. 
+
+
+\vspace{2\baselineskip}
+POLISHING
+\vspace{2\baselineskip}
+
+L' algortitomo polishing è un euristico che sfrutta l' algoritmo RINS all' interno dell' algoritmo genetico. 
+
+\vspace{2\baselineskip}
+LOCAL BRANCHING
+\vspace{2\baselineskip}
+
+
+\vspace{2\baselineskip}
+IMPLEMENTAZIONE LOCAL BRANCHING
+\vspace{2\baselineskip}
+
+\vspace{2\baselineskip}
+LOCAL BRANCH SIMMETRICO
+\vspace{2\baselineskip} 
+
+
+\vspace{2\baselineskip}
+ALGORITMI GENETICI
+\vspace{2\baselineskip}
 
 Gli Algoritmi Genetici (\textit{AG}), proposti nel 1975 da J.H. Holland, sono un modello computazionale idealizzato dall'evoluzione naturale darwinista. L'aggettivo "genetico" deriva dal fatto che il modello evolutivo darwiniano trova spiegazioni nella branca della biologia detta genetica e dal fatto che tali algoritmi attuano meccaniche concettualmente simili a quelli dei processi biochimici scoperti da questa scienza. I principi fondamentali che consentono la nascita e lo sviluppo di un processo evolutivo che porta all'evoluzione di una specie sono la \textbf{selezione naturale} e la \textbf{varietà del genotipo}\footnote{Il termine \textit{genotipo} indica la costituzione genetica di un organismo o di un gruppo di individui} della popolazione.
 La selezione naturale è il meccanismo grazie al quale si ha un progressivo e cumulativo aumento della frequenza degli individui aventi caratteristiche ottimali per l'ambiente in cui essi vivono poiché solo quelli che meglio si adattano ad un certo habitat riescono a sopravvivere e a riprodursi.
@@ -1637,7 +2253,7 @@ I meccanismi generatori della variazione del genotipo della popolazione sono sos
 
 I cambiamenti che si verificano da una generazione all'altra risultano essere molto piccoli ma, dato che sopravvivono soprattutto quelli positivi, un loro accumulo porta nel tempo a grandi cambiamenti.
 La ricerca parte da una popolazione iniziale di individui, detti cromosomi, che rappresentano ipotetiche soluzioni al problema dato. Ogni individuo della popolazione viene codificato da un vettore\footnote{Oltre alla codifica vettoriale in letteratura è possibile trovare anche quella ad albero. Tuttavia essa viene utilizzata per codificare gli individui della popolazione nell'ambito della programmazione genetica (che è?????????).} i cui elementi contengono simboli appartenenti ad un alfabeto finito, detti geni. Ad ogni soluzione è associato un valore determinato da una funzione chiamata \textbf{Fitness} il cui scopo è di determinare la bontà di un individuo nel risolvere il problema in questione.
-Così come nella natura solamente gli individui che meglio si adattano all’ambiente sono in grado di sopravvivere e riprodursi, anche negli algoritmi genetici le soluzioni migliori sono quelle che hanno la maggiore probabilità di trasmettere i propri geni alle generazioni future.
+Così come nella natura solamente gli individui che meglio si adattano all' ambiente sono in grado di sopravvivere e riprodursi, anche negli algoritmi genetici le soluzioni migliori sono quelle che hanno la maggiore probabilità di trasmettere i propri geni alle generazioni future.
 Come vedremo in seguito sono fondamentalmente tre le caratteristiche determinanti per un algoritmo genetico: determinare quale funzione di fitness si andrà ad utilizzare, partendo dalla attuale generazione decidere come creare un pull di possibili candidati per quella successiva ed infine come selezionare tra questi ultimi quelli che sopravviveranno.
 Essendo la definizione delle funzione di fitness direttamente dipendente da quale tipo di problema si desidera studiare, concludiamo questa introduzione elencando solamente quali operatori genetici è possibile applicare per definire le restanti due caratteristiche di un algoritmo.
 
@@ -1761,11 +2377,9 @@ ANDREBBE UN COMMENTINO SU OGNUNO
 
 \end{lstlisting}
 
-
 \vspace{2\baselineskip}
 FUNZIONE GENETICALGORITHM
 \vspace{2\baselineskip}
-
 
 Questa classe ha il compito di amministrare tutto tutte le fasi dell'algoritmo genetico. Per prima cosa si procede con una dichiariazione ed inizializzazione delle varie strutture dati necessarie. Tra queste troviamo due liste di \textit{PathGenetic} chiamate \textbf{OriginallyPopulated} e \textbf{ChildPoulation} che, durante tutto il processo, contengono rispettivamente l'insieme dei circuiti hamiltoniani che compongono la generazione $i-esima$ ed i figli da loro generati. La prima generazione viene ottenuta attraverso il metodo \textbf{NearestNeightborGenetic}, discusso in maggiore dettagli nella appendice LINK!!!!!, che, ricevendo la lista completa per ogni nodo di quali sono ad esso più vicini\footnote{Funzione già descritta qui LINK!!!!!!!!!!!!!!.}, costruisce le varie instanze tendendo a collegare i nodi più vicini tra loro\footnote{Il numero di componenti per ogni generazione viene chiesto in input all'utente e passato come parametro di ingresso alla funzione \textit{GeneticAlgorithm}.}.
 Durante la generazione dei nuovi figli, poiché l'indice in cui è memorizzato un circuito all'interno di \textit{OriginallyPopulated}, dovuto in genere all'estrazione della rouellette, è casuale\footnote{Con casuale si intende che non è presente alcuna forma di correlazione fra l'indice e il costo della soluzione.} si è deciso di accoppiare circuiti memorizzati in celle adiacenti; la casualità di OriginallyPopulated consente di combinare fra loro soluzioni buone con altre meno buone e ciò statisticamente risulta particolarmente vantaggioso.

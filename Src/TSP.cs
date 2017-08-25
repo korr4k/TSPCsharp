@@ -819,6 +819,7 @@ namespace TSPCsharp
 
             cplex.AddMIPStart(x, incumbentSol, "HeuristicPath");
             int z = cplex.GetMIPStartIndex("HeuristicPath");
+
             do
             {
 
