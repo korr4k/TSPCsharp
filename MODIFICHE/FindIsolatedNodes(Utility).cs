@@ -1,1 +1,0 @@
-//Togli l' ultimo parametro dal metodo

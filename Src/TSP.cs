@@ -466,7 +466,7 @@ namespace TSPCsharp
 
             do
             {
-                heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
+                heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
 
                 TwoOpt(instance, heuristicSol);
 
@@ -490,7 +490,7 @@ namespace TSPCsharp
             int typeSol = 0;
             List<int>[] listArray = Utility.BuildSLComplete(instance);
             PathStandard incumbentSol;
-            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            PathStandard solHeuristic = Utility.NearestNeighbour(instance, rnd, listArray);
             incumbentSol = (PathStandard)solHeuristic.Clone();
 
             Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
@@ -511,7 +511,7 @@ namespace TSPCsharp
             int typeSol = 0;
             List<int>[] listArray = Utility.BuildSLComplete(instance);
             PathStandard incumbentSol;
-            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            PathStandard solHeuristic = Utility.NearestNeighbour(instance, rnd, listArray);
             incumbentSol = (PathStandard)solHeuristic.Clone();
             Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
 
@@ -549,7 +549,7 @@ namespace TSPCsharp
 
             //Generate the first population
             for (int i = 0; i < sizePopulation; i++)
-                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));
+                OriginallyPopulated.Add(Utility.NearestNeighbourGenetic(instance, rnd, true, listArray));
             do
             {
                 //Generate the child 
@@ -806,7 +806,7 @@ namespace TSPCsharp
 
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
-            PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
+            PathStandard heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
 
             for (int i = 0; i < instance.NNodes; i++)
             {
@@ -917,7 +917,7 @@ namespace TSPCsharp
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);//Costruisco il modello la prima volta
 
-            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            PathStandard solHeuristic = Utility.NearestNeighbour(instance, rnd, listArray);
             //incumbentSol = ConvertIntArrayToDoubleArray(solHeuristic.path);
             for (int i = 0; i < instance.NNodes; i++)
             {
@@ -1021,7 +1021,7 @@ namespace TSPCsharp
 
             for (int i = 0; i < sizePopulation; i++)
             {
-                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false, listArray));
+                OriginallyPopulated.Add(Utility.NearestNeighbourGenetic(instance, rnd, false, listArray));
                 //OriginallyPopulated[i].path = Utility.InterfaceForTwoOpt(OriginallyPopulated[i].path);
 
                 //TwoOpt(instance, OriginallyPopulated[i]);

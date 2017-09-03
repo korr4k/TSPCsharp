@@ -60,36 +60,36 @@ namespace TSPCsharp
              *later it will be Ax's rows 
             */
             ILinearNumExpr expr = cplex.LinearNumExpr();
-            
+
 
             //Populating objective function
             for (int i = 0; i < instance.NNodes; i++)
             {
-                if (nEdges >= 0)
+                for (int j = i + 1; j < instance.NNodes; j++)
                 {
-                    List<int>[] listArray = BuildSL(instance);
+                    ////xPos return the correct position where to store the variable corresponding to the actual link (i,i)
+                    int position = xPos(i, j, instance.NNodes);
 
-                    //Only links (i,i) with i < i are correct
-                    for (int j = i + 1; j < instance.NNodes; j++)
-                    {
-                        //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
-                        int position = xPos(i, j, instance.NNodes);
-                        if ((listArray[i]).IndexOf(j) < nEdges)
-                            x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
-                        else
-                            x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
-                        expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
-                    }
-                }
-                else
-                {
-                    //Only links (i,i) with i < i are correct
-                    for (int j = i + 1; j < instance.NNodes; j++)
-                    {
-                        //xPos return the correct position where to store the variable corresponding to the actual link (i,i)
-                        int position = xPos(i, j, instance.NNodes);
+                    if (nEdges > 0)
+                        x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+                    else
                         x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
-                        expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+
+                    expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                }
+            }
+
+            if (nEdges > 0)
+            {
+                List<int>[] listArray = BuildSLComplete(instance);
+
+                for (int i = 0; i < instance.NNodes; i++)
+                {
+                    for (int j = 0; j < nEdges; j++)
+                    {
+                        int position = xPos(i, listArray[i][j], instance.NNodes);
+
+                        x[position].UB = 1;
                     }
                 }
             }
@@ -227,9 +227,9 @@ namespace TSPCsharp
 
         //--------------------------------------------HEURISTIC UTILITYES--------------------------------------------
 
-        public static PathGenetic NearestNeightbor(Instance instance, Random rnd, List<int>[] listArray)
+        public static PathGenetic NearestNeighbour(Instance instance, Random rnd, List<int>[] listArray)
         {
-            // heuristicSolution is the path of the current heuristic solution generate
+            // heuristicSolution is the path of the current heuristic solution to generate
             int[] heuristicSolution = new int[instance.NNodes];
             double distHeuristic = 0;
 
@@ -280,7 +280,7 @@ namespace TSPCsharp
         }
 
         //Generating a new heuristic solution for the Genetic Algorithm
-        public static PathGenetic NearestNeightborGenetic(Instance instance, Random rnd, bool rndStartPoint, List<int>[] listArray)
+        public static PathGenetic NearestNeighbourGenetic(Instance instance, Random rnd, bool rndStartPoint, List<int>[] listArray)
         {
             // heuristicSolution is the path of the current heuristic solution generate
             int[] heuristicSolution = new int[instance.NNodes];
@@ -330,33 +330,6 @@ namespace TSPCsharp
             }
 
             return new PathGenetic(heuristicSolution, instance);
-        }
-
-        //Computing the nearest edges for each node
-        static List<int>[] BuildSL(Instance instance)
-        {
-            //SL and L stores the information regarding the nearest edges for each node 
-            List<itemList>[] SL = new List<itemList>[instance.NNodes];
-            List<int>[] L = new List<int>[instance.NNodes];
-
-            for (int i = 0; i < SL.Length; i++)
-            {
-                SL[i] = new List<itemList>();
-
-                for (int j = i + 1; j < SL.Length; j++)
-                {
-                    //Simply adding each possible links with its distance
-                    if (i != j)
-                        SL[i].Add(new itemList(Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType), j));
-                }
-
-                //Sorting the list
-                SL[i] = SL[i].OrderBy(itemList => itemList.dist).ToList<itemList>();
-                //Only the index of the nearest nodes are relevants
-                L[i] = SL[i].Select(itemList => itemList.index).ToList<int>();
-            }
-
-            return L;
         }
 
         public static List<int>[] BuildSLComplete(Instance instance)

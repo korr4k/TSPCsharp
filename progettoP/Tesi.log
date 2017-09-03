@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.8.1)  14 AUG 2017 17:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.8.1)  3 SEP 2017 17:04
 entering extended mode
 **./Tesi.tex
 (Tesi.tex
@@ -935,136 +935,193 @@ Overfull \hbox (5.06567pt too wide) in paragraph at lines 924--927
  []
 
 [22] [23] [24] [25]
-<Callback.jpg, id=411, 376.40625pt x 140.32425pt>
+Overfull \hbox (0.35017pt too wide) in paragraph at lines 1080--1083
+[]\T1/cmr/bx/n/10.95 prima cat-e-go-ria\T1/cmr/m/n/10.95 : du-rante la risoluzi
+one del prob-lema at-traverso la tec-nica del \T1/cmr/bx/n/10.95 Branch&Cut\T1/
+cmr/m/n/10.95 ,
+ []
+
+[26]
+
+! LaTeX Error: File `InterfacciaGrafica' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1112 ...egraphics[scale=0.5]{InterfacciaGrafica}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[27] [28] [29]
+<Callback.jpg, id=485, 376.40625pt x 140.32425pt>
 File: Callback.jpg Graphic file (type jpg)
 <use Callback.jpg>
-Package pdftex.def Info: Callback.jpg  used on input line 1079. on input line 1
-079.
+Package pdftex.def Info: Callback.jpg  used on input line 1201. on input line 1
+201.
 Package pdftex.def Info: Requested size: 188.20265pt x 70.16194pt on input line
- 1079.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1084--1085
+ 1201.
+ [30]
+Underfull \hbox (badness 10000) in paragraph at lines 1206--1207
 
  []
 
 
-Overfull \hbox (2.62569pt too wide) in paragraph at lines 1088--1089
+Overfull \hbox (2.62569pt too wide) in paragraph at lines 1210--1211
 []\T1/cmr/m/n/10.95 Maggiore è il nu-mero di vin-coli che an-di-amo ad in-serir
 e, mag-giore di-venta il tempo di risoluzione
  []
 
-[26 <./Callback.jpg>] [27] [28] [29]
-<SoluzioneFrazionaria.jpg, id=462, 417.9615pt x 373.395pt>
+[31 <./Callback.jpg>] [32] [33] [34]
+<SoluzioneFrazionaria.jpg, id=549, 417.9615pt x 373.395pt>
 File: SoluzioneFrazionaria.jpg Graphic file (type jpg)
 <use SoluzioneFrazionaria.jpg>
-Package pdftex.def Info: SoluzioneFrazionaria.jpg  used on input line 1201. on 
-input line 1201.
+Package pdftex.def Info: SoluzioneFrazionaria.jpg  used on input line 1323. on 
+input line 1323.
 Package pdftex.def Info: Requested size: 208.98024pt x 186.69704pt on input lin
-e 1201.
- [30 <./SoluzioneFrazionaria.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 1221--1222
+e 1323.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1343--1344
 
  []
 
-[31] [32]
-Overfull \hbox (75.07999pt too wide) in paragraph at lines 1313--1314
+[35 <./SoluzioneFrazionaria.jpg>] [36] [37]
+Overfull \hbox (75.07999pt too wide) in paragraph at lines 1435--1436
 []\T1/cmr/m/n/10.95 Successivamente è nec-es-sario as-seg-nare al parametro \T1
 /cmr/bx/n/10.95 *user-ac-tion_p \T1/cmr/m/n/10.95 il val-ore \T1/cmr/bx/n/10.95
  CPX_CALLBACK_DEFAULT\T1/cmr/m/n/10.95 . 
  []
 
-[33]
 
-LaTeX Warning: Command \textendash invalid in math mode on input line 1332.
+LaTeX Warning: Command \textendash invalid in math mode on input line 1454.
 
 
-Underfull \hbox (badness 6510) in paragraph at lines 1350--1350
+Underfull \hbox (badness 6510) in paragraph at lines 1472--1472
 [][][]\T1/cmr/m/n/9 Notiamo in re-altà che l'implementazione delle \T1/cmr/m/it
 /9 user-cut call-back \T1/cmr/m/n/9 avviene sem-pre in con-comi-tanza
  []
 
-[34] [35] [36] [37] [38] [39]
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1603--1604
+[38] [39] [40] [41] [42] [43]
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1725--1726
 [][][][][]  
  []
 
 
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1605--1606
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1727--1728
 [][][][][]  
  []
 
-[40] [41]
-<selezioneSP.jpg, id=699, 1362.89175pt x 317.38576pt>
+[44] [45]
+<ProceduraGreedy.jpg, id=776, 358.941pt x 280.6485pt>
+File: ProceduraGreedy.jpg Graphic file (type jpg)
+<use ProceduraGreedy.jpg>
+Package pdftex.def Info: ProceduraGreedy.jpg  used on input line 1772. on input
+ line 1772.
+Package pdftex.def Info: Requested size: 179.47005pt x 140.3239pt on input line
+ 1772.
+ [46 <./ProceduraGreedy.jpg>]
+<ng.jpg, id=783, 1223.16975pt x 462.528pt>
+File: ng.jpg Graphic file (type jpg)
+<use ng.jpg>
+Package pdftex.def Info: ng.jpg  used on input line 1788. on input line 1788.
+Package pdftex.def Info: Requested size: 611.58339pt x 231.26343pt on input lin
+e 1788.
+
+Overfull \hbox (141.82837pt too wide) in paragraph at lines 1788--1789
+ [] 
+ []
+
+[47 <./ng.jpg>] [48] [49]
+<2-opt.png, id=859, 676.5275pt x 227.85126pt>
+File: 2-opt.png Graphic file (type png)
+<use 2-opt.png>
+Package pdftex.def Info: 2-opt.png  used on input line 1886. on input line 1886
+.
+Package pdftex.def Info: Requested size: 338.26291pt x 113.92534pt on input lin
+e 1886.
+ [50] [51 <./2-opt.png (PNG copy)>] [52] [53]
+<output.jpg, id=954, 492.6405pt x 146.949pt>
+File: output.jpg Graphic file (type jpg)
+<use output.jpg>
+Package pdftex.def Info: output.jpg  used on input line 2049. on input line 204
+9.
+Package pdftex.def Info: Requested size: 246.31964pt x 73.47432pt on input line
+ 2049.
+ [54]
+[55 <./output.jpg>] [56] [57]
+<selezioneSP.jpg, id=998, 1362.89175pt x 317.38576pt>
 File: selezioneSP.jpg Graphic file (type jpg)
 <use selezioneSP.jpg>
-Package pdftex.def Info: selezioneSP.jpg  used on input line 1669. on input lin
-e 1669.
+Package pdftex.def Info: selezioneSP.jpg  used on input line 2154. on input lin
+e 2154.
 Package pdftex.def Info: Requested size: 681.44421pt x 158.69249pt on input lin
-e 1669.
+e 2154.
 
-Overfull \hbox (211.6892pt too wide) in paragraph at lines 1669--1670
+Overfull \hbox (211.6892pt too wide) in paragraph at lines 2154--2155
  [] 
  []
 
-[42 <./selezioneSP.jpg>]
-<Mutazione.jpg, id=704, 1357.4715pt x 168.02776pt>
+[58 <./selezioneSP.jpg>]
+<Mutazione.jpg, id=1003, 1357.4715pt x 168.02776pt>
 File: Mutazione.jpg Graphic file (type jpg)
 <use Mutazione.jpg>
-Package pdftex.def Info: Mutazione.jpg  used on input line 1701. on input line 
-1701.
+Package pdftex.def Info: Mutazione.jpg  used on input line 2186. on input line 
+2186.
 Package pdftex.def Info: Requested size: 678.7341pt x 84.01367pt on input line 
-1701.
+2186.
 
-Overfull \hbox (208.97908pt too wide) in paragraph at lines 1701--1702
+Overfull \hbox (208.97908pt too wide) in paragraph at lines 2186--2187
  [] 
  []
 
-[43] [44 <./Mutazione.jpg>] [45] [46] [47] [48] [49] [50] [51] [52]
-<circuitoF.jpg, id=949, 376.40625pt x 285.4665pt>
+[59 <./Mutazione.jpg>] [60] [61] [62] [63] [64] [65] [66] [67] [68]
+<circuitoF.jpg, id=1257, 376.40625pt x 285.4665pt>
 File: circuitoF.jpg Graphic file (type jpg)
 <use circuitoF.jpg>
-Package pdftex.def Info: circuitoF.jpg  used on input line 2117. on input line 
-2117.
+Package pdftex.def Info: circuitoF.jpg  used on input line 2600. on input line 
+2600.
 Package pdftex.def Info: Requested size: 188.20265pt x 142.7329pt on input line
- 2117.
- [53]
-<circuitoH.jpeg, id=974, 380.622pt x 284.86424pt>
+ 2600.
+<circuitoH.jpeg, id=1258, 380.622pt x 284.86424pt>
 File: circuitoH.jpeg Graphic file (type jpg)
 <use circuitoH.jpeg>
-Package pdftex.def Info: circuitoH.jpeg  used on input line 2123. on input line
- 2123.
+Package pdftex.def Info: circuitoH.jpeg  used on input line 2606. on input line
+ 2606.
 Package pdftex.def Info: Requested size: 190.31052pt x 142.43176pt on input lin
-e 2123.
-<circuitoC.jpg, id=975, 377.61075pt x 284.262pt>
+e 2606.
+ [69 <./circuitoF.jpg>]
+<circuitoC.jpg, id=1274, 377.61075pt x 284.262pt>
 File: circuitoC.jpg Graphic file (type jpg)
 <use circuitoC.jpg>
-Package pdftex.def Info: circuitoC.jpg  used on input line 2129. on input line 
-2129.
+Package pdftex.def Info: circuitoC.jpg  used on input line 2612. on input line 
+2612.
 Package pdftex.def Info: Requested size: 188.8049pt x 142.13065pt on input line
- 2129.
+ 2612.
 
-[54 <./circuitoF.jpg> <./circuitoH.jpeg> <./circuitoC.jpg>]
-Overfull \hbox (3.73863pt too wide) in paragraph at lines 2147--2148
+Overfull \hbox (3.73863pt too wide) in paragraph at lines 2630--2631
 [][][][][][][][][][][][]  
  []
 
-[55] [56]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2280.
- [57]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2280.
+[70 <./circuitoH.jpeg> <./circuitoC.jpg>] [71] [72]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2763.
+ [73]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2763.
  (Tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2280.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2280.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2763.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2763.
 
 Package rerunfilecheck Info: File `Tesi.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2280.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2763.
  ) 
 Here is how much of TeX's memory you used:
- 11957 strings out of 493314
- 168577 string characters out of 3136264
+ 12271 strings out of 493314
+ 172999 string characters out of 3136264
  299031 words of memory out of 3000000
- 14496 multiletter control sequences out of 15000+200000
+ 14572 multiletter control sequences out of 15000+200000
  21937 words of font info for 58 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,13n,40p,1355b,1850s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1079,6 +1136,8 @@ les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files
 )/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/symbols/msam10.pfb><C:/Program Files (x86)/MiKTeX 
 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/cm-super/sfbx0900.pfb><C:/Program Files (x86)/MiKTeX 
 2.9/fonts/type1/public/cm-super/sfbx1095.pfb><C:/Program Files (x86)/MiKTeX 2.9
@@ -1091,9 +1150,9 @@ blic/cm-super/sfti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
 c/cm-super/sftt1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/t
 ipa/tipa10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipab
 x10.pfb>
-Output written on Tesi.pdf (57 pages, 1030378 bytes).
+Output written on Tesi.pdf (73 pages, 1350250 bytes).
 PDF statistics:
- 1317 PDF objects out of 1440 (max. 8388607)
- 828 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1669 PDF objects out of 1728 (max. 8388607)
+ 1054 named destinations out of 1200 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
