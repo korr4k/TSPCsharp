@@ -909,16 +909,18 @@ namespace TSPCsharp
                 currentIncumbentSol[position] = 1;
             }
 
+            currentIncumbentCost = heuristicSol.cost;
+
             //Installation of the Lazy Constraint CallBack
 
             TSPLazyConsCallback tspLazy = new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint);
             cplex.Use(tspLazy);
          
-            TSPIncumbent tspInc = new TSPIncumbent();
-            cplex.Use(tspInc);
+            //TSPIncumbent tspInc = new TSPIncumbent();
+            //cplex.Use(tspInc);
            
-            //Installation of Informative CallBack
-            cplex.Use(new TSPInformativeCallback(tspInc));
+            ////Installation of Informative CallBack
+            //cplex.Use(new TSPInformativeCallback(tspInc));
            
             //Provide to Cplex a warm start
             cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
@@ -932,8 +934,12 @@ namespace TSPCsharp
                 //Modify the Model according to the current Incumbent solution
                 Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
 
+                cplex.SetParam(Cplex.DoubleParam.ObjLLim, currentIncumbentCost - 1);
+
                 //Solve the model
                 cplex.Solve();
+
+                double tmp = cplex.GetObjValue(Cplex.IncumbentId);
 
                 if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
                 {
