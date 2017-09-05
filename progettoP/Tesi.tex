@@ -78,44 +78,130 @@ literate={à}{{\`a}}1 {è}{{\`e}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {é}{{\'e}}1,
     emphstyle=[1]{\color{blue(munsell)}},
 }
 
-
 \begin{document}
 
-ABSTRACT
+\section*{SEZIONE UNO}
 
-\vspace{2\baselineskip}
+Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema "Il Commesso Viaggiatore" applicando differenti algoritmi risolutori. L'obiettivo di questo testo è quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bontà\`a della soluzione prodotta. Verrà\`a fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sarà\`a analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
 
-Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema del Commesso Viaggiatore applicando differenti algoritmi risolutori. L'obiettivo di questo testo è quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bontà della soluzione prodotta. Verrà fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sarà analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
+\subsection*{INTRODUZIONE}
 
-\vspace{2\baselineskip}
-INTRODUZIONE
-
-\vspace{2\baselineskip}
-
-Questa capitolo introduttivo è dedicato alla storia, alle applicazioni e alle correnti sfide riguardanti uno dei più importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem-TSP). 
-Il nome deriva dalla sua più tipica rappresentazione: data una rete di città, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le città una ed una sola volta e ritornare alla città di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le città relative al problema in questione mentre i possibili collegamenti tra le località sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall' arco. Chiaramente è possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o di eventuali pedaggi presenti nei singoli percorsi. Come è facile immaginare, il TSP può essere quindi utilizzato per una infinità  di problemi pratici ma anche teorici.\\
-Il problema del commesso viaggiatore riveste un ruolo notevole nell' ambito di problemi di logistica distributiva, detti anche problemi di routing. Questi riguardano l'organizzazione di sistemi di distribuzione di beni e servizi. Esempi di problemi di questo genere sono la movimentazione di pezzi o semilavorati tra reparti di produzione, la raccolta e distribuzione di materiali, la distribuzione di merci da centri di produzione a centri di distribuzione.
-Sebbene le applicazioni nel contesto dei trasporti siano le più naturali per il TSP, la semplicità del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città  e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
-Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poichè esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
+Questa capitolo introduttivo \`e dedicato alla storia, alle applicazioni e correnti sfide riguardanti uno dei pi\`u importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem -TSP). 
+Il nome deriva dalla sua pi\`u tipica rappresentazione: data una rete di città\`a, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le città\`a una ed una sola volta e ritornare alla città\`a di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le città\`a relative al problema in questione mentre i possibili collegamenti tra le località\`a sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall’arco. Chiaramente è possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o eventuali pedaggi presenti nei singoli percorsi. Come è facile immaginare, il TSP può essere quindi utilizzato per una infinità di problemi pratici ma anche teorici:\\
+Il problema del commesso viaggiatore riveste un ruolo notevole nell'ambito di problemi di logistica distributiva, detti anche di routing. Questi riguardano l’organizzazione di sistemi di distribuzione di beni e servizi. Esempi di problemi di questo genere sono la movimentazione di pezzi o semilavorati tra reparti di produzione, la raccolta e distribuzione di materiali, lo smistamento di merci da centri di produzione a di distribuzione.
+Sebbene le applicazioni nel contesto dei trasporti siano le più naturali per il TSP, la semplicità\`a del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
+Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poiché\`e esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
 
 
-Problemi matematici riconducibili al TSP furono trattati nell' Ottocento dal matematico irlandese Sir William Rowan Hamilton e dal matematico Britannico Thomas Penyngton.  Nel 1857, a Dublino, Rowan Hamilton descrisse un gioco, detto Icosian game, a una riunione della British Association for the Advancement of Science. Il gioco consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro ha 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
-Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema è un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ città è facile da calcolare: data una città di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda città, $(n - 2)$ per la terza e cos\` via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo è dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a metà . Insomma, date n città, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
+Problemi matematici riconducibili al TSP furono trattati nell'Ottocento dal matematico irlandese Sir William Rowan Hamilton e dal matematico Britannico Thomas Penyngton.  Nel 1857, a Dublino, Rowan Hamilton descrisse un gioco, detto Icosian game, a una riunione della British Association for the Advancement of Science. Il gioco consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro ha 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
+Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema \`e un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ città\`a \`e facile da calcolare: data una città\`a di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda città\`a, $(n - 2)$ per la terza e così via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo \`e dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a metà. Insomma, date n città\`a, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
 
-Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP  su un campione di $n = 49$ città: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
+Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP  su un campione di $n = 49$ città\`a: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
 
-Nel 1962, Procter and Gamble bandì un concorso per 33 città, nel 1977 fu bandito un concorso che collegasse le 120 principali città della Germania Federale e la vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
+Nel 1962, Procter and Gamble bandì un concorso per 33 città\`a, nel 1977 fu bandito un concorso che collegasse le 120 principali città\`a della Germania Federale e la vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
 
-Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 città. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
-Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 città tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
-Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 città della Svezia. 
-Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unità, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
-Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore è utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con più nodi in assoluto ha 85,900 città. 
+Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 città\`a. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
+Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 città\`a tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
+Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 città\`a della Svezia. 
+Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unità\`a, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
+Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore è utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con più nodi in assoluto ha 85,900 città\`a. 
 
-\vspace{2\baselineskip}
 
-MODELLO MATEMATICO
-\vspace{2\baselineskip}
+\subsection*{AMBIENTE DI SVILUPPO: Cplex, Visual Studio e C\#}
+
+Il progetto è stato sviluppato in ambiente Windows, in particolare il sistema operativo scelto è Windows 10.\\
+Cplex è la componente principale del progetto, prima di procedere è perciò necessario assicurarsi per potervi interagire dall'IDE che si desidera utilizzare. Il nostro gruppo ha deciso di adottare come linguaggio di programmazione il \textbf{C\#}, successore del \textbf{C++} ed anch'esso orientato agli oggetti.\\
+L'IDE più comune per chi desidera utilizzare tale linguaggio è senza dubbio \textbf{Visual Studio}, sviluppato dalla stessa Microsoft e distribuito gratuitamente. La versione utilizzata in questo progetto e dunque quella a cui si farà riferimento in questa guida è \textbf{Visual Studio Community 2017}. Una volta aperto l'installer reperibile al seguente \href{https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community&rel=15#}{indirizzo} è sufficiente installare i pacchetti \textbf{Sviluppo per desktop .NET} e \textbf{Sviluppo di applicazioni desktop con C++} (vedremo in seguito perché sono necessari pacchetti C++).\\
+Una volta terminata l'installazione assicuriamoci di aver installare nella nostra macchina una versione di cplex pari o superiore alla \textbf{12.7.0}, quella da noi utilizzata è più precisamente la \textbf{12.7.0}.\\
+A questo punto non ci rimane altro che creare il nostro progetto all'interno di Visual Studio e di collegarvi le apposite librerie di Cplex. Selezionare quindi dal menu a tendina \textbf{Visual C\#} e quindi \textbf{App console (.NET Framework)}, forniamo il nome e percorso che desideriamo:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"Progetto C Sharp".png}
+    \caption{Creazione progetto C Sharp}
+\end{figure}
+
+Per connettere Cplex al nostro progetto sono necessari i seguenti passaggi:
+
+\begin{flushleft}
+    \hyphenpenalty=10000
+    \exhyphenpenalty=10000
+    
+    \begin{itemize}
+        
+        \item Selezionare la voce \textbf{Progetto} e quindi \textbf{Aggiungi riferimento...}
+        
+        \item Premere il pulsante \textbf{Sfoglia} e dopo essersi recati nella propria cartella di installazione di Cplex, in genere "C:\textbackslash Program Files\textbackslash IBM\textbackslash ILOG\textbackslash CPLEX\_Studio1271\textbackslash cplex" accedere alla sotto directory "\textbackslash bin\textbackslash x64\_win64" e selezionare i file \textbf{ILOG.CPLEX.dll} e \textbf{ILOG.Concert.dll}. Fatto ciò possiamo chiudere la finestra per la gestione dei riferimenti appena aperta
+        
+        \item Selezionare la voce \textbf{Compilazione} e quindi \textbf{Gestione configurazione..}, nella nuova finestra inserire nella voce  \textbf{Piattaforma} una nuova voce e selezionare \textbf{x64}. Per quanto riguarda la voce configurazione è indifferente selezionare la voce \textbf{Debug} oppure \textbf{Release}: come è facilmente intuibile nella prima modalità e differenza della seconda sarà possibile effettuare il classico debug con break points e gestione delle eccezioni a discapito di tempi di esecuzione leggermente più alti. Cogliamo quindi l'occasione per specificare che tutti i risultati proposti nel seguito di questo testo sono tutti stati ottenuti in modalità \textbf{Release} per il motivo indicato precedentemente.
+        
+    \end{itemize}
+    
+    
+\end{flushleft}
+
+A questo punto è possibile importare attraverso le direttive \textbf{using} sia \textbf{ILOG.CPLEX} che \textbf{ILOG.Concert}.
+
+\subsection*{Creazione ed utilizzo DLL C/C++ }
+
+In questa sezione viene spiegato come sia possibile utilizzare codice esterno, compilato anche in linguaggi differenti dal C\#, sotto forma di \textbf{DLL}. In particolare nel nostro caso si è presentata la necessità di poter utilizzare codice scritto in linguaggio C appartenente al programma Concorde.
+
+La problematica principale con cui ci si scontra in questi casi è l'incompatibilità dei tipi, per noi questo è ancora più accentuato in quanto C al contrario di C\# non è un linguaggio orientato agli oggetti e l'interfaccia con Cplex segue un differente approccio. La soluzione migliore è stata quindi quella di passare al codice C solamente le informazioni fornite in input dall'utente e cioè il nome del file contenente i dati ed il time limit. In altre parole il codice C\# diventa solamente\footnote{In realtà mantiene anche un cronometro per il tempo di risoluzione} una interfaccia per richiamare la DLL, la quale dovrà gestire completamente la lettura dell'input, la risoluzione e la visualizzazione dei risultati\footnote{Tutte le stampe effettuate nella DLL vengono automaticamente reindirizzate nella finestra Console di default utilizzata dal C\#}.
+
+Entriamo ora nel dettaglio della procedura da seguire:
+
+
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+\begin{itemize}
+    
+    \item Prima di tutto da Visual Studio creiamo un nuovo progetto selezionando la voce \textbf{Visual C++} e quindi \textbf{Progetto Win32}. Nel caso in cui questa opzioni siano assenti significa che durante l'installazione di Visual Studio non sono stati selezionati i pacchetti C++, per maggiori dettagli seguire la procedura indicata nella sezione apposita.
+    
+    \item Nelle schermate successive è necessario selezionare l'opzione \textbf{DLL} come tipo di applicazione e \textbf{Progetto vuoto} come opzione aggiuntiva.
+    
+    \item A questo punto dovrebbe essersi creato il nostro nuovo e vuoto progetto, dal menu \textbf{Esplora soluzioni} nella cartella \textbf{File di origine} premiamo il tasto destro ed aggiungiamo un nuovo elemento. Selezioniamo dal menu \textbf{File di C++ (.cpp)}, assegniamo il nome che preferiamo e premiamo il tasto \textbf{Aggiungi}.
+    
+    \item A questo punto il file appena creato verrà compilato come codice \textbf{C++} ma Concorde utilizza \textbf{C} perciò per prima cosa dobbiamo inserire 
+    \begin{lstlisting}
+    extern "C"
+    {
+    }
+    \end{lstlisting}
+    In questo modo tutto il codice al suo interno viene compilato come \textbf{C}.
+    
+    \item Definiamo ora l'entry point per la nostra DLL che si tratta di un semplice metodo con prefisso \textbf{\_\_declspec(dllexport)}. Nel nostro caso si è deciso di utilizzare il metodo entry point come semplice interfaccia per la chiamata di un altro metodo che procederà alla reale risoluzione del problema:
+    \begin{lstlisting}
+    __declspec(dllexport) int Concorde(char *fileName, int timeLimit)
+    {
+        return exemain(strtok(fileName, "\0"), timeLimit);
+    }
+    \end{lstlisting}
+    
+    \item In modo analogo a come abbiamo appena creato questo file selezionando invece l'opzione per aggiungere file esistenti, importiamo tutti i file con estensione \textbf{.C} di cui necessitiamo da Concorde (maggiori dettagli riguardo quelli da noi utilizzati possono essere trovati nella sezione apposita).
+    
+    \item Settiamo ora le proprietà del progetto in modo tale che sia possibile utilizzare Cplex, diverse guide sono già disponibili e la procedura non viene qui riportata. In aggiunta è necessario selezionare nel sottomenù \textbf{C/C++ $\rightarrow$ Generale $\rightarrow$ Directory di inclusione aggiuntive} la cartella dove sono presenti i file \textbf{.h} di Concorde. 
+    
+    \item A questo punto non rimane altro che completare il nostro progetto inserendo i vari metodi necessari, maggiori dettagli nella sezione apposita. Fatto ciò siamo pronti a creare la DLL, dal menu \textbf{Compilazione} selezioniamo la voce \textbf{Compila soluzione} (assicuriamoci che nella barra degli strumenti sia selezionata la modalità release a 64 bit, in realtà è importante si utilizzino gli stessi bit che si adottano nel progetto originale). Terminata la compilazione la DLL si può trovare all'interno della cartella del progetto nella sottocartella \textbf{/x64/Release}.
+    
+    \item Posizioniamo la DLL all'interno della directory del nostro progetto C\# in particolare dentro \textbf{/bin/x64/Release} e \textbf{/bin/x64/Debug} per essere utilizzata nelle due modalità.
+    
+    \item Apriamo infine la classe del nostro progetto nella quale vogliamo utilizzare la DLL ed utilizziamo questo codice:
+    \begin{lstlisting}
+    [DllImport("ConcordeDLL.dll")]
+    public static extern int Concorde(StringBuilder fileName, int timeLimit);
+    \end{lstlisting} 
+    Successivamente potremmo utilizzare il metodo esterno importato come se fosse stato definito all'interno della classe, nel nostro caso:
+    \begin{lstlisting}
+    Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
+    \end{lstlisting}
+    Da notare che la classe \textbf{StringBuilder} permette la conversione automatica del tipo \textbf{String} di C\# a \textbf{char*} di C.
+    
+\end{itemize}
+
+\section*{SEZIONE DUE}
+
+\subsection*{MODELLO MATEMATICO}
 
 Nella sua formalizzazione più generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ è un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ è un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
 
@@ -146,11 +232,12 @@ si ottiene il problema:
 
 L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidano esattamente due lati. In questa forma il modello è  compatto dato che il numero di vincoli è polinomiale rispetto alla dimensione dell'istanza ma non è completo poichè è sprovvisto dei vincoli di subtour che impediscono soluzioni il cui grafo risulta non connesso.
 
-\begin{center}
-\includegraphics[scale=0.5]{subtour}  
 
-Figura 1: Soluzione con due subtour
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"subtour".jpg}
+    \caption{Soluzione con due subtour}
+\end{figure}
 
 \vspace{2\baselineskip}
 
@@ -178,11 +265,7 @@ Una seconda formulazione equivalente per esprimere i vincoli di subtour è la se
 
 La gestione di un numero esponenziale di vincoli implica in genere tempi di risoluzione troppo elevati. Nella pratica però non è necessario utilizzare tutti i vincoli di subtour elimination, è sufficiente considerarne un numero molto più ridotto. Non potendo conoscere in anticipo quali siano quelli essenziali sarà nostro compito progettare un opportuno separatore: ossia una funzione che fornita in ingresso una soluzione x* ottima per il modello corrente generi tutti i vincoli violati.
 
-
-\vspace{2\baselineskip}
-FILE DI INPUT
-\vspace{2\baselineskip}
-
+\subsection*{INPUT FILE}
 
 Le istanze del problema del Commesso Viaggiatore fornite in input al programma sono state selezionata da un libreria presente al seguente indirizzo web: 
 
@@ -190,16 +273,9 @@ Le istanze del problema del Commesso Viaggiatore fornite in input al programma s
 \href{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}
 \end{center}
 
-Ogni istanza è memorizzata in un file di testo in un formato ben preciso, è stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}. 
+Ogni istanza è memorizzata in un file di testo in un formato ben preciso, è stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}.
 
-\vspace{2\baselineskip}
-
-
-
-\vspace{2\baselineskip}
-STRUTTURA DEL PROGETTO
-\vspace{2\baselineskip}
-
+\subsection*{STRUTTURA DEL PROGETTO}
 
 I file che compongono il programma realizzato sono stati organizzati nel modo seguente; all' interno della cartella radice, da noi chiamata TSPCsharp, si sono create le seguenti sottocartelle:
 
@@ -226,10 +302,9 @@ Il software sviluppato è composto da dieci classi, riportiamo di seguito il nom
 
 Per le classi Point, Instances, Program, TSP e Utility verrà fornita una descrizione in questo capitolo, le rimanenti classi verranno presentate nei capitoli successivi poichè una loro trattazione risulterebbe in questo momento prematura. 
 
+\section*{SEZIONE TRE}
 
-\vspace{2\baselineskip}
-CLASSE POINT
-\vspace{2\baselineskip}
+\subsection*{CLASSE POINT}
 
 La classe Point è stata realizzate al fine di memorizzare le coordinate in due dimensioni di un singolo nodo $n$, a tal fine sono presenti due variabili private, accessibili attraverso i propri metodi get e set, di tipo \textbf{double} chiamate rispettivamente \textbf{x} e \textbf{y}. Il costruttore della classe non fa altro che ricevere in input i valori da assegnare a queste ultime. La classe presenta inoltre un ulteriore metodo pubblico e statico chiamato \textbf{Distance} che permette il calcolo della distanza tra due nodi:
 
@@ -268,9 +343,7 @@ A titolo di esempio riportiamo il codice eseguito nel caso in cui pointType risu
 
 Per quanto riguarda gli altri metodi di calcolo della distanza rimandiamo il lettore alla visione del codice.
 
-\vspace{2\baselineskip}
-CLASSE INSTANCE
-\vspace{2\baselineskip}
+\subsection*{CLASSE INSTANCE}
 
 La classe Instance è stata creata per memorizzare tutti i dati caratterizzanti l'istanza del problema del Commesso Viaggiatore. La tabella sottostante fornisce un elenco di variabili ed array definite all'interno della classe assieme ad una loro breve descrizione. 
 
@@ -317,11 +390,7 @@ for (int i = 0; i < inst.NNodes; i++)
     Console.WriteLine("Point #" + (i + 1) + "= (" + inst.Coord[i].X + "," + inst.Coord[i].Y + ")");
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-
-CLASSE PROGRAM
-
-\vspace{2\baselineskip}
+\subsection*{CLASSE PROGRAM}
 
 La classe Program contiene il metodo Main che, come noto, rappresenta il punto di inizio del programma: attraverso le funzionalità di Visual Studio esso riceve in input l'array \textbf{argv} di stringhe contenente i parametri di input forniti dall'utente come il nome del file contenente l'input ed il time limit per la sua risoluzione. Appartengono a questa classe anche i metodi \textbf{ParseInst} e \textbf{Populate}: rispettivamente forniscono il parser per \textbf{argv} ed il parser del file di ingresso indicato con conseguente inizializzazione delle coordinate dei nodi. Firma e implementazione di tali metodi è rimandata al successivo capitolo.\\
 All'interno del metodo \textbf{Main} vengono eseguite in ordine le seguenti attività:
@@ -346,9 +415,7 @@ In tutto il nostro progetto si è cercato di utilizzare il minor numero possibil
     \end{tabular}
 \end{center}
 
-\vspace{2\baselineskip}
-CLASSE TSP
-\vspace{2\baselineskip}
+\subsection*{CLASSE TSP}
 
 La classe \textbf{TSP} è stata pensata come il cuore del programma in quanto lo scheletro di tutti i metodi di risoluzione implementatisi trova al suo interno. Contiene un unico metodo pubblico che rappresenta quindi l'unico entry point per utilizzare questa classe: \textbf{TSPOpt}.
 
@@ -360,15 +427,57 @@ Come già specificato nella descrizione della classe Program, TSPOpt è invocato
 TSPOpt si preoccupa di istanziare i vari elementi utilizzati da tutti i metodi di risoluzione\footnote{Fatta eccezione per l'UserCutCallBack che è gestita esternamente da una DLL}, fornire all'utente un'interfaccia grafica che gli permetta di scegliere quale di questi ultimi voglia utilizzare e di conseguenza invoca il metodo privato della classe associato alla scelta effettuata.\\
 Entrando nello specifico per quanto riguarda gli elementi inizializzati troviamo un oggetto della classe \textbf{Cplex} che come già accennato in precedenza ci permetterà di stabilire una connessione con il programma Cplex ed utilizzarlo per la risoluzione del modello matematico, ed un oggetto \textbf{Process} che sostanzialmente viene da noi utilizzato per inizializzare e comunicare con il programma \textbf{GNUPlot}\footnote{Per maggiori dettagli si veda la sezione dedicata a GNUPlot}.
 
-\vspace{2\baselineskip}
-CLASSE UTILITY
-\vspace{2\baselineskip}
+\subsection*{CLASSE UTILITY}
 
 La classe Utility può essere considerata come una libreria: contiene al suo interno solamente metodi \textbf{statici} che si è deciso di raggruppare al suo interno per rendere il codice il più compatto e leggibile possibile.
 
-\vspace{2\baselineskip}
-INTERPRETAZIONE FILE DI INPUT
-\vspace{2\baselineskip}
+\subsection{CLASSE PATHGENETIC}
+
+La classe \textbf{PathGenetic} utilizzata per memorizzare i dati di una soluzione generica, estende \textbf{PathStandard} già discussa nel paragrafo X.Y. aggiungendo due campi utili solamente per gli algoritmi genetici: il primo di tipo \textit{double} memorizza la fitness associata alla soluzione, il secondo di tipo intero identifica il circuito all'atto dell'estrazione dei percorsi che formeranno la generazione successiva\footnote{I suddetti parametri prendono nome \textbf{fittness} e \textbf{nRoulette}}.
+La classe è dotata del metodo privato \textbf{CalculateFitness} il quale semplicemente setta la variabile fitness come descritto in precedenza:
+
+
+\begin{lstlisting}
+
+private void CalculateFitness()
+{
+fitness = 1 / cost;
+}
+
+\end{lstlisting}
+
+La variabile \textbf{cost} e l’array \textbf{path} sono ereditati da PathStandard e vengono settati utilizzando uno dei tre costruttori a disposizione
+
+\begin{lstlisting}
+
+public PathGenetic(int[] path, double cost) : base()
+{
+this.path = path;
+this.cost = cost;
+CalculateFitness();
+nRoulette = -1;
+}
+
+public PathGenetic(int[] path, Instance inst) : base(path, inst)
+{
+CalculateFitness();
+nRoulette = -1;
+}
+
+
+public PathGenetic(): base()
+{
+fitness = -1;
+nRoulette = -1;
+}
+
+ANDREBBE UN COMMENTINO SU OGNUNO
+
+\end{lstlisting}
+
+\section*{SEZIONE TRE}
+
+\subsection*{LETTURA INPUT FILE}
 
 Lo sviluppo del programma è iniziato realizzando una opportuna funzione per interpretare correttamente i parametri di ingresso forniti dall'utente. Oltre al nome del file di testo contenente i dati relativi  all'istanza del problema che si vuole risolvere, all'utente è richiesto di fornite un time limit(espresso in secondi) e di scegliere con quale algoritmo risolvere l'istanza da esso fornita. Si è deciso di ricevere da riga di comando il nome del file e il time limit; per quanto riguarda la scelta dell'algoritmo risolutore ed eventuali parametri da esso richiesti si è preferito realizzare una semplice interfaccia grafica per favorire l'utente. 
 Visual Studio, all'interno delle proprietà del progetto, permette di definire una stringa come parametro di ingresso per il programma. Questa viene automaticamente separata in sottostringhe utilizzando come separatore il carattere di spazio e fornito in ingresso al metodo Main. Allo stato attutale è gestita solamente la possibilità di fornire in ingresso il nome del file contenente i dati ed il timelimit per la ricerca della soluzione. Per ottenere una migliore organizzazione e chiarezza per il nostro lavoro è stato deciso di utilizzare questa regola per la costruzione della stringa di ingresso: ogni parametro inseritovi deve essere preceduto da una parola chiave che lo identifica il cui primo carattere deve essere '-'. Questa tecnica si rileverà utile anche in futuro nel caso si decidesse di ampliare la lista di parametri di ingresso.\\
@@ -415,10 +524,7 @@ if (inst.InputFile == null || inst.TimeLimit == 0)
 
 \end{lstlisting}
 
-
-\vspace{2\baselineskip}
-METODO POPULATE
-\vspace{2\baselineskip}
+\subsection*{METODO POPULATE}
 
 Il metodo Populate è utilizzato per la lettura dei dati contenuti all'interno del file di input e soprattutto alla loro memorizzazione all'interno di un oggetto di tipo \textbf{Instance} in modo tale che una volta conclusosi il metodo questo contenga tutte le informazioni necessarie per la creazione del modello matematico.\\
 I file di input presenta una struttura pressoché identica tra loro e cioè una divisione in sezioni identificate da parole chiave. Fatta eccezione per la sezione che descrive le coordinate dei nodi, tutte le altre si sviluppano in una sola riga la cui struttura è del tipo:
@@ -600,16 +706,12 @@ dove:
     \item \textbf{newValue}: stringa con cui sostituire tutte le occorrenze di oldValue.
 \end{itemize}
 
-\vspace{2\baselineskip}
-COSTRUZIONE DEL MODELLO
-\vspace{2\baselineskip}
+\section*{SEZIONE QUATTRO}
 
 In questo paragrafo vedremo come è possibile creare da programma un modello matematico attraverso l'uso di alcune routine appartenenti alla libreria di Cplex. Esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di Cplex da iterativo.
 
 
-\vspace{2\baselineskip}
-COSTRUZIONE MODELLO IN C
-\vspace{2\baselineskip}
+\subsection*{COSTRUZIONE MODELLO IN LINGUAGGIO C}
 
 Per istanziare un nuovo modello di programmazione lineare è necessario inizializzare un \textbf{environment} di Cplex utilizzando la funzione \textbf{CPXopenCPLEX} la quale ritorna un puntatore all'environment creato, la firma di tale funzione è:
 
@@ -735,9 +837,7 @@ dove:
 
 Anche in questo caso anzichè aggiungere tutti i vincoli in una singola iterazione, risulta più semplice aggiungere un vincolo per volta invocando il metodo tante volte quante sono i vincoli da aggiungere.
 
-\vspace{2\baselineskip}
-COSTRUZIONE E RISOLUZIONE DEL MODELLO MATEMATICO IN C\#
-\vspace{2\baselineskip}
+\subsection*{COSTRUZIONE E RISOLUZIONE DEL MODELLO MATEMATICO IN C\#}
 
 Per poter creare un modello matematico in Cplex, utilizzando come linguaggio di programmazione C\# è necessario creare inizialmente una istanza della classe \textbf{Cplex}:
 
@@ -909,10 +1009,9 @@ dove:
 Qui bisogna aprire un capitolo nuovo con una breve introduzione, dire che si passa ora ad esporre i metodi utilizzati per gestire i vincoli di subtour elimination
 ------------------------------------------------------------------
 
+\section*{SEZIONE CINQUE}
 
-\vspace{2\baselineskip}
-METODO LOOP
-\vspace{2\baselineskip}
+\subsection*{METODO LOOP}
 
 Il primo metodo sperimentato prende il nome di \textbf{LOOP}.
 -------------------------------------------------------------
@@ -942,9 +1041,7 @@ for (int i = 0; i < rcExpr.Count; i++)
               
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-METODI UpdateCC e InitCC
-\vspace{2\baselineskip}
+\subsection*{METODI UpdateCC e InitCC}
 
 Come già specificato nella sezione riguardo il metodo \textbf{LOOP} questi due metodi di supporto appartenenti alla classe \textbf{Utility} hanno il compito di individuare tutte le componenti connesse (che da ora in avanti abbrevieremo con \textbf{cc}) di una generica soluzione proposta.\\
 Prima di passare alla implementazione vera e propria introduciamoli ad alto livello: inizialmente si vuole assumere l'esistenza di $n$ \textbf{cc} distinte, ognuna di esse contenente un nodo della soluzione. Questo è il compito della dalla funzione \textbf{InitCC}.\\
@@ -1065,10 +1162,7 @@ else
 
 Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente ci assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per implementare i subtour elimination desiderati.
 
-
-\vspace{2\baselineskip} 
-METODO LOOP CON PRIMA FASE EURISTICA
-\vspace{2\baselineskip}
+\subsection*{METODO LOOP CON PRIMA FASE EURISTICA}
 
 Il metodo Loop, indipendente dalla implementazione che si decide di utilizzare, vuole essere un algoritmo esatto. In altre parole è necessario assicurarsi che il risultato finale da esso prodotto sia \textbf{sempre} il migliore possibile. Come vedremo nei paragrafi successivi, sono stati pensati molteplici algoritmi, detti euristici, che al contrario cercano solamente di avvicinarsi al risultato ottimo limitando al contempo i loro tempi di esecuzione.
 \'E infatti quest'ultimo fattore a risultare cruciale per molti problemi di programmazione lineare, a maggior ragione per quelli che, come il \textit{commesso viaggiatore}, vogliono studiare situazioni \textbf{np-difficili}\footnote{In letteratura è noto infatti che i problemi appartenenti a quest'ultima categoria sono caratterizzati da tempi di risoluzione, al caso peggiore, esponenziali rispetto al numero di variabili che li caratterizzano. Nel caso in cui siano definiti nel tipico linguaggio della programmazione lineare, la caratteristica appena esposta è riscontrabile da un numero di vincoli anch'esso esponenziale.}.
@@ -1086,9 +1180,7 @@ Esistono innumerevoli modi per rendere euristico il metodo \textbf{Loop}, possia
 
 Nei due paragrafi successivi vengono mostrati alcuni dettagli, tra cui quelli realizzativi, per l'utilizzo delle varianti euristiche esposte del metodo \textbf{Loop}.
 
-\vspace{2\baselineskip}
-EpGap
-\vspace{2\baselineskip}
+\subsection*{EpGap}
 
 EpGap risulta essere un parametro interno di Cplex, il cui valore di default è $1e^{-06}$. Indicando con \textbf{bestnode} il miglior valore della funzione obiettivo calcolata ad un nodo dell'albero decisionale attraverso metodi euristici propri di Cplex, e con \textbf{bestInteger} il costo della miglior soluzione intera trovata fino a quel momento, ossia il costo dell'incumbent, qualora la seguente quantità:
 
@@ -1108,21 +1200,24 @@ Essendo \textit{EpGap} un valore di distanza \textbf{relativo} e non \textbf{ass
 
 Completato il settaggio di \textit{EpGap} è sufficiente procedere con il normale metodo risolutivo \textbf{Loop}. Al termine di quest'ultimo otteniamo una soluzione euristica ma soprattutto un insieme di vincoli di \textit{subtour elimination}. Entriamo quindi nella fase \textit{esatta} dell'algoritmo riportando al valore di default \textit{EpGap} e ripetiamo il metodo risolutivo \textbf{Loop} sul modello matematico originale ampliato dai nuovi vincoli appena citati.
 
-\begin{center}
-\includegraphics[scale=0.5]{InterfacciaGrafica}
-Figura X: Output
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"InterfacciaGrafica".jpg}
+    \caption{Output}
+\end{figure}
 
-\vspace{2\baselineskip}
-TITOLO DA CAMBIARE
-\vspace{2\baselineskip}
+\subsection*{TITOLO DA CAMBIARE}
 
-Nel paragrafo LINK!!!!!!!!!!!!!!!, è stato presentato il metodo \textbf{BuildModel} della classe \textbf{Utility} il cui compito è di creare il modello matematico, privo dei vincoli di subtour elimination, risolubile da Cplex. Durante la presentazione della sua firma, era stato lasciato in sospeso l'utilizzo del parametro \textit{nEdges} in quanto allora del tutto prematura. 
+Nel paragrafo LINK!!!!!!!!!!!!!!!, è stato presentato il metodo \textbf{BuildModel} della classe \textbf{Utility} il cui compito è di creare il modello matematico, privo dei vincoli di subtour elimination, risolubile da Cplex. Durante la presentazione della sua firma, era stato lasciato in sospeso l'utilizzo del parametro \textit{nEdges} in quanto allora del tutto prematura.
+
 Come specificato nel paragrafo LINK!!!!!!!!!! una variante euristica del metodo \textbf{Loop}, prevede di utilizzare solamente un numero massimo $m$ di lati incidenti in ogni nodo del problema in questione del commesso viaggiatore. Tale parametro è inoltre richiesto all'utente per i motivi già specificati e viene comunicato al metodo \textbf{BuildModel} proprio grazie alla variabile di ingresso \textbf{nEdges}\footnote{Come dettaglio implementativo specifichiamo inoltre che per convenzione si è deciso di settare $nEdges = -1$ nel caso in cui si voglia coistruire un modello con tutti i lati possibili abilitati}.
 
 A livello implementativo, per rendere inutilizzabili certi collegamenti, è sufficiente non inserirli nel modello matematico oppure farlo ma fissandone sia il \textbf{lower} che l'\textbf{upper bound} a 0. Quest'ultima opzione è quella più comoda da utilizzare in quanto nella successiva fase \textit{esatta} dell'algoritmo il modello matematico deve comunque aver disponibili al suo interno tutte le variabili.
-L'individuazione algoritmica di quali collegamenti debbano essere abilitati risulta l'operazione più complessa da un punto di vista computazione. Come vedremo nel corso di questa tesi, diversi algoritmi necessitano di conoscere per ogni nodo l'ordinamento completo dei lati ad esso incidenti basato sul loro costo e per tanto si è definita una unica funzione \textbf{BuildSL} adibita a tale scopo\footnote{In realtà il costo computazionale per trovare gli $m$ lati meno costosi incidenti in un nodo, ripetuto per tutti gli $n$ nodi disponibili, è il medesimo del metodo \textit{BuildSL} e quindi l'utilizzo di quest'ultimo non porta alcuno svantaggio.}. la quale 
-I dettagli riguardanti al metodo \textbf{BuildSL} sono riportati al seguente paragrafo della appendice LINK!!!!!!!!!!!!!!!, in questo contesto ci basta indicare che essa restituisce una lista di vettori di interi, chiamata \textbf{listArray}, in cui $i-esimo$ elemento contiene, in ordine crescente, la sequenza dei restanti $n-1$ vertici basandosi sulla loro distanza rispetto al nodo $i$. In altre parole, una volta invocato \textit{BuildSL}, i lati il cui \textbf{upper bound} deve essere posto pari ad $1$ sono individuabili dagli estremi \[0,(listArray[0])[0]\], \[0,(listArray[0])[1]\], ..., \[0,(listArray[0])[m]\], ..., \[i,(listArray[i])[0]\], ..., \[i,(listArray[i])[m]\], ..., \[n-1,(listArray[n-1])[0]\], ..., \[n-1,(listArray[n-1])[m]\].
+
+L'individuazione algoritmica di quali collegamenti debbano essere abilitati risulta l'operazione più complessa da un punto di vista computazionale. Come vedremo nel corso di questa tesi, diversi algoritmi necessitano di conoscere per ogni nodo l'ordinamento completo dei lati ad esso incidenti basato sul loro costo e per tanto si è definita una unica funzione \textbf{BuildSL} adibita a tale scopo\footnote{In realtà il costo computazionale per trovare gli $m$ lati meno costosi incidenti in un nodo, ripetuto per tutti gli $n$ nodi disponibili, è il medesimo del metodo \textit{BuildSL} e quindi l'utilizzo di quest'ultimo non porta alcuno svantaggio.}.
+
+I dettagli riguardanti al metodo \textbf{BuildSL} sono riportati al seguente paragrafo della appendice LINK!!!!!!!!!!!!!!!, in questo contesto ci basta indicare che essa restituisce una lista di vettori di interi, chiamata \textbf{listArray}, in cui $i-esimo$ elemento contiene, in ordine crescente, la sequenza dei restanti $n-1$ vertici basandosi sulla loro distanza rispetto al nodo $i$. In altre parole, una volta invocato \textit{BuildSL}, i lati il cui \textbf{upper bound} deve essere posto pari ad $1$ sono individuabili dagli estremi $[0,(listArray[0])[0]], [0,(listArray[0])[1]], ..., [0,(listArray[0])[m]], ..., [i,(listArray[i])[0]], ..., [i,(listArray[i])[m]], ..., [n-1,(listArray[n-1])[0]], ..., [n-1,(listArray[n-1])[m]]$.
+
 Di seguito è riportato per completezza il codice all'interno della funzione \textbf{BuildModel} che nel caso di $nEdges \geqslant 1$ sfrutta le informazioni presenti in \textit{listArray} per il settaggio delle variabili del modello matematico:
 
 \begin{lstlisting}
@@ -1186,10 +1281,7 @@ public static void ResetVariables(INumVar[] x)
 
 Dove chiaramente \textbf{x} è il vettore contenente i riferimenti alle variabili utilizzate dal modello matematico da noi definito.
 
-
-\vspace{2\baselineskip}
-CALLBACK
-\vspace{2\baselineskip}
+\section*{SEZIONE SEI}
 
 In questa sezione esponiamo una tecnica alternativa per l'inserimento delle espressioni di subtour elimination all'interno di un sistema. Ciò che varia rispetto al metodo \textbf{Loop} presentato in precedenza è il \textbf{momento} in cui tali espressioni vengono definite.\\
 L'idea è di sfruttare il fatto che Cplex come metodo di risoluzione per i problemi di \textbf{PLI} utilizza la tecnica del \textbf{Branch\&Cut}\footnote{Da ora in avanti sarà abbreviato con la sigla \textbf{B\&C}}. Viene inoltre offerta la possibilità di conoscere la soluzione trovata, sia essa frazionaria o intera, per ogni nodo dell'albero decisione ma soprattuto la possibilità di ampliare il modello matematico come meglio crediamo.\\
@@ -1197,11 +1289,11 @@ Quello che vogliamo fare risulta a questo punto molto chiaro: se alla analisi de
 A livello pratico Cplex permette l'implementazione distinta di callback che vengono eseguite nel momento in cui viene trovata una soluzione intera oppure frazionaria\footnote{In informatica una callback è una funzione definita dall'utente che viene eseguita in automatico dal sistema ogniqualvolta scatta un particolare evento.}: nel primo caso è necessario implementare una \textbf{"lazy constraint callback"} mentre nel secondo caso una \textbf{"user cut callback"}. Da notare che in realtà solo soluzioni valide per i criteri di fathoming possono far scattare una callback, ciò non avviene ad esempio se il valore della soluzione di un nodo risulta maggiore rispetto a quello dell'incumbent\footnote{Per incumbent si intende il valore migliore trovato fino a questo momento relativo ad un soluzione accettabile.}.\\
 In generale i tagli possono essere definiti \textbf{locali} o \textbf{globali}: mentre i primi hanno validità esclusiva all'interno del sottoalbero avente come radice il nodo per la quale sono stati generati, i secondi hanno validità per tutti i nodi dell'albero decisionale e vengono memorizzati in una struttura globale detta \textbf{pool di tagli}. Cplex inoltre fornisce la possibilità di definire un taglio \textbf{purgeable} o meno: nel primo caso significa che può essere rimosso in un secondo momento poiché ritenuto inefficace. Durante il proseguo della tesi i tagli saranno da considerarsi sempre globali e non purgeable.
 
-\begin{center}
-    \includegraphics[scale=0.5]{Callback}  
-    
-    Figura 3: Soluzione frazionaria
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"Callback".jpg}
+    \caption{Soluzione frazionaria}
+\end{figure}
 
 Prima di procedere con l'esposizione dei dattagli riguardanti l'implementare di tali procedure, è possibile effettuare le seguenti considerazioni:\\
 
@@ -1213,11 +1305,7 @@ Prima di procedere con l'esposizione dei dattagli riguardanti l'implementare di 
     Per evitare queste problematiche, i progettisti di Cplex hanno preferito settare il numero di thread al valore \textbf{1} dopo l' installazione di una callback. \'E quindi nostro compito modificare tale parametro così da renderlo pari al numero di processori virtuali a nostra disposizione e di conseguenza assicurarci che le callback risultino \textbf{thread-safe}. Maggiori dettagli sono riportati nei successivi paragrafi.
 \end{itemize}
 
-
-\vspace{2\baselineskip}
-LAZYCONSTRAINT CALLBACK C\#
-\vspace{2\baselineskip}
-
+\subsection*{LAZYCONSTRAINT CALLBACK C\#}
 
 Per poter utilizzare una \textbf{lazy constraint callback} in \textbf{C\#} Cplex fornisce all'interno delle proprie librerie la classe astratta \textbf{LazyConstraintCallback} che a sua volta estende \textbf{ControlCallback}. \'E quindi necessario creare una propria classe che estenda quest'ultima, nel nostro caso è stato deciso di chiamarla \textbf{TSPLazyConsCallback}, in questo modo è necessario definire al suo interno il metodo \textbf{Main} che verrà invocato automaticamente dal sistema ogniqualvolta scatta la callback\footnote{Rocordiamo che tutti i metodi astratti presenti all'interno di una classe astratta devono essere obbligatoriamente definiti da tutte le classi che estendono quest'ultima}.\\
 Una volta terminato questo processo l'installazione della callback viene eseguita nel seguente modo:
@@ -1305,10 +1393,7 @@ Dove:
 
 \end{itemize}
 
-
-\vspace{2\baselineskip}
-CONCORDE
-\vspace{2\baselineskip}
+\subsection*{CONCORDE}
 
 L'utilizzo di una \textbf{user cut callback} risulta molto più complicato rispetto a quanto appena visto per la \textbf{lazy constraint callback}: dato che tali callback scattano nel momento in cui viene trovata una soluzione frazionaria, l'individuazione di eventuali subtour non può essere eseguita con le tecniche esposte fino ad ora.\\
 Per effetturare tale operazione si necessita di un separatore che, ricevendo in ingresso la soluzione x* con almeno una componente frazionaria, fornisca in uscita un insieme $S\subsetneq{V}$, $|S|\geq{2}$ tale per cui:
@@ -1319,11 +1404,11 @@ Per effetturare tale operazione si necessita di un separatore che, ricevendo in 
 
 Tale sottoinsieme non è facilmente individuabile come nel caso di soluzione intere in cui era sufficiente individuare le componenti connesse. Per esempio in Figura 3 si è riportato il supporto di una soluzione x* frazionaria ove i lati colorati di rosso, blu e grigio indicano che la corrispondente variabile assumme rispettivamente i valori 1, 0.5 , 1.5.
 
-\begin{center}
-    \includegraphics[scale=0.5]{SoluzioneFrazionaria}  
-    
-    Figura 3: Soluzione frazionaria
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"SoluzioneFrazionaria".jpg}
+    \caption{Soluzione frazionaria}
+\end{figure}
 
 Tale grafo risulta connesso; tuttavia è presente un sottoinsieme S = {1,2,3} per cui vale \eqref{eq:concorde1}.\\
 Una seconda formulazione equivalente alla \eqref{eq:concorde1} risulta essere la seguente:
@@ -1367,10 +1452,7 @@ Dove affinché il programma compili correttamente, è necessario effettuare le s
     \item All' interno del file \textbf{machdefs.h} è necessario eliminare l'inclusione di \textbf{config.h}.
 \end{itemize}
 
-\vspace{2\baselineskip}
-LAZYCONSTRAINTCALLBACK IN C
-\vspace{2\baselineskip}
-
+\subsection*{LAZYCONSTRAINTCALLBACK IN C}
 
 In questa mostreremo solamente i dettagli per l'installazione e l'utilizzo delle \textbf{lazyconstraint callback} in linguaggio \textbf{C} in quanto un discorso più ampio è stato precedentemente in LINK!!!!!!!!!.
 L'installazione di questo tipo di callback avviene attraverso l'invocazione della routine \textbf{CPXsetlazyconstraintcallbackfunc} la cui firma è:
@@ -1465,9 +1547,7 @@ Questa operazione risulta necessaria al fine di realizzare un codice che risulti
 A questo punto entra in gioco Concorde per l'individuazione e l'introduzione dei vincoli di subtour elination, dato che il metodo da utilizzare è il medesimo che vedremo per le \textit{usercut callback} rimandiamo al paragrafo seguente per maggiori dettagli.
 Una volta completato tale passaggio non rimane altro che impostare il parametro \textbf{*useraction\_p} al valore \textbf{CPX\_CALLBACK\_SET} al fine di comunicare a Cplex che sono stati aggiunti tagli.
 
-\vspace{2\baselineskip}
-USERCUT CALLBACK IN C
-\vspace{2\baselineskip}
+\subsection*{USERCUT CALLBACK IN C}
 
 Come già anticipato nei precedenti paragrafi questo tipo di callback sono utilizzate per gestire soluzioni frazionarie ottenute per i vari nodidell'albero decisionale durante una risoluzione di tipo \textit{B\&C} per problemi di programmazione lineare da parte di Cplex. A livello concettuale sono del tutto simili a quanto visto nel paragrafo precedente per le \textit{lazy callback} in linguaggio \textbf{C}, è raccomandata una lettura del paragrafo precedente a loro dedicato in quanto di seguito saranno esposti estensivamente solamente i dettagli riguardanti la gestione dei tagli.\footnote{Notiamo in realtà che l'implementazione delle \textit{usercut callback} avviene sempre in concomitanza all'implementazione delle \textit{lazy callback} per tanto il settaggio del numero di thread è necessario solamente una volta}.
 
@@ -1741,54 +1821,37 @@ return 0;
 
 \end{lstlisting}
 
-
-\vspace{2\baselineskip}
-INTRODUZIONE ALGORITMI EURISTICI
-\vspace{2\baselineskip}
+\section*{SEZIONE 7}
 
 Fino a questo momento sono stati presentati algoritmi che, alla loro naturale terminazione, garantiscono di risolvere una generica istanza del problema del commesso viaggiatore in modo esatto, ovvero restituendo sempre un ottimo globale come soluzione.
 L'applicazione di metodi esatti non è sempre possibile per due motivi principali: il primo è che si necessita di un programma di calcolo molto potente ed in genere costoso come può essere \textbf{Cplex}, in secondo luogo, quando si procede all'analisi di problemi \textbf{NP-hard}, indipendentemente da quali accorgimenti introduciamo, non è mai garantito di trovare la soluzione migliore in tempi relativamente brevi.
 Per tali ragioni, nelle applicazioni reali, capita spesso che l'unica strada percorribile sia il ricorrere a metodi \textit{non esatti}, che, come abbiamo già potuto vedere nelle varianti del metodo \textbf{Loop} presentate, prendono il nome di algoritmi euristici: la soluzione che offrono sarà sempre ammissibile ma non viene garantità la sua ottimilità, al contrario nella maggior parte dei casi, soprattutto per istanze complesse, questa non viene quasi mai raggiunta. \'E inoltre tenere ben presente che esistono molteplici algoritmi euristici più o meno potenti, essendo inoltre tecniche non esatte, è possibile trovarne infinite varianti per ognuno di essi. In generale, come meglio vedremo nel seguito del testo, possiamo classificarli in \textbf{costruttivi}, \textbf{migliorativi}, \textbf{metaeuristici} e \textbf{matheuristics}.
 Quanto esposto fino ad ora ci porta intuitivamente a pensare che la bontà di un metodo proposto può subire enormi variazioni in base a quali istanze su cui viene applicato.
 
-
------------------------------------------------------------------------------------------------------------------------------
-Gli euristici costruttivi determinano (costruiscono) una soluzione ammissibile per passi partendo inizialmente da una soluzione vuota. Ad ogni iterazione selezionano in modo iterativo nuovi elementi da aggiungere alla soluzione parziale corrente sino ad arrivare ad una soluzione completa (criterio di espansione). Gli euristici migliorativi, invece, a partire da una soluzione ammissibile, cercano possibili soluzioni ammissibili migliori in termini di funzione obbiettivo apportando "piccole" modifiche alla soluzione data.
-Spesso algoritmi che appartengono a queste due classi di euristici vengono utilizzati in sequenza: si ricorre ad un euristico costruttivo per generare una soluzione ammissibile e successivamente si tenta di migliorarla attraverso l' utilizzo di un euristico di miglioramento.
-Poiché la soluzione prodotta dai metodi di miglioramento spesso risulta essere un ottimo locale, si concluderà il capitolo con la presentazione di algoritmi metaeuristici i quali sono stati sviluppati per "sfuggire" in maniera "intelligente" dai minimi locali al fine di calcolare soluzioni migliori.
-TOGLIERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
------------------------------------------------------------------------------------------------------------------------------
-
-
-\vspace{2\baselineskip}
-ALGORITMI COSTRUTTIVI GREEDY
-\vspace{2\baselineskip}
+\subsection*{ALGORITMI COSTRUTTIVI GREEDY}
 
 Gli algoritmi costruttivi hanno la caratteristica di determinare una soluzione ammissibile partendo da una \textit{vuota}. Quest'ultima, durante tutto il corso dell'agoritmo, seguendo il criterio di espansione, viene continuamente aggiornata ed ampliata attraverso l'introduzione di nuove componenti fintanto che non diviene completa e quindi ammissibile.
 Una sottocategoria molto importante degli algoritmi costruttivi viene definita come \textbf{greedy}: la soluzione euristica al problema è ottenuta attraverso una sequenza \textit{finita} di decisioni "localmente ottime". In altre parole, attraverso una struttura ricorsiva, ad ogni sua iterazione, la soluzione parziale viene aggiornata con l'aggiunta dell'elemento migliore disponibile in quel momento. La correttezza di queste operazione non deve però mai essere verificata runtime dell'algoritmo ma solamente a livello teorico durante la sua fase di progettazione. |'E proprio questa caratteristica che motiva il nome \textit{greedy} e soprattutto rende tali algoritmi estremamente velociti.
 
-
-\begin{center}
-\includegraphics[scale=0.5]{ProceduraGreedy}
-
-Figura X: Algoritmo Greedy
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"ProceduraGreedy".jpg}
+    \caption{Algoritmo Greedy}
+\end{figure}
 
 Nella procedura, \textbf{S} è l'insieme degli elementi di \textbf{E} che sono stati inseriti nella soluzione parziale corrente mentre \textbf{Q} è l'insieme degli elementi appartenenti ad \textbf{E} ancora da esaminare.
 La procedura fa uso della sottoprocedura \textbf{Best} la quale fornisce il miglior elemento di \textbf{E} tra quelli ancora in \textbf{Q} sulla base di un prefissato criterio euristico.
 Come esempio della categoria di algoritmi euristici costruttivi greedy presentiamo nel paragrafo seguente la tecnica del \textbf{nearest neighbour}.
 
-\vspace{2\baselineskip}
-ALGORITMO NEAREST NEIGHBOUR
-\vspace{2\baselineskip}
+\subsection*{ALGORITMO NEAREST NEIGHBOUR}
 
 L'algoritmo \textbf{nearest neighbour} è stato uno dei primi algoritmi utilizzati per risolvere istanze del problema del commesso viaggiatore. La sua dimostrazione di correttezza non viene qui riportata in quanto non risulta di interesse ai fine del nostro progetto ed è inoltre ampiamente discussa in letteratura. Limitiamoci quindi ad una descrizione del concetto fondamentale alla base dell'algoritmo: dato un qualsiasi percorso (soluzione) parziale, il modo migliore per ampliarlo è banalmente attraverso l'aggiunta di un nuovo arco a costo \textbf{minore} avente come estremi uno dei due nodi liberi\footnote{Nodi attraversati del percorso parziale ma aventi un solo lato incidente.} del percorso stesso mentre il secondo sia uno ancora disponibile\footnote{Non ancora attraversato dal circuito parziale.}.
 
-\begin{center}
-\includegraphics[scale=0.5]{ng}
-
-Figura X:Esempio di algoritmo Nearest Neighbour
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"ng".jpg}
+    \caption{Esempio di algoritmo Nearest Neighbour}
+\end{figure}
 
 Entriamo ora più nel dettaglio nella realizzazione di questo algoritmo descrivendone i passaggi fondamentali. Noteremo che sono state fatte delle scelte di programmazione che in un primo momento potrebbero apparire inmotivate se considerate limitatamente a qanto visto fino ad ora.
 L'algoritmo preso in analisi produce una soluzione valida molto velocemente ma che risulta essere scadente per quanto riguarda il suo costo, nel nostro progetto di conseguenza il \textit{nearest neighbour} viene unicamente utilizzato per fornire una o più soluzioni di partenza per altri algoritmi euristici. Risulta pertanto di maggior importanza che al suo interno sia introdotta una certa randomicità nelle scelte che effettua in modo tale che multipli utilizzi sulla stessa instanza del TSP producano soluzioni tra loro scorrelate. Algoritmi che presentano tale caratteristica possono essere trovati in letteratura con la dicitura \textbf{GRASP}\footnote{Greedy Randomly Adaptive Search Procedure.}
@@ -1858,9 +1921,7 @@ public static PathGenetic NearestNeighbour(Instance instance, Random rnd, List<i
 
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-ALGORITMI MIGLIORATIVI
-\vspace{2\baselineskip}
+\subsection*{ALGORITMI MIGLIORATIVI}
 
 Gli algoritmi euristici migliorativi si basano su un'idea estremamente semplice ed intuitiva: data una soluzione ammissibile \textbf{x}, relativa ad un problema di ottimizzazione, viene esaminato se attraverso minime variazioni questa risulta migliorabile in termini di funzione obiettivo.
 In gergo più tecnico si parla di ricercare soluzioni \textit{vicine} a quella attuale ma migliorative. Per poter definire il concetto di "vicinanza" è necessario discutere quello di \textbf{mossa}. Questa è una operazione di modifica (caratteristica dell'algoritmo migliorativo) che viene eseguita su \textbf{x} e che ha come conseguenza la generazione di un \textbf{insieme} di soluzioni ammissibili le quali costituiscono un intorno di \textbf{x}, indicato con \textbf{N(x)}. Si parla allora di \textbf{y} vicina ad \textbf{x} se e solo se differiscono tra loro per una sola mossa e quindi $y \in N(x)$.
@@ -1873,30 +1934,25 @@ Tranne alcuni casi particolari in cui la funzione obiettivo ha determinate carat
 
 Tra i più famosi algoritmi migliorativi applicabili al problema del commesso viaggiatore troviamo i \textbf{K-Opt} dove \textbf{K} è in genere un numero intero superiore a $2$. Procediamo quindi ad una loro descrizione generale seguita da una implementazione particolare della tecnica del \textbf{2-Opt}.
 
-\vspace{2\baselineskip}
-ALGORITMO K-OPT
-\vspace{2\baselineskip}
+\subsection*{ALGORITMO K-OPT}
 
 Gli algoritmi \textbf{K-Opt}, sigla inglese per K-Ottimalità, fanno parte della categoria degli algoritmi migliorativi e sono caratterizzati da una mossa, applicata ad un circuito hamiltoniano, consistente nello \textbf{scambio} di \textbf{K} archi con altrettanti non facenti parte del percorso producendone uno \textit{vicino}, migliore e chiaramente valido.
 Come specificato nel paragrafo precedente \textbf{K} può assumere qualsiasi valore superiore a $2$\footnote{Chiaramente \textbf{K} non può superare il numero di archi che costituiscono la soluzione.} ma in genere è proprio $K = 2$ l'unica variante realmente utilizzata. Risulta infatti facilmente verificabile che più il suo valore è alto, più salgono sia la complessità computazione che di scrittura\\progettazione dell'algoritmo\footnote{Vedremo in seguito che questa affermazione è valida solo per algoritmi che applicano direttamente la definizione di K-Ottimalità. Esistono infatti metodi che la ottengono indirettamente se sono caratterizzati da tempi di esecuzione molto buoni.} perdendo così i vantaggi offerti dall'utilizzo di tecniche euristiche.
 Concentriamoci quindi unicamente nella variante $2-Opt$: presa una qualsiasi coppia di archi distinti $([i,j];[h,k])$\footnote{Notiamo che questi non possono mai essere presi consecutivi e cioè con un vertice in comune in quanto non ci sarebbe modo di produrre una soluzione \textit{vicina} valida.} è possibile sostituirli correttamente con una sola delle combinazioni $([i,k];[h,j])$ e $([i,h];[j,k])$. Una di queste due, infatti, trasforma la soluzione in una seconda contenente due subtour.
 A discapito quindi di un concetto molto basilare, l'algoritmo $2-opt$\footnote{In generale lo stesso discorso può applicarsi anche a tutto il resto della famiglia di algoritmi.} introduce la difficoltà di verificare quale delle due possibili sostituzioni è valida. L'approccio migliore in questi casi è di introdurre un fittizio ordinamento nel circuito attraverso una struttura dati di supporto apposita. Come è possibile infatti vedere dalla figura X, se gli archi sono ordinati, e quindi lo è anche il circuito, la difficoltà appena discussa è facilmente risolvibile: 
 
-\begin{center}
-\includegraphics[scale=0.5]{2-opt}
-
-Figura X:Esempio di azione nell'algoritmo 2-opt
-
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"2-opt".png}
+    \caption{Esempio di azione nell'algoritmo 2-opt}
+\end{figure}
 
 Viene da sé che applicare l'approccio $2-Opt$ a qualsiasi coppia di archi non garantisce un miglioramento del costo della soluzione. Questo però avviene nel $100\%$ dei casi se i due archi in questione visualmente si incrociano come mostrato nella figura X, tale affermazione è facilmente verificabile matematicamente.
 Nel complesso, nel caso in cui si voglia trovare l'operazione di due ottimalità migliore\footnote{Cioè trovare la soluzione vicina a costo più basso} è necessario confrontare tutte le coppie possibili ottenendo quindi una complessità computazione pari a $O(n^2)$ rispetto al numero di nodi mentre nel caso di un generico valore di $K$ si passa ovviamente a $O(n^3)$.
 Nel caso del \textit{TSP}, alcuni esperimenti svolti versoo la fine degli anni '50 hanno mostrato che il passaggio da due ottimalità a tre ottimalità porta un miglioramento sensibile della qualità della soluzione trovata, che giustifica pienamente l'aumento di carico computazionale ma non il costo di scrittura\\progettazione dell'algoritmo se paragonato ad altri metodi euristici che mostreremo nel seguito del testo. Miglioramenti praticamente trascurabili si hanno invece per $K > 3$. 
 Concludiamo le nozioni riguardanti i metodi migliorativi di K ottimalità nel seguente paragrafo dove vengono mostrati i dettagli implementativi dell'algoritmo $2-Opt$ da noi progettato
 
-\vspace{2\baselineskip}
-METODO TwoOpt
-\vspace{2\baselineskip}
+\subsection*{METODO TwoOpt}
 
 Il metodo TwoOpt implementa l' euristico algoritmo $2-Opt$ applicato al problema del commesso viaggiatore la cui discussione teorica è stata presentata nel paragrafo precedente.
 
@@ -1967,10 +2023,7 @@ do
 
 \'E utile fare infine le seguenti annotazioni: le assegnazioni degli indici possono ad un primo sguardo sembrare errate in quanto non tutte le possibili coppie di lati vengono analizzate, in realtà questo non avviene solamente per quelli tra loro consecutivi. Infine, dato che come vedremo a breve la tecnica della due ottimalità è utilizzata in un contesto più ampio, il percorso modificato viene poi riutilizzato e quindi è necessario mantenere aggiornato anche il suo ordinamento fittizzio. Questa funzionalità è offerta dal metodo \textbf{SwapRoute} descritto nel dettaglio nella appendice LINK!!!!!!!.
 
-
-\vspace{2\baselineskip}
-MULTISTART
-\vspace{2\baselineskip}
+\subsection*{MULTISTART}
 
 La tecnica del \textit{multi start} è un modo molto semplice per combinare i due algoritmi euristici proposti, \textit{nearest neighbour} e \textit{2-Opt}, sfruttando appieno i loro punti di forza.
 L'idea alla base è la seguente: \textit{nearest neighbour}, secondo l'implementazione presentata LINK!!!!!!!, offre la possibilità di produrre molto velocemente un numero soluzioni valide al problema TSP in esame tutto diverse tra loro; Il suo principale svantaggio è che queste presentano risultati molto scadenti per quanto riguarda la funzione obiettivo da minimizzare. A questo punto è logico pensare di introdurre la tecnica del \textit{2-Opt}, l'algoritmo infatti necessità di una soluzione iniziale su cui essere applicato e produce velocemente risultati accettabili indipendentemente dalla bontà del punto di partenza.
@@ -2009,11 +2062,7 @@ Console.WriteLine("Incumbed not changed");
 
 \end{lstlisting}
 
-
-
-\vspace{2\baselineskip}
-GENERAZIONE NUMERI CASUALI - SEMERANDOM DA SPOSTARE!!!!!!!!!!!!!!! INIZIO O APPENDICE
-\vspace{2\baselineskip}
+\subsection*{GENERAZIONE NUMERI CASUALI - SEMERANDOM DA SPOSTARE!!!!!!!!!!!!!!! INIZIO O APPENDICE}
 
 Per generare un numero casuale è sufficiente istanziare la classe Random ed invocare sull' istanza creata il metodo \textbf{Next} o \textbf{NextDouble}. Per esempio nel caso in cui si voglia generare un numero casuale intero tra 1 e 99 è necessario scrivere le seguenti righe di codice:
 
@@ -2045,71 +2094,22 @@ Console.ReadLine();
 
 Il cui output, come previsto, risulta mostrato in Fig C.
 
-\begin{center}
-\includegraphics[scale=0.5]{output}  
-
-Figura X: Output 
-
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"ng".jpg}
+    \caption{Output}
+\end{figure}
 
 Per ovviare a questa problematica la classe Random dispone di un secondo costruttore che riceve come parametro un intero che setta il valore del seme: sarà a questo punto compito del programmatore passare valori casuali e  differenti all' atto della creazione delle due istanze della classe Random.
 
 
-\vspace{2\baselineskip}
-METAEURISTICI
-\vspace{2\baselineskip}
+\section*{METAEURISTICI}
 
-\vspace{2\baselineskip}
-TABU
-\vspace{2\baselineskip}
+\subsection*{TABU}
 
-\vspace{2\baselineskip}
-VNS
-\vspace{2\baselineskip}
+\subsection*{VNS}
 
-\vspace{2\baselineskip}
-MATHEURISTICS
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-HARD FIXING
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-WARM-START
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-PREPROCESSING
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-IMPLEMENTAZIONE HARD FIXING
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-RINS
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-POLISHING
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-LOCAL BRANCHING
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-IMPLEMENTAZIONE LOCAL BRANCHING
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-LOCAL BRANCH SIMMETRICO
-\vspace{2\baselineskip}
-
-\vspace{2\baselineskip}
-ALGORITMI GENETICI
-\vspace{2\baselineskip}
+\subsection*{ALGORITMI GENETICI}
 
 Gli Algoritmi Genetici (\textit{AG}), proposti nel 1975 da J.H. Holland, sono un modello computazionale idealizzato dall'evoluzione naturale darwinista. L'aggettivo "genetico" deriva dal fatto che il modello evolutivo darwiniano trova spiegazioni nella branca della biologia detta genetica e dal fatto che tali algoritmi attuano meccaniche concettualmente simili a quelli dei processi biochimici scoperti da questa scienza. I principi fondamentali che consentono la nascita e lo sviluppo di un processo evolutivo che porta all'evoluzione di una specie sono la \textbf{selezione naturale} e la \textbf{varietà del genotipo}\footnote{Il termine \textit{genotipo} indica la costituzione genetica di un organismo o di un gruppo di individui} della popolazione.
 La selezione naturale è il meccanismo grazie al quale si ha un progressivo e cumulativo aumento della frequenza degli individui aventi caratteristiche ottimali per l'ambiente in cui essi vivono poiché solo quelli che meglio si adattano ad un certo habitat riescono a sopravvivere e a riprodursi.
@@ -2126,17 +2126,11 @@ Così come nella natura solamente gli individui che meglio si adattano all' ambi
 Come vedremo in seguito sono fondamentalmente tre le caratteristiche determinanti per un algoritmo genetico: determinare quale funzione di fitness si andrà ad utilizzare, partendo dalla attuale generazione decidere come creare un pull di possibili candidati per quella successiva ed infine come selezionare tra questi ultimi quelli che sopravviveranno.
 Essendo la definizione delle funzione di fitness direttamente dipendente da quale tipo di problema si desidera studiare, concludiamo questa introduzione elencando solamente quali operatori genetici è possibile applicare per definire le restanti due caratteristiche di un algoritmo.
 
-
-\vspace{2\baselineskip}
-OPERATORI GENETICI
-\vspace{2\baselineskip}
+\subsection*{OPERATORI GENETICI}
 
 In questo paragrafo vengono trattati i principali operatori genetici applicabili ai cromosomi. Per ogni operatore vengono inoltre descritte le principali varianti che si possono trovare in letteratura.
 
-
-\vspace{2\baselineskip}
-OPERATORE DI CROSSOVER
-\vspace{2\baselineskip}
+\subsubsection*{OPERATORE DI CROSSOVER}
 
 Il crossover è una metafora della riproduzione in cui il materiale genetico dei discendenti è una combinazione di quello dei genitori. Di seguito sono indicati alcuni dei metodi più comuni per creare un \textit{figlio} partendo da due \textit{genitori}, le instanze così ottenute vanno a far parte di quelle candidate alla sopravvivenza per la generazione successiva:
 
@@ -2150,105 +2144,47 @@ Il crossover è una metafora della riproduzione in cui il materiale genetico dei
     \item \textbf{Crossover aritmetico}: consiste nell'utilizzare un'operazione aritmetica per creare la nuova soluzione, ad esempio eseguendo una \textit{XOR} o una \textit{AND} tra elementi dei genitori se interpretati come una sequenza binaria;
 \end{itemize}
 
-\begin{center}
-    \includegraphics[scale=0.5]{selezioneSP}
-    
-    Figura 3: Esempio di operatore di crossover
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"selezioneSP".jpg}
+    \caption{Esempio di operatore di crossover}
+\end{figure}
 
-
-\vspace{2\baselineskip}
-OPERATORI DI SELEZIONE
-\vspace{2\baselineskip}
+\subsubsection*{OPERATORI DI SELEZIONE}
 
 A causa di complessi fenomeni di interazione non lineare, non è sempre vero che da due soluzioni promettenti ne nasca una terza \textit{migliore} né che da due soluzioni con valori di fitness basso venga generato un figlio \textit{peggiore}. Pertanto non è statisticamente conveniente utilizzare i soli elementi con valori di fitness elevata sia durante la scelta dei genitori che durante la scelta di quali elementi faranno parte della generazione successiva. Per quanto riguarda quest'ultimo caso, oltre al semplice valore di fitness, vengono prese in considerazione particolari tecniche di \textit{selezione}. Le più comuni sono:
 
 \begin{itemize}
     \item \textbf{Selezione a roulette}: la probabilità che una soluzione venga scelta per far parte della successiva generazione è direttamente proporzionale al valore restituito dalla funzione di fitness. Immaginiamo quindi di avere a disposizione una roulette la cui ruota viene divisa in sezioni tutte assegnate ai vari candidati, la loro grandezza è quindi proporzionale all'idoneità dell'individuo. La selezione è banalamente ottenuta con molteplici rotazioni della roulette tenendo conto che un individuo non può essere selezionato più volte. Questa tecnica presenta dei problemi nel caso in cui le sezioni della ruota risultino tra loro eccessivamente sbilanciate in ampiezza, le soluzioni peggiori vengono selezionate troppo raramente e questo per quanto già esposto non è necessariamente un bene;
-
+    
     \item \textbf{Selezione di Boltzmann}: le soluzioni vengono scelte con un grado di probabilità che, agli inizi dell'algoritmo, favorisce \textit{l'esplorazione} mentre più avanti tende a stabilizzarsi. Questa tecnica ritiene utile, in un primo momento, consentire agli individui meno idonei di riprodursi quasi quanto quelli migliori, e far procedere lentamente la selezione così da mantenere una certa diversità all'interno della popolazione. In seguito si rafforza la selezione per favorire maggiormente gli individui ad alta idoneità, presumendo che la fase iniziale, con grande diversità e poca selezione, abbia consentito alla popolazione di individuare la zona giusta nello spazio di ricerca;
-
+    
     \item \textbf{Selezione a torneo}: da un pool di possibili soluzioni, nel caso più comune vengono scelti in modo del tutto casuale sia due individui che un numero $c \in [0, 1]$. Se quest'ultimo risulta minore di un parametro $k \in [0, 1]$ fissato, si seleziona il più idoneo tra i due candidati, altrimenti la scelta ricade sul peggiore. Naturalmente si procede fino a quando non ho tutti gli elementi per la generazione successiva.
 \end{itemize}
 
 Non esiste in assoluto un metodo migliore tra quelli proposti, molto dipende direttamente da come questi sono implementati e soprattutto sia dalla dimensione del problema che dalla quantità di vincoli imposti: ad esempio, nel caso in cui sia richiesto di trovare nel minor tempo possibile una \textbf{buona} soluzione è sconsigliato utilizzare la selezione di Boltzmann.
 
+\subsubsection*{OPERATORI DI MUTAZIONE}
 
-\vspace{2\baselineskip}
-MUTAZIONE
-\vspace{2\baselineskip}
-
-L' operatore di mutazione prevede che in funzione di una prefissata e usualmente piccola probabilità $p_{mutation}$, il valore di un bit del figlio venga cambiato: questo serve per simulare quanto avviene in natura dove, anche se raramente, è possibile che vi sia una variazione del genotipo durante l' evoluzione di un essere vivente.
+L'operatore di mutazione prevede che in funzione di una prefissata e usualmente piccola probabilità $p_{mutation}$, il valore di un bit del figlio venga cambiato: questo serve per simulare quanto avviene in natura dove, anche se raramente, è possibile che vi sia una variazione del genotipo durante l' evoluzione di un essere vivente.
 La figura x.y illustra un esempio di mutazione.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"Mutazione".jpg}
+    \caption{Esempio di mutazione}
+\end{figure}
 
-\begin{center}
-\includegraphics[scale=0.5]{Mutazione}
-
-Figura 3: Esempio di mutazione
-\end{center}
-
-
-\vspace{2\baselineskip}
-ALGORITMO GENETICO REALZIZZATO PER TSP
-\vspace{2\baselineskip}
+\subsection{ALGORITMO GENETICO TSP}
 
 Gli \textit{AG} risolvono un determinato problema generando sempre nuove \textbf{popolazioni} di soluzioni dove in genere troviamo una fitness media piuttosto bassa, giungendo solamente dopo diverse generazioni a valori più elevati. Per poter applicare un algoritmo genetico, occorre anzitutto codificare numericamente le soluzioni e individuare una opportuna funzione di fitness. La codifica vettoriale dei cromosomi più adatta per i problemi di TSP risulta essere un vettore di interi dove ogni elemento identifica in maniera univoca una delle città da visitare mentre il suo posizionamento identifica l'ordine di visita.
 La funzione di fitness realizzata riceve in ingresso una soluzione \textbf{ammissibile}\footnote{Per qualsiasi generazione non sono quindi accettabili elementi non validi per il problema in questione. La funzione XXXX LINK!!! è stata realizzata a a tale scopo.} e restituisce un valore reale pari al reciproco del suo costo PERCHE'?????? LO DICIAMO DOPO???????.
 La prima generazione viene ottenuta attraverso il metodo \textbf{NearestNeightborGenetic} dell classe \textbf{Utility}. Come facilmente intuibile genera soluzioni che tendono a collegare nodi tra loro vicini, per maggiori dettagli si consulti l'apposita sezione ad esso dedicata nella appendice LINKK!!!!!!!!!!!!!!!!!.
 La generazione di un \textit{figlio} a partire da due \textit{genitori} avviene attraverso il crossover ad un punto già presentato dove però solamente una delle due soluzioni ottenute entra a far parte del pool di candidati per la successiva generazione. Il crossover viene fornito dal metodo \textbf{GenerateChild}, sempre appartenente alla classe \textbf{Utility}, che viene descritto nell'apposito paragrafo LINK!!!!!!!, mentre i restanti condidati alla nuova generazione sono gli elementi stessi della generazione precedente (motivo?!?!?!).
 Come operatore di selezione, si è deciso di utilizzare la \textit{selezione a roulette} dato che le soluzioni hanno lo stesso ordine di grandezza per quanto riguarda i loro costi QUI NON E' CHIARO CHE SIGNIFICA---INTENDI CHE LE FETTE CHE VENGONO FUORI NON SONO TROPPO DIVERSE??????. Infine la mutazione avviene con probabilità $p_{mutex}$ pari all'1\%.
-Quanto descritto viene per la maggior parte gestito attraverso il metodo NOME!!!!!!!!!!!!! con l'ausilio della classe \textbf{pathgenetic}, procediamo quindi alla loro esposizione.
+Quanto descritto viene per la maggior parte gestito attraverso il metodo NOME!!!!!!!!!!!!! con l'ausilio della classe \textbf{pathgenetic} descritta nella apposita sezione LINK!!!!!!!!!!!!!!!!!!!!!!!!!!!!.
 
-\vspace{2\baselineskip}
-CLASSE PATHGENETIC
-\vspace{2\baselineskip}
-
-La classe \textbf{PathGenetic} utilizzata per memorizzare i dati di una soluzione generica, estende \textbf{PathStandard} già discussa nel paragrafo X.Y. aggiungendo due campi utili solamente per gli algoritmi genetici: il primo di tipo \textit{double} memorizza la fitness associata alla soluzione, il secondo di tipo intero identifica il circuito all'atto dell'estrazione dei percorsi che formeranno la generazione successiva\footnote{I suddetti parametri prendono nome \textbf{fittness} e \textbf{nRoulette}}.
-La classe è dotata del metodo privato \textbf{CalculateFitness} il quale semplicemente setta la variabile fitness come descritto in precedenza:
-
-
-\begin{lstlisting}
-
-private void CalculateFitness()
-{
-     fitness = 1 / cost;
-}
-
-\end{lstlisting}
-
-La variabile \textbf{cost} e l’array \textbf{path} sono ereditati da PathStandard e vengono settati utilizzando uno dei tre costruttori a disposizione
-
-\begin{lstlisting}
-
-public PathGenetic(int[] path, double cost) : base()
-{
-     this.path = path;
-     this.cost = cost;
-     CalculateFitness();
-     nRoulette = -1;
-}
-
-public PathGenetic(int[] path, Instance inst) : base(path, inst)
-{
-    CalculateFitness();
-    nRoulette = -1;
-}
-
-       
-public PathGenetic(): base()
-{
-    fitness = -1;
-    nRoulette = -1;
-}
-
-ANDREBBE UN COMMENTINO SU OGNUNO
-
-\end{lstlisting}
-
-\vspace{2\baselineskip}
-FUNZIONE GENETICALGORITHM
-\vspace{2\baselineskip}
+\subsection*{FUNZIONE GENETICALGORITHM}
 
 Questa classe ha il compito di amministrare tutto tutte le fasi dell'algoritmo genetico. Per prima cosa si procede con una dichiariazione ed inizializzazione delle varie strutture dati necessarie. Tra queste troviamo due liste di \textit{PathGenetic} chiamate \textbf{OriginallyPopulated} e \textbf{ChildPoulation} che, durante tutto il processo, contengono rispettivamente l'insieme dei circuiti hamiltoniani che compongono la generazione $i-esima$ ed i figli da loro generati. La prima generazione viene ottenuta attraverso il metodo \textbf{NearestNeightborGenetic}, discusso in maggiore dettagli nella appendice LINK!!!!!, che, ricevendo la lista completa per ogni nodo di quali sono ad esso più vicini\footnote{Funzione già descritta qui LINK!!!!!!!!!!!!!!.}, costruisce le varie instanze tendendo a collegare i nodi più vicini tra loro\footnote{Il numero di componenti per ogni generazione viene chiesto in input all'utente e passato come parametro di ingresso alla funzione \textit{GeneticAlgorithm}.}.
 Durante la generazione dei nuovi figli, poiché l'indice in cui è memorizzato un circuito all'interno di \textit{OriginallyPopulated}, dovuto in genere all'estrazione della rouellette, è casuale\footnote{Con casuale si intende che non è presente alcuna forma di correlazione fra l'indice e il costo della soluzione.} si è deciso di accoppiare circuiti memorizzati in celle adiacenti; la casualità di OriginallyPopulated consente di combinare fra loro soluzioni buone con altre meno buone e ciò statisticamente risulta particolarmente vantaggioso.
@@ -2269,26 +2205,26 @@ for (int i = 0; i < sizePopulation; i++)
 OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, true, listArray));
 do
 {
-    //Generate the children
-    for (int i = 0; i < sizePopulation; i++)
-    {
-        if (i % 2 != 0)
-            ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
-    }
+//Generate the children
+for (int i = 0; i < sizePopulation; i++)
+{
+if (i % 2 != 0)
+ChildPoulation.Add(Utility.GenerateChild(instance, rnd, OriginallyPopulated[i], OriginallyPopulated[i - 1], listArray));
+}
 
-    OriginallyPopulated = Utility.NextPopulation(instance, sizePopulation, OriginallyPopulated, ChildPoulation);
+OriginallyPopulated = Utility.NextPopulation(instance, sizePopulation, OriginallyPopulated, ChildPoulation);
 
-    //currentBestPath contains the best path of the current population
-    currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
+//currentBestPath contains the best path of the current population
+currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
 
-    if (currentBestPath.cost < incumbentSol.cost)
-    {
-        incumbentSol = (PathGenetic)currentBestPath.Clone();
-        Utility.PrintGeneticSolution(instance, process, incumbentSol);
-    }
+if (currentBestPath.cost < incumbentSol.cost)
+{
+incumbentSol = (PathGenetic)currentBestPath.Clone();
+Utility.PrintGeneticSolution(instance, process, incumbentSol);
+}
 
-    // We empty the list that contain the child
-    ChildPoulation.RemoveRange(0, ChildPoulation.Count);
+// We empty the list that contain the child
+ChildPoulation.RemoveRange(0, ChildPoulation.Count);
 
 } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
@@ -2296,10 +2232,7 @@ Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.c
 
 \end{lstlisting}
 
-
-\vspace{2\baselineskip}
-NEARESTNEIGHTBORGENETIC
-\vspace{2\baselineskip}
+\subsection*{NEARESTNEIGHTBORGENETIC}
 
 Il corrente metodo è simile alla funzione NearestNeight discussa nel paragrafo X.Y ma con due differenze significative:
 
@@ -2333,19 +2266,19 @@ Il circuito prodotto dal metodo viene memorizzato all'interno del vettore \textb
 
 \begin{lstlisting}
 
- // heuristicSolution is the path of the current heuristic solution generate
-    int[] heuristicSolution = new int[instance.NNodes];
+// heuristicSolution is the path of the current heuristic solution generate
+int[] heuristicSolution = new int[instance.NNodes];
 
-    bool[] VisitedNodes = new bool[instance.NNodes];
+bool[] VisitedNodes = new bool[instance.NNodes];
 
-    int firstNode = 0;
+int firstNode = 0;
 
-    //rndStartPoint define if the starting point is random or always the node 0 
-    if (rndStartPoint)
-        firstNode = rnd.Next(0, instance.NNodes);
+//rndStartPoint define if the starting point is random or always the node 0 
+if (rndStartPoint)
+firstNode = rnd.Next(0, instance.NNodes);
 
-    heuristicSolution[0] = firstNode;
-    VisitedNodes[firstNode] = true;
+heuristicSolution[0] = firstNode;
+VisitedNodes[firstNode] = true;
 
 \end{lstlisting}
 
@@ -2358,39 +2291,36 @@ Una volta definito il nodo di partenza i restanti nodi, che se visitati rispetta
 
 for (int i = 1; i < instance.NNodes; i++)
 {
-     bool found = false;
-     int candPos = RndGenetic(rnd);
-     int nextNode = listArray[heuristicSolution[i - 1]][candPos];
-      do
-      {
-         //We control that the selected node has never been visited
-          if (VisitedNodes[nextNode] == false)
-          {
-              VisitedNodes[nextNode] = true;
-              heuristicSolution[i] = nextNode;
-              found = true;
-          }
-          else
-          {
-              candPos++;
-              if (candPos >= instance.NNodes - 1)
-              {
-                  nextNode = listArray[heuristicSolution[i - 1]][0];
-                  candPos = 0;
-              }
-              else
-                  nextNode = listArray[heuristicSolution[i - 1]][candPos];
-          }
+bool found = false;
+int candPos = RndGenetic(rnd);
+int nextNode = listArray[heuristicSolution[i - 1]][candPos];
+do
+{
+//We control that the selected node has never been visited
+if (VisitedNodes[nextNode] == false)
+{
+VisitedNodes[nextNode] = true;
+heuristicSolution[i] = nextNode;
+found = true;
+}
+else
+{
+candPos++;
+if (candPos >= instance.NNodes - 1)
+{
+nextNode = listArray[heuristicSolution[i - 1]][0];
+candPos = 0;
+}
+else
+nextNode = listArray[heuristicSolution[i - 1]][candPos];
+}
 
-     } while (!found);
+} while (!found);
 }
 
 \end{lstlisting}
 
-
-\vspace{2\baselineskip}
-GENERATECHILD
-\vspace{2\baselineskip}
+\subsection*{GENERATECHILD}
 
 Per generare un figlio si è realizzato il metodo \textbf{GenerateChild}, appartenente alla classe Utility, avente la seguente intestazione:
 
@@ -2418,10 +2348,10 @@ int crossover = (rnd.Next(0, instance.NNodes));
 
 for (int i = 0; i < instance.NNodes; i++)
 {
-   if (i > crossover)
-      pathChild[i] = mother.path[i];
-   else
-      pathChild[i] = father.path[i];
+if (i > crossover)
+pathChild[i] = mother.path[i];
+else
+pathChild[i] = father.path[i];
 }
 
 \end{lstlisting}
@@ -2433,7 +2363,7 @@ Una volta creato il figlio, con una probabilità p = 0.01 viene effettuata su di
 \begin{lstlisting}
 
 if (rnd.Next(0, 101) == 100)
-      Mutation(instance, rnd, pathChild);
+Mutation(instance, rnd, pathChild);
 
 \end{lstlisting}
 
@@ -2443,18 +2373,16 @@ Il figlio ottenuto quasi certamente non risulta essere un circuito ammissibile, 
 
 if (ProbabilityTwoOpt(instance, rnd) == 1)
 {
-      child.path = InterfaceForTwoOpt(child.path);
-      TSP.TwoOpt(instance, child);
-      child.path = Reverse(child.path);
+child.path = InterfaceForTwoOpt(child.path);
+TSP.TwoOpt(instance, child);
+child.path = Reverse(child.path);
 }
 
 \end{lstlisting}
 
 Da notare che la funzione per ottenere la due ottimalità è utilizzata da più metodi di risoluzione (multi-start ecc..) e necessita che il percorso della soluzione hamiltoniana sia memorizzato con un apposito formato diverso da quello presentato per l'algoritmo genetico: sono quindi necessarie due semplici interfacce \textbf{InterfaceForTwoOpt, Reverse}, i cui tempi di esecuzione sono $O(n)$.
 
-\vspace{2\baselineskip}
-NEXTPOPULATION
-\vspace{2\baselineskip}
+\subsection*{NEXTPOPULATION}
 
 La funzione \textbf{NextPopulation}, appartenente alla classe \textbf{Utility}, consente di definire la nuova generazione scegliendone gli elementi tra la vecchia generazione ed i suoi figli attraverso una estrazione a roulette. La firma di tale funzione risulta essere:
 
@@ -2472,7 +2400,7 @@ Dove:
     \item \textbf{sizePopulation}: parametro che indica di quanti elementi deve essere la nuova generazione, per come è stato costruito il nostro programma questo parametro non varia mai ed è richiesto una sola volta all'utente;
     \item \textbf{FatherGeneration}: Lista contenente i circuiti che definiscono la generazione corrente;
     \item \textbf{ChildGeneration}: Lista contenente i circuiti figli generati da FatherGeneration utilizzando la funzione GenerateChild.
-
+    
 \end{itemize}
 
 Per prima cosa uniamo le due liste di circuiti in quanto si è deciso che l'unico metro di giudizio durante la selezione deve essere il valore di fitness attribuito ad ogni soluzione indipendentemente dalla loro provenienza.
@@ -2480,7 +2408,7 @@ Per prima cosa uniamo le due liste di circuiti in quanto si è deciso che l'unic
 \begin{lstlisting}
 
 for (int i = 0; i < ChildGeneration.Count; i++)
-    FatherGeneration.Add(ChildGeneration[i]);
+FatherGeneration.Add(ChildGeneration[i]);
 
 \end{lstlisting}
 
@@ -2505,30 +2433,46 @@ int numberExtracted;
 
 for (int i = 0; i < instance.SizePopulation; i++)
 {
-    do
-    {
-       find = true;
-       numberExtracted = rouletteValue.Next(0, upperExtremity);
-       //A path can't be extracted more than one time
-       if (NumbersExtracted.Contains(roulette[numberExtracted]) == false)
-       {
-          find = false;
-          NumbersExtracted.Add(roulette[numberExtracted]);
-          nextGeneration.Add(FatherGeneration.Find(x => x.NRoulette == roulette[numberExtracted]));
-       }
-  } while (find);
+do
+{
+find = true;
+numberExtracted = rouletteValue.Next(0, upperExtremity);
+//A path can't be extracted more than one time
+if (NumbersExtracted.Contains(roulette[numberExtracted]) == false)
+{
+find = false;
+NumbersExtracted.Add(roulette[numberExtracted]);
+nextGeneration.Add(FatherGeneration.Find(x => x.NRoulette == roulette[numberExtracted]));
+}
+} while (find);
 }
 return nextGeneration;
 
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-\textbf{APPENDICE}
-\vspace{2\baselineskip}
+\section*{MATHEURISTICS}
 
-\vspace{2\baselineskip}
-FILL ROULETTE
-\vspace{2\baselineskip}
+\subsection*{HARD FIXING}
+
+\subsection*{WARM-START}
+
+\subsection*{PREPROCESSING}
+
+\subsection*{IMPLEMENTAZIONE HARD FIXING}
+
+\subsection*{RINS}
+
+\subsection*{POLISHING}
+
+\subsection*{LOCAL BRANCHING}
+
+\subsection*{IMPLEMENTAZIONE LOCAL BRANCHING}
+
+\subsection*{LOCAL BRANCH SIMMETRICO}
+
+\section*{APPENDICE}
+
+\subsection*{FILL ROULETTE}
 
 Il metodo FillRoulette ha il compito di popolare la roulette in modo tale che la selezione sia proporzionale alla fitness. Associa ad ogni circuito un numero intero, chiamato \textbf{NRoulette}, progressivo e inserisce all'interno della roulette tale valore un numero di volte proporzionale al valore della fitness del circuito, infine ritorna la dimensione della roulette. La sua firma risulta essere:
 
@@ -2561,12 +2505,9 @@ for (int i = 0; i < CurrentGeneration.Count; i++)
 }
 return sizeRoulette;
 
-
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-ESTIMATE
-\vspace{2\baselineskip}
+\subsection*{ESTIMATE}
 
 Il metodo Estimate genera una costante di proporzionalità in modo tale che, eseguendo il prodotto fra tale costante ed il valore ricevuto come parametro di ingresso, si ottenga una quantità sempre maggiore di 100 PERCHE'??????? A COSA SERVE?????. La sua firma risulta essere:
 
@@ -2590,29 +2531,27 @@ Dove:
     \item \textbf{sample}: Valore della fitness presa come campione.
 \end{itemize}
 
-\vspace{2\baselineskip}
-REPAIR
-\vspace{2\baselineskip}
+\subsection*{REPAIR}
 
 Il metodo Repair è stato progettato per trasformare un percorso che non risulta essere un circuito hamiltoniano in un circuito hamiltoniano. Sappiamo che visitare più volte lo stesso nodo rende tale proprietà non vera così come la presenza di almeno un nodo isolato. L'algoritmo si sviluppa in due fasi: in un primo momento si eliminano dal vettore che codifica il percordo tutti i nodi duplicati, successivamente si fa in modo che quelli isolati vengano connessi al nodo ad essi più vicini. Un esempio di funzionamento dell'algoritmo è riportato nei tre grafici sottostanti.
 
-\begin{center}
-\includegraphics[scale=0.5]{circuitoF}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"circuitoF".jpg}
+    \caption{Circuito non hamiltoniano figlio}
+\end{figure}
 
-Figura 1: Circuito non hamiltoniano figlio
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"circuitoH".jpeg}
+    \caption{Circuito hamiltoniano incompleto}
+\end{figure}
 
-\begin{center}
-\includegraphics[scale=0.5]{circuitoH}  
-
-Figura 2: Circuito hamiltoniano incompleto
-\end{center}
-
-\begin{center}
-\includegraphics[scale=0.5]{circuitoC}
-
-Figura 3: Circuito hamiltoniano figlio
-\end{center}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Immagini/"circuitoC".jpg}
+    \caption{Circuito hamiltoniano figlio}
+\end{figure}
 
 Discutiamo ora il codice prodotto. Costruiamo due liste di interi chiamate \textbf{isolatedNodes} e \textbf{nearlestIsolatedNodes} dove rispettivamente contengono all'i-esimo elemento l'indice dell'i-esimo nodo isolato e l' indice del nodo ad esso più vicino\footnote{Ci sono in realtà delle eccezzioni a quest'ultima affermazione che vedremo in seguito}.
 Per popolare tali liste utilizziamo i metodi \textbf{FindIsolatedNodes} LINK!!!!!! e \textbf{FindNearestNode} LINK!!!!!!!!!!.
@@ -2638,9 +2577,7 @@ for (int i = 0; i < pathIncomplete.Count; i++)
 return new PathGenetic(pathComplete, instance);
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-FINDISOLATEDNODES
-\vspace{2\baselineskip}
+\subsection*{FINDISOLATEDNODES}
 
 Tale funzione viene utilizzata per identificare tutti i nodi isolati presenti in un generico percorso.
 La sua firma risulta essere:
@@ -2682,9 +2619,7 @@ for (int i = 0; i < instance.NNodes; i++)
 
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-FINDNEARESTNODE
-\vspace{2\baselineskip}
+\subsection*{FINDNEARESTNODE}
 
 Dato un certo circuito ed una lista di nodi isolati in esso contenuti, il metodo FindNearestNode fornisce per ognuno di essi il nodo più vicino \textit{valido} ossia che rispetti le seguenti condizioni:
 
@@ -2726,9 +2661,7 @@ for (int i = 0; i < isolatedNodes.Count; i++)
 
 \end{lstlisting}
 
-\vspace{2\baselineskip}
-BESTSOLUTION
-\vspace{2\baselineskip}
+\subsection*{BESTSOLUTION}
 
 Il metodo BestSolution riceve come input una serie di percorsi hamiltoniani memorizzati attraverso la classe \textbf{PathGenetic} LINK!!!!!!!!!!!!!!!!!!!! ed in output fornisce quello a costo minore, la sua intestazione risulta essere:
 

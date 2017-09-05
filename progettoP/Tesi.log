@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.8.1)  3 SEP 2017 17:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.8.1)  3 SEP 2017 20:49
 entering extended mode
 **./Tesi.tex
 (Tesi.tex
@@ -729,26 +729,26 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 ) (Tesi.aux)
 \openout1 = `Tesi.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 82.
-LaTeX Font Info:    Try loading font information for T3+cmr on input line 82.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 81.
+LaTeX Font Info:    Try loading font information for T3+cmr on input line 81.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tipa\t3cmr.fd"
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    ... okay on input line 81.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
@@ -795,7 +795,7 @@ G,.JBIG2,.JB2,.eps]
 )
 \c@lstlisting=\count143
 \AtBeginShipoutBox=\box38
-Package hyperref Info: Link coloring OFF on input line 82.
+Package hyperref Info: Link coloring OFF on input line 81.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -805,326 +805,1107 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count144
 )
-LaTeX Info: Redefining \ref on input line 82.
-LaTeX Info: Redefining \pageref on input line 82.
-LaTeX Info: Redefining \nameref on input line 82.
+LaTeX Info: Redefining \ref on input line 81.
+LaTeX Info: Redefining \pageref on input line 81.
+LaTeX Info: Redefining \nameref on input line 81.
 
 (Tesi.out) (Tesi.out)
 \@outlinefile=\write3
 \openout3 = `Tesi.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 103.
+LaTeX Font Info:    Try loading font information for U+msa on input line 97.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 103.
+LaTeX Font Info:    Try loading font information for U+msb on input line 97.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{C:/Users/Corrado/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Overfull \hbox (6.88007pt too wide) in paragraph at lines 120--121
-[]\T1/cmr/m/n/10.95 Nella sua for-mal-iz-zazione più gen-erale, il prob-lema de
-l Commesso Vi-ag-gia-tore con-siste nell'individuare
- []
-
-
-Overfull \hbox (9.24182pt too wide) in paragraph at lines 120--121
-\T1/cmr/m/n/10.95 un cir-cuito hamil-to-ni-ano di costo min-imo per un dato gra
-fo ori-en-tato $\OML/cmm/m/it/10.95 G \OT1/cmr/m/n/10.95 = (\OML/cmm/m/it/10.95
- V; A\OT1/cmr/m/n/10.95 )$\T1/cmr/m/n/10.95 , dove $\OML/cmm/m/it/10.95 V \OT1/
-cmr/m/n/10.95 =$\T1/cmr/m/n/10.95 {$[]$}$$
- []
-
-[2]
-<subtour.jpg, id=25, 601.64775pt x 374.5995pt>
-File: subtour.jpg Graphic file (type jpg)
-<use subtour.jpg>
-Package pdftex.def Info: subtour.jpg  used on input line 150. on input line 150
-.
-Package pdftex.def Info: Requested size: 300.82314pt x 187.29929pt on input lin
-e 150.
- [3] [4 <./subtour.jpg>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 207.
+{C:/Users/Corrado/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+<Immagini/"Progetto C Sharp".png, id=34, 717.43031pt x 499.8675pt>
+File: Immagini/"Progetto C Sharp".png Graphic file (type png)
+<use Immagini/"Progetto C Sharp".png>
+Package pdftex.def Info: Immagini/"Progetto C Sharp".png  used on input line 12
+0. on input line 120.
+Package pdftex.def Info: Requested size: 469.75502pt x 327.30501pt on input lin
+e 120.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 132.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 207.
- [5]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 236.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 132.
+ [3 <./Immagini/Progetto C Sharp.png>]
+Overfull \hbox (31.41246pt too wide) in paragraph at lines 143--144
+[]\T1/cmr/m/n/10.95 A questo punto è pos-si-bile im-portare at-traverso le di-r
+et-tive \T1/cmr/bx/n/10.95 us-ing \T1/cmr/m/n/10.95 sia \T1/cmr/bx/n/10.95 ILOG
+.CPLEX \T1/cmr/m/n/10.95 che \T1/cmr/bx/n/10.95 ILOG.Concert\T1/cmr/m/n/10.95 .
+ 
+ []
 
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 166.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-) [6]
-Underfull \hbox (badness 1127) in paragraph at lines 288--288
+) [4]
+Overfull \hbox (4.40698pt too wide) in paragraph at lines 189--190
+[]\T1/cmr/m/n/10.95 Apriamo in-fine la classe del nos-tro pro-getto nella quale
+ vogliamo uti-liz-zare la DLL ed uti-lizzi-amo
+ []
+
+
+Overfull \hbox (42.60631pt too wide) in paragraph at lines 192--193
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+
+Overfull \hbox (42.60631pt too wide) in paragraph at lines 196--197
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (6.88007pt too wide) in paragraph at lines 206--207
+\T1/cmr/m/n/10.95 Nella sua for-mal-iz-zazione più gen-erale, il prob-lema del 
+Commesso Vi-ag-gia-tore con-siste nell'individuare
+ []
+
+
+Overfull \hbox (9.24182pt too wide) in paragraph at lines 206--207
+\T1/cmr/m/n/10.95 un cir-cuito hamil-to-ni-ano di costo min-imo per un dato gra
+fo ori-en-tato $\OML/cmm/m/it/10.95 G \OT1/cmr/m/n/10.95 = (\OML/cmm/m/it/10.95
+ V; A\OT1/cmr/m/n/10.95 )$\T1/cmr/m/n/10.95 , dove $\OML/cmm/m/it/10.95 V \OT1/
+cmr/m/n/10.95 =$\T1/cmr/m/n/10.95 {$[]$}$$
+ []
+
+[5]
+<Immagini/"subtour".jpg, id=76, 601.64775pt x 374.5995pt>
+File: Immagini/"subtour".jpg Graphic file (type jpg)
+<use Immagini/"subtour".jpg>
+Package pdftex.def Info: Immagini/"subtour".jpg  used on input line 238. on inp
+ut line 238.
+Package pdftex.def Info: Requested size: 469.75502pt x 292.48938pt on input lin
+e 238.
+ [6] [7 <./Immagini/subtour.jpg>]
+Overfull \hbox (3.5661pt too wide) in paragraph at lines 285--286
+[]\T1/cmr/bx/n/10.95 Concorde \T1/cmr/m/n/10.95 con-te-nente i file sor-genti i
+n lin-guag-gio C del pro-gramma Con-corde[][][] la cui trat-tazione
+ []
+
+[8] [9]
+Underfull \hbox (badness 1127) in paragraph at lines 361--361
 []\T1/cmr/m/n/10.95 Rappresenta il nome del file di in-put
  []
 
 
-Underfull \hbox (badness 2961) in paragraph at lines 288--288
+Underfull \hbox (badness 2961) in paragraph at lines 361--361
 \T1/cmr/m/n/10.95 con-te-nente l'istanza del prob-lema del
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 289--289
+Underfull \hbox (badness 10000) in paragraph at lines 362--362
 []\T1/cmr/m/n/10.95 Rappresenta i sec-ondi trascorsi
  []
 
 
-Underfull \vbox (badness 10000) detected at line 296
+Underfull \hbox (badness 8094) in paragraph at lines 366--366
+[]\T1/cmr/m/n/10.95 Rappresenta il miglior lower bound
  []
 
-[7] [8]
-Overfull \hbox (6.3698pt too wide) in paragraph at lines 344--344
+
+Underfull \hbox (badness 8094) in paragraph at lines 367--367
+[]\T1/cmr/m/n/10.95 Rappresenta il miglior lower bound
+ []
+
+
+Underfull \hbox (badness 8094) in paragraph at lines 368--368
+[]\T1/cmr/m/n/10.95 Rappresenta il miglior lower bound
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 369
+ []
+
+[10]
+Overfull \hbox (153.79875pt too wide) in paragraph at lines 390--391
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[11]
+Underfull \hbox (badness 5302) in paragraph at lines 412--412
+\T1/cmr/m/n/10.95 mostra a video: si è scelto di
+ []
+
+
+Underfull \hbox (badness 2197) in paragraph at lines 412--412
+\T1/cmr/m/n/10.95 con-dizionare l' es-e-cuzione di molte
+ []
+
+
+Overfull \hbox (6.3698pt too wide) in paragraph at lines 413--413
  \T1/cmr/m/n/10.95 TICKS_PER_SECOND 
  []
 
-[9] [10] [11] [12] [13] [14]
-Overfull \hbox (17.72476pt too wide) in paragraph at lines 614--615
-\T1/cmr/bx/n/10.95 ment \T1/cmr/m/n/10.95 di Cplex uti-liz-zando la fun-zione \
-T1/cmr/bx/n/10.95 CPX-openC-PLEX \T1/cmr/m/n/10.95 la quale ri-torna un pun-ta-
-tore all'environment
+
+Underfull \hbox (badness 3826) in paragraph at lines 413--413
+\T1/cmr/m/n/10.95 unità di misura per il tempo di
+ []
+
+[12]
+Overfull \hbox (32.97293pt too wide) in paragraph at lines 436--438
+\T1/cmr/m/n/10.95 La classe \T1/cmr/bx/n/10.95 Path-Ge-netic \T1/cmr/m/n/10.95 
+uti-liz-zata per mem-o-riz-zare i dati di una soluzione gener-ica, es-tende \T1
+/cmr/bx/n/10.95 Path-Stan-dard
+ []
+
+[13]
+Overfull \hbox (17.12997pt too wide) in paragraph at lines 482--485
+\T1/cmr/m/n/10.95 Lo sviluppo del pro-gramma è in-iziato re-al-iz-zando una op-
+por-tuna fun-zione per in-ter-pretare cor-ret-ta-mente
+ []
+
+[14] [15] [16]
+Overfull \hbox (15.23125pt too wide) in paragraph at lines 584--586
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][]  
+ []
+
+[17]
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 663--665
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][]  
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 647--648
-
- []
-
-[15]
-Underfull \hbox (badness 10000) in paragraph at lines 676--677
-
+Overfull \hbox (330.1574pt too wide) in paragraph at lines 667--668
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][]  
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 678--681
+Overfull \hbox (8.00603pt too wide) in paragraph at lines 682--683
+[]\T1/cmr/bx/n/10.95 options\T1/cmr/m/n/10.95 : A questo parametro pos-sono es-
+sere pas-sate solo i seguenti due val-ori dell' enu-mer-azione
+ []
+
+
+Overfull \hbox (7.80334pt too wide) in paragraph at lines 686--687
+[]\T1/cmr/bx/n/10.95 StringSplitOptions.RemoveEmptyEntries\T1/cmr/m/n/10.95 : i
+n-dica che gli el-e-menti dell'array ri-tor-nato
+ []
+
+[18]
+Overfull \hbox (3.5395pt too wide) in paragraph at lines 711--712
+\T1/cmr/m/n/10.95 In questo para-grafo ve-dremo come è pos-si-bile creare da pr
+o-gramma un mod-ello matem-atico at-traverso
+ []
+
+
+Overfull \hbox (5.44371pt too wide) in paragraph at lines 716--717
+\T1/cmr/m/n/10.95 Per is-tanziare un nuovo mod-ello di pro-gram-mazione lin-ear
+e è nec-es-sario in-izial-iz-zare un \T1/cmr/bx/n/10.95 en-vi-ron-ment
+ []
+
+
+Overfull \hbox (71.91795pt too wide) in paragraph at lines 736--738
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][]  
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 749--750
 
  []
 
-[16]
-Underfull \hbox (badness 10000) in paragraph at lines 708--709
+[19]
+Overfull \hbox (267.17216pt too wide) in paragraph at lines 756--758
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
 
  []
 
-[17] [18] [19]
-Overfull \hbox (17.23354pt too wide) in paragraph at lines 863--864
+
+Underfull \hbox (badness 10000) in paragraph at lines 778--779
+
+ []
+
+
+Overfull \hbox (3.25421pt too wide) in paragraph at lines 780--783
+\T1/cmr/m/n/10.95 Una ul-te-ri-ore con-sid-er-azione nec-es-saria è la seguente
+: come mostrato poco fa il metodo \T1/cmr/bx/n/10.95 CPXnew-cols
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 780--783
+
+ []
+
+[20]
+Overfull \hbox (103.41057pt too wide) in paragraph at lines 791--792
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][]  
+ []
+
+
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 798--799
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (449.82933pt too wide) in paragraph at lines 803--804
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][]  
+ []
+
+
+Overfull \hbox (544.30717pt too wide) in paragraph at lines 804--805
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 810--811
+
+ []
+
+
+Overfull \hbox (367.94853pt too wide) in paragraph at lines 815--816
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][]  
+ []
+
+[21]
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 853--854
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (20.47646pt too wide) in paragraph at lines 870--872
+\T1/cmr/m/n/10.95 Introduciamo ora una sec-onda in-ter-fac-cia \T1/cmr/bx/n/10.
+95 ILin-ear-Nu-m-Expr \T1/cmr/m/n/10.95 che come si può in-tuire viene im-ple-m
+en-tata
+ []
+
+[22]
+Overfull \hbox (210.48546pt too wide) in paragraph at lines 904--906
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][]  
+ []
+
+
+Overfull \hbox (109.70909pt too wide) in paragraph at lines 908--910
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (185.29137pt too wide) in paragraph at lines 910--911
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (5.18108pt too wide) in paragraph at lines 916--918
+\T1/cmr/m/n/10.95 Nel primo caso risulta suf-fi-ciente in-vo-care i metodi non 
+statici \T1/cmr/bx/n/10.95 Ad-dMin-i-mize \T1/cmr/m/n/10.95 op-pure \T1/cmr/bx/
+n/10.95 Ad-dMax-i-mize
+ []
+
+
+Overfull \hbox (26.8935pt too wide) in paragraph at lines 924--926
+[]\T1/cmr/m/n/10.95 Per quanto riguarda i vin-coli è nec-es-sario uti-liz-zare 
+i metodi \T1/cmr/bx/n/10.95 Ad-dEq\T1/cmr/m/n/10.95 , \T1/cmr/bx/n/10.95 Ad-dLe
+\T1/cmr/m/n/10.95 , \T1/cmr/bx/n/10.95 Ad-dGe \T1/cmr/m/n/10.95 che rispet-ti-v
+a-mente
+ []
+
+[23]
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 951--953
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 957--958
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][]  
+ []
+
+
+Overfull \hbox (17.23354pt too wide) in paragraph at lines 963--964
 []\T1/cmr/m/n/10.95 Spiegato come è pos-si-bile creare un mod-ello C# risulta c
 om-pren-si-bile la scelta di re-al-iz-zare un'opportuna
  []
 
-[20]
-Underfull \hbox (badness 10000) in paragraph at lines 877--878
+
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 966--967
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][]  
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 977--978
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 917--923
+Overfull \hbox (8.93625pt too wide) in paragraph at lines 985--987
+\T1/cmr/m/n/10.95 nello stan-dard out-put da noi definito[][][]: in-izial-mente
+ tro-vi-amo le im-postazioni di risoluzione se-lezion-ate
+ []
+
+[24]
+Overfull \hbox (15.81462pt too wide) in paragraph at lines 1016--1022
+\T1/cmr/m/n/10.95 Il primo metodo sper-i-men-tato prende il nome di \T1/cmr/bx/
+n/10.95 LOOP\T1/cmr/m/n/10.95 . -----------------------------------------------
+--------------
+ []
+
+
+Overfull \hbox (5.95378pt too wide) in paragraph at lines 1016--1022
+\T1/cmr/m/n/10.95 É im-por-tante far no-tare che ogni it-er-azione del loop i v
+in-coli ag-giunti nella prece-dente sono ovvi-a-mente
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1016--1022
 
  []
 
-[21]
-Overfull \hbox (5.06567pt too wide) in paragraph at lines 924--927
+
+Overfull \hbox (5.06567pt too wide) in paragraph at lines 1023--1026
 []\T1/cmr/m/n/10.95 Per poter im-ple-mentare il metodo Loop risulta quindi ev-i
 -dente la ne-ces-sità di svilup-pare un'opportuna
  []
 
-[22] [23] [24] [25]
-Overfull \hbox (0.35017pt too wide) in paragraph at lines 1080--1083
+
+Overfull \hbox (10.66077pt too wide) in paragraph at lines 1023--1026
+\T1/cmr/m/n/10.95 con-nesse in-di-cando an-che quali lati sono a loro ap-parte-
+nenti. I det-tagli riguardo le loro im-ple-men-tazioni
+ []
+
+
+Overfull \hbox (7.56967pt too wide) in paragraph at lines 1023--1026
+\T1/cmr/m/n/10.95 sono vis-i-bili nella ap-pen-dice di questo testo, per ora sp
+eci-fichi-amo so-la-mente che al ter-mine dell'utilizzo
+ []
+
+[25]
+Overfull \hbox (16.02403pt too wide) in paragraph at lines 1046--1050
+\T1/cmr/m/n/10.95 Come già spec-i-fi-cato nella sezione riguardo il metodo \T1/
+cmr/bx/n/10.95 LOOP \T1/cmr/m/n/10.95 questi due metodi di sup-porto ap-parte-n
+enti
+ []
+
+
+Overfull \hbox (5.88542pt too wide) in paragraph at lines 1051--1052
+\T1/cmr/m/n/10.95 con-tenga all'indice $\OML/cmm/m/it/10.95 i \OMS/cmsy/m/n/10.
+95   \OML/cmm/m/it/10.95 esimo$ \T1/cmr/m/n/10.95 l'identificativo della \T1/cm
+r/bx/n/10.95 cc \T1/cmr/m/n/10.95 alla quale ap-par-tiene il nodo $\OML/cmm/m/i
+t/10.95 i$[][][]\T1/cmr/m/n/10.95 . L'inizializzazione
+ []
+
+[26]
+Overfull \hbox (449.82933pt too wide) in paragraph at lines 1069--1071
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (0.61115pt too wide) in paragraph at lines 1078--1079
+[]\T1/cmr/bx/n/10.95 rcExpr\T1/cmr/m/n/10.95 : Lista all' in-terno della quale 
+ven-gono mem-o-riz-zate le espres-sioni con-te-nenti le vari-abili
+ []
+
+
+Overfull \hbox (443.5308pt too wide) in paragraph at lines 1091--1093
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][]  
+ []
+
+[27] [28]
+Overfull \hbox (15.23125pt too wide) in paragraph at lines 1150--1151
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (8.193pt too wide) in paragraph at lines 1163--1164
+\T1/cmr/m/n/10.95 cor-rente ci as-si-cura che le due liste \T1/cmr/bx/n/10.95 r
+c-Expr \T1/cmr/m/n/10.95 e \T1/cmr/bx/n/10.95 buffer-Co-ef-fRC \T1/cmr/m/n/10.9
+5 con-tengano tutti i dati per im-ple-mentare
+ []
+
+[29]
+Overfull \hbox (0.35017pt too wide) in paragraph at lines 1174--1177
 []\T1/cmr/bx/n/10.95 prima cat-e-go-ria\T1/cmr/m/n/10.95 : du-rante la risoluzi
 one del prob-lema at-traverso la tec-nica del \T1/cmr/bx/n/10.95 Branch&Cut\T1/
 cmr/m/n/10.95 ,
  []
 
-[26]
 
-! LaTeX Error: File `InterfacciaGrafica' not found.
+Overfull \hbox (3.11978pt too wide) in paragraph at lines 1177--1178
+\T1/cmr/m/n/10.95 risul-tano espo-nen-ziali rispetto al nu-mero di vari-abili c
+he carat-ter-iz-zano il prob-lema in ques-tione.
+ []
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1112 ...egraphics[scale=0.5]{InterfacciaGrafica}
-                                                  
-I could not locate the file with any of these extensions:
-.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
+[30]
+<Immagini/"InterfacciaGrafica".jpg, id=526, 759.43726pt x 155.98276pt>
+File: Immagini/"InterfacciaGrafica".jpg Graphic file (type jpg)
+<use Immagini/"InterfacciaGrafica".jpg>
+Package pdftex.def Info: Immagini/"InterfacciaGrafica".jpg  used on input line 
+1205. on input line 1205.
+Package pdftex.def Info: Requested size: 469.75502pt x 96.48695pt on input line
+ 1205.
+ [31 <./Immagini/InterfacciaGrafica.jpg>]
+Overfull \hbox (103.3999pt too wide) in paragraph at lines 1219--1220
+\OT1/cmr/m/n/10.95 [0\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10
+.95 listArray\OT1/cmr/m/n/10.95 [0])[0]]\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.9
+5 [0\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 listArray\OT1
+/cmr/m/n/10.95 [0])[1]]\OML/cmm/m/it/10.95 ; :::; \OT1/cmr/m/n/10.95 [0\OML/cmm
+/m/it/10.95 ; \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 listArray\OT1/cmr/m/n/10.
+95 [0])[\OML/cmm/m/it/10.95 m\OT1/cmr/m/n/10.95 ]]\OML/cmm/m/it/10.95 ; :::; \O
+T1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 i; \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.9
+5 listArray\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 i\OT1/cmr/m/n/10.95 ])[0]]\O
+ML/cmm/m/it/10.95 ; :::; \OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 i; \OT1/cmr/m/
+n/10.95 (\OML/cmm/m/it/10.95 listArray\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 i
+\OT1/cmr/m/n/10.95 ])[\OML/cmm/m/it/10.95 m\OT1/cmr/m/n/10.95 ]]\OML/cmm/m/it/1
+0.95 ; :::; \OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 n \OMS/cmsy/m/n/10.95  
+ []
 
-[27] [28] [29]
-<Callback.jpg, id=485, 376.40625pt x 140.32425pt>
-File: Callback.jpg Graphic file (type jpg)
-<use Callback.jpg>
-Package pdftex.def Info: Callback.jpg  used on input line 1201. on input line 1
-201.
-Package pdftex.def Info: Requested size: 188.20265pt x 70.16194pt on input line
- 1201.
- [30]
-Underfull \hbox (badness 10000) in paragraph at lines 1206--1207
+
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 1254--1255
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][]  
+ []
+
+[32]
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 1258--1259
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 1262--1263
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (5.2434pt too wide) in paragraph at lines 1282--1283
+[]\T1/cmr/m/n/10.95 Dove chiara-mente \T1/cmr/bx/n/10.95 x \T1/cmr/m/n/10.95 è 
+il vet-tore con-te-nente i rifer-i-menti alle vari-abili uti-liz-zate dal mod-e
+llo matem-atico
+ []
+
+
+Overfull \hbox (0.23787pt too wide) in paragraph at lines 1286--1291
+\T1/cmr/m/n/10.95 elim-i-na-tion all'interno di un sis-tema. Ciò che varia risp
+etto al metodo \T1/cmr/bx/n/10.95 Loop \T1/cmr/m/n/10.95 pre-sen-tato in prece-
+denza
+ []
+
+[33]
+<Immagini/"Callback".jpg, id=605, 376.40625pt x 140.32425pt>
+File: Immagini/"Callback".jpg Graphic file (type jpg)
+<use Immagini/"Callback".jpg>
+Package pdftex.def Info: Immagini/"Callback".jpg  used on input line 1294. on i
+nput line 1294.
+Package pdftex.def Info: Requested size: 469.75502pt x 175.13722pt on input lin
+e 1294.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1298--1299
 
  []
 
 
-Overfull \hbox (2.62569pt too wide) in paragraph at lines 1210--1211
+Overfull \hbox (2.62569pt too wide) in paragraph at lines 1302--1303
 []\T1/cmr/m/n/10.95 Maggiore è il nu-mero di vin-coli che an-di-amo ad in-serir
 e, mag-giore di-venta il tempo di risoluzione
  []
 
-[31 <./Callback.jpg>] [32] [33] [34]
-<SoluzioneFrazionaria.jpg, id=549, 417.9615pt x 373.395pt>
-File: SoluzioneFrazionaria.jpg Graphic file (type jpg)
-<use SoluzioneFrazionaria.jpg>
-Package pdftex.def Info: SoluzioneFrazionaria.jpg  used on input line 1323. on 
-input line 1323.
-Package pdftex.def Info: Requested size: 208.98024pt x 186.69704pt on input lin
-e 1323.
+[34 <./Immagini/Callback.jpg>]
+Overfull \hbox (2.47267pt too wide) in paragraph at lines 1319--1321
+[]\T1/cmr/m/n/10.95 Dove, come al solito, cplex è l'instanza della classe \T1/c
+mr/bx/n/10.95 Cplex \T1/cmr/m/n/10.95 sulla quale defini-amo il mod-ello matem-
+atico
+ []
 
-Underfull \hbox (badness 10000) in paragraph at lines 1343--1344
+
+Overfull \hbox (191.58989pt too wide) in paragraph at lines 1324--1326
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][]  
+ []
+
+[35] [36]
+Overfull \hbox (6.51692pt too wide) in paragraph at lines 1387--1389
+[]\T1/cmr/bx/n/10.95 Add\T1/cmr/m/n/10.95 : è la fun-zione era-di-tata dalla cl
+asse \T1/cmr/bx/n/10.95 Lazy-Con-straint-Call-back \T1/cmr/m/n/10.95 che per-me
+-tte di ag-giun-gere
+ []
+
+[37]
+<Immagini/"SoluzioneFrazionaria".jpg, id=656, 417.9615pt x 373.395pt>
+File: Immagini/"SoluzioneFrazionaria".jpg Graphic file (type jpg)
+<use Immagini/"SoluzioneFrazionaria".jpg>
+Package pdftex.def Info: Immagini/"SoluzioneFrazionaria".jpg  used on input lin
+e 1409. on input line 1409.
+Package pdftex.def Info: Requested size: 469.75502pt x 419.6866pt on input line
+ 1409.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1428--1429
 
  []
 
-[35 <./SoluzioneFrazionaria.jpg>] [36] [37]
-Overfull \hbox (75.07999pt too wide) in paragraph at lines 1435--1436
+[38] [39 <./Immagini/SoluzioneFrazionaria.jpg>]
+Overfull \hbox (116.7607pt too wide) in paragraph at lines 1457--1459
+\T1/cmr/m/n/10.95 L'installazione di questo tipo di call-back avviene at-traver
+so l'invocazione della rou-tine \T1/cmr/bx/n/10.95 CPXset-lazy-con-straint-call
+-back-func
+ []
+
+
+Overfull \hbox (210.48546pt too wide) in paragraph at lines 1462--1464
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[40]
+Overfull \hbox (260.87364pt too wide) in paragraph at lines 1488--1490
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[41]
+Overfull \hbox (75.07999pt too wide) in paragraph at lines 1517--1518
 []\T1/cmr/m/n/10.95 Successivamente è nec-es-sario as-seg-nare al parametro \T1
 /cmr/bx/n/10.95 *user-ac-tion_p \T1/cmr/m/n/10.95 il val-ore \T1/cmr/bx/n/10.95
  CPX_CALLBACK_DEFAULT\T1/cmr/m/n/10.95 . 
  []
 
 
-LaTeX Warning: Command \textendash invalid in math mode on input line 1454.
+Overfull \hbox (36.48619pt too wide) in paragraph at lines 1519--1520
+[]\T1/cmr/m/n/10.95 Per ot-tenere la soluzione del ri-las-sa-mento con-tinuo è 
+nec-es-sario uti-liz-zare il metodo \T1/cmr/bx/n/10.95 CPXget-call-bac-kn-odex
+ []
 
 
-Underfull \hbox (badness 6510) in paragraph at lines 1472--1472
+Overfull \hbox (166.3958pt too wide) in paragraph at lines 1523--1525
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (24.17696pt too wide) in paragraph at lines 1530--1531
+[]\T1/cmr/m/n/10.95 Per quanto riguarda env, cb-data, where-from vale la de-scr
+izione vista per il metodo my-Lazy-Call-Back; 
+ []
+
+
+LaTeX Warning: Command \textendash invalid in math mode on input line 1536.
+
+
+Underfull \hbox (badness 6510) in paragraph at lines 1552--1552
 [][][]\T1/cmr/m/n/9 Notiamo in re-altà che l'implementazione delle \T1/cmr/m/it
 /9 user-cut call-back \T1/cmr/m/n/9 avviene sem-pre in con-comi-tanza
  []
 
-[38] [39] [40] [41] [42] [43]
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1725--1726
+[42]
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 1558--1560
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][]  
+ []
+
+
+Overfull \hbox (235.67955pt too wide) in paragraph at lines 1566--1568
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (134.90318pt too wide) in paragraph at lines 1579--1581
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 1590--1591
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+[43]
+Overfull \hbox (4.39053pt too wide) in paragraph at lines 1611--1612
+[]\T1/cmr/bx/n/10.95 *elist\T1/cmr/m/n/10.95 : vet-tore di di-men-sione $\OT1/c
+mr/m/n/10.95 2 \OMS/cmsy/m/n/10.95  \OML/cmm/m/it/10.95 econut$\T1/cmr/m/n/10.
+95 , con-tiene al suo in-terno tutti i lati del grafo carat-ter-iz-zati
+ []
+
+
+Overfull \hbox (12.84775pt too wide) in paragraph at lines 1629--1630
+\T1/cmr/m/n/10.95 con-nessa, è strut-turato in modo che comp-scount[i] con-teng
+a il nu-mero di nodi pre-sente nell'i-esima
+ []
+
+
+Overfull \hbox (81.30016pt too wide) in paragraph at lines 1633--1634
+\T1/cmr/m/n/10.95 as-seg-nare sia alle vari-abili che ai pun-ta-tori il medes-i
+mo nome che as-sumono all'interno di \T1/cmr/m/it/10.95 CC-cut_connect_componen
+ts\T1/cmr/m/n/10.95 . 
+ []
+
+[44]
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 1648--1649
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][]  
+ []
+
+
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 1649--1650
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (449.82933pt too wide) in paragraph at lines 1657--1659
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (6.31863pt too wide) in paragraph at lines 1683--1684
+\T1/cmr/m/n/10.95 ap-parte-nenti alla t-esima com-po-nente con-nessa mem-o-riz-
+zata in \T1/cmr/m/it/10.95 comps\T1/cmr/m/n/10.95 . Si os-serva che \T1/cmr/m/i
+t/10.95 k2 \T1/cmr/m/n/10.95 è in-izial-iz-zato
+ []
+
+[45]
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 1694--1695
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 1696--1697
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ 
+ []
+
+
+Overfull \hbox (317.56035pt too wide) in paragraph at lines 1714--1716
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][]  
+ []
+
+[46]
+Overfull \hbox (223.0825pt too wide) in paragraph at lines 1746--1748
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (41.19702pt too wide) in paragraph at lines 1750--1751
+[]\T1/cmr/m/n/10.95 Dove oc-corre so-la-mente far no-tare che la fun-zione call
+-back da noi definita prende il nome \T1/cmr/bx/n/10.95 doit-Func-Concorde
+ []
+
+
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 1769--1771
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][]  
+ []
+
+[47]
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1805--1806
 [][][][][]  
  []
 
 
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1727--1728
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1806--1807
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][]  
+ []
+
+
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1807--1808
 [][][][][]  
  []
 
-[44] [45]
-<ProceduraGreedy.jpg, id=776, 358.941pt x 280.6485pt>
-File: ProceduraGreedy.jpg Graphic file (type jpg)
-<use ProceduraGreedy.jpg>
-Package pdftex.def Info: ProceduraGreedy.jpg  used on input line 1772. on input
- line 1772.
-Package pdftex.def Info: Requested size: 179.47005pt x 140.3239pt on input line
- 1772.
- [46 <./ProceduraGreedy.jpg>]
-<ng.jpg, id=783, 1223.16975pt x 462.528pt>
-File: ng.jpg Graphic file (type jpg)
-<use ng.jpg>
-Package pdftex.def Info: ng.jpg  used on input line 1788. on input line 1788.
-Package pdftex.def Info: Requested size: 611.58339pt x 231.26343pt on input lin
-e 1788.
 
-Overfull \hbox (141.82837pt too wide) in paragraph at lines 1788--1789
- [] 
+Overfull \hbox (260.87364pt too wide) in paragraph at lines 1813--1815
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
-[47 <./ng.jpg>] [48] [49]
-<2-opt.png, id=859, 676.5275pt x 227.85126pt>
-File: 2-opt.png Graphic file (type png)
-<use 2-opt.png>
-Package pdftex.def Info: 2-opt.png  used on input line 1886. on input line 1886
-.
-Package pdftex.def Info: Requested size: 338.26291pt x 113.92534pt on input lin
-e 1886.
- [50] [51 <./2-opt.png (PNG copy)>] [52] [53]
-<output.jpg, id=954, 492.6405pt x 146.949pt>
-File: output.jpg Graphic file (type jpg)
-<use output.jpg>
-Package pdftex.def Info: output.jpg  used on input line 2049. on input line 204
-9.
-Package pdftex.def Info: Requested size: 246.31964pt x 73.47432pt on input line
- 2049.
- [54]
-[55 <./output.jpg>] [56] [57]
-<selezioneSP.jpg, id=998, 1362.89175pt x 317.38576pt>
-File: selezioneSP.jpg Graphic file (type jpg)
-<use selezioneSP.jpg>
-Package pdftex.def Info: selezioneSP.jpg  used on input line 2154. on input lin
-e 2154.
-Package pdftex.def Info: Requested size: 681.44421pt x 158.69249pt on input lin
-e 2154.
 
-Overfull \hbox (211.6892pt too wide) in paragraph at lines 2154--2155
- [] 
+Overfull \hbox (12.72504pt too wide) in paragraph at lines 1826--1830
+\T1/cmr/m/n/10.95 Fino a questo mo-mento sono stati pre-sen-tati al-go-ritmi ch
+e, alla loro nat-u-rale ter-mi-nazione, garan-tis-cono
  []
 
-[58 <./selezioneSP.jpg>]
-<Mutazione.jpg, id=1003, 1357.4715pt x 168.02776pt>
-File: Mutazione.jpg Graphic file (type jpg)
-<use Mutazione.jpg>
-Package pdftex.def Info: Mutazione.jpg  used on input line 2186. on input line 
-2186.
-Package pdftex.def Info: Requested size: 678.7341pt x 84.01367pt on input line 
-2186.
+[48]
+<Immagini/"ProceduraGreedy".jpg, id=888, 358.941pt x 280.6485pt>
+File: Immagini/"ProceduraGreedy".jpg Graphic file (type jpg)
+<use Immagini/"ProceduraGreedy".jpg>
+Package pdftex.def Info: Immagini/"ProceduraGreedy".jpg  used on input line 183
+8. on input line 1838.
+Package pdftex.def Info: Requested size: 469.75502pt x 367.29251pt on input lin
+e 1838.
 
-Overfull \hbox (208.97908pt too wide) in paragraph at lines 2186--2187
- [] 
+Overfull \hbox (3.79161pt too wide) in paragraph at lines 1848--1849
+\T1/cmr/m/n/10.95 let-ter-atura. Limi-ti-amoci quindi ad una de-scrizione del c
+on-cetto fon-da-men-tale alla base dell'algoritmo:
  []
 
-[59 <./Mutazione.jpg>] [60] [61] [62] [63] [64] [65] [66] [67] [68]
-<circuitoF.jpg, id=1257, 376.40625pt x 285.4665pt>
-File: circuitoF.jpg Graphic file (type jpg)
-<use circuitoF.jpg>
-Package pdftex.def Info: circuitoF.jpg  used on input line 2600. on input line 
-2600.
-Package pdftex.def Info: Requested size: 188.20265pt x 142.7329pt on input line
- 2600.
-<circuitoH.jpeg, id=1258, 380.622pt x 284.86424pt>
-File: circuitoH.jpeg Graphic file (type jpg)
-<use circuitoH.jpeg>
-Package pdftex.def Info: circuitoH.jpeg  used on input line 2606. on input line
- 2606.
-Package pdftex.def Info: Requested size: 190.31052pt x 142.43176pt on input lin
-e 2606.
- [69 <./circuitoF.jpg>]
-<circuitoC.jpg, id=1274, 377.61075pt x 284.262pt>
-File: circuitoC.jpg Graphic file (type jpg)
-<use circuitoC.jpg>
-Package pdftex.def Info: circuitoC.jpg  used on input line 2612. on input line 
-2612.
-Package pdftex.def Info: Requested size: 188.8049pt x 142.13065pt on input line
- 2612.
 
-Overfull \hbox (3.73863pt too wide) in paragraph at lines 2630--2631
-[][][][][][][][][][][][]  
+Overfull \hbox (4.47183pt too wide) in paragraph at lines 1848--1849
+\T1/cmr/m/n/10.95 dato un qual-si-asi per-corso (soluzione) parziale, il modo m
+igliore per am-pli-arlo è ba-nal-mente at-traverso
  []
 
-[70 <./circuitoH.jpeg> <./circuitoC.jpg>] [71] [72]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2763.
- [73]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2763.
+<Immagini/"ng".jpg, id=891, 1223.16975pt x 462.528pt>
+File: Immagini/"ng".jpg Graphic file (type jpg)
+<use Immagini/"ng".jpg>
+Package pdftex.def Info: Immagini/"ng".jpg  used on input line 1852. on input l
+ine 1852.
+Package pdftex.def Info: Requested size: 469.75502pt x 177.63272pt on input lin
+e 1852.
+[49] [50 <./Immagini/ProceduraGreedy.jpg> <./Immagini/ng.jpg>]
+Overfull \hbox (134.90318pt too wide) in paragraph at lines 1870--1871
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 1872--1873
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][]  
+ []
+
+[51]
+Overfull \hbox (311.26183pt too wide) in paragraph at lines 1896--1897
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (241.97807pt too wide) in paragraph at lines 1917--1919
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[52]
+<Immagini/"2-opt".png, id=976, 676.5275pt x 227.85126pt>
+File: Immagini/"2-opt".png Graphic file (type png)
+<use Immagini/"2-opt".png>
+Package pdftex.def Info: Immagini/"2-opt".png  used on input line 1946. on inpu
+t line 1946.
+Package pdftex.def Info: Requested size: 469.75502pt x 158.21535pt on input lin
+e 1946.
+
+Overfull \hbox (10.56955pt too wide) in paragraph at lines 1950--1954
+[]\T1/cmr/m/n/10.95 Viene da sé che ap-pli-care l'approccio $\OT1/cmr/m/n/10.95
+ 2 \OMS/cmsy/m/n/10.95   \OML/cmm/m/it/10.95 Opt$ \T1/cmr/m/n/10.95 a qual-si-a
+si cop-pia di archi non garan-tisce un miglio-ra-mento
+ []
+
+
+Overfull \hbox (27.19856pt too wide) in paragraph at lines 1950--1954
+\T1/cmr/m/n/10.95 migliore[][][] è nec-es-sario con-frontare tutte le cop-pie p
+os-si-bili ot-te-nendo quindi una com-p-lessità com-putazione
+ []
+
+[53]
+Overfull \hbox (7.30736pt too wide) in paragraph at lines 1970--1972
+\T1/cmr/m/n/10.95 per-me-tte di mem-o-riz-zare una soluzione del prob-lema come
+ un per-corso or-di-nato. Molto sem-plice-mente
+ []
+
+[54 <./Immagini/2-opt.png (PNG copy)>]
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 1989--1990
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 1990--1991
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 1991--1992
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 1992--1994
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 1994--1995
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][]  
+ []
+
+
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 1995--1997
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[55]
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2039--2040
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][]  
+ []
+
+
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2042--2043
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][]  
+ []
+
+
+Overfull \hbox (254.57512pt too wide) in paragraph at lines 2061--2063
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][]  
+ []
+
+[56]
+Overfull \hbox (29.171pt too wide) in paragraph at lines 2065--2065
+[][]\T1/cmr/bx/n/12 GENERAZIONE NU-MERI CA-SU-ALI - SE-MERAN-DOM DA SPOSTARE!!!
+!!!!!!!!!!!!
+ []
+
+File: Immagini/"ng".jpg Graphic file (type jpg)
+<use Immagini/"ng".jpg>
+Package pdftex.def Info: Immagini/"ng".jpg  used on input line 2099. on input l
+ine 2099.
+Package pdftex.def Info: Requested size: 469.75502pt x 177.63272pt on input lin
+e 2099.
+
+Overfull \hbox (4.4605pt too wide) in paragraph at lines 2103--2104
+\T1/cmr/m/n/10.95 come parametro un in-tero che setta il val-ore del seme: sarà
+ a questo punto com-pito del pro-gram-ma-tore
+ []
+
+[57]
+Overfull \hbox (6.66415pt too wide) in paragraph at lines 2123--2128
+\T1/cmr/m/n/10.95 rap-p-re-sen-tano ipotetiche soluzioni al prob-lema dato. Ogn
+i in-di-viduo della popo-lazione viene cod-i-fi-cato
+ []
+
+[58]
+Overfull \hbox (1.78905pt too wide) in paragraph at lines 2142--2143
+[]\T1/cmr/bx/n/10.95 Crossover uni-forme\T1/cmr/m/n/10.95 : con-siste nello sca
+m-biare ca-sual-mente el-e-menti tra le soluzioni can-di-date
+ []
+
+<Immagini/"selezioneSP".jpg, id=1116, 1362.89175pt x 317.38576pt>
+File: Immagini/"selezioneSP".jpg Graphic file (type jpg)
+<use Immagini/"selezioneSP".jpg>
+Package pdftex.def Info: Immagini/"selezioneSP".jpg  used on input line 2149. o
+n input line 2149.
+Package pdftex.def Info: Requested size: 469.75502pt x 109.39165pt on input lin
+e 2149.
+[59 <./Immagini/selezioneSP.jpg>]
+<Immagini/"Mutazione".jpg, id=1124, 1357.4715pt x 168.02776pt>
+File: Immagini/"Mutazione".jpg Graphic file (type jpg)
+<use Immagini/"Mutazione".jpg>
+Package pdftex.def Info: Immagini/"Mutazione".jpg  used on input line 2174. on 
+input line 2174.
+Package pdftex.def Info: Requested size: 469.75502pt x 58.14655pt on input line
+ 2174.
+
+Overfull \hbox (67.31856pt too wide) in paragraph at lines 2180--2186
+\T1/cmr/m/n/10.95 DI-CI-AMO DOPO???????. La prima gen-er-azione viene ot-tenuta
+ at-traverso il metodo \T1/cmr/bx/n/10.95 Near-est-Neight-bor-Ge-netic
+ []
+
+[60] [61 <./Immagini/Mutazione.jpg>]
+Overfull \hbox (90.81352pt too wide) in paragraph at lines 2205--2206
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (286.06773pt too wide) in paragraph at lines 2212--2213
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+]  
+ []
+
+
+Overfull \hbox (210.48546pt too wide) in paragraph at lines 2215--2217
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[62]
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 2231--2233
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (304.9633pt too wide) in paragraph at lines 2250--2252
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2269--2270
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[63]
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2276--2277
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+[64]
+Overfull \hbox (367.94853pt too wide) in paragraph at lines 2329--2331
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[65]
+Overfull \hbox (3.27429pt too wide) in paragraph at lines 2387--2388
+\T1/cmr/m/n/10.95 gen-er-azione sceglien-done gli el-e-menti tra la vec-chia ge
+n-er-azione ed i suoi figli at-traverso una es-trazione
+ []
+
+
+Overfull \hbox (512.81456pt too wide) in paragraph at lines 2391--2393
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[66]
+Overfull \hbox (9.10065pt too wide) in paragraph at lines 2426--2427
+[]\T1/cmr/m/n/10.95 La creazione della nuova gen-er-azione avviene es-traendo v
+al-ori ran-dom non su-pe-ri-ori ad \T1/cmr/m/it/10.95 up-perEx-trem-ity\T1/cmr/
+m/n/10.95 ,
+ []
+
+
+Overfull \hbox (90.81352pt too wide) in paragraph at lines 2445--2446
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[67]
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 2481--2483
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2499--2500
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[68]
+<Immagini/"circuitoF".jpg, id=1354, 376.40625pt x 285.4665pt>
+File: Immagini/"circuitoF".jpg Graphic file (type jpg)
+<use Immagini/"circuitoF".jpg>
+Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 2540. on 
+input line 2540.
+Package pdftex.def Info: Requested size: 469.75502pt x 356.28775pt on input lin
+e 2540.
+<Immagini/"circuitoH".jpeg, id=1355, 380.622pt x 284.86424pt>
+File: Immagini/"circuitoH".jpeg Graphic file (type jpg)
+<use Immagini/"circuitoH".jpeg>
+Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 2546. on
+ input line 2546.
+Package pdftex.def Info: Requested size: 469.75502pt x 351.59799pt on input lin
+e 2546.
+<Immagini/"circuitoC".jpg, id=1356, 377.61075pt x 284.262pt>
+File: Immagini/"circuitoC".jpg Graphic file (type jpg)
+<use Immagini/"circuitoC".jpg>
+Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 2552. on 
+input line 2552.
+Package pdftex.def Info: Requested size: 469.75502pt x 353.63933pt on input lin
+e 2552.
+ [69] [70 <./Immagini/circuitoF.jpg>] [71 <./Immagini/circuitoH.jpeg>]
+[72 <./Immagini/circuitoC.jpg>]
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 2569--2570
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 2586--2587
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][]  
+ []
+
+[73]
+Overfull \hbox (3.63159pt too wide) in paragraph at lines 2628--2629
+\OML/cmm/m/it/10.95 n[]$\T1/cmr/m/n/10.95 . Per con-ven-zione, sup-po-nendo $\O
+ML/cmm/m/it/10.95 indice[] < indice[]$ \T1/cmr/m/n/10.95 vale $\OML/cmm/m/it/10
+.95 nearestNeighIsolNode\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 indice[]\OT1/cm
+r/m/n/10.95 ] =
+ []
+
+
+Overfull \hbox (267.17216pt too wide) in paragraph at lines 2649--2650
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][]  
+ []
+
+[74]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2696.
+ [75]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2696.
  (Tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2763.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2763.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2696.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2696.
 
 Package rerunfilecheck Info: File `Tesi.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2763.
+(rerunfilecheck)             Checksum: 112F2550288246F1A6C00208FC2443E6;122.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2696.
  ) 
 Here is how much of TeX's memory you used:
- 12271 strings out of 493314
- 172999 string characters out of 3136264
+ 12399 strings out of 493314
+ 175257 string characters out of 3136264
  299031 words of memory out of 3000000
- 14572 multiletter control sequences out of 15000+200000
- 21937 words of font info for 58 fonts, out of 3000000 for 9000
+ 14602 multiletter control sequences out of 15000+200000
+ 25020 words of font info for 62 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,13n,40p,1355b,1850s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,13n,40p,1355b,1923s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
 C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:
 /Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/P
@@ -1141,18 +1922,20 @@ eX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX
 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/cm-super/sfbx0900.pfb><C:/Program Files (x86)/MiKTeX 
 2.9/fonts/type1/public/cm-super/sfbx1095.pfb><C:/Program Files (x86)/MiKTeX 2.9
-/fonts/type1/public/cm-super/sfrm0600.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/public/cm-super/sfrm0800.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
-/type1/public/cm-super/sfrm0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
-pe1/public/cm-super/sfrm1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/cm-super/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
-blic/cm-super/sfti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
-c/cm-super/sftt1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/t
-ipa/tipa10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipab
-x10.pfb>
-Output written on Tesi.pdf (73 pages, 1350250 bytes).
+/fonts/type1/public/cm-super/sfbx1200.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/cm-super/sfbx1440.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/cm-super/sfrm0600.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/cm-super/sfrm0800.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
+/public/cm-super/sfrm0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
+blic/cm-super/sfrm1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/cm-super/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/c
+m-super/sfti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-s
+uper/sftt1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/ti
+pa10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipabx10.pf
+b>
+Output written on Tesi.pdf (75 pages, 1476431 bytes).
 PDF statistics:
- 1669 PDF objects out of 1728 (max. 8388607)
- 1054 named destinations out of 1200 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1817 PDF objects out of 2073 (max. 8388607)
+ 1156 named destinations out of 1200 (max. 500000)
+ 82 words of extra memory for PDF output out of 10000 (max. 10000000)
 
