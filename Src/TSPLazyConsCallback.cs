@@ -99,7 +99,12 @@ namespace TSPCsharp
                     cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
                     Add(cuts[i], 1);
                 }
-            }              
+            }  
+            else
+            {
+                int y = 0;
+                double i = value;
+            }            
         }
     }
 }

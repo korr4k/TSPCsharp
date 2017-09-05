@@ -923,10 +923,11 @@ namespace TSPCsharp
             //cplex.Use(new TSPInformativeCallback(tspInc));
            
             //Provide to Cplex a warm start
-            cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
+             cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
 
             //Set the number of thread equal to the number of logical core present in the processor
-            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+            cplex.SetParam(Cplex.Param.Threads, 1);
+
             //cplex.SetParam(Cplex.IntParam.ParallelMode, -1);
 
             do
@@ -934,7 +935,10 @@ namespace TSPCsharp
                 //Modify the Model according to the current Incumbent solution
                 Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
 
-                cplex.SetParam(Cplex.DoubleParam.ObjLLim, currentIncumbentCost - 1);
+               // cplex.SetParam(Cplex.DoubleParam.ObjLLim, currentIncumbentCost - 1);
+                cplex.SetParam(Cplex.DoubleParam.ObjULim, currentIncumbentCost - 1);
+
+                double solPassata = currentIncumbentCost - 1;
 
                 //Solve the model
                 cplex.Solve();
@@ -975,7 +979,7 @@ namespace TSPCsharp
                     //If don't have improvement decrease variable consecutiveIterationNotImprov
                     consecutiveiterationNotImprov--;
        
-                    cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
+                    //cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
                 }
                                    
                 if (consecutiveiterationNotImprov == 0)
