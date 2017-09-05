@@ -6,9 +6,85 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
-
+using System.Threading;
 namespace TSPCsharp
 {
+    class TSPIncumbent: Cplex.IncumbentCallback
+    {
+        public bool upgradeInc = false;
+
+        private System.Object lockThis = new System.Object();
+        public TSPIncumbent()
+        {
+         
+        }
+
+        public override void Main()
+        {
+            double c = GetIncumbentObjValue();
+       
+            if (GetIncumbentObjValue() != 1E+75)
+            {
+                lock (lockThis)
+                {
+                    if (upgradeInc == false)
+                        upgradeInc = true;
+                    else
+                        Reject();
+                }
+            }    
+        }
+    }
+    
+    class TSPInformativeCallback : Cplex.MIPInfoCallback
+    {
+        TSPIncumbent tspI;
+ 
+        //Constructor of the class
+        public TSPInformativeCallback(TSPIncumbent tspI)
+        {
+            this.tspI = tspI;
+        }
+
+        public override void Main()
+        {
+            double c = GetIncumbentObjValue();
+
+           if (tspI.upgradeInc == true)
+           {
+                tspI.upgradeInc = false;
+               //Stop the solver                          
+                Abort();
+           } 
+       }
+   }
+
+   /*
+   class TSPInformativeCallback : Cplex.MIPInfoCallback
+   {
+       //Stored the value of the previousIncumbent
+       double previusIncumbent = Double.MaxValue;
+
+       //Constructor of the class
+       public TSPInformativeCallback()
+       {
+
+       }
+
+       public override void Main()
+       {
+           //Only if the Incumbent solution is upgrade stop the solver
+           if (GetIncumbentObjValue() < previusIncumbent)
+           {
+               //Sored the actual incumbet for the next iteration
+               previusIncumbent = GetIncumbentObjValue();
+               //Stop the solver                          
+               Abort();
+           }
+       }
+   }
+
+   */
     class TSP
     {
         [DllImport("ConcordeDLL.dll")]
@@ -792,57 +868,88 @@ namespace TSPCsharp
         static void HardFixing(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
         {
             StreamWriter file;
-            double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
-            double incumbentCost = Double.MaxValue;
+
+            //Vector used to encode the path that rappresent the best integer solution note
+            double[] currentIncumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            
+            //Cost of the best integer solution note
+            double currentIncumbentCost = Double.MaxValue;
+
             List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-            List<int[]> fixedVariables = new List<int[]>();
+            //Serve per differenziarsi rispetto alla lazy "normale" in cui stampo ogni soluzione intera(anche che non è un subtour)
+            bool BlockPrint = false;
 
-            bool BlockPrint = false;//Serve per differenziarsi rispetto alla lazy "normale" in cui stampo ogni soluzione intera(anche che non è un subtour)
-            int numIterazioni = 10;
-            int percentageFixing = 8;
+            const int VALUECONSITENOTIMPROV = 3;
+
+            //Defined the max number of consecutive run of cplex whithout finds a improvement of the incumbent
+            int consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+
+            //Defined the percentage of edge in the current solution that fixed 
+            double percentageFixing = 0.8;
 
             instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
+            //Create the model
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
+            //Create a heuristic solution
             PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
+            
+            //Apply 2-opt algorithm in order to improve the costo o the heiristicSol
+            TwoOpt(instance, heuristicSol);
+
+            //The heuristic solution is the Incumbent, translate the encode in the format used by Cplex
 
             for (int i = 0; i < instance.NNodes; i++)
             {
                 int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
-                incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
+                
+                //Set to one only the edge that belong to heuristic solution
+                currentIncumbentSol[position] = 1;
             }
 
-            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
+            //Installation of the Lazy Constraint CallBack
 
-            cplex.AddMIPStart(x, incumbentSol, "HeuristicPath");
-            int z = cplex.GetMIPStartIndex("HeuristicPath");
+            TSPLazyConsCallback tspLazy = new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint);
+            cplex.Use(tspLazy);
+         
+            TSPIncumbent tspInc = new TSPIncumbent();
+            cplex.Use(tspInc);
+           
+            //Installation of Informative CallBack
+            cplex.Use(new TSPInformativeCallback(tspInc));
+           
+            //Provide to Cplex a warm start
+            cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
+
+            //Set the number of thread equal to the number of logical core present in the processor
+            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+            //cplex.SetParam(Cplex.IntParam.ParallelMode, -1);
 
             do
             {
+                //Modify the Model according to the current Incumbent solution
+                Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
 
-                Utility.ModifyModel(instance, x, rnd, percentageFixing, incumbentSol, fixedVariables);
-                if ((fixedVariables.Count != instance.NNodes - 1) && (fixedVariables.Count != instance.NNodes))
-                    Utility.PreProcessing(instance, x, fixedVariables);
-
+                //Solve the model
                 cplex.Solve();
 
-                if (incumbentCost > cplex.ObjValue)
+                if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
                 {
                     file = new StreamWriter(instance.InputFile + ".dat", false);
 
-                    incumbentCost = cplex.ObjValue;
-                    incumbentSol = cplex.GetValues(x);
+                    currentIncumbentCost = cplex.GetObjValue(Cplex.IncumbentId);
+                    currentIncumbentSol = cplex.GetValues(x,Cplex.IncumbentId);
 
+                    //Print solution               
                     for (int i = 0; i < instance.NNodes; i++)
                     {
                         for (int j = i + 1; j < instance.NNodes; j++)
                         {
                             int position = Utility.xPos(i, j, instance.NNodes);
 
-                            if (incumbentSol[position] >= 0.5)
+                            if (currentIncumbentSol[position] >= 0.5)
                             {
                                 file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
                                 file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
@@ -852,31 +959,40 @@ namespace TSPCsharp
 
                     file.Close();
 
-                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
-                    cplex.ChangeMIPStart(z, x, incumbentSol);
-                }
-            
-                fixedVariables.RemoveRange(0, fixedVariables.Count);
-                numIterazioni--;
+                    Utility.PrintGNUPlot(process, instance.InputFile, 1, currentIncumbentCost, -1);
 
-                if (numIterazioni == 0)
+                    //Restorarion the variable consecutiveIterationNotImprov to the value VALUECONSITENOTIMPROV
+                    consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+                }
+                else
                 {
-                    if (percentageFixing > 2)
+                    //If don't have improvement decrease variable consecutiveIterationNotImprov
+                    consecutiveiterationNotImprov--;
+       
+                    cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
+                }
+                                   
+                if (consecutiveiterationNotImprov == 0)
+                {
+                    if (percentageFixing > 0.2)
                     {
-                        percentageFixing--;
-                        numIterazioni = 10;
+                        percentageFixing -= 0.1;
+                        consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
                     }
                     else
-                        numIterazioni = 10;
+                        consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
                 }
 
             } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
-            instance.XBest = incumbentCost;
-            instance.BestSol = incumbentSol;
+            instance.XBest = currentIncumbentCost;
+            instance.BestSol = currentIncumbentSol;
 
             file = new StreamWriter(instance.InputFile + ".dat", false);
             cplex.Output().WriteLine();
+
+
+            //Print the solution
 
             for (int i = 0; i < instance.NNodes; i++)
             {
@@ -897,7 +1013,9 @@ namespace TSPCsharp
             if (Program.VERBOSE >= -1)
                 Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.XBest, -1);
 
+            //Empty line
             cplex.Output().WriteLine();
+
             cplex.Output().WriteLine("xOPT = " + instance.XBest + "\n");
 
             if (Program.VERBOSE >= -1)
@@ -934,7 +1052,12 @@ namespace TSPCsharp
             cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local brnching constraint");
             cplex.AddCut(cut);
 
-            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+           //cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
+
+            cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Traditional);
+
+            //cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+
             cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
 
             do

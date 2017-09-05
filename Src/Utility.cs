@@ -174,6 +174,7 @@ namespace TSPCsharp
                 cc[i] = i;
             }
         }
+ 
 
         //Updating the related components
         public static void UpdateCC(Cplex cplex, INumVar[] x, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
@@ -745,110 +746,143 @@ namespace TSPCsharp
 
         //--------------------------------------------MATH HEURISTIC UTILITYES--------------------------------------------
 
-        public static void ModifyModel(Instance instance, INumVar[] x, Random rnd, int percentageFixing, double[] values, List<int[]> fixedEdges)
+        public static void ModifyModel(Instance instance, INumVar[] x, Random rnd, double percentageFixing, double[] solution)
         {
-            for (int i = 0; i < x.Length; i++)//Inutile la prima volta
+            double[] fixedVariable = new double[solution.Length];
+
+            //Restoration the lower and upper bound of all variable. 
+            for (int i = 0; i < x.Length; i++)
             {
                 x[i].LB = 0;
                 x[i].UB = 1;
             }
 
+            //Scan all edge that belong to the current heuristic solution
             for (int i = 0; i < x.Length; i++)
             {
-                if ((values[i] == 1))
+                if ((solution[i] == 1))
                 {
+                    //Whit a percentageFixing probability fix a edge belong to the current solution
                     if (RandomSelect(rnd, percentageFixing) == 1)
                     {
                         x[i].LB = 1;
-                        fixedEdges.Add((xPosInv(i, instance.NNodes)));
+                        //zPosInv(i, instance.NNodes);
+                        fixedVariable[i] = 1;
                     }
                 }
             }
+
+            //Fixed other variables according to the subtour elimination constraint
+             Utility.PreProcessing(instance, x, fixedVariable);
         }
 
-        static int RandomSelect(Random rnd, int percentageFixing)
+        static int RandomSelect(Random rnd, double percentageFixing)
         {
-            if (rnd.Next(1, 10) < percentageFixing)
+            if (rnd.NextDouble() < percentageFixing)
                 return 1;
             else
                 return 0;
         }
-
-        static int[] xPosInv(int index, int nNodes)
+        static int[] zPosInv(int index, int nNodes)
         {
+            //int i = 0;
+            //int cnt = 1;
+            //int sup = nNodes - cnt;
+            //while(index > sup)
+            //{
+            //    cnt++;
+            //    sup += nNodes - cnt; 
+            //}
+
+            //i = cnt - 1;
+
+            //int i = index + (i + 1) * (i + 2) / 2 - i * nNodes;
+
+            //return new int[] { i, i };
+
             for (int i = 0; i < nNodes; i++)
             {
                 for (int j = i + 1; j < nNodes; j++)
                     if (xPos(i, j, nNodes) == index)
+                    {
+                        Console.WriteLine(i + "-------" + j);
                         return new int[] { i, j };
+                    }
             }
 
             return null;
         }
 
-        public static void PreProcessing(Instance instance, INumVar[] x, List<int[]> fixedVariables)
+        public static void PreProcessing(Instance instance, INumVar[] x, double[] edgeFixed)
         {
-            int nodeLeft = 0;
-            int nodeRight = 0;
+            //List of integer Lists contentent for each connected component all nodes that belong to it
+            List<List<int>> nodesComp = new List<List<int>>();
+           
+            //Vector contenent for each node relative connected component
+            int[] compConn = new int[instance.NNodes];
 
-            /* for (int i = 0; i < fixedVariables.Count; i++)
-             {
-                 int[] x = fixedVariables[i];
-                 Console.WriteLine(x[0] + "---" + x[1]);
-             }
-             */
-            for (int i = 0; i < fixedVariables.Count; i++)
+            //Inizialization Comp
+            for (int i = 0; i < instance.NNodes; i++)
             {
-                int[] currentEdge = fixedVariables[i];
-
-                nodeLeft = currentEdge[0];
-                nodeRight = currentEdge[1];
-                fixedVariables.Remove(currentEdge);
-
-
-                for (int k = 0; k < fixedVariables.Count; k++)
-                {
-                    int[] fixedEdge = fixedVariables[k];
-                    if (nodeLeft == fixedEdge[0])
-                    {
-                        nodeLeft = fixedEdge[1];
-                        fixedVariables.Remove(fixedEdge);
-                    }
-                }
-                for (int k = 0; k < fixedVariables.Count; k++)
-                {
-                    int[] fixedEdge = fixedVariables[k];
-                    if (nodeLeft == fixedEdge[1])
-                    {
-                        nodeLeft = fixedEdge[0];
-                        fixedVariables.Remove(fixedEdge);
-                    }
-                }
-
-                for (int k = 0; k < fixedVariables.Count; k++)
-                {
-                    int[] fixedEdge = fixedVariables[k];
-                    if (nodeRight == fixedEdge[0])
-                    {
-                        nodeRight = fixedEdge[1];
-                        fixedVariables.Remove(fixedEdge);
-                    }
-
-                }
-
-                for (int k = 0; k < fixedVariables.Count; k++)
-                {
-                    int[] fixedEdge = fixedVariables[k];
-                    if (nodeRight == fixedEdge[1])
-                    {
-                        nodeRight = fixedEdge[0];
-                        fixedVariables.Remove(fixedEdge);
-                    }
-
-                }
-                if (nodeLeft != currentEdge[0] || nodeRight != currentEdge[1])
-                    x[xPos(nodeLeft, nodeRight, instance.NNodes)].UB = 0;
+                nodesComp.Add(new List<int>());
+                nodesComp[i].Add(i);
             }
+
+            //Inizialization compConn
+            Utility.InitCC(compConn);
+
+            for (int i = 0; i < instance.NNodes; i++)
+            {
+                for (int j = i + 1; j < instance.NNodes; j++)
+                {
+                    //Retriving the correct index position for the current link 
+                    int position = Utility.xPos(i, j, instance.NNodes);
+
+                    //if the edge is fixed don't generate a subtour
+                    if (edgeFixed[position] == 1)
+                    {   
+                        //Set the connected component 
+                        for (int k = 0; k < instance.NNodes; k++)
+                        {
+                            if ((k != j) && (compConn[k] == compConn[j]))
+                            {
+                                compConn[k] = compConn[i];
+                                nodesComp[compConn[i]].Add(k);
+                            }
+                        }
+
+                        //Essendo che ora il nodo j appartiene alla componente connessa i, in Comp[compConn[j]] non vado ad inserire nodi, li insererisco  Comp[compConn[i]]
+                        nodesComp[compConn[j]] = null;
+
+                        //Finally also the vallue relative to the Point i are updated
+                        compConn[j] = compConn[i];
+                        nodesComp[compConn[i]].Add(j);                                                            
+                    }
+                }
+            }
+
+      
+
+            //For everyone node tha belong to a connected component 
+            for (int i = 0; i < nodesComp.Count; i++)
+            {
+                if (nodesComp[i] != null && nodesComp[i].Count > 2)
+                {
+                    for (int m = 0; m < nodesComp[i].Count - 1; m++)
+                    {
+                        for (int y = m + 1; y < nodesComp[i].Count; y++)
+                        {
+                            int pos = xPos(nodesComp[i][m], nodesComp[i][y], instance.NNodes);
+                            
+                            //The variabile is not previus fix
+                            if ((x[pos].UB == 1) && (x[pos].LB == 0))
+                            {
+                                x[pos].UB = 0;
+                            }        
+                        }
+                    }
+                }
+            }   
         }
 
         public static PathGenetic GenerateChildRins(Cplex cplex, Instance instance, Process process, INumVar[] x, PathGenetic mother, PathGenetic father)

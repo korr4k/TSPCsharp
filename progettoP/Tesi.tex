@@ -2054,7 +2054,7 @@ int nun = random.Next(1,100);
 
 I numeri random sono generati, a partire da un valore d' inizializzazione chiamato \textbf{seme}, da un algoritmo matematico. Per sua natura l' algoritmo è deterministico: se si fornisce in input lo stesso seme genererà sempre la medesima sequenza di numeri. Per tale ragione il valore del seme viene derivato dall'orologio di sistema all' atto della  creazione dell' istanza della classe Random qualora si utilizza il costruttore di default. In questo modo, non essendo predicibile il valore del seme, la sequenza di numeri generati dall' algoritmo risulta essere sistematicamente casuale. 
 
-L' orologio di sistema non sempre risulta un buon valore da utilizzare per settare il seme. Si supponga di avere la necessità di creare due oggetti diversi della classe Random: qualora quest’ ultimi siano creati uno di seguito all’ altro avranno entrambi il medesimo seme poichè l' orologio di sistema risulta lo stesso nel lasso di tempo che il processore impiega ad eseguire le due istruzioni.
+L' orologio di sistema non sempre risulta un buon valore da utilizzare per settare il seme. Si supponga di avere la necessità di creare due oggetti diversi della classe Random: qualora quest' ultimi siano creati uno di seguito all' altro avranno entrambi il medesimo seme poichè l' orologio di sistema risulta lo stesso nel lasso di tempo che il processore impiega ad eseguire le due istruzioni.
 
 Per constatare ciò si è realizzato il seguente programma:
 
@@ -2145,30 +2145,70 @@ VNS
 MATHEURISTICS
 \vspace{2\baselineskip}
 
-In termini generali possiamo definire gli algoritmi \textbf{matheuristics} come algoritmi euristici di miglioramento che, partendo da una o più soluzioni ammissibili, sfruttano il \textbf{modello matematico} per calcolare soluzioni migliori.
-In particolare sfruttare il modello matematico significa poter utilizzare un solver e, poichè essi sono estremamente efficienti anche nel risolvere istanze grandi a costo di semplificare il modello, è possibile realizzare algoritmi euristici che producono soluzioni particolarmente buone in brevissimo tempo.
-Per quanto possa risultare semplice tale idea, algoritmi di questo tipo sono stati implementati solamente a partire dagli anni 2000. Il punto saliente i questi metodi consta nella determinazione del vicinato di una soluzione di partenza \textbf{x}. Tale scelta è tutt'altro che banale, ed è la chiave per ottenere un metodo efficiente. Uno schema comunemente usato è di scegliere un certo numero di variabili della soluzione di riferimento \textbf{x} e fissarle, lasciando libere altre. Questo modo di procedere è detto\textbf{ hard variable fixing}; il suo principale svantaggio è rappresentato nel difficile problema della scelta di quali variabili sia opportuno fissare e quali lasciare libere. In contrapposizione a questa tecnica è possibile pensare ad un differente modo di procedere, il cosiddetto \textbf{soft variable fixing}, che consiste invece nel far sì che un certo numero di variabili restino immutate, ma senza conoscere a priori quali siano, lasciando che sia il solver ad effettuare la scelta ottimale fra tutte quelle possibili.
+Gli algoritmi \textbf{matheuristics} nascono con l' obbiettivo di migliorare una soluzione di partenza ammissibile \textbf{x} sfruttando il modello matematico del MIP che si vuole risolvere. Analogamente a quanto visto per gli algoritmi di ricerca locale e metaeuristici, essi tentano di individuare una soluzione migliore x* all' interno di un intorno N(x) ottenuto, in questo ambito, modificando opportunamente il modello matematico del MIP di partenza. 
+
+L' esplorazione di N(x) non avviene per enumerazione, come visto per gli algoritmi di ricerca locale, ma avviene tramite un solver che, in questo contesto, può essere visto come una “black-box” che risolve il subMIP corrente. Poiché al giorno d' oggi i solver risultano essere estremamente efficienti, gli algoritmi matheuristics consentono,tipicamente, di esplorare l' intorno N(x) in breve tempo. 
+I matheuristici posso essere applicati a qualunque soluzione ammissibile x; ciò nonostante per apprezzarne davvero la potenza tipicamente vengono applicati successivamente all' esecuzione di un algoritmo migliorativo o, meglio ancora, al termine del multistart o di un metaeuristico. Questo perchè, molto spesso, le tecniche mostrate precedentemente tendono tutte a saturare in prossimità di una soluzione molto buona \textbf{\overline{x}}, ma che non rappresenta l' ottimo. Fornendo tale soluzione ad un matheuristics esso è in grado di migliorarla in brevissimo tempo e, dipendentemente dal costo di \textbf{\overline{x}} e del time limit residuo, persino di raggiungere l' ottimo globale. Si osserva che esiste una notevole differenza fra l' ottenere l' ottimo da un algoritmo esatto e calcolare l' ottimo seguendo il procedimento precedentemente discusso: mentre nel primo caso l' ottimo è certificato, nel secondo caso non si ha modo di sapere, a meno che non si conosca a priori il suo costo, se la soluzione restituita all' utente terminato il time-limit rappresenta l' ottimo oppure no.
+
+Il punto saliente di questi metodi consta nella determinazione del vicinato di una soluzione di partenza \textbf{x}. Tale scelta è tutt'altro che banale, ed è la chiave per ottenere un metodo efficiente. Uno schema comunemente usato è di scegliere un certo numero di variabili della soluzione di riferimento \textbf{x} e fissarle, lasciando libere altre. Questo modo di procedere è detto\textbf{ hard variable fixing}; il suo principale svantaggio è rappresentato nel difficile problema della scelta di quali variabili sia opportuno fissare e quali lasciare libere. In contrapposizione a questa tecnica è possibile pensare ad un differente modo di procedere, il cosiddetto \textbf{soft variable fixing}, che consiste invece nel far sì che un certo numero di variabili restino immutate, ma senza conoscere a priori quali siano, lasciando che sia il solver ad effettuare la scelta ottimale fra tutte quelle possibili.
+
 
 \vspace{2\baselineskip}
 HARD FIXING
 \vspace{2\baselineskip} 
 
-L' hard fixing è una tecnica euristica che, data una soluzione ammissibile di riferimento \textbf{x_H}, consiste nel fissare in soluzione variabili che fanno parte di \textbf{x_H}. La soluzione \textbf{x_H} può essere ottenuta utilizzando un qualunque algoritmo costruttivo oppure Cplex fornendogli un time limit che ragionevolmente possa essere considerato breve per l' istanza che si vuole risolvere. Esistono varie politiche di fissaggio dei lati. Una strategia possibile consiste nello scansionare tutti i lati che costituiscono x_H e fissare in soluzione le variabili ad essi associati con probabilità \textbf{p}. Maggiore è il numero di variabili fissate, minore saranno le operazioni di branching e quindi conseguentemente i nodi dell' albero decisionale.
-Si osserva che qualora si fissi le variabili corrispondenti ai due lati che incidono in un nodo, Cplex nella fase di preprocessing fissa a 0 le variabili corrispondente ai rimanenti n-3 lati uscenti dal nodo grazie ai vincoli di grado inseriti nel modello. 
-Fissare alcune variabili induce la definizione di un intorno N(x_H) al cui interno sono presenti tutti i tour aventi tali variabili fissate: l' esplorazione dell' intorno non avviene più tramite enumerazione come visto per gli algorimi migliorativi, ma avviene utilizzando Cplex fornendo a quest' ultimo il modello matematico modificato.
+L' hard fixing è una tecnica euristica che, data una soluzione ammissibile \textbf{x_H}, consiste nel fissare in soluzione lati che fanno parte di \textbf{x_H}. La soluzione \textbf{x_H} può essere ottenuta utilizzando un qualunque algoritmo costruttivo oppure Cplex fornendogli un time limit che ragionevolmente possa essere considerato breve per l' istanza che si vuole risolvere. Esistono varie politiche di fissaggio dei lati. Una strategia possibile consiste nello scansionare tutti i lati che costituiscono x_H e fissare in soluzione le variabili ad essi associati con probabilità \textbf{p}. Una seconda strategia consiste invece nel fissare in soluzione gli $m$ lati più corti di x_H; tale politica prende origine dall' idea intuitiva per cui lati lunghi poco probabilmente faranno parte della soluzione ottima. 
+Il fissaggio di alcune variabili induce la definizione di un intorno N(x_H) al cui interno sono presenti tutti i tour aventi tali variabili fissate: l' esplorazione dell' intorno non avviene più tramite enumerazione come visto per gli algoritmi migliorativi, ma avviene utilizzando Cplex.//
+Naturalmente maggiore è il numero di variabili fissate (ossia più elevati sono p o m a seconda della strategia di fissaggio usata), minore saranno le operazioni di branching e quindi conseguentemente i nodi dell' albero decisionale. Un minor numero di nodi implica un minor numero numero di rilassamenti continui da risolvere e ciò non può che velocizzare Cplex nel calcolo della soluzione ottima del subMIP.
  
+Tuttavia la soluzione prodotta non sarà in generale un ottimo globale poichè con un \textit{p} o un \textit{m} molto elevato risulta poco probabile fissare in soluzione tutte le variabili che appartengono alla soluzione ottima. 
+Qualora il time limit residuo non risulta nullo, è quindi opportuno nelle iterazioni successive diminuire il valore di tali parametri. Tipicamente si preferisce la prima strategia poichè consente dopo un certo numero k di iterazioni, dove k può essere molto elevato, di calcolare la soluzione ottima essendo che si fissano ad ogni iterazioni variabili in maniera random e ,poichè gradualmente p viene diminuito, è facile in una iterazione vengano fissata tutte variabili che appartengono alla soluzione ottima. La seconda strategia da questo punto di vista risulta più scadente visto che, anche se solo un lato fra quelli più corti non appartiene alla soluzione ottima, esso viene comunque fissato impedendo a Cplex di calcolare l' ottimo.
+
+Passiamo ora a discutere il metodo HardFixing realizzato, fornendo una panoramica del suo funzionamento e definendo quali scelte sono state adottate. La soluzione di partenza c_P è stata ottenuto applicando il metodo NearestNeightbor precedentemente discusso. Come accennato, i matheuristici risultano tipicamente applicati a soluzioni  con costi già particolarmente buoni, per tale ragione si è invocato il metodo TwoOpt su c_P il quale produrrà una soluzione x il cui costo risulta,tipicamente, inferiore rispetto a c_P. Fra le politiche possibili per esplorare N(x), si è scelto nuovamente di utilizzare \textbf{first improvement}.//
+La generica iterazione \textit{t} dell' algoritmo si sviluppa come segue: sia \textbf{x_I} la miglior soluzione calcolata da Cplex fino all' itarazine \textit{t}, ogni lato di \textit{x_I} viene fissato in soluzione con probabilità \textit{p} dal metodo \textbf{ModifyModel}. Fissare in soluzione la variabile \textit{x_i} equivale ad aggiungere al modello il vincoli $x_i = 1$ e togliere il vincolo di interezza 0<= x_i <= 1: il nuovo modello così ottenuto viene risolto da Cplex.
+
+Alla prima soluzione ammissibile x* calcolata,il cui costo risulta inferiore rispetto ad \textit{x_I}, il solver viene arrestato e si pone x_I = x*. All' iterazione $t + 1$ vengono nuovamente fissate con probabilità $p$ variabili in soluzione appartenenti a \textit{x*}  iterando il procedimento discusso. Qualora invece in N(x_I) non esista una soluzione migliore di x_I, si modifica l' intorno di esplorazione, ovvero vengono fissate nuovamente in soluzione lati che appartengono x_I ma, poichè il processo di fissaggio è casuale, verranno fissate variabili differenti ottenendo così un intorno differente rispetto al precedente. Quando decidere di far diminuire p è tutt' altro che banale ed esistono svariate possibilità.//
+
+[...]
+
+//
+
+
 \vspace{2\baselineskip} 
 WARM-START
 \vspace{2\baselineskip} 
 
-Il solver Cplex consente di fornirgli in input una soluzione euristica del problema: tale soluzione prende il nome di \textbf{warm-start} o \textbf{MIP start}. Risulta possibile, in generale, fornire più MIP start, in tal caso si parla di MIP starts multiplo. Quando si fornisce un MIP start, esso viene processato da Cplex durante la fase di ottimizzazione prima di iniziare il branch and cut. Qualora uno o più MIP start rappresenti una soluzione ammissibile, CPLEX installa la migliore di queste soluzioni come incumbent. Poter disporre di un incumbent fin dall'inizio del branch and cut è molto importante poichè consente a Cplex di dichiarare sondati nodi il cui costo della soluzione del rilassamento continuo risulta essere superiore rispetto al costo dell' incumbent(criterio di bounding). Avere un incumbent consente inoltre a Cplex di utilizzare euristici che necessitano di esso, come ad esempio gli euristici \textbf{RINS} e \textbf{polishing} che saranno discussi nel paragrafo X.
+Qualora si disponga di una soluzione del problema in esame, per esempio ottenuta da un run precedente di un solver o da un algoritmo euristico, è possibile fornirla a Cplex il quale, prima di iniziare il B&C, la processa durante la fase di ottimizzazione. Tale soluzione prende il nome di  \textbf{warm-start} o \textbf{MIP start} e qualora risulti una soluzione ammissibile, viene installata come incumbent. 
+Poter disporre di un incumbent è molto importante poichè consente a Cplex di dichiarare sondati nodi il cui costo della soluzione del rilassamento continuo risulta essere superiore rispetto al costo dell' incumbent(criterio di bounding). Avere un incumbent consente inoltre a Cplex di utilizzare euristici che necessitano di esso, come ad esempio gli euristici \textbf{RINS} e \textbf{polishing} che saranno discussi nel paragrafo X. 
+
+----Come si fa ad inserire
+
+La soluzione di partenza \textbf{x} è stata fornita a Cplex come MIP start, inoltre qualora l' esplorazione di un intorno non determina una soluzione migliorativa rispetto a quella corrente x_I,  quest' ultima viene passata come warm start anche per  l'iterazione successiva di Cplex: in questo modo l' incumebent contiene sempre la soluzione che si vuole migliorare e, per applicare correttamente la politica first improvement, è sufficiente quindi arrestare il solver non appena l' incumbent viene aggiornato.
+
+Si osserva che non è invece necessario fornire a Cplex un warm start nel caso in cui l' incumbent x_I venga aggiornato poichè, nonostante Cplex fissi ad "infinito" il valore dell' incument ogni qual volta inizia a risolvere il subMIP corrente, esso verifica se quest' ultimo risulta essere una soluzione ammissibile per il nuovo subMIP e in tal caso lo installa come incumbent. Per costruzione x_I risulta essere una soluzione ammissibile anche del subMIP corrente poichè questo è ottenuto fissano in soluzione variabili che appartengono proprio a x_I.
+
+
+\vspace{2\baselineskip} 
+INFORMATIVE CALLBACK
+\vspace{2\baselineskip} 
+
+La MIP informative callback viene invocata tutte le volte che un thread si accinge a risolvere un nodo dell' albero decisionale. 
+In maniera del tutto analoga a quanto discusso per la lazy constraint callback, per poterla utilizzare  è necessario creare una classe attribuendoli un nome a piacere, la quale deve estendere la classe astratta \textbf{MIPInfoCallback} contenuta nella libreria di cplex ed infine implementare al suo interno il metodo Main che verrà invocato automaticamente dal sistema ogniqualvolta la callback viene invocata. Nel codice prodotto la classe è stata chiamata \textbf{TSPInformativeCallback}, per installare la callback è necessario eseguire il seguente codice:
+
+
+cplex.Use(new TSPInformativeCallback ())
+
+
+Come accennato nel paragrafo precedente, l' incumbent del B&C risulta pari alla soluzione che si desidera migliorare e quindi, ricordando che si è applicata una politica di esplorazione first improvement, quando l' incumbent viene aggiornato è necessario arrestare Cplex. 
+
+Ciò non poteva essere fatto utilizzando la lazy constraint callback poichè interrompere cplex al suo interno significava non aggiornare l' incumbent. Per tale ragione è stato necessario installare la MIP informative callback: in questo modo non appena un thread prima di procedere nell' esecuzione del rilassamento continuo di un nodo constata che l'incumebent è stato aggiornato, eseguendo il metodo Abort() ereditato dalla classe MIPInfoCallback arresta Cplex. Per verificare se l' incumbent attuale è inferiore a quello precedente, è necessario memorizzarlo in una variabile
 
 
 \vspace{2\baselineskip}
-PREPROCESSING
+PRE-PROCESSING
 \vspace{2\baselineskip} 
 
-Per migliorare le performance dell' algoritmo risulta molto utile eseguire una fase di fissaggio di variabili ulteriore chiamato pre-processing caratteristica per il problema del Commesso Viaggiatore. Si consideri la figura X:
+Per ridurre il tempo necessario a Cplex per calcolare la prima soluzione migliore di x_I nell' intorno N(x_I), risulta estremamente utile eseguire una seconda fase di fissaggio di variabili chiamata \textbf{pre-processing}. Mentre nella prima fase si fissano in maniera casuale le variabili appartenenti a x_I, in questa seconda fase, a partire dalle variabili fissate, se ne fissano altre a 0 in modo da ridurre la probabilità che la soluzione candidata da Cplex come incumbent abbia al suo interno dei subtour. La fase di pre-processing è quindi specifica per il problema del Commesso Viaggiatore, si consideri la figura X in cui in blu sono stati indicati i lati fissati in soluzione:
 
 \begin{center}
 \includegraphics[scale=0.5]{PreProcessing}  
@@ -2177,8 +2217,77 @@ Figura X: Output
 
 \end{center}
 
-La variabile x_{z,j} dovrà necessariamente assumere il valore 0 essendo x_{z,j} e x_{z,h} al valore 1 altrimenti ci sarà un subtour. Poichè i vincoli di subtour elimination, a differenza dei vincoli di grado, non sono stati inseriti nel modello iniziale, durante il preprocessing non fissa a 0 la variabile x_{z,j}. Qualora il lato venisse scelto poco male, la funzione di separazione che si è implementata aggiungerà il corrispondente vincolo di subtour: tuttavia visto che è noto a priori che tale variabile deve essere fissata a 0, al fine di aumentare le prestazioni del metodo, si è realizzato un metodo chiamato PreProcessing appartenente alla classe Utility.
+Le variabili x_{1,3},x_{4,5} e x_{6,9}, per come si sono fissati i lati, dovranno necessariamente assumere il valore 0,altrimenti si avrebbe la presenza di uno o più subtour. 
 
+Il metodo che realizza ciò è stato chiamato PreProcessing ed ha la seguente firma:
+
+\begin{lstlisting}
+
+ public static void PreProcessing(Instance instance, INumVar[] x, double[] edgeFixed)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: 
+    \item \textbf{x}: 
+    \item \textbf{edgeFixed}: 
+\end{itemize}
+
+L' algoritmo realizzato ricerca in un primo momento tutte le componenti connesse presenti dopo il fissaggio: per far ciò si è utilizzato un vettore di interi denominato compConn in cui memorizziamo all' indice i la componente connessa del nodo i, e una lista di liste di interi chiamata nodesComp la quale all' indice i contiene una lista contenente tutti i nodi appartenente alla componente connessa i. Riportiamo di seguito il codice realizzato per inizializzare le strutture dati:
+ 
+\begin{lstlisting}
+
+//List of integer Lists contentent for each connected component all nodes that belong to it
+List<List<int>> nodesComp = new List<List<int>>();
+           
+//Vector contenent for each node relative connected component
+int[] compConn = new int[instance.NNodes];
+
+//Inizialization Comp
+for (int i = 0; i < instance.NNodes; i++)
+{
+  nodesComp.Add(new List<int>());
+  nodesComp[i].Add(i);
+}
+
+//Inizialization compConn
+Utility.InitCC(compConn);
+
+\end{lstlisting}
+
+
+Una volta noti tutti i nodi che appartengono ad una generica componente connessa k, è necessario individuare i vertici \textit{i} e \textit{j} appartenenti a k nei quali incidono su di essi solo lato poichè, per costruzione, la variabile associata al lato [i,j] è la variabile cercata da fissare a 0. Individuare il lato [i,j] non risulta banale per cui si è preferito,data una componente connessa k, fissare sistematicamente a 0 tutte le variabili associate a lati i cui nodi indicenti appartengono alla componente connessa k e che non sono stati precedentemente fissati ad 1. In questo modo senz' altro si fissa a 0 la variabile che evita la formazione del subtour, in più si pongono a 0 variabili che durante la fase di pre-processing di Cplex comunque sarebbero state fissate a 0 per i vincoli di grado inseriti. Per cui, considerando la componente connessa formata dai vartici {6,7,8,9} di Fig.X, non solo viene fissata a 0 la variabile x_{6,9} ma anche le variabli x_{6,7} e x_{8,9} .
+
+\begin{center}
+\includegraphics[scale=0.5]{PreProcCompCon}  
+
+Figura X: Output 
+
+\end{center}
+\begin{lstlisting}
+
+//For everyone node tha belong to a connected component 
+for (int i = 0; i < nodesComp.Count; i++)
+{
+    if (nodesComp[i] != null && nodesComp[i].Count > 2)
+    {
+         for (int m = 0; m < nodesComp[i].Count - 1; m++)
+         {
+               for (int y = m + 1; y < nodesComp[i].Count; y++)
+               {
+                   int pos = xPos(nodesComp[i][m], nodesComp[i][y], instance.NNodes);
+                            
+                  //The variabile is not previus fix
+                    if ((x[pos].UB == 1) && (x[pos].LB == 0))
+                         x[pos].UB = 0;                              
+                }
+           }
+     }
+}   
+
+\end{lstlisting}
 
 \vspace{2\baselineskip}
 IMPLEMENTAZIONE HARD FIXING
@@ -2203,10 +2312,11 @@ dove:
 \end{itemize}
 
 
-La soluzione ammissibile è stata ottenuta applicando il metodo NearestNeightbor precedentemente discusso e codificata all' interno del vettore \textbf{heuristicSol} di tipo \textbf{PathStandard}. Inizialmente si è deciso 
-di fissare mediamente l' $80%$ dei lati: i miglioramenti saranno così molto frequenti ma tipicamente piccoli avendo fissato la stragrande maggioranza d elle variabili. 
 
-Qualora Cplex, dopo k esecuzioni in cui ha migliorato la soluzione, non  produce nessuna soluzione migliore, una strategia potrebbe essere quella di passare subito a fissare una percentuale inferiore di lati; questo tipicamente non viene fatto e si preferisce riprovare \textbf{t} volte prima di diminuire la percentuale di fissaggio in modo da avere, almeno nella fase iniziale, più miglioramenti possibili. Il valore di \textbf{t} dipende ovviamente dall' applicazione e da quali sono lo esigenze: all' interno dell' algoritmo realizzato si è ritenuto ragionevole fissate t = 10. 
+
+
+
+
 
 \vspace{2\baselineskip}
 RINS

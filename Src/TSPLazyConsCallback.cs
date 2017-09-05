@@ -3,6 +3,8 @@ using ILOG.CPLEX;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
+using System;
 
 namespace TSPCsharp
 {
@@ -13,7 +15,8 @@ namespace TSPCsharp
         private INumVar[] x;
         private Instance instance;
         private Process process;
-
+        private double value;
+        
         public TSPLazyConsCallback(Cplex cplex, INumVar[] x, Instance instance, Process process, bool BlockPrint)
         {
             this.cplex = cplex;
@@ -25,10 +28,11 @@ namespace TSPCsharp
 
         public override void Main()
         {
-
+            double xg = GetIncumbentObjValue();
+           
             //Init buffers, due to multithreading, using global buffers is incorrect
             List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
-            List<int> bufferCoeffCCLC = new List<int>(); ;
+            List<int> bufferCoeffCCLC = new List<int>();
 
             int[] compConnLC = new int[instance.NNodes];
 
@@ -36,6 +40,8 @@ namespace TSPCsharp
 
             //To call GetValues for each value in x is a lot more expensive for unknown reasons
             double[] actualX = GetValues(x);
+
+             value = GetObjValue();
 
             //Node's is that generated the callback, used to create an unique nome for the GNUPlot files
             string nodeId = GetNodeId().ToString();
@@ -93,7 +99,7 @@ namespace TSPCsharp
                     cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
                     Add(cuts[i], 1);
                 }
-            }
+            }              
         }
     }
 }
