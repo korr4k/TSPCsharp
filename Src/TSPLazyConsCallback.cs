@@ -27,9 +27,7 @@ namespace TSPCsharp
         }
 
         public override void Main()
-        {
-            double xg = GetIncumbentObjValue();
-           
+        {        
             //Init buffers, due to multithreading, using global buffers is incorrect
             List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
             List<int> bufferCoeffCCLC = new List<int>();
@@ -38,7 +36,7 @@ namespace TSPCsharp
 
             Utility.InitCC(compConnLC);
 
-            //To call GetValues for each value in x is a lot more expensive for unknown reasons
+            //To call GetValues for each value in x is a lot more expensive
             double[] actualX = GetValues(x);
 
              value = GetObjValue();
@@ -99,12 +97,7 @@ namespace TSPCsharp
                     cuts[i] = cplex.Le(ccExprLC[i], bufferCoeffCCLC[i] - 1);
                     Add(cuts[i], 1);
                 }
-            }  
-            else
-            {
-                int y = 0;
-                double i = value;
-            }            
+            }    
         }
     }
 }

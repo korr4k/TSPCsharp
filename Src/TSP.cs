@@ -9,82 +9,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 namespace TSPCsharp
 {
-    class TSPIncumbent: Cplex.IncumbentCallback
-    {
-        public bool upgradeInc = false;
-
-        private System.Object lockThis = new System.Object();
-        public TSPIncumbent()
-        {
-         
-        }
-
-        public override void Main()
-        {
-            double c = GetIncumbentObjValue();
-       
-            if (GetIncumbentObjValue() != 1E+75)
-            {
-                lock (lockThis)
-                {
-                    if (upgradeInc == false)
-                        upgradeInc = true;
-                    else
-                        Reject();
-                }
-            }    
-        }
-    }
-    
-    class TSPInformativeCallback : Cplex.MIPInfoCallback
-    {
-        TSPIncumbent tspI;
- 
-        //Constructor of the class
-        public TSPInformativeCallback(TSPIncumbent tspI)
-        {
-            this.tspI = tspI;
-        }
-
-        public override void Main()
-        {
-            double c = GetIncumbentObjValue();
-
-           if (tspI.upgradeInc == true)
-           {
-                tspI.upgradeInc = false;
-               //Stop the solver                          
-                Abort();
-           } 
-       }
-   }
-
-   /*
-   class TSPInformativeCallback : Cplex.MIPInfoCallback
-   {
-       //Stored the value of the previousIncumbent
-       double previusIncumbent = Double.MaxValue;
-
-       //Constructor of the class
-       public TSPInformativeCallback()
-       {
-
-       }
-
-       public override void Main()
-       {
-           //Only if the Incumbent solution is upgrade stop the solver
-           if (GetIncumbentObjValue() < previusIncumbent)
-           {
-               //Sored the actual incumbet for the next iteration
-               previusIncumbent = GetIncumbentObjValue();
-               //Stop the solver                          
-               Abort();
-           }
-       }
-   }
-
-   */
     class TSP
     {
         [DllImport("ConcordeDLL.dll")]
@@ -900,11 +824,10 @@ namespace TSPCsharp
             TwoOpt(instance, heuristicSol);
 
             //The heuristic solution is the Incumbent, translate the encode in the format used by Cplex
-
             for (int i = 0; i < instance.NNodes; i++)
             {
                 int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
-                
+
                 //Set to one only the edge that belong to heuristic solution
                 currentIncumbentSol[position] = 1;
             }
@@ -915,42 +838,29 @@ namespace TSPCsharp
 
             TSPLazyConsCallback tspLazy = new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint);
             cplex.Use(tspLazy);
-         
-            //TSPIncumbent tspInc = new TSPIncumbent();
-            //cplex.Use(tspInc);
-           
-            ////Installation of Informative CallBack
-            //cplex.Use(new TSPInformativeCallback(tspInc));
            
             //Provide to Cplex a warm start
-             cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
+             cplex.AddMIPStart(x, currentIncumbentSol);
 
             //Set the number of thread equal to the number of logical core present in the processor
-            cplex.SetParam(Cplex.Param.Threads, 1);
+            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
 
-            //cplex.SetParam(Cplex.IntParam.ParallelMode, -1);
+            cplex.SetParam(Cplex.LongParam.IntSolLim, 2);
 
             do
             {
                 //Modify the Model according to the current Incumbent solution
                 Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
-
-               // cplex.SetParam(Cplex.DoubleParam.ObjLLim, currentIncumbentCost - 1);
-                cplex.SetParam(Cplex.DoubleParam.ObjULim, currentIncumbentCost - 1);
-
-                double solPassata = currentIncumbentCost - 1;
-
+              
                 //Solve the model
                 cplex.Solve();
-
-                double tmp = cplex.GetObjValue(Cplex.IncumbentId);
 
                 if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
                 {
                     file = new StreamWriter(instance.InputFile + ".dat", false);
 
                     currentIncumbentCost = cplex.GetObjValue(Cplex.IncumbentId);
-                    currentIncumbentSol = cplex.GetValues(x,Cplex.IncumbentId);
+                    currentIncumbentSol = cplex.GetValues(x, Cplex.IncumbentId);
 
                     //Print solution               
                     for (int i = 0; i < instance.NNodes; i++)
@@ -978,8 +888,6 @@ namespace TSPCsharp
                 {
                     //If don't have improvement decrease variable consecutiveIterationNotImprov
                     consecutiveiterationNotImprov--;
-       
-                    //cplex.AddMIPStart(x, currentIncumbentSol, "HeuristicPath");
                 }
                                    
                 if (consecutiveiterationNotImprov == 0)
@@ -993,40 +901,22 @@ namespace TSPCsharp
                         consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
                 }
 
+                //Restoration the lower and upper bound of all variable. 
+                for (int i = 0; i < x.Length; i++)
+                {
+                    x[i].LB = 0;
+                    x[i].UB = 1;
+                }
+
             } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
             instance.XBest = currentIncumbentCost;
-            instance.BestSol = currentIncumbentSol;
-
-            file = new StreamWriter(instance.InputFile + ".dat", false);
-            cplex.Output().WriteLine();
-
-
-            //Print the solution
-
-            for (int i = 0; i < instance.NNodes; i++)
-            {
-                for (int j = i + 1; j < instance.NNodes; j++)
-                {
-                    int position = Utility.xPos(i, j, instance.NNodes);
-
-                    if (instance.BestSol[position] >= 0.5)
-                    {
-                        file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                        file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
-                    }
-                }
-            }
-
-            file.Close();
-
-            if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.XBest, -1);
+            instance.BestSol = currentIncumbentSol;         
 
             //Empty line
             cplex.Output().WriteLine();
 
-            cplex.Output().WriteLine("xOPT = " + instance.XBest + "\n");
+            cplex.Output().WriteLine("x = " + instance.XBest + "\n");
 
             if (Program.VERBOSE >= -1)
                 cplex.ExportModel(instance.InputFile + ".lp");
