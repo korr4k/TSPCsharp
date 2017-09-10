@@ -7,16 +7,21 @@
 \usepackage {listings}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage[all]{hypcap}
 \usepackage{longtable}
 \usepackage{array}
 %\usepackage[scaled]{beramono}
 \usepackage[T1]{fontenc}
 \usepackage{tabularx}
+\usepackage{caption}
 \usepackage{amssymb}
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{multirow} 
 \usepackage{tipa}
+\usepackage{pbox}
+\usepackage{placeins}
+\usepackage{adjustbox}
 
 %\setmonofont{Consolas} %to be used with XeLaTeX or LuaLaTeX
 \definecolor{bluekeywords}{rgb}{0,0,1}
@@ -2692,5 +2697,364 @@ for (int i = 1; i < population.Count; i++)
 return currentBestPath;
 
 \end{lstlisting}
+
+\section*{TEST E RISULTATI}
+
+In questa sezione sono presentati i test eseguiti sugli algoritmi discussi nel testo. La presentazione è suddivisa in tre sottozezioni:
+\begin{itemize}
+    \item Instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti;
+    \item Instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti;
+    \item Instanze con numero di nodi compreso tra \textbf{$300$} e \textbf{$999$} $+$ algoritmi euristici;
+\end{itemize}
+Essendo il codice progettatto in Visual Studio utilizzando il linguaggio C\#, non è stato possibile utilizzare il cluster di calcolo offerto dal dipartimento di studio DEI dell'università di Padova. Pertanto la macchina su cui i test sono stati eseguiti è un normale PC di utilizzo quotidiano: da pretest eseguiti durante la fase di sviluppo, si era già notato come istanze di tagli superiore ai $300$ nodi richiedessero tempi troppo alti per essere risolte da algoritmi esatti; Tenendo presente inoltre che sarebbero state richiesti multipli tentativi di risoluzione per ogni coppia istanza/algoritmo, si è deciso di optare per la suddivisione appena descritta.
+
+I dettagli hardware della macchina utilizzata sono riportati di seguito ma è necessario far notare che è stato imposto un limite massimo all'utilizzo della CPU pari al $75\%$: si è voluto sfruttare l'arco minimo di tempo per i test in modo tale che l'ambiente rimanesse il più omogeneo possibile, pertanto un uso superiore delle prestazioni del PC per 2/4 giorni di seguito\footnote{Attualemente ci troviamo in stagione estiva con alte temperature.} avrebbe potuto arrecarvi danni.
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{1}{\includegraphics{Immagini/"Spec1".jpg}}
+    \caption{CPU}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{1}{\includegraphics{Immagini/"Spec2".jpg}}
+    \caption{Caches}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{1}{\includegraphics{Immagini/"Spec3".jpg}}
+    \caption{Scheda madre}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{1}{\includegraphics{Immagini/"Spec4".jpg}}
+    \caption{RAM}
+\end{figure}
+
+
+Aggiungiamo solamente infine che il sistema operativo è Windows 10 Pro versione 1703 installato su una memoria a stato solido con velocità di lettura/scrittura fino a 535 MB sec/445 MB sec.
+
+Concludiamo questa introduzione spendendo alcune righe descrivendo alcuni aspetti comuni a tutti i test.
+
+Nelle tre successessive sottosezioni troviamo inizialmente una descrizione delle sigle utilizzate per identificare gli algoritmi utilizzati e l'indicazione del numero di run eseguite. Successivamente sono esposti i tempi medi di esecuzione, espressi in secondi, sotto forma tabellare utilizzando come tempo limite $30$ minuti. Infine troviamo una serie di immagini che mostrano visivamente un confronto dei vari algoritmi per ogni istanza.
+
+Per nessun test sono riportati i circuiti hamiltoniani trovati in quanto le istanze utilizzate sono tutte note in litteratura e già risolte all'ottimo. L'obiettivo che si vuole raggiungere è, per quanto riguarda gli algoritmi esatti un confronto dei loro tempi di esecuzione, mentre invece per quelli euristici un confronto del costo delle soluzioni da loro trovate e il valore ottimo noto entro un tempo limite fissato.
+
+In ogni algoritmo sono state quindi rimosse tutte le stampe sia visuali attraverso GNUPlot che su file del circuito trovato ed anche la stampa su file del modello matematico finale comprendente i tagli generati. Le prove per gli algoritmi esatti sono state automatizzate in modo tale che per la stessa istanza venissero eseguiti in serie tutte le run necessarie ogni algoritmo\footnote{Ogni run è stata caratterizzata da un seme diverso sia per quanto riguarda Cplex sia per quanto riguarda gli oggetti utilizzati per generare valori random.}.
+
+Nel caso in cui una o più run presentavano rallentamentamenti apparentemente non motivabili o improvvisi queste sono state ripetute per verificare che il problema non riguardasse fattori esterni determinati dalla macchina utilizzata. Tutti i valori riportati sono quindi verificati sotto questo punto di vista e dipendenti solamente dalla applicazione sviluppata.
+
+\subsection*{Instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+
+Gli algoritmi esatti a disposizione sono i seguenti: Loop completamente esatto più le sue due varianti a prima fase euristica (linguaggio C\#), utilizzo LazyConstraint Callback (linguaggio C\#), utilizzo LazyConstraint e UserCut Callback (linguaggio C).
+
+Il numero di run per ogni algoritmo è stato di 5: i valori riportati sono quindi una media aritmetica.
+
+Passiamo quindi alla descrizione delle sigle utilizzate:
+\begin{itemize}
+    \item \textbf{LOOP}: metodo Loop completamente esatto;
+    \item \textbf{L EG\textit{X}}: metodo Loop con prima fase euristica dove EpGap è settato al $X\%$;
+    \item \textbf{L LA\textit{X}}: metodo Loop con prima fase euristica dove sono abilitati i soli \textit{X} lati a costo minore incidenti in un qualsiasi nodo;
+    \item \textbf{L EG\textit{X} LA\textit{Y}}: combinazione dei due punti precedenti;
+    \item \textbf{LAZY}: utilizzo lazyconstraint callback in linguaggio\textit{ C\#};
+    \item \textbf{USER}: utilizzo lazyconstraint callback e usercut callback in linguaggio \textit{C};
+\end{itemize}
+
+Notiamo che modificare un modello matematico attraverso l'eliminazione di alcune variabili può causare l'invalidazione di tutte le soluzioni originali: questi casi sono di seguito riconoscibili da un tempo di esecuzione medio pari a $0,00$ secondi.
+
+\newpage
+
+\begin{table}
+\begin{adjustbox}{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    \cline{2-10} 
+        \multicolumn{1}{c|}{} & \multirow{3}{*}{\textbf{LOOP}} & \multirow{3}{*}{\textbf{L EG5}} & \multirow{3}{*}{\textbf{L EG10}} & \multirow{3}{*}{\textbf{L LA5}} & \multirow{3}{*}{\textbf{L LA10}} & \multirow{3}{*}{\textbf{L EG5 LA5}} & \multirow{3}{*}{\textbf{L EG10 LA10}} & \multirow{3}{*}{\textbf{LAZY}} & \multirow{3}{*}{\textbf{USER}}\tabularnewline
+        \multicolumn{1}{c|}{} &  &  &  &  &  &  &  &  & \tabularnewline
+        \multicolumn{1}{c|}{} &  &  &  &  &  &  &  &  & \tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:berlin52]{berlin52}} & 0,111 & 0,083 & 0,073 & 0,092 & 0,053 & 0,096 & 0,051 & 0,028 & 0,024\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:st70]{st70}} & 0,628 & 0,577 & 0,579 & 0,000 & 0,193 & 0,000 & 0,187 & 0,298 & 0,363\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:eil76]{eil76}} & 0,297 & 0,254 & 0,235 & 0,204 & 0,075 & 0,204 & 0,075 & 0,107 & 0,084\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:pr76]{pr76}} & 3,586 & 3,572 & 3,305 & 0,000 & 2,958 & 0,000 & 2,589 & 6,344 & 3,178\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:rat99]{rat99}} & 1,040 & 1,010 & 1,041 & 0,845 & 0,458 & 0,670 & 0,450 & 0,396 & 0,468\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroA100]{kroA100}} & 2,009 & 1,959 & 1,891 & 1,544 & 0,770 & 1,504 & 0,777 & 0,915 & 1,508\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroB100]{kroB100}} & 3,745 & 4,016 & 3,031 & 1,767 & 1,820 & 2,026 & 1,699 & 0,785 & 1,026\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroC100]{kroC100}} & 2,306 & 1,850 & 1,908 & 2,197 & 0,823 & 1,878 & 0,821 & 0,648 & 0,996\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroD100]{kroD100}} & 2,397 & 1,758 & 1,990 & 2,547 & 0,896 & 1,903 & 0,934 & 0,514 & 0,769\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroE100]{kroE100}} & 2,017 & 2,243 & 2,290 & 2,168 & 1,137 & 1,793 & 0,936 & 1,084 & 0,900\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:eil101]{eil101}} & 0,952 & 0,851 & 0,802 & 0,426 & 0,370 & 0,433 & 0,414 & 0,363 & 0,342\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:lin105]{lin105}} & 1,402 & 0,897 & 0,959 & 0,664 & 1,000 & 0,625 & 0,588 & 0,545 & 1,071\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:bier127]{bier127}} & 1,862 & 2,228 & 3,077 & 1,251 & 0,981 & 1,222 & 0,905 & 1,093 & 1,636\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:ch130]{ch130}} & 2,013 & 2,213 & 2,198 & 1,625 & 0,980 & 1,911 & 1,052 & 1,373 & 1,589\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:pr144]{pr144}} & 10,247 & 6,362 & 4,023 & 0,000 & 7,427 & 0,000 & 5,703 & 3,300 & 2,020\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroA150]{kroA150}} & 9,446 & 8,455 & 7,329 & 3,875 & 4,524 & 3,536 & 4,096 & 2,943 & 3,058\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroB150]{kroB150}} & 15,815 & 10,842 & 12,213 & 9,041 & 7,643 & 5,165 & 8,266 & 8,473 & 5,067\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:ch150]{ch150}} & 4,563 & 5,158 & 6,103 & 2,348 & 2,612 & 3,034 & 3,987 & 2,413 & 2,481\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:pr152]{pr152}} & 4,806 & 3,961 & 3,610 & 0,000 & 0,000 & 0,000 & 0,000 & 2,638 & 3,130\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:u159]{u159}} & 3,310 & 2,816 & 2,766 & 1,538 & 2,146 & 1,339 & 2,364 & 1,876 & 2,759\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:rat195]{rat195}} & 25,914 & 19,111 & 19,606 & 13,473 & 15,830 & 11,534 & 14,198 & 13,354 & 4,130\tabularnewline
+        \hline 
+\end{tabular}
+\end{adjustbox}
+\caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"berlin52".png}}
+    \label{fig:berlin52}
+    \caption{berlin52}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"st70".png}}
+    \label{fig:st70}
+    \caption{st70}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"eil76".png}}
+    \label{fig:eil76}
+    \caption{eil76}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"pr76".png}}
+    \label{fig:pr76}
+    \caption{pr76}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"rat99".png}}
+\label{fig:rat99}
+\caption{rat99}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroA100".png}}
+\label{fig:kroA100}
+\caption{kroA100}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroB100".png}}
+\label{fig:kroB100}
+\caption{kroB100}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroC100".png}}
+\label{fig:kroC100}
+\caption{kroC100}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroD100".png}}
+\label{fig:kroD100}
+\caption{kroD100}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroE100".png}}
+\label{fig:kroE100}
+\caption{kroE100}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"eil101".png}}
+\label{fig:eil101}
+\caption{eil101}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"lin105".png}}
+\label{fig:lin105}
+\caption{lin105}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"bier127".png}}
+\label{fig:bier127}
+\caption{bier127}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"ch130".png}}
+\label{fig:ch130}
+\caption{ch130}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"pr144".png}}
+\label{fig:pr144}
+\caption{pr144}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroA150".png}}
+\label{fig:kroA150}
+\caption{kroA150}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"kroB150".png}}
+\label{fig:kroB150}
+\caption{kroB150}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"ch150".png}}
+\label{fig:ch150}
+\caption{ch150}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"pr152".png}}
+\label{fig:pr152}
+\caption{pr152}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"u159".png}}
+\label{fig:u159}
+\caption{u159}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{.75}{\includegraphics{Immagini/"rat195".png}}
+\label{fig:rat195}
+\caption{rat195}
+\end{figure}
+
+\FloatBarrier
+
+\subsection*{Instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+
+Questo set di risultati ha le stesse identiche premesse indicate per il precedente se non che il numero di run eseguito per ogni coppia istanza/algoritmo è pari a $2$ e non $5$. Il motivo di tale scelta è puramente per una questione temporale.
+
+Come più volte ripetuto è stato posto un tempo limite pari a $30$ minuti il quale è stato raggiunto dall'istanza \textbf{pr99} se risolta attraverso l'utilizzo della sola \textit{LazyConstraint Callback}: il valore medio comunicato da Cplex per ottenere il risultato ottimo era in questo di circa lo $0,36\%$.
+
+\vspace*{\fill}
+{
+\centering
+\centerline{
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+        \cline{2-10} 
+        \multicolumn{1}{c|}{} & \multirow{3}{*}{\textbf{LOOP}} & \multirow{3}{*}{\textbf{L EG5}} & \multirow{3}{*}{\textbf{L EG10}} & \multirow{3}{*}{\textbf{L LA5}} & \multirow{3}{*}{\textbf{L LA10}} & \multirow{3}{*}{\textbf{L EG5 LA5}} & \multirow{3}{*}{\textbf{L EG10 LA10}} & \multirow{3}{*}{\textbf{LAZY}} & \multirow{3}{*}{\textbf{USER}}\tabularnewline
+        \multicolumn{1}{c|}{} &  &  &  &  &  &  &  &  & \tabularnewline
+        \multicolumn{1}{c|}{} &  &  &  &  &  &  &  &  & \tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroA200]{kroA200}} & 26,12 & 35,36 & 35,02 & 23,71 & 25,25 & 20,73 & 23,20 & 61,62 & 65,22\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:kroB200]{kroB200}} & 10,92 & 13,53 & 13,93 & 4,86 & 6,44 & 5,67 & 5,11 & 6,05 & 5,21\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:tsp225]{tsp225}} & 28,10 & 26,72 & 28,15 & 11,61 & 15,46 & 14,85 & 15,20 & 23,49 & 6,70\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:pr226]{pr226}} & 326,40 & 32,52 & 16,64 & 0,00 & 0,00 & 0,00 & 0,00 & 7,97 & 4,90\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:gil262]{gil262}} & 26,86 & 40,91 & 27,55 & 8,95 & 14,02 & 18,27 & 20,29 & 79,30 & 37,50\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:a280]{a280}} & 19,00 & 29,20 & 16,74 & 5,03 & 6,48 & 4,75 & 10,06 & 6,46 & 5,56\tabularnewline
+        \hline 
+        \textbf{\hyperref[fig:pr299]{pr299}} & 102,89 & 142,75 & 128,17 & 67,00 & 85,60 & 97,19 & 101,65 & 1800,00 & 27,52\tabularnewline
+        \hline 
+\end{tabular}
+}
+\captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+\clearpage
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"kroA200".png}}
+    \label{fig:kroA200}
+    \caption{kroA200}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"kroB200".png}}
+    \label{fig:kroB200}
+    \caption{kroB200}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"tsp225".png}}
+    \label{fig:tsp225}
+    \caption{tsp225}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"pr226".png}}
+    \label{fig:pr226}
+    \caption{pr226}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"gil262".png}}
+    \label{fig:gil262}
+    \caption{gil262}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"a280".png}}
+    \label{fig:a280}
+    \caption{a280}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"pr299".png}}
+    \label{fig:pr299}
+    \caption{pr299}
+\end{figure}
 
 \end{document}
