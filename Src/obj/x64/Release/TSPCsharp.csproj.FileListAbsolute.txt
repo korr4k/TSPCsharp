@@ -7,3 +7,4 @@ E:\Documenti\TSPCsharp\Src\bin\x64\Release\ILOG.Concert.xml
 E:\Documenti\TSPCsharp\Src\bin\x64\Release\ILOG.CPLEX.xml
 E:\Documenti\TSPCsharp\Src\obj\x64\Release\TSPCsharp.exe
 E:\Documenti\TSPCsharp\Src\obj\x64\Release\TSPCsharp.pdb
+E:\Documenti\TSPCsharp\Src\obj\x64\Release\TSPCsharp.csprojResolveAssemblyReference.cache

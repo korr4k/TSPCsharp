@@ -2464,13 +2464,355 @@ return nextGeneration;
 
 \section*{MATHEURISTICS}
 
+Gli algoritmi \textbf{matheuristics} nascono con l'obbiettivo di migliorare una soluzione di partenza ammissibile \textbf{x} sfruttando il \textbf{modello matematico} del problema (ogni tanto parli di MIP, ma si intende modelli misti interi e frazionari, è giusto usarlo???) che si vuole risolvere. Analogamente a quanto visto per gli algoritmi di ricerca locale e metaeuristici, i matheuristici tentano di individuare una soluzione migliore \textbf{x*} all' interno di un intorno N(x) ottenuto, in questo ambito, modificando opportunamente il modello matematico di partenza. 
+
+L'esplorazione di N(x) non avviene per enumerazione come visto in precedenza ma tramite appositi solver come ad esempio Cplex: grazie alla loro sempre maggiore ottimizzazione, questa operazione risulta quindi essere molto veloce. 
+
+I matheuristici possono essere applicati a qualunque soluzione ammissibile x; ciò nonostante per apprezzarne davvero la potenza è consigliabile utilizzare un punto di partenza già buono. A tale scopo si può quindi pensare di concatenarli  all'esecuzione di un algoritmo migliorativo o, meglio ancora, al termine del multistart o di un metaeuristico. Questi infatti arrivano molto frequentemente a saturare in prossimità di una soluzione molto buona \textbf{\overline{x}} ma non ottima. 
+
+Sfruttando questa combinazione di algoritmi è stato dimostrato che già in un breve lasso di tempo si riescono ad ottenere sostanziali miglioramenti ed in alcuni casi è possibile raggiungere anche l'ottimo globale. Si osserva che esiste una notevole differenza fra l'ottenere quest'ultimo risultato grazie ad un algoritmo esatto e seguendo il procedimento precedentemente discusso: mentre nel primo caso è sempre certificato, nel secondo questo non avviene\footnote{Il solver utilizzato garantisce solamente l'ottimalità del modello da noi fornitogli che chiaramente non può essere quello originale del problema.} e non si ha nemmeno modo di certificarlo a meno che non lo si conosca a priori.
+
+A questo punto è chiaro come il fattore caratterizzante di un algoritmo matheuristico sia come questo definisce l'intorno della soluzione di partenza sul quale si suppone possano essere localizzati dei miglioramenti. 
+
+Uno schema comunemente utilizzato prende il nome di \textbf{hard variable fixing} e prevede di fissare il valore di un certo numero di variabili, rendendole di fatto costanti, mentre le restanti vengono lasciate libere. Lo svantaggio principale derivante da questa tecnica è che a priori non esistono indicazioni su cosa è più opportuno fissare e cosa lo è meno. Di conseguenza esiste una sua variante detta \textbf{soft variable fixing} che lascia al solver questa responsabilità indicandogli solamente con quale proporzione deve avvenire la cosa.
+
+Nei prossimi paragrafi sono riportanti alcuni esempi di algoritmi matheuristici che si basano sui concetti appena esposti ricordando che come per qualsiasi metodo euristico non esistono varianti più o meno efficaci in assoluto ma molto dipende dal problema che si sta analizzando e da fattori casuali non calcolabili.
+
 \subsection*{HARD FIXING}
+
+L'hard fixing è una tecnica euristica che, partendo da una qualsiasi soluzione ammissibile \textbf{x_H}, tenta di trovarne una migliore all'interno di un suo intorno. Quest'ultimo viene definito dall'algoritmo stesso attraverso il fissaggio a priori di alcune variabili del modello matematico, rendendole così di fatto costanti, utilizzando i valori che queste assumo in $x_H$. 
+
+Come già discusso nel paragrafo precedente, una volta definito l'intorno e quindi un nuovo modello matematico, la sua risoluzione viene affidata ad un solver esterno pertanto l'unica fase saliente dell'algoritmo è la scelta stessa di quale porzione di $x_H$ mantenere valida e quale no. 
+
+Esistono chiaramente molteplici approcci ammissibili e nessuno di questi risulta migliore in assoluto. Come spesso accade negli algoritmi euristici la scelta più semplice produce risultati molto buoni e quindi alcune varianti dell'\textit{hard fixing} semplicemente fissano un qualunque lato con probabilità $p$ o meno con probabilità $1-p$\footnote{Ovviamente $p$ è direttamente proporzionale a quanti lati sul loro totale vogliamo fissare.}.
+
+Altri approcci invece tentano di definire un sistema di ranking come ad esempio dare più valore agli elementi con costo minore.
+
+Indipendentemente da quale tecnica si decida di utilizzare maggiore è il numero dei lati fissati, minore è il carico di lavoro per risolvere il rilassamento continuo derivante ma allo stesso tempo diviene minore anche l'ampiezza dell'intorno che si va a sondare.
+
+Nel complesso quindi è buona norma tentare sì molteplici fissaggi ma anche variarne il numero cercando di trovare la miglior combinazione per il problema in questione.
+
+Nel nostro caso si è deciso di optare per la prima variante andando progressivamente a diminuire il valore di $p$. Il motivo di tale scelta è che il nostro algoritmo non ha un target specifico di istanze aventi una struttura ben definita dove diventa quindi evidente un sistema di ranking efficiente.
+
+Preferiamo quindi ampliare il range di possibili intorni da visitae dando però sempre la possibilità all'algoritmo di trovare la soluzione ottima. Di conseguenza più è alto il tempo limite che gli andiamo a concedere maggiori sono le probabilità di avvicinarsi al risultato desiderato.
 
 \subsection*{WARM-START}
 
+Tra le svariate funzionalità offerta da Cplex possiamo trovarne una in particolare che è sempre consigliato utilizzare quando possibile e nello specifico risulta essere una naturale aggiunta alla tecnica dell'\textbf{hard-fixing}. Stiamo parlando della possibilità di fornire a Cplex una soluzione al problema che dovrà andare a risolvere in modo tale che, una volta controllata la sua validità durante la fase di prepocessing, possa essere utilizzata come incumbent. Questa soluzione prende il nome di \textbf{warm-start} o \textbf{MIP-start} e chiaramente quando si procede al fissaggio di alcune variabili in accordo ad $x_H$, questa rimane ovviamente valida per il problema e quindi è una naturale candidata per questo ruolo.
+
+Cplex trae diversi potenziali vantaggi grazie ad un \textbf{warm-start}: prima di tutto sfruttando il criterio di bounding, avere a disposizione un buon incumbent fin dai primi momenti della tecnica del \textit{branch\&cut} può velocizzare la costruzione dell'albero decisionale dichiarandone alcuni nodi come sondati; In secondo luogo permette di applicare particolare tecniche euristiche che necessitano di questa condizione di partenza, parliamo ad esempio degli algoritmi \textbf{RINS} e \textbf{polishing} che saranno discussi successivamente anche in questa tesi.
+
+In linguaggio \textbf{C\#} l'operazione di warm-start avviene attraverso il metodo non statico \textbf{AddMIPStart} della classe \textit{Cplex} la cui firma è:
+
+\begin{lstlisting}
+
+public virtual int AddMIPStart(INumVar[] vars,double[] values)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{vars}: Vettore contenente nella posizione $i$ la $i-esima$ variabile del modello;
+    \item \textbf{values}: Vettore contenente nella posizione $i$ il valore della $i-esima$ variabile del modello;
+\end{itemize}
+
+Si osserva inoltre che nel caso in cui si attuino consecutive esecuzione dell'\textit{hard-fixing} non è più necessario aggiornare manualmente il valore di \textit{warm-start}\footnote{Se non alla prima run.}: variare solamente i fissaggi delle variabili, senza modificare ulteriormente il modello matematico, non viene considerata da Cplex una operazione \textit{drastica} al punto di abbandonare i risultati ottenuti fino a quel momento.
+
+In altre parole, nel caso in cui non sia trovata una soluzione migliore rispetto al \textit{warm-start} attuale la validità di quest'ultimo viene automaticamente ricontrollata durante la successiva fase di preprocessing\footnote{La sua validità è sempre garantita in quanto siamo nel caso in cui sì applichiamo un fissaggio diverso ma rispetto la stessa soluzione di partenza dato che non ne sono state trovate di migliori.}. Altrimenti nel caso in cui l'ultimo rilassamento continuo abbia individuato un nuovo valore per l'incumbent, e quindi un nuovo \textit{warm-start}, Cplex provvede autonomamente al suo aggiornamento.
+
 \subsection*{PREPROCESSING}
 
+Per ridurre il tempo necessario a Cplex per calcolare la prima soluzione migliore di x_I nell' intorno N(x_I), risulta estremamente utile eseguire una seconda fase di fissaggio di variabili. Mentre nella prima fase si fissano in maniera casuale le variabili appartenenti a x_I, in questa seconda fase, a partire dalle variabili fissate, se ne fissano altre a 0 in modo da ridurre la probabilità che la soluzione candidata da Cplex come incumbent abbia al suo interno dei subtour. La fase di pre-processing è quindi specifica per il problema del Commesso Viaggiatore, si consideri la figura X in cui in blu sono stati indicati i lati fissati in soluzione:
+
+\begin{center}
+    \includegraphics[scale=0.5]{PreProcessing}  
+    
+    Figura X: Output 
+    
+\end{center}
+
+Le variabili x_{1,3},x_{4,5} e x_{6,9}, per come si sono fissati i lati, dovranno necessariamente assumere il valore 0,altrimenti si avrebbe la presenza di uno o più subtour. 
+
+Il metodo che realizza ciò è stato chiamato \textbf{PreProcessingTSP} ed ha la seguente firma:
+
+\begin{lstlisting}
+
+public static void PreProcessing(Instance instance, INumVar[] x)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: riferimento all' oggetto contenente tutte le informazioni relative all' istanza del Problema del Commesso Viaggiatore corrente;
+    \item \textbf{x}: vettore contente le variabili del modello matematico;
+\end{itemize}
+
+L' algoritmo individua per ogni nodo, in cui incide almeno un lato fissato, la relativa componente connessa e memorizza per ognuno di essi il numero di lati ad esso incidenti. 
+
+\begin{lstlisting} 
+
+//Array that stored,for eache node, how many edges incise to it 
+int[] cntNode = new int[instance.NNodes];
+
+//Vector contenent for each node relative connected component
+int[] compConn = new int[instance.NNodes];
+
+//Array of List where are stored,for each connected component the nodes in which incise only a edge
+List<int>[] externalNodes = new List<int>[instance.NNodes];
+
+//Inizialization compConn
+Utility.InitCC(compConn);
+
+//Inizialization externalNodes
+for (int i = 0; i < instance.NNodes; i++)
+externalNodes[i] = new List<int>();
+
+for (int i = 0; i < instance.NNodes; i++)
+{
+for (int j = i + 1; j < instance.NNodes; j++)
+{
+//Retriving the correct index position for the current link 
+int position = Utility.xPos(i, j, instance.NNodes);
+
+//if the edge is fixed 
+if (x[position].LB == 1)
+{
+//Upgrade the array cntNode
+cntNode[i] += 1;
+cntNode[j] += 1;
+
+//Set the connected component 
+for (int k = 0; k < instance.NNodes; k++)
+{
+if ((k != j) && (compConn[k] == compConn[j]))
+compConn[k] = compConn[i];                          
+}
+
+//Finally also the value relative to the node i are updated
+compConn[j] = compConn[i];                                                                        
+}
+}
+}
+\end{lstlisting}
+
+Per individuare i nodi i,j della variabile x_[i,j] da porre a 0 è sufficiente, per ogni nodo avente un solo lato indicente, inserirlo nella posizione i di un vettore di liste, dove i è compConn[i], cioè la componente connessa di quel nodo.
+
+\begin{lstlisting}    
+//For each connected component we determine the node which have only a edge incident 
+for(int i = 0; i< instance.NNodes; i++)
+{
+if (cntNode[i] == 1)
+externalNodes[compConn[i]].Add(i);
+}
+\end{lstlisting}
+
+Infine si scandiscono tutte le liste appartenenti nel vettore externalNodes, qualora la lista k-esima contenente 2 nodi, questi per costruzione sono i nodi incidenti del lato da porre a 0 della componente connessa k-esima.//
+Si osserva che, qualora la componente connessa sia formata da un solo lato, non dobbiamo ovviamente fissarlo a 0. 
+
+\begin{lstlisting}  
+//Fix to 0 the variable associated to the edge that create a subtour if is fix to 1 by Cplex
+for (int i = 0; i < instance.NNodes; i++)
+{
+if (externalNodes[i].Count == 2)
+{
+//Retriving the correct index position for the current link 
+int pos = xPos(externalNodes[i][0], externalNodes[i][1], instance.NNodes);
+
+//If the variabile is not previus fix, set the relative LB to 0
+if ((x[pos].UB == 1) && (x[pos].LB == 0))
+x[pos].UB = 0;
+}
+}
+
+\end{lstlisting}
+
 \subsection*{IMPLEMENTAZIONE HARD FIXING}
+
+Passiamo ora a discutere il metodo HardFixing realizzato, fornendo una panoramica del suo funzionamento e definendo quali scelte sono state adottate. La sua firma risulta essere:
+
+\begin{lstlisting}
+
+static void HardFixing(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{cplex}: riferimento oggetto contenente il modello da risolvere;
+    \item \textbf{instance}: riferimento all' oggetto contenente tutte le informazioni relative all' istanza del Problema del Commesso Viaggiatore corrente;
+    \item \textbf{process}: 
+    \item \textbf{rdn}: istanza della classe Random utilizzata per la generazione dei numeri casuali;
+    \item \textbf{clock}: 
+\end{itemize}
+
+
+La soluzione di partenza c_P è stata ottenuto applicando il metodo NearestNeightbor precedentemente discusso. Come accennato, i matheuristici risultano tipicamente applicati a soluzioni  con costi già particolarmente buoni, per tale ragione si è invocato il metodo TwoOpt su c_P il quale produrrà una soluzione x il cui costo risulta,tipicamente, inferiore rispetto a c_P. La soluzione così ottenuta è stata memorizzata nel formato utilizzato da Cplex e passata come MIPstart.
+
+Visto che non si sono aggiunti i vincoli di subtour, per garantire che l' eventuale soluzione migliorativa che Cplex  individua nell' intorno corrente, non abbia cicli al suo interno è stato necessario installare la lazy callback.
+
+\begin{lstlisting}
+
+StreamWriter file;
+
+//Vector used to encode the path that rappresent the best integer solution note
+double[] currentIncumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Cost of the best integer solution note
+double currentIncumbentCost = Double.MaxValue;
+
+List<int>[] listArray = Utility.BuildSLComplete(instance);
+
+//Variable use to don't fix any candidate incumbent solution when lazy callback is invoke
+bool BlockPrint = false;
+
+const int VALUECONSITENOTIMPROV = 3;
+
+//Defined the max number of consecutive run of cplex whithout finds a improvement of the incumbent
+int consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+
+//Defined the percentage of edge in the current solution that fixed 
+double percentageFixing = 0.8;
+
+instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Create the model
+INumVar[] x = Utility.BuildModel(cplex, instance, -1);
+
+//Create a heuristic solution
+PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
+
+//Apply 2-opt algorithm in order to improve the costo o the heiristicSol
+TwoOpt(instance, heuristicSol);
+
+//The heuristic solution is the Incumbent, translate the encode in the format used by Cplex
+for (int i = 0; i < instance.NNodes; i++)
+{
+int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
+//Set to one only the edge that belong to heuristic solution
+currentIncumbentSol[position] = 1;
+}
+
+currentIncumbentCost = heuristicSol.cost;
+
+//Installation of the Lazy Constraint CallBack
+
+TSPLazyConsCallback tspLazy = new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint);
+cplex.Use(tspLazy);
+
+//Provide to Cplex a warm start
+cplex.AddMIPStart(x, currentIncumbentSol);
+
+//Set the number of thread equal to the number of logical core present in the processor
+cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+\end{lstlisting}
+
+
+Fra le politiche possibili per esplorare N(x), si è scelto nuovamente di utilizzare \textbf{first improvement}. Per applicare correttamente tale politica si è fissato il paramento \textbf{IntSolLim} interno a cplex al valore 2.
+
+\begin{lstlisting}
+
+cplex.SetParam(Cplex.LongParam.IntSolLim, 2);
+
+\end{lstlisting}
+
+Esso determina il numero di soluzioni che Cplex deve individuare prima di arrestarsi: è necessario settarlo a 2 poichè gli passiamo un warm-start sempre ammissibile per il modello corrente e ad ogni iterazione cplex riparte dall' incumbent di quella precedente per cui sempre Cplex ha una soluzione ammissibile.
+
+
+La generica iterazione \textit{t} dell' algoritmo si sviluppa come segue: sia \textbf{x_I} la miglior soluzione calcolata da Cplex fino all' itarazine \textit{t}, ogni lato di \textit{x_I} viene fissato in soluzione con probabilità \textit{p} dal metodo \textbf{ModifyModel}. Fissare in soluzione la variabile \textit{x_i} equivale ad aggiungere al modello il vincoli $x_i = 1$ e togliere il vincolo di interezza 0<= x_i <= 1: il nuovo modello così ottenuto viene risolto da Cplex.
+
+Alla prima soluzione ammissibile x* calcolata,il cui costo risulta inferiore rispetto ad \textit{x_I}, il solver viene arrestato e si pone x_I = x*. All' iterazione $t + 1$ vengono nuovamente fissate con probabilità $p$ variabili in soluzione appartenenti a \textit{x*}  iterando il procedimento discusso. Qualora invece in N(x_I) non esista una soluzione migliore di x_I, si modifica l' intorno di esplorazione, ovvero vengono fissate nuovamente in soluzione lati che appartengono x_I ma, poichè il processo di fissaggio è casuale, verranno fissate variabili differenti ottenendo così un intorno differente rispetto al precedente. Quando decidere di far diminuire p è tutt' altro che banale ed esistono svariate possibilità.//
+
+[...]
+
+//
+
+Infine si è ripristinato il valore del lower bound di tutte le variabili per l' iterazione successiva.
+
+\begin{lstlisting}
+
+do
+{
+//Modify the Model according to the current Incumbent solution
+Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
+
+//Solve the model
+cplex.Solve();
+
+if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
+{
+file = new StreamWriter(instance.InputFile + ".dat", false);
+
+currentIncumbentCost = cplex.GetObjValue(Cplex.IncumbentId);
+currentIncumbentSol = cplex.GetValues(x, Cplex.IncumbentId);
+
+//Print solution               
+for (int i = 0; i < instance.NNodes; i++)
+{
+for (int j = i + 1; j < instance.NNodes; j++)
+{
+int position = Utility.xPos(i, j, instance.NNodes);
+
+if (currentIncumbentSol[position] >= 0.5)
+{
+file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+}
+}
+}
+
+file.Close();
+
+Utility.PrintGNUPlot(process, instance.InputFile, 1, currentIncumbentCost, -1);
+
+//Restorarion the variable consecutiveIterationNotImprov to the value VALUECONSITENOTIMPROV
+consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+}
+else
+{
+/If don't have improvement decrease variable consecutiveIterationNotImprov
+consecutiveiterationNotImprov--;
+}
+
+if (consecutiveiterationNotImprov == 0)
+{
+if (percentageFixing > 0.2)
+{
+percentageFixing -= 0.1;
+consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+}
+else
+consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+}
+
+//Restoration the lower and upper bound of all variable. 
+for (int i = 0; i < x.Length; i++)
+{
+x[i].LB = 0;
+x[i].UB = 1;
+}
+
+} while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+instance.XBest = currentIncumbentCost;
+instance.BestSol = currentIncumbentSol;
+
+cplex.Output().WriteLine();
+
+
+//Empty line
+cplex.Output().WriteLine();
+
+cplex.Output().WriteLine("x = " + instance.XBest + "\n");
+
+if (Program.VERBOSE >= -1)
+cplex.ExportModel(instance.InputFile + ".lp");
+
+
+\end{lstlisting}
+
 
 \subsection*{RINS}
 
@@ -2483,6 +2825,56 @@ return nextGeneration;
 \subsection*{LOCAL BRANCH SIMMETRICO}
 
 \section*{APPENDICE}
+
+\subsection*{METODO MODIFYMODEL (APPENDICE)}
+
+Il metodo ModifyModel fissa in soluzione, con una certa percentuale p, lati che appartengono ad una soluzione ammissibile. La sua firma risulta essere:
+
+\begin{lstlisting} 
+public static void ModifyModel(Instance instance, INumVar[] x, Random rnd, double percentageFixing, double[] solution)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: riferimento all' oggetto contenente tutte le informazioni relative all' istanza del Problema del Commesso Viaggiatore corrente;
+    \item \textbf{x}: vettore contenente le variabili del modello;
+    \item \textbf{rnd}: istanza della classe Random utilizzata per la generazione dei numeri casuali;
+    \item \textbf{percentageFixing}: Probabilità con cui un lato viene fissato in soluzione;
+    \item \textbf{solution}: Vettore che codifica la soluzione ammissibile su cui si fissano in soluzione i lati.
+\end{itemize}
+
+
+L' idea dell' algoritmo consiste nel scandire tutti i lati appartenenti alla soluzione ammissibile fornitagli in ingresso, invocare per ognuno lato il metodo \textbf{RandomSelect} e se ritorna 1 viene fissato il lato altrimenti no. Per fissarlo si pone semplicemente il LB della variabile ad esso associata a 1.  Il ciclo do - while serve per ripete il fissaggio qualora si fissino tutti i lati o non si vincoli solo un lato poichè non avrebbe senso a questo punto far partire cplex. Al termine del metodo viene effettuato il preprocessing discusso del paragrafo precedente.
+
+\begin{lstlisting}
+
+//Stored the number of variable fixed
+int nVariabileFix = 0;
+
+do
+{
+nVariabileFix = 0;
+
+//Scan all edge that belong to the current heuristic solution
+for (int i = 0; i < x.Length; i++)
+{
+if ((solution[i] == 1))
+{
+//Whit a percentageFixing probability fix a edge belong to the current solution
+if (RandomSelect(rnd, percentageFixing) == 1)
+{
+x[i].LB = 1;
+nVariabileFix++;
+}
+}
+}
+
+} while (nVariabileFix >= instance.NNodes - 1);
+
+Utility.PreProcessingTSP(instance, x);
+
+\end{lstlisting}
 
 \subsection*{FILL ROULETTE}
 
