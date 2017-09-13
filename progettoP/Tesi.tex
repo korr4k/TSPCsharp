@@ -2558,15 +2558,192 @@ L' algortitomo polishing è un euristico che sfrutta l' algoritmo RINS all' inte
 LOCAL BRANCHING
 \vspace{2\baselineskip}
 
+\begin{eqnarray}
+&\displaystyle\underbrace{\sum_{j\text{ } : \text{ } x_j = 0} x_j^{*}}_{\text{n. variabili cha passano da 0 a 1}} + \underbrace{\sum_{j\text{ }:\text{ } x_j = 1}(1 - x_j^{*})}_{\text{n. variabili cha passano da 1 a 0}} \le r
+\end{eqnarray}
+
+\begin{eqnarray}
+&\displaystyle\sum_{e \text{ } : \text{ } x_e = 1} x_e^{*} \ge n - r
+\end{eqnarray}
 
 \vspace{2\baselineskip}
 IMPLEMENTAZIONE LOCAL BRANCHING
 \vspace{2\baselineskip}
 
 \vspace{2\baselineskip}
-LOCAL BRANCH SIMMETRICO
+LOCAL BRANCH
 \vspace{2\baselineskip} 
 
+La seconda tecnica matheutistica che presentiamo è il \textbf{Local Branch }proposto nel 2002 da Matteo Fischetti \footnote{Docente presso l' Università di Padova, Dipartimento di Ingegneria dell’ Informazione} e Andrea Lodi \footnote{Docente presso l' Università di Bologna, Dipartimento di Ingegneria dell' Energia Elettrica e dell' Informazione.}. Nel paragrafo X abbiamo visto che l' esplorazione di un intorno N(x,r) per enumerazione ha una complessità computazionale O(n^r), e che per r > 3 il miglioramento che si ottiene non vale il costo computazionale che si deve pagare. L' idea del Local Branch è di utilizzare un solver per esplorare N(x,r), con \textit{r} intero positivo, in modo da ricercare al suo interno una soluzione x* avente un costo inferiore rispetto ad x senza però dover pagare un O(n^r). Al fine di ottenere ciò è sufficiente aggiungere al modello il seguente vincolo che prende il nome di \textbf{vincolo di local branch}:
+
+\begin{eqnarray}
+&\displaystyle\sum_{e \text{ } : \text{ } x_e = 1} x_e^{*} \ge n - r
+\end{eqnarray}
+
+Grazie a tale vincolo, non si definiscono quali variabili a 1 di x saranno a 1 anche in x* ma solamente quante: la scelta di quali mantenere, e quindi indirettamente quali cambiare, è delegata al solver il quale fra tutte le scelte sceglierà la migliore possibile. Nella formulazione presentata il local branch viene definito \textbf{asimmetrico} poichè in (\textit{formula precedente}) partecipano solamente le variabili che assumono il valore 1 in x e non quelle che assumono il valore 0.  Anche se meno utilizzata, in letteratura è possibile trovare anche il local branch simmetrico caratterizzato dal vincolo: 
+
+
+\begin{eqnarray}
+&\displaystyle\underbrace{\sum_{j\text{ } : \text{ } x_j = 0} x_j^{*}}_{\text{n. variabili cha passano da 0 a 1}} + \underbrace{\sum_{j\text{ }:\text{ } x_j = 1}(1 - x_j^{*})}_{\text{n. variabili cha passano da 1 a 0}} \le r
+\end{eqnarray}
+
+che definisce la massima distanza di Hamming \footnote{La distanza di Hamming fra due vettori contenenti il medesimo numero di elementi è il numero di posizioni nella quale i simboli corrispondenti sono diversi} che può sussistere fra x* e x. 
+
+Si osserva che in questa seconda formulazione se si vuole esplorare un intorno di k-opt, il valore di r deve essere 2*k poiché k sono i lati che tolgo dalla soluzione (che passano quindi da 1 a 0) a cui sommo altri k che passano in soluzione(cioè da 0 vanno a 1). 
+
+
+L' aspetto negativo del local branch simetrico è che il vincolo che il viene aggiunto al modello è molto \emph{denso}(ossia poche variabili hanno coefficiente diverso da 0): è noto che avere un vincolo così in generale rallenta Cplex nella risoluzione dell' algoritmo del simplesso; per tale ragione si è implementato il local branch nella versione asimetrica.
+
+Discutiamo ora il codice realizzato. Si è generata una soluzione euristica utilizzando il metodo NearestNeightbor sulla quale si è applicato un 2-opt e questa è stata passata come warm-start. Si è installata la lazy al fine di garantire che la soluzione ottima prodotta da cplex fosse priva di subtour. Sia x_I la miglio soluzione calcolare da cplex, i valori che può assumere il raggio r dell' intorno N(x_I,r) sono: 3,5,7 e 10.
+
+\begin{lstlisting}
+
+//Define the possible value that the radius can be assume
+int[] possibleRadius = {3, 5, 7, 10};
+
+//We start whit a radius of 3
+int currentRange = 0;
+
+//Don't want print every candidate incumbent solution inside the lazy constraint callback
+bool BlockPrint = false;
+
+//Define the vector where is  coded the incumbent solution
+double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            
+//Variable where is store the cost of the incumbent solution
+double incumbentCost = double.MaxValue;
+
+//Create the vector conten that it will contain the last best solution find befor time limit or when it can't be  improved
+instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Build the model
+INumVar[] x = Utility.BuildModel(cplex, instance, -1);
+
+//List use in NearestNeightbor method
+List<int>[] listArray = Utility.BuildSLComplete(instance);
+
+//Create a heuristic solution
+PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
+
+//Apply 2-opt algotithm in order to improve the cost to the heuristicSol
+TwoOpt(instance, heuristicSol);
+
+
+//The heuristic solution is the incumbent, translate the encode in the format used by Cplex
+for (int i = 0; i < instance.NNodes; i++)
+{
+    int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
+                
+    //Set to one only the edge that belong to euristic solution
+    incumbentSol[position] = 1;
+}
+
+//Installation of the Lazy Constraint Callback
+cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
+
+//Set the number of thread equal to the number of logical core present in the processor
+cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+
+//Provide to Cplex a warm start
+cplex.AddMIPStart(x, incumbentSol);
+
+\end{lstlisting}
+
+
+A partire dalla soluzione euristica, si è creato il vincolo di local branch nella forma assimetrica e successivamente lo si è aggiunto al modello matematico. 
+
+\begin{lstlisting}
+//Create a empty expression
+ILinearNumExpr expr = cplex.LinearNumExpr();
+
+//Create the firts member of the local branch constraint
+for (int i = 0; i < instance.NNodes; i++)
+   expr.AddTerm(x[Utility.xPos(i, heuristicSol.path[i], instance.NNodes)], 1);
+   
+//Create a new local branch constraint
+IAddable localBranchConstraint  = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+//Add the constraint 
+cplex.Add(localBranchConstraint);               
+\end{lstlisting}    
+
+Notiamo che è stato necessario memorizzare tale vincolo (a differenza dei vincoli di grado e di interezza) in una variabile di tipo \emph{IAddable} poichè una volta che cplex termina di calcolare la soluzione ottima di tale modello, è necessario eliminare tale vincolo, utilizzando il metodo \textbf{Remove}. Qualora non è più possibile ottenere dei miglioramenti con un certo raggio r, questo viene aumentato. L' algoritmo termina qualora l' esplorazione di N(x_I,20) non produca un soluzione migliore di x_I oppure scade il time limit.
+
+\begin{lstlisting}
+do
+{
+     //Solve the model
+      cplex.Solve();
+                
+      if (incumbentCost > cplex.GetObjValue())
+      {
+           incumbentCost = cplex.ObjValue;
+           incumbentSol = cplex.GetValues(x);
+
+           //Eliminate the previous local branch constraint
+            cplex.Remove(localBranchConstraint);
+
+            //Create an empty expression
+            expr = cplex.LinearNumExpr();
+
+            StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+
+            //Print the new incombent solution
+             for (int i = 0; i < instance.NNodes; i++)
+             {
+                 for (int j = i + 1; j < instance.NNodes; j++)
+                 {
+                      int position = Utility.xPos(i, j, instance.NNodes);
+
+                       if (incumbentSol[position] >= 0.5)
+                       {
+                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+
+                            //Create the firts member of the local branch constraint
+                            expr.AddTerm(x[position], 1);
+                        }
+                   }
+                }
+
+                Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
+                file.Close();
+                 
+                //Create a local branch constraint
+                localBranchConstraint = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+                 
+                //Add the local branch constraint
+                cplex.Add(localBranchConstraint);
+         }
+         else
+         {
+             if (possibleRadius[currentRange] != 10)
+             {
+                 //Increase the radius
+                 currentRange++;
+
+                 //Remove the previous local branch constraint
+                 cplex.Remove(localBranchConstraint);
+                       
+                  //Create the new local branch constraint
+                  localBranchConstraint = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+                  //Add the local branch constraint to the model
+                  cplex.Add(localBranchConstraint);
+              }
+              else
+              {
+                  break;
+              }                  
+         }
+
+} while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+//Store in the appropriate fields inside instance the last incumbent solution find and the relative cost
+instance.BestSol = incumbentSol;
+instance.BestLb = incumbentCost;
+
+\end{lstlisting}
 
 \vspace{2\baselineskip}
 ALGORITMI GENETICI

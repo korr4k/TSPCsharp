@@ -703,7 +703,7 @@ namespace TSPCsharp
         static int ProbabilityTwoOpt(Instance instance, Random rnd)
         {
             //The probability to applying TwoOpt is proportional to the number of nodes
-            if (rnd.Next(1, instance.NNodes / 2) == 1)
+            if (rnd.Next(1, instance.NNodes / 2 ) == 1)
                 return 1;
             else
                 return 0;

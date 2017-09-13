@@ -922,56 +922,89 @@ namespace TSPCsharp
                 cplex.ExportModel(instance.InputFile + ".lp");
         }
 
-        static void LocalBranching(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
+         static void LocalBranching(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
         {
-            int[] possibleRange = { 3, 5, 7, 10 };// Fisso poco così inizialmente: al max r = 10
+            //Define the possible value that the radius can be assume
+            int[] possibleRadius = {3, 5, 7, 10};
+
+            //We start whit a radius of 3
             int currentRange = 0;
+
+            //Don't want print every candidate incumbent solution inside the lazy constraint callback
             bool BlockPrint = false;
-            IRange cut;
+
+            //Define the vector where is  coded the incumbent solution
             double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            
+            //Variable where is store the cost of the incumbent solution
             double incumbentCost = double.MaxValue;
+
+            //Create the vector conten that it will contain the last best solution find befor time limit or when it can't be  improved
+            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+            //Build the model
+            INumVar[] x = Utility.BuildModel(cplex, instance, -1);
+
+            //List use in NearestNeightbor method
             List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
-            INumVar[] x = Utility.BuildModel(cplex, instance, -1);//Costruisco il modello la prima volta
+            //Create a heuristic solution
+            PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
 
-            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
-            //incumbentSol = ConvertIntArrayToDoubleArray(solHeuristic.path);
+            //Apply 2-opt algotithm in order to improve the cost to the heuristicSol
+            TwoOpt(instance, heuristicSol);
+
+
+            //The heuristic solution is the incumbent, translate the encode in the format used by Cplex
             for (int i = 0; i < instance.NNodes; i++)
             {
-                int position = Utility.xPos(i, solHeuristic.path[i], instance.NNodes);
-                incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
+                int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
+                
+                //Set to one only the edge that belong to euristic solution
+                incumbentSol[position] = 1;
             }
 
-            TwoOpt(instance, solHeuristic);
-            ILinearNumExpr expr = cplex.LinearNumExpr();
-
-            for (int i = 0; i < instance.NNodes; i++)
-                expr.AddTerm(x[Utility.xPos(i, solHeuristic.path[i], instance.NNodes)], 1);
-
-            cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local brnching constraint");
-            cplex.AddCut(cut);
-
-           //cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
-
-            cplex.SetParam(Cplex.Param.MIP.Strategy.Search, Cplex.MIPSearch.Traditional);
-
-            //cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-
+            //Installation of the Lazy Constraint Callback
             cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
 
+            //Set the number of thread equal to the number of logical core present in the processor
+            cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+
+            //Provide to Cplex a warm start
+            cplex.AddMIPStart(x, incumbentSol);
+
+            //Create a empty expression
+            ILinearNumExpr expr = cplex.LinearNumExpr();
+
+            //Create the firts member of the local branch constraint
+            for (int i = 0; i < instance.NNodes; i++)
+                expr.AddTerm(x[Utility.xPos(i, heuristicSol.path[i], instance.NNodes)], 1);
+
+            //Create a new local branch constraint
+            IAddable localBranchConstraint  = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+            //Add the constraint 
+            cplex.Add(localBranchConstraint);
+           
             do
             {
-                cplex.AddMIPStart(x, incumbentSol);
+                //Solve the model
                 cplex.Solve();
-
-                if (incumbentCost > cplex.ObjValue)
+                
+                if (incumbentCost > cplex.GetObjValue())
                 {
                     incumbentCost = cplex.ObjValue;
                     incumbentSol = cplex.GetValues(x);
 
+                    //Eliminate the previous local branch constraint
+                    cplex.Remove(localBranchConstraint);
+
+                    //Create an empty expression
+                    expr = cplex.LinearNumExpr();
+
                     StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
 
+                    //Print the new incombent solution
                     for (int i = 0; i < instance.NNodes; i++)
                     {
                         for (int j = i + 1; j < instance.NNodes; j++)
@@ -982,48 +1015,50 @@ namespace TSPCsharp
                             {
                                 file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
                                 file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+
+                                //Create the firts member of the local branch constraint
+                                expr.AddTerm(x[position], 1);
                             }
                         }
                     }
 
                     Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
                     file.Close();
-
-                    //Eliminate all cuts
-                    cplex.ClearCuts();
-
-                    for (int i = 0; i < instance.NNodes; i++)
-                    {
-                        if (incumbentSol[i] == 1)
-                            expr.AddTerm(x[i], 1);
-                    }
-
-                    currentRange = 0;
-
-                    cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local branching constraint");//Aggiungo il vincolo nuovo
-                    cplex.AddCut(cut);
+                 
+                    //Create a local branch constraint
+                    localBranchConstraint = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+                 
+                    //Add the local branch constraint
+                    cplex.Add(localBranchConstraint);
                 }
                 else
                 {
-                    if (possibleRange[currentRange] != 10)
+                    if (possibleRadius[currentRange] != 10)
                     {
+                        //Increase the radius
                         currentRange++;
-                        cplex.ClearCuts();
-                        cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local branching constraint");//Aggiungo il vincolo nuovo
-                        cplex.AddCut(cut);
+
+                        //Remove the previous local branch constraint
+                        cplex.Remove(localBranchConstraint);
+                       
+                        //Create the new local branch constraint
+                        localBranchConstraint = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+                        //Add the local branch constraint to the model
+                        cplex.Add(localBranchConstraint);
                     }
                     else
                     {
                         break;
-                    }
+                    }                  
                 }
 
             } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
 
+            //Store in the appropriate fields inside instance the last incumbent solution find and the relative cost
             instance.BestSol = incumbentSol;
             instance.BestLb = incumbentCost;
         }
-
         static void Polishing(Cplex cplex, Instance instance, Process process, Random rnd, int sizePopulation, Stopwatch clock)
         {
 
