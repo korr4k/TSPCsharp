@@ -2519,26 +2519,29 @@ Dove:
 
 Si osserva inoltre che nel caso in cui si attuino consecutive esecuzione dell'\textit{hard-fixing} non è più necessario aggiornare manualmente il valore di \textit{warm-start}\footnote{Se non alla prima run.}: variare solamente i fissaggi delle variabili, senza modificare ulteriormente il modello matematico, non viene considerata da Cplex una operazione \textit{drastica} al punto di abbandonare i risultati ottenuti fino a quel momento.
 
-In altre parole, nel caso in cui non sia trovata una soluzione migliore rispetto al \textit{warm-start} attuale la validità di quest'ultimo viene automaticamente ricontrollata durante la successiva fase di preprocessing\footnote{La sua validità è sempre garantita in quanto siamo nel caso in cui sì applichiamo un fissaggio diverso ma rispetto la stessa soluzione di partenza dato che non ne sono state trovate di migliori.}. Altrimenti nel caso in cui l'ultimo rilassamento continuo abbia individuato un nuovo valore per l'incumbent, e quindi un nuovo \textit{warm-start}, Cplex provvede autonomamente al suo aggiornamento.
+In altre parole, nel caso in cui non sia trovata una soluzione migliore rispetto al \textit{warm-start} attuale la validità di quest'ultimo viene automaticamente ricontrollata durante la successiva fase di preprocessing\footnote{La sua validità è sempre garantita in quanto siamo nel caso in cui sì applichiamo un fissaggio diverso ma rispetto la stessa soluzione di partenza dato che non ne sono state trovate di migliori.} effettuata dal solver. Altrimenti nel caso in cui l'ultimo rilassamento continuo abbia individuato un nuovo valore per l'incumbent, e quindi un nuovo \textit{warm-start}, Cplex provvede autonomamente al suo aggiornamento.
 
-\subsection*{PREPROCESSING}
+\subsection*{PREPROCESSINGTSP}
 
-Per ridurre il tempo necessario a Cplex per calcolare la prima soluzione migliore di x_I nell' intorno N(x_I), risulta estremamente utile eseguire una seconda fase di fissaggio di variabili. Mentre nella prima fase si fissano in maniera casuale le variabili appartenenti a x_I, in questa seconda fase, a partire dalle variabili fissate, se ne fissano altre a 0 in modo da ridurre la probabilità che la soluzione candidata da Cplex come incumbent abbia al suo interno dei subtour. La fase di pre-processing è quindi specifica per il problema del Commesso Viaggiatore, si consideri la figura X in cui in blu sono stati indicati i lati fissati in soluzione:
+Una volta defenito l'intorno \textbf{$N(x_I)$} e quindi aver fissato il \textit{lower bound} di alcune variabili a $1$ è possibile procedere immediatamente alla risoluzione del problema modificato attraverso il solver, nel nostro caso Cplex. Come ben noto, nel caso più generico, il pool di tagli è inizialmente vuoto e solo quelli necessari, non determinabili a priori, sono individuati attraverso le callback installate.
 
-\begin{center}
-    \includegraphics[scale=0.5]{PreProcessing}  
-    
-    Figura X: Output 
-    
-\end{center}
+Nel caso dell'\textbf{hard-fixing} questa affermazione non è del tutto esatta in quanto \textbf{alcuni} dei tagli \textbf{necessari}\footnote{Per necessari si intende che sicuramente } possono essere trovati molto velocemente attraverso una analisi del fissaggio effettuato. Una loro aggiunta preventiva risulta quindi molto vantaggiosa in quanto si evitano certamente delle iterazioni al solver risparmiando nel complesso diverso tempo.
+In \hyperref[fig:Preprocessiong1]{FiguraX} troviamo una generica situazione dove gli archi in \textit{blu} sono stati \textit{fissati} mentre quelli in \textit{azzurro} no. Proprio questi ultimi però verrebbero immediatamente selezionati dal solver in quanto la soluzione con i due subtour indicati risulta banalmente la meno costosa. Il compito del preprocessingTSP (\textbf{ppTSP}) da noi progettato è quindi proprio questo, trovare tutti quei lati che, se anche selezionati singolarmente, generano un subtour\footnote{Dato che non ha senso fissare $n-1$ lati su un totale di $n$, se la singola selezione di un lato genera un subtour, qualsiasi siano le restanti selezioni, la soluzione così prodotta avrà sempre almeno un secondo subtour e quindi risulta invalida.} e di conseguenza forzarli a valore $0$.
 
-Le variabili x_{1,3},x_{4,5} e x_{6,9}, per come si sono fissati i lati, dovranno necessariamente assumere il valore 0,altrimenti si avrebbe la presenza di uno o più subtour. 
+\begin{figure}[htbp]
+    \centering
+    \scalebox{.75}{\includegraphics{Immagini/"PreProcessing".jpg}}
+    \label{fig:Preprocessiong1}
+    \caption{Preprocessing}
+\end{figure}
 
-Il metodo che realizza ciò è stato chiamato \textbf{PreProcessingTSP} ed ha la seguente firma:
+A livello algoritmo l'operazione di \textit{ppTSP} è molto semplice da realizzare. Sfruttiamo la stessa tecnica utilizzata nel corso del progetto per individuare le componenti connesse di una \textbf{soluzione} proposta. Queste nel nostro caso non risulteranno mai essere un ciclo completo per costruzione e quindi si possono sempre individuare le coppie di nodi posti alle loro estremetà: i lati che collegano i due elementi appartenenti alla stessa coppia sono esattamente quelli da forzare a valore nullo\footnote{Questo discorso è sempre valido a meno che la componente connessa non ciclica trovata sia composta da un solo lato, in quel caso non è richiesta nessuna operazione.}.
+
+Una definizione equivalente di quanto stiamo cercando sono tutti quei nodi posti alla estremi di un solo lato che è stato fissato. Proponiamo ora il codice commentato che sfrutta quest'ultima affermazione e permette di attuare la completa fase di \textit{ppTSP}:
 
 \begin{lstlisting}
 
-public static void PreProcessing(Instance instance, INumVar[] x)
+public static void PreProcessingTSP(Instance instance, INumVar[] x)
 
 \end{lstlisting}
 
@@ -2549,88 +2552,79 @@ Dove:
     \item \textbf{x}: vettore contente le variabili del modello matematico;
 \end{itemize}
 
-L' algoritmo individua per ogni nodo, in cui incide almeno un lato fissato, la relativa componente connessa e memorizza per ognuno di essi il numero di lati ad esso incidenti. 
+\begin{lstlisting}
 
-\begin{lstlisting} 
-
-//Array that stored,for eache node, how many edges incise to it 
+//Questo vettore tiene traccia all'indice i-esimo di quante volte il nodo i è estremo di un lato fissato, opzioni valide sono 0, 1, 2
 int[] cntNode = new int[instance.NNodes];
 
-//Vector contenent for each node relative connected component
+//Questo vettore tiene traccia di quale componente connessa fa parte ogni nodo
 int[] compConn = new int[instance.NNodes];
 
-//Array of List where are stored,for each connected component the nodes in which incise only a edge
+//Questo vettore di liste di interi è la struttura dati di supporto dove infine ogni lista contenente due elementi sarà relativa ad una singola
+//componente connessa e immagazzinerà al suo interno gli indici dei nodi posti alle sue estremità. Chiaramente tale informazione è facilmente
+//ricavabile dai due precedenti vettori cntNode e compConn ma con un costo complessivo più alto.
 List<int>[] externalNodes = new List<int>[instance.NNodes];
 
-//Inizialization compConn
+//Classica inizializzazione delle componenti connesse, ad ogni nodo è assegnato ne è assegnata una propria
 Utility.InitCC(compConn);
 
-//Inizialization externalNodes
+//Inizializzazione di externalNodes
 for (int i = 0; i < instance.NNodes; i++)
-externalNodes[i] = new List<int>();
+    externalNodes[i] = new List<int>();
 
 for (int i = 0; i < instance.NNodes; i++)
 {
-for (int j = i + 1; j < instance.NNodes; j++)
-{
-//Retriving the correct index position for the current link 
-int position = Utility.xPos(i, j, instance.NNodes);
+    for (int j = i + 1; j < instance.NNodes; j++)
+    {
+        //Trovo indice corretto del lato con estremi i nodi di indice i e j
+        int position = Utility.xPos(i, j, instance.NNodes);
 
-//if the edge is fixed 
-if (x[position].LB == 1)
-{
-//Upgrade the array cntNode
-cntNode[i] += 1;
-cntNode[j] += 1;
+        //Nel caso sia stato fissato dall'hard-fixing lo si analizza
+        if (x[position].LB == 1)
+        {
+            //Aggiornamento del contatore relativo ai nodi i e j
+            cntNode[i] += 1;
+            cntNode[j] += 1;
 
-//Set the connected component 
-for (int k = 0; k < instance.NNodes; k++)
-{
-if ((k != j) && (compConn[k] == compConn[j]))
-compConn[k] = compConn[i];                          
+            //Aggiorno componenti connesse seguendo la tecnica di Kruskal
+            for (int k = 0; k < instance.NNodes; k++)
+            {
+                if ((k != j) && (compConn[k] == compConn[j]))
+                    compConn[k] = compConn[i];
+            }
+
+            compConn[j] = compConn[i];
+        }
+    }
 }
 
-//Finally also the value relative to the node i are updated
-compConn[j] = compConn[i];                                                                        
-}
-}
-}
-\end{lstlisting}
-
-Per individuare i nodi i,j della variabile x_[i,j] da porre a 0 è sufficiente, per ogni nodo avente un solo lato indicente, inserirlo nella posizione i di un vettore di liste, dove i è compConn[i], cioè la componente connessa di quel nodo.
-
-\begin{lstlisting}    
-//For each connected component we determine the node which have only a edge incident 
+//Popoliamo correttamente externalNodes in modo tale che solamente i due nodi estremi della stessa componente connessa
+//siano inserite all'interno della stessa lista
 for(int i = 0; i< instance.NNodes; i++)
 {
-if (cntNode[i] == 1)
-externalNodes[compConn[i]].Add(i);
+    if (cntNode[i] == 1)
+        externalNodes[compConn[i]].Add(i);
 }
-\end{lstlisting}
 
-Infine si scandiscono tutte le liste appartenenti nel vettore externalNodes, qualora la lista k-esima contenente 2 nodi, questi per costruzione sono i nodi incidenti del lato da porre a 0 della componente connessa k-esima.//
-Si osserva che, qualora la componente connessa sia formata da un solo lato, non dobbiamo ovviamente fissarlo a 0. 
-
-\begin{lstlisting}  
-//Fix to 0 the variable associated to the edge that create a subtour if is fix to 1 by Cplex
+//Controlliamo quali elementi del vettore di liste appena popolato risultano avere esattamente due elementi ed eseguiamo
+//l'operazione fondamentale del preprocessing discussa
 for (int i = 0; i < instance.NNodes; i++)
 {
-if (externalNodes[i].Count == 2)
-{
-//Retriving the correct index position for the current link 
-int pos = xPos(externalNodes[i][0], externalNodes[i][1], instance.NNodes);
+    if (externalNodes[i].Count == 2)
+    {
+        //Calcolo l'indice del lato di cui voglio forzare l'upper bound a 0
+        int pos = xPos(externalNodes[i][0], externalNodes[i][1], instance.NNodes);
 
-//If the variabile is not previus fix, set the relative LB to 0
-if ((x[pos].UB == 1) && (x[pos].LB == 0))
-x[pos].UB = 0;
-}
+        //Se il lato analizzato era in precedenza stato fissato ad uno dall'algoritmo di hard fixing, quindi il suo lower bound
+        //è pari ad 1, non lo andiamo a toccare in quanto significa che la componente connesse non ha altri elementi
+        if (x[pos].LB == 0)
+            x[pos].UB = 0;
+    }
 }
 
 \end{lstlisting}
 
 \subsection*{IMPLEMENTAZIONE HARD FIXING}
-
-Passiamo ora a discutere il metodo HardFixing realizzato, fornendo una panoramica del suo funzionamento e definendo quali scelte sono state adottate. La sua firma risulta essere:
 
 \begin{lstlisting}
 
@@ -2641,176 +2635,157 @@ static void HardFixing(Cplex cplex, Instance instance, Process process, Random r
 Dove:
 
 \begin{itemize}
-    \item \textbf{cplex}: riferimento oggetto contenente il modello da risolvere;
-    \item \textbf{instance}: riferimento all' oggetto contenente tutte le informazioni relative all' istanza del Problema del Commesso Viaggiatore corrente;
-    \item \textbf{process}: 
+    \item \textbf{cplex}: riferimento all'oggetto contenente il modello da risolvere;
+    \item \textbf{instance}: riferimento all'oggetto contenente tutte le informazioni relative all'istanza del Problema del Commesso Viaggiatore corrente;
+    \item \textbf{process}: riferimento all'oggetto necessario per la stampa dei dati attraverso \textit{GNUPlot};
     \item \textbf{rdn}: istanza della classe Random utilizzata per la generazione dei numeri casuali;
-    \item \textbf{clock}: 
+    \item \textbf{clock}: riferimento all'oggetto utilizzato come cronometro;
 \end{itemize}
 
+Di seguito troviamo il codice del metodo \textbf{commentato}. Facciamo però presente che l'\textit{hard fixing} può ricevere in ingresso una qualsiasi soluzione di partenza, preferibilmente già buona, sulla quale vogliamo definire un intorno di ricerca. Nella versione base dell'algoritmo riportato viene utilizzato il modo più veloce per ottenere tale risultato e quindi attraverso la funzione \textbf{NearestNeightbor} LINK!!!!!!!!!!!!!!! con conseguente algoritmo di due ottimalità.
 
-La soluzione di partenza c_P è stata ottenuto applicando il metodo NearestNeightbor precedentemente discusso. Come accennato, i matheuristici risultano tipicamente applicati a soluzioni  con costi già particolarmente buoni, per tale ragione si è invocato il metodo TwoOpt su c_P il quale produrrà una soluzione x il cui costo risulta,tipicamente, inferiore rispetto a c_P. La soluzione così ottenuta è stata memorizzata nel formato utilizzato da Cplex e passata come MIPstart.
-
-Visto che non si sono aggiunti i vincoli di subtour, per garantire che l' eventuale soluzione migliorativa che Cplex  individua nell' intorno corrente, non abbia cicli al suo interno è stato necessario installare la lazy callback.
+Nei test a fine capitolo vedremo invece una variante che sfrutta soluzioni già precedentemente ottenute da altri algoritmi euristici attraverso loro tempi di esecuzione infinitamente più alti.
 
 \begin{lstlisting}
-
+//Oggetto utilizzato per la scrittura su file dei vari incumbent così che GNUPlot possa stamparne il ciclo a video
 StreamWriter file;
 
-//Vector used to encode the path that rappresent the best integer solution note
+//Vettore che vuole essere sempre aggiornato al miglior ciclo trovato
 double[] currentIncumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
-//Cost of the best integer solution note
+//Variabile sempre aggiornata al costo del miglior ciclo trovato
 double currentIncumbentCost = Double.MaxValue;
 
+//All'indice i-esimo troviamo in ordine crescente quali sono i nodi più vicini all'i-esimo nodo
 List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-//Variable use to don't fix any candidate incumbent solution when lazy callback is invoke
+//Variabile booleana che comunicherà alla lazy callback utilizzata di non stampare a video tutte gli aggiornamenti dell'incumbent che trova
 bool BlockPrint = false;
 
+//Indica dopo quante consecutive esplorazioni di diversi intorni sia necessario ampliare l'ampiezza dei successivi
 const int VALUECONSITENOTIMPROV = 3;
 
-//Defined the max number of consecutive run of cplex whithout finds a improvement of the incumbent
+//Variabile costantemente aggiornata a quante esplorazioni consecutive non hanno portato ad una soluzione migliore, inizialmente si parte da VALUECONSITENOTIMPROV
 int consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
 
-//Defined the percentage of edge in the current solution that fixed 
+//La percentuale inizile p che ha ogni lato di essere fissato
 double percentageFixing = 0.8;
 
+//Semplice inizializzazione del vettore che andrà a contenere la selezione o meno di ogni lato nella soluzione migliore finale
 instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 
-//Create the model
+//Creo il modello matematico di partenza
 INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
-//Create a heuristic solution
+//Utilizzo del NearestNeightbor per iniziare a costruire la soluzione di partenza
 PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
 
-//Apply 2-opt algorithm in order to improve the costo o the heiristicSol
+//Applicazione del 2-Opt per completare la soluzione di partenza
 TwoOpt(instance, heuristicSol);
 
-//The heuristic solution is the Incumbent, translate the encode in the format used by Cplex
+//La soluzione di partenza è settata come attuale incumbent
 for (int i = 0; i < instance.NNodes; i++)
 {
-int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
-//Set to one only the edge that belong to heuristic solution
-currentIncumbentSol[position] = 1;
+    int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
+    currentIncumbentSol[position] = 1;
 }
-
+//Il costo della soluzione di partenza è settato come il miglior costo attuale
 currentIncumbentCost = heuristicSol.cost;
 
-//Installation of the Lazy Constraint CallBack
-
+//Installazione lazy callback per la risoluzione del modello
 TSPLazyConsCallback tspLazy = new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint);
 cplex.Use(tspLazy);
 
-//Provide to Cplex a warm start
+//Forniamo a Cplex il warm-start
 cplex.AddMIPStart(x, currentIncumbentSol);
 
-//Set the number of thread equal to the number of logical core present in the processor
+//Setto i thread utilizzati da Cplex pari al numero di core virtuali della macchina utilizzata, il codice della Lazy è thread-safe
 cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-\end{lstlisting}
 
-
-Fra le politiche possibili per esplorare N(x), si è scelto nuovamente di utilizzare \textbf{first improvement}. Per applicare correttamente tale politica si è fissato il paramento \textbf{IntSolLim} interno a cplex al valore 2.
-
-\begin{lstlisting}
-
+//La polita da noi scelta prevede che al primo miglioramento ottenuto durante l'esplorazione dell'intorno attuale questa venga fermata in modo da ripetere il procedimento
+//in modo da ripetere il procedimentocon il nuovo valore di incumbent. Per ottenere questo risultato comunichiamo a Cplex che alla seconda soluzione intera trovata fermi
+//la propria risoluzione. Notiamo che la prima soluzione intera è il warm-start
 cplex.SetParam(Cplex.LongParam.IntSolLim, 2);
-
-\end{lstlisting}
-
-Esso determina il numero di soluzioni che Cplex deve individuare prima di arrestarsi: è necessario settarlo a 2 poichè gli passiamo un warm-start sempre ammissibile per il modello corrente e ad ogni iterazione cplex riparte dall' incumbent di quella precedente per cui sempre Cplex ha una soluzione ammissibile.
-
-
-La generica iterazione \textit{t} dell' algoritmo si sviluppa come segue: sia \textbf{x_I} la miglior soluzione calcolata da Cplex fino all' itarazine \textit{t}, ogni lato di \textit{x_I} viene fissato in soluzione con probabilità \textit{p} dal metodo \textbf{ModifyModel}. Fissare in soluzione la variabile \textit{x_i} equivale ad aggiungere al modello il vincoli $x_i = 1$ e togliere il vincolo di interezza 0<= x_i <= 1: il nuovo modello così ottenuto viene risolto da Cplex.
-
-Alla prima soluzione ammissibile x* calcolata,il cui costo risulta inferiore rispetto ad \textit{x_I}, il solver viene arrestato e si pone x_I = x*. All' iterazione $t + 1$ vengono nuovamente fissate con probabilità $p$ variabili in soluzione appartenenti a \textit{x*}  iterando il procedimento discusso. Qualora invece in N(x_I) non esista una soluzione migliore di x_I, si modifica l' intorno di esplorazione, ovvero vengono fissate nuovamente in soluzione lati che appartengono x_I ma, poichè il processo di fissaggio è casuale, verranno fissate variabili differenti ottenendo così un intorno differente rispetto al precedente. Quando decidere di far diminuire p è tutt' altro che banale ed esistono svariate possibilità.//
-
-[...]
-
-//
-
-Infine si è ripristinato il valore del lower bound di tutte le variabili per l' iterazione successiva.
-
-\begin{lstlisting}
 
 do
 {
-//Modify the Model according to the current Incumbent solution
-Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
+    //Modifichiamo il modello introducento il fissaggio di alcune variabili creando così un intorno della soluzione migliore attuale
+    Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
 
-//Solve the model
-cplex.Solve();
+    //Risolviamo il modello attuale
+    cplex.Solve();
 
-if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
-{
-file = new StreamWriter(instance.InputFile + ".dat", false);
+    //Se otteniamo un miglioramento
+    if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
+    {
+        //Preparo il file
+        file = new StreamWriter(instance.InputFile + ".dat", false);
 
-currentIncumbentCost = cplex.GetObjValue(Cplex.IncumbentId);
-currentIncumbentSol = cplex.GetValues(x, Cplex.IncumbentId);
+        //Aggiorno le variabili con l'attuale percorso e costo incumbent
+        currentIncumbentCost = cplex.GetObjValue(Cplex.IncumbentId);
+        currentIncumbentSol = cplex.GetValues(x, Cplex.IncumbentId);
 
-//Print solution               
-for (int i = 0; i < instance.NNodes; i++)
-{
-for (int j = i + 1; j < instance.NNodes; j++)
-{
-int position = Utility.xPos(i, j, instance.NNodes);
+        //Stampa del nuovo percorso incumbent su file
+        for (int i = 0; i < instance.NNodes; i++)
+        {
+            for (int j = i + 1; j < instance.NNodes; j++)
+            {
+                int position = Utility.xPos(i, j, instance.NNodes);
 
-if (currentIncumbentSol[position] >= 0.5)
-{
-file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
-}
-}
-}
+                if (currentIncumbentSol[position] >= 0.5)
+                {
+                    file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                    file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                }
+            }
+        }
+        //Chiusura del file così da eseguire il flush dal buffer
+        file.Close();
 
-file.Close();
+        //Stampa attraverso GNUPLot del nuovo incumbet path
+        Utility.PrintGNUPlot(process, instance.InputFile, 1, currentIncumbentCost, -1);
 
-Utility.PrintGNUPlot(process, instance.InputFile, 1, currentIncumbentCost, -1);
+        //Resettiamo il numero di successivi non miglioramenti
+        consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+    }
+    else
+    {
+        //Il numero di consecutivi non miglioramenti è decrementato
+        consecutiveiterationNotImprov--;
+    }
 
-//Restorarion the variable consecutiveIterationNotImprov to the value VALUECONSITENOTIMPROV
-consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
-}
-else
-{
-/If don't have improvement decrease variable consecutiveIterationNotImprov
-consecutiveiterationNotImprov--;
-}
+    //Se ho raggiunto il limite di consecutivi non miglioramenti
+    if (consecutiveiterationNotImprov == 0)
+    {
+        //Se la percentuale di fissaggio di un nodo è ancora superiore al 20% la diminuisco
+        if (percentageFixing > 0.2)
+        {
+            //Diminuzione della percentuale di fissammento di un nodo di un 10%
+            percentageFixing -= 0.1;
+            //Resetto il numero di consecutivi non miglioramenti in seguito alla variazione dell'ampiezza dell'intorno da analizzare
+            consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
+        }
+    }
 
-if (consecutiveiterationNotImprov == 0)
-{
-if (percentageFixing > 0.2)
-{
-percentageFixing -= 0.1;
-consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
-}
-else
-consecutiveiterationNotImprov = VALUECONSITENOTIMPROV;
-}
-
-//Restoration the lower and upper bound of all variable. 
-for (int i = 0; i < x.Length; i++)
-{
-x[i].LB = 0;
-x[i].UB = 1;
-}
+    //Elimino l'ultimo fissaggio delle variabili in preparazione al prossimo 
+    for (int i = 0; i < x.Length; i++)
+    {
+        x[i].LB = 0;
+        x[i].UB = 1;
+    }
 
 } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+//Ripeto il tutto fino a che non scade il timelimit, l'ultima iterazione può sforarlo fino a che non è completa
 
+//Aggiorno la variabili instance con la soluzione migliore finale ed il relativo costo
 instance.XBest = currentIncumbentCost;
 instance.BestSol = currentIncumbentSol;
 
+//Stampo righe vuota nell'output standard di Cplex
 cplex.Output().WriteLine();
-
-
-//Empty line
 cplex.Output().WriteLine();
-
+//Stampo il costo della miglior soluzione trovata nell'output standard di Cplex
 cplex.Output().WriteLine("x = " + instance.XBest + "\n");
-
-if (Program.VERBOSE >= -1)
-cplex.ExportModel(instance.InputFile + ".lp");
-
-
 \end{lstlisting}
 
 
