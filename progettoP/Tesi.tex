@@ -2667,7 +2667,7 @@ IAddable localBranchConstraint  = cplex.Ge(expr, instance.NNodes - possibleRadiu
 cplex.Add(localBranchConstraint);               
 \end{lstlisting}    
 
-Notiamo che è stato necessario memorizzare tale vincolo (a differenza dei vincoli di grado e di interezza) in una variabile di tipo \emph{IAddable} poichè una volta che cplex termina di calcolare la soluzione ottima di tale modello, è necessario eliminare tale vincolo, utilizzando il metodo \textbf{Remove}. Qualora non è più possibile ottenere dei miglioramenti con un certo raggio r, questo viene aumentato. L' algoritmo termina qualora l' esplorazione di N(x_I,20) non produca un soluzione migliore di x_I oppure scade il time limit.
+Notiamo che è stato necessario memorizzare tale vincolo (a differenza dei vincoli di grado e di interezza) in una variabile di tipo \emph{IAddable} poichè una volta che cplex termina di calcolare la soluzione ottima di tale modello, è necessario eliminare tale vincolo, utilizzando il metodo \textbf{Remove}. Qualora non è più possibile ottenere dei miglioramenti con un certo raggio r, questo viene aumentato. L' algoritmo termina qualora l' esplorazione di N(x_I,10) non produca un soluzione migliore di x_I oppure scade il time limit.
 
 \begin{lstlisting}
 do
