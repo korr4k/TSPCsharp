@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.9.7)  10 SEP 2017 09:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.9.7)  18 SEP 2017 15:11
 entering extended mode
 **./Tesi.tex
 (Tesi.tex
@@ -1937,494 +1937,1195 @@ Overfull \hbox (90.81352pt too wide) in paragraph at lines 2457--2458
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
-[67]
-Overfull \hbox (34.12682pt too wide) in paragraph at lines 2493--2495
+[67] [68]
+Overfull \hbox (4.54501pt too wide) in paragraph at lines 2505--2506
+[]\T1/cmr/m/n/10.95 In lin-guag-gio \T1/cmr/bx/n/10.95 C# \T1/cmr/m/n/10.95 l'o
+perazione di warm-start avviene at-traverso il metodo non statico \T1/cmr/bx/n/
+10.95 Ad-dMIP-Start
+ []
+
+[69]
+<Immagini/"PreProcessing".jpg, id=1352, 754.017pt x 373.395pt>
+File: Immagini/"PreProcessing".jpg Graphic file (type jpg)
+<use Immagini/"PreProcessing".jpg>
+Package pdftex.def Info: Immagini/"PreProcessing".jpg  used on input line 2533.
+ on input line 2533.
+Package pdftex.def Info: Requested size: 754.01515pt x 373.39409pt on input lin
+e 2533.
+
+Overfull \hbox (95.75633pt too wide) in paragraph at lines 2533--2535
+ [][] 
+ []
+
+[70 <./Immagini/PreProcessing.jpg>]
+Overfull \hbox (367.94853pt too wide) in paragraph at lines 2557--2558
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2560--2561
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][]  
+ []
+
+
+Overfull \hbox (430.93376pt too wide) in paragraph at lines 2563--2564
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (418.33672pt too wide) in paragraph at lines 2564--2565
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (134.90318pt too wide) in paragraph at lines 2565--2566
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (197.88841pt too wide) in paragraph at lines 2568--2569
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2579--2580
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[71]
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 2601--2602
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (286.06773pt too wide) in paragraph at lines 2609--2610
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2615--2616
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2616--2618
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (330.1574pt too wide) in paragraph at lines 2618--2619
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (260.87364pt too wide) in paragraph at lines 2619--2620
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2631--2633
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][]  
+ []
+
+[72]
+Overfull \hbox (349.05296pt too wide) in paragraph at lines 2650--2651
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (78.21648pt too wide) in paragraph at lines 2654--2656
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][]  
+ []
+
+
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2659--2660
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][]  
+ []
+
+
+Overfull \hbox (405.73967pt too wide) in paragraph at lines 2662--2663
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (248.2766pt too wide) in paragraph at lines 2665--2666
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (550.6057pt too wide) in paragraph at lines 2668--2669
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (323.85887pt too wide) in paragraph at lines 2674--2675
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2675--2677
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][]  
+ []
+
+
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 2680--2681
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2681--2683
+[][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2692--2693
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][]  
+ []
+
+[73]
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2696--2697
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][]  
+ []
+
+
+Overfull \hbox (349.05296pt too wide) in paragraph at lines 2702--2703
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+
+ []
+
+
+Overfull \hbox (600.99388pt too wide) in paragraph at lines 2705--2706
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (594.69536pt too wide) in paragraph at lines 2706--2707
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2707--2708
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (424.63524pt too wide) in paragraph at lines 2712--2713
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 2713--2715
+[][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2737--2738
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 2738--2739
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (59.3209pt too wide) in paragraph at lines 2742--2743
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (78.21648pt too wide) in paragraph at lines 2746--2748
+[][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[74]
+Overfull \hbox (103.41057pt too wide) in paragraph at lines 2760--2761
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2763--2764
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[]  
+ []
+
+
+Overfull \hbox (361.65001pt too wide) in paragraph at lines 2765--2766
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][]  
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 2511--2512
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2770--2771
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
-[68]
-<Immagini/"circuitoF".jpg, id=1354, 376.40625pt x 285.4665pt>
-File: Immagini/"circuitoF".jpg Graphic file (type jpg)
-<use Immagini/"circuitoF".jpg>
-Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 2552. on 
-input line 2552.
-Package pdftex.def Info: Requested size: 469.75502pt x 356.28775pt on input lin
-e 2552.
-<Immagini/"circuitoH".jpeg, id=1355, 380.622pt x 284.86424pt>
-File: Immagini/"circuitoH".jpeg Graphic file (type jpg)
-<use Immagini/"circuitoH".jpeg>
-Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 2558. on
- input line 2558.
-Package pdftex.def Info: Requested size: 469.75502pt x 351.59799pt on input lin
-e 2558.
-<Immagini/"circuitoC".jpg, id=1356, 377.61075pt x 284.262pt>
-File: Immagini/"circuitoC".jpg Graphic file (type jpg)
-<use Immagini/"circuitoC".jpg>
-Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 2564. on 
-input line 2564.
-Package pdftex.def Info: Requested size: 469.75502pt x 353.63933pt on input lin
-e 2564.
- [69] [70 <./Immagini/circuitoF.jpg>] [71 <./Immagini/circuitoH.jpeg>]
-[72 <./Immagini/circuitoC.jpg>]
-Overfull \hbox (229.38103pt too wide) in paragraph at lines 2581--2582
+
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 2778--2780
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (71.91795pt too wide) in paragraph at lines 2780--2781
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2787--2788
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][]  
+ []
+
+[75]
+
+LaTeX Warning: Command \` invalid in math mode on input line 2806.
+
+Missing character: There is no à in font cmr10!
+
+Overfull \hbox (15.32906pt too wide) in paragraph at lines 2814--2815
+\T1/cmr/m/n/10.95 speci-fico [] definisce la mas-sima dis-tanza di \T1/cmr/bx/n
+/10.95 Ham-ming[][][][][] \T1/cmr/m/n/10.95 che può sus-sis-tere fra $\OML/cmm/
+m/it/10.95 x[]$ \T1/cmr/m/n/10.95 e $\OML/cmm/m/it/10.95 x$[][][][][] \T1/cmr/m
+/n/10.95 rispet-ti-va-mente
+ []
+
+[76]
+Overfull \hbox (17.81178pt too wide) in paragraph at lines 2825--2826
+\T1/cmr/m/n/10.95 Presentiamo ora il codice \T1/cmr/bx/n/10.95 com-men-tato \T1
+/cmr/m/n/10.95 che re-al-izza la tec-nica \T1/cmr/m/it/10.95 Lo-cal Branch-ing 
+\T1/cmr/m/n/10.95 in ver-sione \T1/cmr/bx/n/10.95 asim-met-rica
+ []
+
+
+Overfull \hbox (14.24576pt too wide) in paragraph at lines 2829--2830
+\T1/cmr/m/n/10.95 uti-liz-zati[][][][][] sono so-la-mente $[]$, rag-giun-gi-bil
+i in pro-gres-sione una volta che i prece-denti fal-lis-cono[][][][][]. 
+ []
+
+
+Overfull \hbox (185.29137pt too wide) in paragraph at lines 2833--2835
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2849--2850
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+
+Overfull \hbox (166.3958pt too wide) in paragraph at lines 2853--2854
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (65.61943pt too wide) in paragraph at lines 2598--2599
+Overfull \hbox (185.29137pt too wide) in paragraph at lines 2856--2857
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[77]
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 2861--2863
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][]  
+ []
+
+
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 2866--2867
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2867--2869
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][]  
+ []
+
+
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2869--2870
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2872--2873
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][]  
+ []
+
+
+Overfull \hbox (153.79875pt too wide) in paragraph at lines 2875--2876
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2876--2878
+[][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (97.11205pt too wide) in paragraph at lines 2878--2879
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (71.91795pt too wide) in paragraph at lines 2881--2882
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2890--2892
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (197.88841pt too wide) in paragraph at lines 2892--2893
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][]  
+ []
+
+
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2898--2900
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2903--2904
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2905--2907
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2907--2908
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (116.00761pt too wide) in paragraph at lines 2908--2909
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2909--2911
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[78]
+Overfull \hbox (109.70909pt too wide) in paragraph at lines 2911--2912
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2912--2913
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][]  
+ []
+
+
+Overfull \hbox (147.50023pt too wide) in paragraph at lines 2916--2917
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2917--2918
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2926--2927
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+  
+ []
+
+
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2930--2931
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (147.50023pt too wide) in paragraph at lines 2933--2934
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+  
+ []
+
+
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 2938--2940
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2940--2941
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[]  
+ []
+
+
+Overfull \hbox (84.515pt too wide) in paragraph at lines 2947--2948
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+
+ []
+
+
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2950--2951
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2951--2952
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 2952--2954
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 2954--2955
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][]  
+ []
+
+
+Overfull \hbox (59.3209pt too wide) in paragraph at lines 2960--2961
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][]  
+ []
+
+[79]
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 2962--2964
+[][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2965--2967
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (178.99284pt too wide) in paragraph at lines 2972--2973
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2975--2976
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2981--2982
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[]  
+ []
+
+
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2982--2983
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][]  
+ []
+
+
+Overfull \hbox (153.79875pt too wide) in paragraph at lines 2983--2985
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2985--2986
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2990--2991
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2996--2997
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (481.32195pt too wide) in paragraph at lines 3008--3010
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 3011--3012
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[80]
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 3041--3042
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][]  
+ []
+
+[81]
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 3062--3064
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][]  
+ []
+
+
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 3080--3081
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[82]
+<Immagini/"circuitoF".jpg, id=1881, 376.40625pt x 285.4665pt>
+File: Immagini/"circuitoF".jpg Graphic file (type jpg)
+<use Immagini/"circuitoF".jpg>
+Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 3121. on 
+input line 3121.
+Package pdftex.def Info: Requested size: 469.75502pt x 356.28775pt on input lin
+e 3121.
+<Immagini/"circuitoH".jpeg, id=1882, 380.622pt x 284.86424pt>
+File: Immagini/"circuitoH".jpeg Graphic file (type jpg)
+<use Immagini/"circuitoH".jpeg>
+Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 3127. on
+ input line 3127.
+Package pdftex.def Info: Requested size: 469.75502pt x 351.59799pt on input lin
+e 3127.
+<Immagini/"circuitoC".jpg, id=1883, 377.61075pt x 284.262pt>
+File: Immagini/"circuitoC".jpg Graphic file (type jpg)
+<use Immagini/"circuitoC".jpg>
+Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 3133. on 
+input line 3133.
+Package pdftex.def Info: Requested size: 469.75502pt x 353.63933pt on input lin
+e 3133.
+ [83 <./Immagini/circuitoF.jpg>] [84 <./Immagini/circuitoH.jpeg>] [85 <./Immagi
+ni/circuitoC.jpg>]
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 3150--3151
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 3167--3168
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][]  
  []
 
-[73]
-Overfull \hbox (3.63159pt too wide) in paragraph at lines 2640--2641
+[86]
+Overfull \hbox (3.63159pt too wide) in paragraph at lines 3209--3210
 \OML/cmm/m/it/10.95 n[]$\T1/cmr/m/n/10.95 . Per con-ven-zione, sup-po-nendo $\O
 ML/cmm/m/it/10.95 indice[] < indice[]$ \T1/cmr/m/n/10.95 vale $\OML/cmm/m/it/10
 .95 nearestNeighIsolNode\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 indice[]\OT1/cm
 r/m/n/10.95 ] =
  []
 
-
-Overfull \hbox (267.17216pt too wide) in paragraph at lines 2661--2662
+[87]
+Overfull \hbox (267.17216pt too wide) in paragraph at lines 3230--3231
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][]  
  []
 
-[74]
-<Immagini/"Spec1".jpg, id=1480, 298.11375pt x 252.19218pt>
+[88]
+<Immagini/"Spec1".jpg, id=2008, 298.11375pt x 252.19218pt>
 File: Immagini/"Spec1".jpg Graphic file (type jpg)
 <use Immagini/"Spec1".jpg>
-Package pdftex.def Info: Immagini/"Spec1".jpg  used on input line 2722. on inpu
-t line 2722.
+Package pdftex.def Info: Immagini/"Spec1".jpg  used on input line 3291. on inpu
+t line 3291.
 Package pdftex.def Info: Requested size: 298.11302pt x 252.19156pt on input lin
-e 2722.
-<Immagini/"Spec2".jpg, id=1481, 298.11375pt x 252.19218pt>
+e 3291.
+<Immagini/"Spec2".jpg, id=2009, 298.11375pt x 252.19218pt>
 File: Immagini/"Spec2".jpg Graphic file (type jpg)
 <use Immagini/"Spec2".jpg>
-Package pdftex.def Info: Immagini/"Spec2".jpg  used on input line 2728. on inpu
-t line 2728.
+Package pdftex.def Info: Immagini/"Spec2".jpg  used on input line 3297. on inpu
+t line 3297.
 Package pdftex.def Info: Requested size: 298.11302pt x 252.19156pt on input lin
-e 2728.
-<Immagini/"Spec3".jpg, id=1482, 298.11375pt x 228.855pt>
+e 3297.
+<Immagini/"Spec3".jpg, id=2010, 298.11375pt x 228.855pt>
 File: Immagini/"Spec3".jpg Graphic file (type jpg)
 <use Immagini/"Spec3".jpg>
-Package pdftex.def Info: Immagini/"Spec3".jpg  used on input line 2734. on inpu
-t line 2734.
+Package pdftex.def Info: Immagini/"Spec3".jpg  used on input line 3303. on inpu
+t line 3303.
 Package pdftex.def Info: Requested size: 298.11302pt x 228.85443pt on input lin
-e 2734.
-<Immagini/"Spec4".jpg, id=1483, 298.11375pt x 233.37187pt>
+e 3303.
+<Immagini/"Spec4".jpg, id=2011, 298.11375pt x 233.37187pt>
 File: Immagini/"Spec4".jpg Graphic file (type jpg)
 <use Immagini/"Spec4".jpg>
-Package pdftex.def Info: Immagini/"Spec4".jpg  used on input line 2740. on inpu
-t line 2740.
+Package pdftex.def Info: Immagini/"Spec4".jpg  used on input line 3309. on inpu
+t line 3309.
 Package pdftex.def Info: Requested size: 298.11302pt x 233.37129pt on input lin
-e 2740.
- [75] [76 <./Immagini/Spec1.jpg> <./Immagini/Spec2.jpg>] [77 <./Immagini/Spec3.
-jpg> <./Immagini/Spec4.jpg>] [78]
-<Immagini/"berlin52".png, id=1547, 627.84563pt x 424.58624pt>
-File: Immagini/"berlin52".png Graphic file (type png)
-<use Immagini/"berlin52".png>
-Package pdftex.def Info: Immagini/"berlin52".png  used on input line 2834. on i
-nput line 2834.
+e 3309.
+ [89 <./Immagini/Spec1.jpg>] [90 <./Immagini/Spec2.jpg> <./Immagini/Spec3.jpg>]
+ [91 <./Immagini/Spec4.jpg>] [92]
+<Immagini/GRAFI_ESATTI/"berlin52".png, id=2060, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"berlin52".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"berlin52".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"berlin52".png  used on input li
+ne 3403. on input line 3403.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2834.
+ 3403.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2834--2836
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3403--3405
  [][] 
  []
 
-<Immagini/"st70".png, id=1548, 627.84563pt x 424.58624pt>
-File: Immagini/"st70".png Graphic file (type png)
-<use Immagini/"st70".png>
-Package pdftex.def Info: Immagini/"st70".png  used on input line 2841. on input
- line 2841.
+<Immagini/GRAFI_ESATTI/"st70".png, id=2061, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"st70".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"st70".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"st70".png  used on input line 3
+410. on input line 3410.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2841.
+ 3410.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2841--2843
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3410--3412
  [][] 
  []
 
-<Immagini/"eil76".png, id=1549, 627.84563pt x 424.58624pt>
-File: Immagini/"eil76".png Graphic file (type png)
-<use Immagini/"eil76".png>
-Package pdftex.def Info: Immagini/"eil76".png  used on input line 2848. on inpu
-t line 2848.
+<Immagini/GRAFI_ESATTI/"eil76".png, id=2062, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"eil76".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"eil76".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"eil76".png  used on input line 
+3417. on input line 3417.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2848.
+ 3417.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2848--2850
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3417--3419
  [][] 
  []
 
-<Immagini/"pr76".png, id=1550, 627.84563pt x 424.58624pt>
-File: Immagini/"pr76".png Graphic file (type png)
-<use Immagini/"pr76".png>
-Package pdftex.def Info: Immagini/"pr76".png  used on input line 2855. on input
- line 2855.
+<Immagini/GRAFI_ESATTI/"pr76".png, id=2063, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"pr76".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"pr76".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr76".png  used on input line 3
+424. on input line 3424.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2855.
+ 3424.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2855--2857
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3424--3426
  [][] 
  []
 
-<Immagini/"rat99".png, id=1551, 627.84563pt x 424.58624pt>
-File: Immagini/"rat99".png Graphic file (type png)
-<use Immagini/"rat99".png>
-Package pdftex.def Info: Immagini/"rat99".png  used on input line 2862. on inpu
-t line 2862.
+<Immagini/GRAFI_ESATTI/"rat99".png, id=2064, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"rat99".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"rat99".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat99".png  used on input line 
+3431. on input line 3431.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2862.
+ 3431.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2862--2864
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3431--3433
  [][] 
  []
 
-<Immagini/"kroA100".png, id=1552, 627.84563pt x 424.58624pt>
-File: Immagini/"kroA100".png Graphic file (type png)
-<use Immagini/"kroA100".png>
-Package pdftex.def Info: Immagini/"kroA100".png  used on input line 2869. on in
-put line 2869.
+<Immagini/GRAFI_ESATTI/"kroA100".png, id=2065, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroA100".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroA100".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA100".png  used on input lin
+e 3438. on input line 3438.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2869.
+ 3438.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2869--2871
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3438--3440
  [][] 
  []
 
-<Immagini/"kroB100".png, id=1553, 627.84563pt x 424.58624pt>
-File: Immagini/"kroB100".png Graphic file (type png)
-<use Immagini/"kroB100".png>
-Package pdftex.def Info: Immagini/"kroB100".png  used on input line 2876. on in
-put line 2876.
+<Immagini/GRAFI_ESATTI/"kroB100".png, id=2066, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroB100".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroB100".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB100".png  used on input lin
+e 3445. on input line 3445.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2876.
+ 3445.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2876--2878
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3445--3447
  [][] 
  []
 
-<Immagini/"kroC100".png, id=1554, 627.84563pt x 424.58624pt>
-File: Immagini/"kroC100".png Graphic file (type png)
-<use Immagini/"kroC100".png>
-Package pdftex.def Info: Immagini/"kroC100".png  used on input line 2883. on in
-put line 2883.
+<Immagini/GRAFI_ESATTI/"kroC100".png, id=2067, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroC100".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroC100".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroC100".png  used on input lin
+e 3452. on input line 3452.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2883.
+ 3452.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2883--2885
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3452--3454
  [][] 
  []
 
-<Immagini/"kroD100".png, id=1555, 627.84563pt x 424.58624pt>
-File: Immagini/"kroD100".png Graphic file (type png)
-<use Immagini/"kroD100".png>
-Package pdftex.def Info: Immagini/"kroD100".png  used on input line 2890. on in
-put line 2890.
+<Immagini/GRAFI_ESATTI/"kroD100".png, id=2068, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroD100".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroD100".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroD100".png  used on input lin
+e 3459. on input line 3459.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2890.
+ 3459.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2890--2892
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3459--3461
  [][] 
  []
 
-<Immagini/"kroE100".png, id=1556, 627.84563pt x 424.58624pt>
-File: Immagini/"kroE100".png Graphic file (type png)
-<use Immagini/"kroE100".png>
-Package pdftex.def Info: Immagini/"kroE100".png  used on input line 2897. on in
-put line 2897.
+<Immagini/GRAFI_ESATTI/"kroE100".png, id=2069, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroE100".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroE100".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroE100".png  used on input lin
+e 3466. on input line 3466.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2897.
+ 3466.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2897--2899
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3466--3468
  [][] 
  []
 
-<Immagini/"eil101".png, id=1557, 627.84563pt x 424.58624pt>
-File: Immagini/"eil101".png Graphic file (type png)
-<use Immagini/"eil101".png>
-Package pdftex.def Info: Immagini/"eil101".png  used on input line 2904. on inp
-ut line 2904.
+<Immagini/GRAFI_ESATTI/"eil101".png, id=2070, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"eil101".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"eil101".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"eil101".png  used on input line
+ 3473. on input line 3473.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2904.
+ 3473.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2904--2906
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3473--3475
  [][] 
  []
 
-<Immagini/"lin105".png, id=1558, 627.84563pt x 424.58624pt>
-File: Immagini/"lin105".png Graphic file (type png)
-<use Immagini/"lin105".png>
-Package pdftex.def Info: Immagini/"lin105".png  used on input line 2911. on inp
-ut line 2911.
+<Immagini/GRAFI_ESATTI/"lin105".png, id=2071, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"lin105".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"lin105".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"lin105".png  used on input line
+ 3480. on input line 3480.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2911.
+ 3480.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2911--2913
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3480--3482
  [][] 
  []
 
-<Immagini/"bier127".png, id=1559, 627.84563pt x 424.58624pt>
-File: Immagini/"bier127".png Graphic file (type png)
-<use Immagini/"bier127".png>
-Package pdftex.def Info: Immagini/"bier127".png  used on input line 2918. on in
-put line 2918.
+<Immagini/GRAFI_ESATTI/"bier127".png, id=2072, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"bier127".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"bier127".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"bier127".png  used on input lin
+e 3487. on input line 3487.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2918.
+ 3487.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2918--2920
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3487--3489
  [][] 
  []
 
-<Immagini/"ch130".png, id=1560, 627.84563pt x 424.58624pt>
-File: Immagini/"ch130".png Graphic file (type png)
-<use Immagini/"ch130".png>
-Package pdftex.def Info: Immagini/"ch130".png  used on input line 2925. on inpu
-t line 2925.
+<Immagini/GRAFI_ESATTI/"ch130".png, id=2073, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"ch130".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"ch130".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"ch130".png  used on input line 
+3494. on input line 3494.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2925.
+ 3494.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2925--2927
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3494--3496
  [][] 
  []
 
-<Immagini/"pr144".png, id=1561, 627.84563pt x 424.58624pt>
-File: Immagini/"pr144".png Graphic file (type png)
-<use Immagini/"pr144".png>
-Package pdftex.def Info: Immagini/"pr144".png  used on input line 2932. on inpu
-t line 2932.
+<Immagini/GRAFI_ESATTI/"pr144".png, id=2074, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"pr144".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"pr144".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr144".png  used on input line 
+3501. on input line 3501.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2932.
+ 3501.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2932--2934
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3501--3503
  [][] 
  []
 
-<Immagini/"kroA150".png, id=1562, 627.84563pt x 424.58624pt>
-File: Immagini/"kroA150".png Graphic file (type png)
-<use Immagini/"kroA150".png>
-Package pdftex.def Info: Immagini/"kroA150".png  used on input line 2939. on in
-put line 2939.
+<Immagini/GRAFI_ESATTI/"kroA150".png, id=2075, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroA150".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroA150".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA150".png  used on input lin
+e 3508. on input line 3508.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2939.
+ 3508.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2939--2941
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3508--3510
  [][] 
  []
 
-<Immagini/"kroB150".png, id=1563, 627.84563pt x 424.58624pt>
-File: Immagini/"kroB150".png Graphic file (type png)
-<use Immagini/"kroB150".png>
-Package pdftex.def Info: Immagini/"kroB150".png  used on input line 2946. on in
-put line 2946.
+<Immagini/GRAFI_ESATTI/"kroB150".png, id=2076, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroB150".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroB150".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB150".png  used on input lin
+e 3515. on input line 3515.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2946.
+ 3515.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2946--2948
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3515--3517
  [][] 
  []
 
-<Immagini/"ch150".png, id=1564, 627.84563pt x 424.58624pt>
-File: Immagini/"ch150".png Graphic file (type png)
-<use Immagini/"ch150".png>
-Package pdftex.def Info: Immagini/"ch150".png  used on input line 2953. on inpu
-t line 2953.
+<Immagini/GRAFI_ESATTI/"ch150".png, id=2077, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"ch150".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"ch150".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"ch150".png  used on input line 
+3522. on input line 3522.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2953.
+ 3522.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2953--2955
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3522--3524
  [][] 
  []
 
-<Immagini/"pr152".png, id=1565, 627.84563pt x 424.58624pt>
-File: Immagini/"pr152".png Graphic file (type png)
-<use Immagini/"pr152".png>
-Package pdftex.def Info: Immagini/"pr152".png  used on input line 2960. on inpu
-t line 2960.
+<Immagini/GRAFI_ESATTI/"pr152".png, id=2078, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"pr152".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"pr152".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr152".png  used on input line 
+3529. on input line 3529.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2960.
+ 3529.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2960--2962
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3529--3531
  [][] 
  []
 
-<Immagini/"u159".png, id=1566, 627.84563pt x 424.58624pt>
-File: Immagini/"u159".png Graphic file (type png)
-<use Immagini/"u159".png>
-Package pdftex.def Info: Immagini/"u159".png  used on input line 2967. on input
- line 2967.
+<Immagini/GRAFI_ESATTI/"u159".png, id=2079, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"u159".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"u159".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"u159".png  used on input line 3
+536. on input line 3536.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2967.
+ 3536.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2967--2969
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3536--3538
  [][] 
  []
 
-<Immagini/"rat195".png, id=1567, 627.84563pt x 424.58624pt>
-File: Immagini/"rat195".png Graphic file (type png)
-<use Immagini/"rat195".png>
-Package pdftex.def Info: Immagini/"rat195".png  used on input line 2974. on inp
-ut line 2974.
+<Immagini/GRAFI_ESATTI/"rat195".png, id=2080, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"rat195".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"rat195".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat195".png  used on input line
+ 3543. on input line 3543.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 2974.
+ 3543.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 2974--2976
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3543--3545
  [][] 
  []
 
-[79] [80 <./Immagini/berlin52.png>] [81 <./Immagini/st70.png>] [82 <./Immagini/
-eil76.png>] [83 <./Immagini/pr76.png>] [84 <./Immagini/rat99.png>] [85 <./Immag
-ini/kroA100.png>] [86 <./Immagini/kroB100.png>] [87 <./Immagini/kroC100.png>]
-[88 <./Immagini/kroD100.png>] [89 <./Immagini/kroE100.png>] [90 <./Immagini/eil
-101.png>] [91 <./Immagini/lin105.png>] [92 <./Immagini/bier127.png>] [93 <./Imm
-agini/ch130.png>] [94 <./Immagini/pr144.png>] [95 <./Immagini/kroA150.png>]
-[96 <./Immagini/kroB150.png>] [97 <./Immagini/ch150.png>] [98 <./Immagini/pr152
-.png>] [99 <./Immagini/u159.png>] [100 <./Immagini/rat195.png>]
-<Immagini/"kroA200".png, id=1689, 627.84563pt x 424.58624pt>
-File: Immagini/"kroA200".png Graphic file (type png)
-<use Immagini/"kroA200".png>
-Package pdftex.def Info: Immagini/"kroA200".png  used on input line 3019. on in
-put line 3019.
+[93] [94 <./Immagini/GRAFI_ESATTI/berlin52.png>] [95 <./Immagini/GRAFI_ESATTI/s
+t70.png>] [96 <./Immagini/GRAFI_ESATTI/eil76.png>] [97 <./Immagini/GRAFI_ESATTI
+/pr76.png>] [98 <./Immagini/GRAFI_ESATTI/rat99.png>] [99 <./Immagini/GRAFI_ESAT
+TI/kroA100.png>] [100 <./Immagini/GRAFI_ESATTI/kroB100.png>] [101 <./Immagini/G
+RAFI_ESATTI/kroC100.png>] [102 <./Immagini/GRAFI_ESATTI/kroD100.png>] [103 <./I
+mmagini/GRAFI_ESATTI/kroE100.png>] [104 <./Immagini/GRAFI_ESATTI/eil101.png>]
+[105 <./Immagini/GRAFI_ESATTI/lin105.png>] [106 <./Immagini/GRAFI_ESATTI/bier12
+7.png>] [107 <./Immagini/GRAFI_ESATTI/ch130.png>] [108 <./Immagini/GRAFI_ESATTI
+/pr144.png>] [109 <./Immagini/GRAFI_ESATTI/kroA150.png>] [110 <./Immagini/GRAFI
+_ESATTI/kroB150.png>] [111 <./Immagini/GRAFI_ESATTI/ch150.png>] [112 <./Immagin
+i/GRAFI_ESATTI/pr152.png>] [113 <./Immagini/GRAFI_ESATTI/u159.png>] [114 <./Imm
+agini/GRAFI_ESATTI/rat195.png>]
+<Immagini/GRAFI_ESATTI/"kroA200".png, id=2201, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroA200".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroA200".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA200".png  used on input lin
+e 3588. on input line 3588.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3019.
+ 3588.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3019--3021
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3588--3590
  [][] 
  []
 
-<Immagini/"kroB200".png, id=1690, 627.84563pt x 424.58624pt>
-File: Immagini/"kroB200".png Graphic file (type png)
-<use Immagini/"kroB200".png>
-Package pdftex.def Info: Immagini/"kroB200".png  used on input line 3026. on in
-put line 3026.
+<Immagini/GRAFI_ESATTI/"kroB200".png, id=2202, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroB200".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroB200".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB200".png  used on input lin
+e 3595. on input line 3595.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3026.
+ 3595.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3026--3028
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3595--3597
  [][] 
  []
 
-<Immagini/"tsp225".png, id=1691, 627.84563pt x 424.58624pt>
-File: Immagini/"tsp225".png Graphic file (type png)
-<use Immagini/"tsp225".png>
-Package pdftex.def Info: Immagini/"tsp225".png  used on input line 3033. on inp
-ut line 3033.
+<Immagini/GRAFI_ESATTI/"tsp225".png, id=2203, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"tsp225".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"tsp225".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"tsp225".png  used on input line
+ 3602. on input line 3602.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3033.
+ 3602.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3033--3035
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3602--3604
  [][] 
  []
 
-<Immagini/"pr226".png, id=1692, 627.84563pt x 424.58624pt>
-File: Immagini/"pr226".png Graphic file (type png)
-<use Immagini/"pr226".png>
-Package pdftex.def Info: Immagini/"pr226".png  used on input line 3040. on inpu
-t line 3040.
+<Immagini/GRAFI_ESATTI/"pr226".png, id=2204, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"pr226".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"pr226".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr226".png  used on input line 
+3609. on input line 3609.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3040.
+ 3609.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3040--3042
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3609--3611
  [][] 
  []
 
-<Immagini/"gil262".png, id=1693, 627.84563pt x 424.58624pt>
-File: Immagini/"gil262".png Graphic file (type png)
-<use Immagini/"gil262".png>
-Package pdftex.def Info: Immagini/"gil262".png  used on input line 3047. on inp
-ut line 3047.
+<Immagini/GRAFI_ESATTI/"gil262".png, id=2205, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"gil262".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"gil262".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"gil262".png  used on input line
+ 3616. on input line 3616.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3047.
+ 3616.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3047--3049
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3616--3618
  [][] 
  []
 
-<Immagini/"a280".png, id=1694, 627.84563pt x 424.58624pt>
-File: Immagini/"a280".png Graphic file (type png)
-<use Immagini/"a280".png>
-Package pdftex.def Info: Immagini/"a280".png  used on input line 3054. on input
- line 3054.
+<Immagini/GRAFI_ESATTI/"a280".png, id=2206, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"a280".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"a280".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"a280".png  used on input line 3
+623. on input line 3623.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3054.
+ 3623.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3054--3056
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3623--3625
  [][] 
  []
 
-<Immagini/"pr299".png, id=1695, 627.84563pt x 424.58624pt>
-File: Immagini/"pr299".png Graphic file (type png)
-<use Immagini/"pr299".png>
-Package pdftex.def Info: Immagini/"pr299".png  used on input line 3061. on inpu
-t line 3061.
+<Immagini/GRAFI_ESATTI/"pr299".png, id=2207, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"pr299".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"pr299".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr299".png  used on input line 
+3630. on input line 3630.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3061.
+ 3630.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3061--3063
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3630--3632
  [][] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3066.
-[101
+[115
 
-] [102 <./Immagini/kroA200.png>] [103 <./Immagini/kroB200.png>] [104 <./Immagin
-i/tsp225.png>] [105 <./Immagini/pr226.png>] [106 <./Immagini/gil262.png>]
-[107 <./Immagini/a280.png>] [108 <./Immagini/pr299.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 3066.
- (Tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3066.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3066.
+] [116 <./Immagini/GRAFI_ESATTI/kroA200.png>] [117 <./Immagini/GRAFI_ESATTI/kro
+B200.png>] [118 <./Immagini/GRAFI_ESATTI/tsp225.png>] [119 <./Immagini/GRAFI_ES
+ATTI/pr226.png>] [120 <./Immagini/GRAFI_ESATTI/gil262.png>] [121 <./Immagini/GR
+AFI_ESATTI/a280.png>] [122 <./Immagini/GRAFI_ESATTI/pr299.png>] [123]
+[124] [125] [126] [127] [128] [129]
+Overfull \vbox (105.56944pt too high) has occurred while \output is active []
+
+
+[130] [131] [132]
+Overfull \vbox (21.96953pt too high) has occurred while \output is active []
+
+
+[133] [134] [135]
+Overfull \vbox (144.36945pt too high) has occurred while \output is active []
+
+
+[136] [137] [138] [139]
+Overfull \vbox (664.76904pt too high) has occurred while \output is active []
+
+
+[140] [141] [142] [143] [144] [145] [146] [147] [148] [149] [150]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 5536.
+ [151]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 5536.
+
+(Tesi.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 5536.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 5536.
 
 Package rerunfilecheck Info: File `Tesi.out' has not changed.
 (rerunfilecheck)             Checksum: 112F2550288246F1A6C00208FC2443E6;122.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3066.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 5536.
  ) 
 Here is how much of TeX's memory you used:
- 14991 strings out of 493314
- 218132 string characters out of 3136264
- 348298 words of memory out of 3000000
- 17023 multiletter control sequences out of 15000+200000
+ 15640 strings out of 493314
+ 229497 string characters out of 3136264
+ 393298 words of memory out of 3000000
+ 17165 multiletter control sequences out of 15000+200000
  27266 words of font info for 69 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,13n,77p,1355b,1925s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
 C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:
 /Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Prog
-ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program
- Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fi
-les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files
- (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x8
-6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/symbols/msam10.pfb><C:/Program Files (x86)/MiKTeX 2.9
-/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/public/cm-super/sfbi1095.pfb><C:/Program Files (x86)/MiKTeX 2.9
-/fonts/type1/public/cm-super/sfbx0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/public/cm-super/sfbx1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
-/type1/public/cm-super/sfbx1200.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
-pe1/public/cm-super/sfbx1440.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/cm-super/sfrm0600.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
-blic/cm-super/sfrm0800.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
-c/cm-super/sfrm0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/c
-m-super/sfrm1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-s
-uper/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-supe
-r/sfti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/s
-ftt1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipa10.p
-fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipabx10.pfb>
-Output written on Tesi.pdf (108 pages, 2512955 bytes).
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Prog
+ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program
+ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x
+86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/amsfonts/symbols/msam10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/cm-super/sfbi1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/cm-super/sfbx0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/cm-super/sfbx1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/cm-super/sfbx1200.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
+/public/cm-super/sfbx1440.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
+blic/cm-super/sfrm0600.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/cm-super/sfrm0800.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/c
+m-super/sfrm0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-s
+uper/sfrm1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-supe
+r/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/s
+fti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/sftt
+1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipa10.pfb>
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipabx10.pfb>
+Output written on Tesi.pdf (151 pages, 2796230 bytes).
 PDF statistics:
- 2077 PDF objects out of 2487 (max. 8388607)
- 1228 named destinations out of 1440 (max. 500000)
- 242 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2856 PDF objects out of 2984 (max. 8388607)
+ 1733 named destinations out of 2073 (max. 500000)
+ 247 words of extra memory for PDF output out of 10000 (max. 10000000)
 

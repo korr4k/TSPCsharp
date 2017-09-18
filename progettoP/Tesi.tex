@@ -4,7 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{empheq}
 \usepackage{color}
-\usepackage {listings}
+\usepackage{listings}
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{xcolor}
@@ -24,7 +24,7 @@
 \usepackage{amssymb}
 \usepackage{enumitem}
 \usepackage{booktabs}
-\usepackage{multirow} 
+\usepackage{multirow}
 \usepackage{tipa}
 \usepackage{pbox}
 \usepackage{placeins}
@@ -2468,7 +2468,7 @@ Gli algoritmi \textbf{matheuristics} nascono con l'obbiettivo di migliorare una 
 
 L'esplorazione di N(x) non avviene per enumerazione come visto in precedenza ma tramite appositi solver come ad esempio Cplex: grazie alla loro sempre maggiore ottimizzazione, questa operazione risulta quindi essere molto veloce. 
 
-I matheuristici possono essere applicati a qualunque soluzione ammissibile x; ciò nonostante per apprezzarne davvero la potenza è consigliabile utilizzare un punto di partenza già buono. A tale scopo si può quindi pensare di concatenarli  all'esecuzione di un algoritmo migliorativo o, meglio ancora, al termine del multistart o di un metaeuristico. Questi infatti arrivano molto frequentemente a saturare in prossimità di una soluzione molto buona \textbf{\overline{x}} ma non ottima. 
+I matheuristici possono essere applicati a qualunque soluzione ammissibile x; ciò nonostante per apprezzarne davvero la potenza è consigliabile utilizzare un punto di partenza già buono. A tale scopo si può quindi pensare di concatenarli  all'esecuzione di un algoritmo migliorativo o, meglio ancora, al termine del multistart o di un metaeuristico. Questi infatti arrivano molto frequentemente a saturare in prossimità di una soluzione molto buona \textbf{$\overline{x}$} ma non ottima.
 
 Sfruttando questa combinazione di algoritmi è stato dimostrato che già in un breve lasso di tempo si riescono ad ottenere sostanziali miglioramenti ed in alcuni casi è possibile raggiungere anche l'ottimo globale. Si osserva che esiste una notevole differenza fra l'ottenere quest'ultimo risultato grazie ad un algoritmo esatto e seguendo il procedimento precedentemente discusso: mentre nel primo caso è sempre certificato, nel secondo questo non avviene\footnote{Il solver utilizzato garantisce solamente l'ottimalità del modello da noi fornitogli che chiaramente non può essere quello originale del problema.} e non si ha nemmeno modo di certificarlo a meno che non lo si conosca a priori.
 
@@ -2480,7 +2480,7 @@ Nei prossimi paragrafi sono riportanti alcuni esempi di algoritmi matheuristici 
 
 \subsection*{HARD FIXING}
 
-L'hard fixing è una tecnica euristica che, partendo da una qualsiasi soluzione ammissibile \textbf{x_H}, tenta di trovarne una migliore all'interno di un suo intorno. Quest'ultimo viene definito dall'algoritmo stesso attraverso il fissaggio a priori di alcune variabili del modello matematico, rendendole così di fatto costanti, utilizzando i valori che queste assumo in $x_H$. 
+L'hard fixing è una tecnica euristica che, partendo da una qualsiasi soluzione ammissibile \textbf{$x_H$}, tenta di trovarne una migliore all'interno di un suo intorno. Quest'ultimo viene definito dall'algoritmo stesso attraverso il fissaggio a priori di alcune variabili del modello matematico, rendendole così di fatto costanti, utilizzando i valori che queste assumo in $x_H$. 
 
 Come già discusso nel paragrafo precedente, una volta definito l'intorno e quindi un nuovo modello matematico, la sua risoluzione viene affidata ad un solver esterno pertanto l'unica fase saliente dell'algoritmo è la scelta stessa di quale porzione di $x_H$ mantenere valida e quale no. 
 
@@ -2639,7 +2639,7 @@ Dove:
     \item \textbf{instance}: riferimento all'oggetto contenente tutte le informazioni relative all'istanza del Problema del Commesso Viaggiatore corrente;
     \item \textbf{process}: riferimento all'oggetto necessario per la stampa dei dati attraverso \textit{GNUPlot};
     \item \textbf{rdn}: istanza della classe Random utilizzata per la generazione dei numeri casuali;
-    \item \textbf{clock}: riferimento all'oggetto utilizzato come cronometro;
+    \item \textbf{clock}: riferimento all'oggetto utilizzato come cronometro, deve già essere stato avviato;;
 \end{itemize}
 
 Di seguito troviamo il codice del metodo \textbf{commentato}. Facciamo però presente che l'\textit{hard fixing} può ricevere in ingresso una qualsiasi soluzione di partenza, preferibilmente già buona, sulla quale vogliamo definire un intorno di ricerca. Nella versione base dell'algoritmo riportato viene utilizzato il modo più veloce per ottenere tale risultato e quindi attraverso la funzione \textbf{NearestNeightbor} LINK!!!!!!!!!!!!!!! con conseguente algoritmo di due ottimalità.
@@ -2647,7 +2647,7 @@ Di seguito troviamo il codice del metodo \textbf{commentato}. Facciamo però pre
 Nei test a fine capitolo vedremo invece una variante che sfrutta soluzioni già precedentemente ottenute da altri algoritmi euristici attraverso loro tempi di esecuzione infinitamente più alti.
 
 \begin{lstlisting}
-//Oggetto utilizzato per la scrittura su file dei vari incumbent così che GNUPlot possa stamparne il ciclo a video
+//Oggetto utilizzato per la scrittura su file dei vari incumbent trovati in modo tale che GNUPlot possa stamparne il ciclo a video
 StreamWriter file;
 
 //Vettore che vuole essere sempre aggiornato al miglior ciclo trovato
@@ -2678,7 +2678,7 @@ instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
 //Utilizzo del NearestNeightbor per iniziare a costruire la soluzione di partenza
-PathStandard heuristicSol = Utility.NearestNeightbor(instance, rnd, listArray);
+PathStandard heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
 
 //Applicazione del 2-Opt per completare la soluzione di partenza
 TwoOpt(instance, heuristicSol);
@@ -2709,7 +2709,7 @@ cplex.SetParam(Cplex.LongParam.IntSolLim, 2);
 
 do
 {
-    //Modifichiamo il modello introducento il fissaggio di alcune variabili creando così un intorno della soluzione migliore attuale
+    //Modifichiamo il modello introducento il fissaggio di alcune variabili creando in questo modo un intorno della soluzione migliore attuale
     Utility.ModifyModel(instance, x, rnd, percentageFixing, currentIncumbentSol);
 
     //Risolviamo il modello attuale
@@ -2739,7 +2739,7 @@ do
                 }
             }
         }
-        //Chiusura del file così da eseguire il flush dal buffer
+        //Chiusura del file di tipo StreamWriter, il flush dal buffer viene eseguito
         file.Close();
 
         //Stampa attraverso GNUPLot del nuovo incumbet path
@@ -2788,16 +2788,218 @@ cplex.Output().WriteLine();
 cplex.Output().WriteLine("x = " + instance.XBest + "\n");
 \end{lstlisting}
 
+\subsection*{LOCAL BRANCH}
+
+Terminata l'analisi di una possibile variante della tecnica \textit{hard-fixing} proseguiamo con la tipologia gemella del \textbf{soft-fixing}: si ricordi che la principale differenza tra i due approcci è che il secondo lascia al solver, nel nostro caso Cplex, anche l'operazione di fissaggio indicandogli solamente la forma che questo deve assuemere.
+
+Nello specifico prendiamo in considerazione una particolare tipologia di algoritmi facente parte del ramo \textit{soft-fixing} e cioè il \textbf{Local Branch}: proposto nell'anno 2002 dai docenti universitari \textbf{Matteo Fischetti} \footnote{Docente presso l' Università di Padova, Dipartimento di Ingegneria dell’ Informazione.} e \textbf{Andrea Lodi} \footnote{Docente presso l' Università di Bologna, Dipartimento di Ingegneria dell'Energia Elettrica e dell'Informazione.}, questa variante mira ad ottenere l'esplorazione di un intorno $N(x,r)$ di una soluzione $x$ con un costo computazionale estremamente inferiore a $O(n^r)$ che invece abbiamo visto essere necessario per un classico algoritmo di \textit{r-ottimalità}.
+
+Il \textit{Local Branch} non utilizza la classica tecnica di eplorazione per enumerazione di $N(x,r)$ ma introduce una specifica disequanzione al modello matematico del problema \textit{TSP}:
+
+
+\begin{equation}\label{eq:LocalBranchVincoloAsimmetrico}
+\displaystyle\sum_{e \text{ } : \text{ } x_e = 1} x_e^{*} \ge n - r
+\end{equation}
+
+Attraverso questo vincolo è il solver stesso a generare un intorno $N(x,r)$ sul quale cercare la soluzione migliore al suo interno. In altre parole, nel nostro esempio, sfruttiamo la velocità offerta da Cplex nel risolvere un modello matematico e costruiamo quest'ultimo così che ammetta tutte le soluzioni a loro volta valide per un algoritmo di \textit{r-ottimalità}.
+
+Prendendo più in esame \eqref{eq:LocalBranchVincoloAsimmetrico}, è possibile notare come la sua elevata potenza sia in pieno contrasto alla sua estrema semplicità. Tra tutte le variabili disponibili, sono considerate solamente quelle facenti parte della soluzione $x$ attuale\footnote{Il cui numero totale pari al numero di nodi indicato con $n$.} e si impone che almeno $n-r$ dovranno far parte della nuova soluzione prodotta dal solver. Sono quindi ammessi fino a $r$ scambi tra variabili in soluzione e non, producendo di fatto \textit{gratuitamente} un'operazione di $r-ottimalità$.
+
+La forma espressa dalla \eqref{eq:LocalBranchVincoloAsimmetrico} prende il nome di formulazione \textbf{asimentrica} in quanto non appaiono direttamente le variabili non selezionate da $x$. \'E presente anche una sua variante \textbf{simmetrica} che risulta essere sia più esplicita che maggiormente \textit{complessa}:
+
+\begin{equation}\label{eq:LocalBranchVincoloSimmetrico}
+\displaystyle\underbrace{\sum_{j\text{ } : \text{ } x_j = 0} x_j^{*}}_{\text{\# variabili cha passano da 0 a 1}} + \underbrace{\sum_{j\text{ }:\text{ } x_j = 1}(1 - x_j^{*})}_{\text{\# variabili cha passano da 1 a 0}} \le r
+\end{equation}
+
+Come si può vedere da una breve analisi le due forme \eqref{eq:LocalBranchVincoloAsimmetrico} e \eqref{eq:LocalBranchVincoloSimmetrico} sono del tutto equivalenti, nello specifico \eqref{eq:LocalBranchVincoloSimmetrico} definisce la massima distanza di \textbf{Hamming}\footnote{La distanza di \textit{Hamming} fra due vettori di pari dimensione, corrisponde al numero di posizioni aventi simboli corrispondenti diversi.} che può sussistere fra \textbf{$x^*$} e \textbf{$x$}\footnote, rispettivamente la nuova e la attuale soluzione.
+
+Esponiamo due concetti riguardanti le due formulazioni proposto. Come prima cosa \eqref{eq:LocalBranchVincoloSimmetrico}, al contrario di \eqref{eq:LocalBranchVincoloAsimmetrico}, nel caso in cui voglia simulare una operazione $k-Opt$ deve porre $r = 2*k$ in quando devo indicare sia i lati che aggiungo rispetto a $x$ ma anche quelli che tolgo da quest'ultima.
+
+In secondo luogo la decisione di quale delle due formulazioni adottare dipende dal tipo di problema: notiamo infatti che in \eqref{eq:LocalBranchVincoloSimmetrico} appaiono tutte le variabili del problema mentre in \eqref{eq:LocalBranchVincoloAsimmetrico} solamente quelle facenti parte della soluzione attuale. Nel caso in cui queste due quantità risultino paragonabili allora le due formulazioni sono entrambe valide. In caso contrario, come ad esempio i modelli di TSP analizzati in questa tesi dove la differenza è di un ordine di grandezza, \eqref{eq:LocalBranchVincoloSimmetrico} risulta molto più densa di \eqref{eq:LocalBranchVincoloAsimmetrico} e quindi più difficilmente gestibile dal solver.
+
+Concludiamo questa introduzione teorica con una considerazione sui valori assegnabili ad $r$ nella \eqref{eq:LocalBranchVincoloAsimmetrico}. Sappiamo che una operazione di \textit{k ottimalità} comprende anche tutte le possibili $m-Opt$ dove $k>m$ pertanto più alto viene posto il valore di $r$ più diventa ampio l'intorno $N(x,r)$ dove andiamo a cercare la nuova soluzione e quindi le possibilità di ottenere un risultato migliore.
+Naturale conseguenza è anche una maggiore complessità computazionale sia nel caso di una banale esplorazione per enumerazione di $N(x,r)$ sia attraverso l'uso del \textit{Local Branching}. Non è mai pertanto consigliabile oltreppassare certi limiti, direttamente dipendenti dal tipo di macchina sulla quale vengono fatti eseguire gli algoritmi, in quanto si viene a parte la fondamentale caratteristica degli euristici: la loro velocità.
+
+\subsection*{IMPLEMENTAZIONE LOCAL BRANCHING}
+
+Presentiamo ora il codice \textbf{commentato} che realizza la tecnica \textit{Local Branching} in versione \textbf{asimmetrica} per le motivazioni esposte nel precedente paragrafo.
+
+Come per il metodo \textbf{hard fixing} qui viene riportato un versione basilare del codice che crea una soluzione di partenza attraverso la applicazione consecutiva del NN LINK!!!!!! e $2-Opt$ LINK!!!!. Nella parte finale della tesi dove sono presentati vari test, saranno invece utilizzate soluzioni migliore ottenute in precedenza dall'applicazione di altri metodi euristici.
+
+Infine riprendendo quanto detto alla fine dell'ultimo paragrafo specifichiamo che i valori di $r$ utilizzati\footnote{Dove $r$ determina quale operazione di $r-Opt$ si ottiene.} sono solamente ${3, 5, 7, 10}$, raggiungibili in progressione una volta che i precedenti falliscono\footnote{Cioè se non si rova una soluzione migliore di quella già disponibile all'interno del suo intorno $N(x,r)$.}.
+
+\begin{lstlisting}
+
+static void LocalBranching(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{cplex}: riferimento all'oggetto contenente il modello da risolvere;
+    \item \textbf{instance}: riferimento all'oggetto contenente tutte le informazioni relative all'istanza del Problema del Commesso Viaggiatore corrente;
+    \item \textbf{process}: riferimento all'oggetto necessario per la stampa dei dati attraverso \textit{GNUPlot};
+    \item \textbf{rdn}: istanza della classe Random utilizzata per la generazione dei numeri casuali;
+    \item \textbf{clock}: riferimento all'oggetto utilizzato come cronometro, deve già essere stato avviato;
+\end{itemize}
+
+\begin{lstlisting}
+
+//Vettore contenente i possibili valori del raggio r che definisce l'intorno nel quale il metodo cerca
+//una soluzione migliore della attuale
+int[] possibleRadius = {3, 5, 7, 10};
+
+//Variabile che memorizza l'indice dove trovare l'attuale raggio in possibleRadius, inizializzata a 0
+int currentRange = 0;
+
+//Variabile booleana utilizzare per comunicare alla Lazy Callback di Cplex se deve stampare la soluzione
+//intera trovata nel caso migliore quella incumbent
+bool BlockPrint = false;
+
+//Inizializzazione del vettore contenente la soluzione incumbent
+double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Inizializzazione variabile contenente il costo della soluzione incumbent
+double incumbentCost = double.MaxValue;
+
+//Inizializzazione del vettore presente in istance sul quale viene memorizzata la soluzione finale migliore
+instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Creo il modello iniziale e assegnao ad x il riferimento alle sua variabili
+INumVar[] x = Utility.BuildModel(cplex, instance, -1);
+
+//All'indice i-esimo troviamo in ordine crescente quali sono i nodi più vicini all'i-esimo nodo
+List<int>[] listArray = Utility.BuildSLComplete(instance);
+
+//Prima parte della creazione della soluzione di partenza, si utilizza la tecnica del nearest neigh
+PathStandard heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
+
+///Seconda parte della creazione della soluzione di partenza, si applica un semplice 2-Opt
+TwoOpt(instance, heuristicSol);
+
+//Aggiornamento del vettore incumbentSol secondo la soluzione iniziale appena prodotta
+for (int i = 0; i < instance.NNodes; i++)
+{
+    int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
+
+    incumbentSol[position] = 1;
+}
+
+//Installazione Lazy Callback
+cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
+
+//Settaggio per il multi-thread di Cplex, si utilizzano tanti thread quanti i core virtuali della macchina
+cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+
+//Aggiunta di un warm-start per Cplex
+cplex.AddMIPStart(x, incumbentSol);
+
+//Inizio creazione del vincolo asincrono caratterizzante il Local Branching
+
+//Creao il contenitore per l'espressione del vincolo di Local Branching
+ILinearNumExpr expr = cplex.LinearNumExpr();
+
+//Popolo il contenitore secondo le variabili utilizzate dalla soluzione di partenza appena creata
+for (int i = 0; i < instance.NNodes; i++)
+    expr.AddTerm(x[Utility.xPos(i, heuristicSol.path[i], instance.NNodes)], 1);
+
+//Dovendo ad ogni applicazione del Local Branching sostituire il vincolo caratterizzante, si memorizza
+//quello attuale in una variabile apposita in modo tale da facilitare la sua rimozione futura
+IAddable localBranchConstraint  = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+//Aggiungo il vincolo creato non come un qualsiasi taglio ma come una vero e proprio vincolo
+//del modello matematico, la risoluzione da parte di Cplex è nettamente migliorata
+cplex.Add(localBranchConstraint);
+
+
+//Inizio ciclo do-while che ripete la tecnica del Local Branching fino al termine del tempo limite
+//indicato dall'utente o quando il raggio r=10 non produce più miglioramenti
+do
+{
+    //Cplex risolve l'attuale modello
+    cplex.Solve();
+
+    //Se trovo un miglioramento rispetto alla soluzione incumbent
+    if (incumbentCost > cplex.GetObjValue())
+    {
+        //Sostituisco l'incumbent attuale con i valori appena trovati da Cplex
+        incumbentCost = cplex.ObjValue;
+        incumbentSol = cplex.GetValues(x);
+
+        //Rimozione del vincolo caratterizzante attualmente utilizzato nel modello
+        cplex.Remove(localBranchConstraint);
+
+        //Preparo il nuovo vincolo caratterizzante sfruttando l'esplorazione della nuova soluzione
+        //per la sua stampa a video attraverso GNUPlot
+
+        expr = cplex.LinearNumExpr();
+
+        StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+
+        //Scandisco ogni variabile per vedere se fa parte della nuova soluzione
+        for (int i = 0; i < instance.NNodes; i++)
+        {
+            for (int j = i + 1; j < instance.NNodes; j++)
+            {
+                int position = Utility.xPos(i, j, instance.NNodes);
+
+                //Testo se l'attuale variabile è stata selezionata nella nuova soluzione
+                if (incumbentSol[position] >= 0.5)
+                {
+                    //Stampo su file il percorso della nuova soluzione per GNUPlot
+                    file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                    file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+
+                    //In contemporanea aggiungo il termine all'espressione per il nuovo vincolo caratterizzante
+                    expr.AddTerm(x[position], 1);
+                }
+            }
+        }
+
+        //Lancio la stampa attraverso GNUPlot e chiudo il flusso del file utilizzato
+        file.Close();
+        Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
+
+        //Completo la creazione del nuovo vincolo caratterizzante
+        localBranchConstraint = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+        //Aggiungo il nuovo vincolo caratterizzante al modello matematico
+        cplex.Add(localBranchConstraint);
+    }
+    else
+    {
+        //Nel caso in cui non si sia trovata una soluzione migliore testo se posso aumentare il range r
+        if (possibleRadius[currentRange] != 10)
+        {
+            //Aumento l'indice di possibleRadius sui cui trovare il nuovo raggio da utilizzare
+            currentRange++;
+
+            //Rimuovo il precedente vincolo
+            cplex.Remove(localBranchConstraint);
+
+            //Aggiorno il range r del vincolo caratterizzante mantenendo chiaramente le variabili
+            //coinvolte dato che la soluzione incumbent rimane la medesima della precedente iterazione
+            localBranchConstraint = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
+
+            //Aggiungo il vincolo caratterizzante aggiornato al modello matematico
+            cplex.Add(localBranchConstraint);
+        }
+        else
+        {
+            //Nel caso non sia possibile aumentare ulteriormente il raggio r termino il ciclo do-while
+            break;
+        }
+    }
+} while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+//Memorizzo nelle apposite variabili di instance la soluzione finale trovata ed il relativo costo
+instance.BestSol = incumbentSol;
+instance.BestLb = incumbentCost;
 
 \subsection*{RINS}
 
 \subsection*{POLISHING}
-
-\subsection*{LOCAL BRANCHING}
-
-\subsection*{IMPLEMENTAZIONE LOCAL BRANCHING}
-
-\subsection*{LOCAL BRANCH SIMMETRICO}
 
 \section*{APPENDICE}
 
@@ -3198,147 +3400,147 @@ Notiamo che modificare un modello matematico attraverso l'eliminazione di alcune
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"berlin52".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"berlin52".png}}
     \label{fig:berlin52}
     \caption{berlin52}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"st70".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"st70".png}}
     \label{fig:st70}
     \caption{st70}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"eil76".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"eil76".png}}
     \label{fig:eil76}
     \caption{eil76}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"pr76".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"pr76".png}}
     \label{fig:pr76}
     \caption{pr76}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"rat99".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"rat99".png}}
 \label{fig:rat99}
 \caption{rat99}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroA100".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroA100".png}}
 \label{fig:kroA100}
 \caption{kroA100}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroB100".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroB100".png}}
 \label{fig:kroB100}
 \caption{kroB100}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroC100".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroC100".png}}
 \label{fig:kroC100}
 \caption{kroC100}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroD100".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroD100".png}}
 \label{fig:kroD100}
 \caption{kroD100}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroE100".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroE100".png}}
 \label{fig:kroE100}
 \caption{kroE100}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"eil101".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"eil101".png}}
 \label{fig:eil101}
 \caption{eil101}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"lin105".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"lin105".png}}
 \label{fig:lin105}
 \caption{lin105}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"bier127".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"bier127".png}}
 \label{fig:bier127}
 \caption{bier127}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"ch130".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"ch130".png}}
 \label{fig:ch130}
 \caption{ch130}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"pr144".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"pr144".png}}
 \label{fig:pr144}
 \caption{pr144}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroA150".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroA150".png}}
 \label{fig:kroA150}
 \caption{kroA150}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"kroB150".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroB150".png}}
 \label{fig:kroB150}
 \caption{kroB150}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"ch150".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"ch150".png}}
 \label{fig:ch150}
 \caption{ch150}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"pr152".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"pr152".png}}
 \label{fig:pr152}
 \caption{pr152}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"u159".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"u159".png}}
 \label{fig:u159}
 \caption{u159}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\scalebox{.75}{\includegraphics{Immagini/"rat195".png}}
+\scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"rat195".png}}
 \label{fig:rat195}
 \caption{rat195}
 \end{figure}
@@ -3383,51 +3585,1952 @@ Come più volte ripetuto è stato posto un tempo limite pari a $30$ minuti il qu
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"kroA200".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroA200".png}}
     \label{fig:kroA200}
     \caption{kroA200}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"kroB200".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"kroB200".png}}
     \label{fig:kroB200}
     \caption{kroB200}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"tsp225".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"tsp225".png}}
     \label{fig:tsp225}
     \caption{tsp225}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"pr226".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"pr226".png}}
     \label{fig:pr226}
     \caption{pr226}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"gil262".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"gil262".png}}
     \label{fig:gil262}
     \caption{gil262}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"a280".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"a280".png}}
     \label{fig:a280}
     \caption{a280}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \scalebox{.75}{\includegraphics{Immagini/"pr299".png}}
+    \scalebox{.75}{\includegraphics{Immagini/GRAFI_ESATTI/"pr299".png}}
     \label{fig:pr299}
     \caption{pr299}
 \end{figure}
+
+\FloatBarrier
+
+\subsection*{Instanze con numero di nodi compreso tra \textbf{$300$} e \textbf{$999$} $+$ algoritmi euristici}
+
+\subsubsection*{MULTI START}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{lin318 MULTI START (costo ottimo 42029)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            44098 & 0,6 & 45374 & 0,6 & 45153 & 0,6 & 45442 & 0,6\tabularnewline
+            \hline 
+            43987 & 3,6 & 43904 & 1,7 & 44188 & 1,1 & 44054 & 1,5\tabularnewline
+            \hline 
+            43962 & 6,6 & 43663 & 4,1 & 43976 & 2,3 & 43695 & 1,9\tabularnewline
+            \hline 
+            43783 & 10,9 & 43620 & 14,9 & 43960 & 6,5 & 43139 & 40,6\tabularnewline
+            \hline 
+            43641 & 11,9 & 43549 & 20,7 & 43688 & 15,7 & 43094 & 684,7\tabularnewline
+            \hline 
+            43575 & 112,5 & 43231 & 319,1 & 43358 & 41,6 & 43094 & 1800,0\tabularnewline
+            \hline 
+            43286 & 145,3 & 43231 & 1800,0 & 43315 & 639,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            42935 & 872,0 & \multicolumn{1}{c}{} &  & 43230 & 833,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            42935 & 1800,0 & \multicolumn{1}{c}{} &  & 43020 & 1196,2 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 43020 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline 
+    \multicolumn{8}{|c|}{pr439 MULTI START (costo ottimo 107217)}\tabularnewline
+    \hline 
+    \hline 
+    \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+    \hline 
+    Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s)\tabularnewline
+    \hline 
+    116111 & 1,2 & 112354 & 1,4 & 116794 & 0,9 & 116014 & 1,5\tabularnewline
+    \hline 
+    114306 & 2,4 & 112228 & 8,2 & 114316 & 1,7 & 111574 & 3,2\tabularnewline
+    \hline 
+    112609 & 6,7 & 111791 & 13,9 & 112781 & 7,9 & 109631 & 6,2\tabularnewline
+    \hline 
+    112481 & 11,7 & 110439 & 21,9 & 111045 & 18,0 & 109539 & 198,4\tabularnewline
+    \hline 
+    110785 & 19,8 & 110324 & 32,9 & 110899 & 34,3 & 109395 & 901,7\tabularnewline
+    \hline 
+    110182 & 146,5 & 109949 & 104,7 & 110584 & 78,9 & 109240 & 1158,3\tabularnewline
+    \hline 
+    110122 & 168,2 & 109641 & 294,3 & 110424 & 172,5 & 109240 & 1800,0\tabularnewline
+    \hline 
+    109928 & 366,4 & 109519 & 544,3 & 109705 & 213,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+    \cline{1-6} 
+    109823 & 416,9 & 109270 & 1119,0 & 109659 & 526,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+    \cline{1-6} 
+    109352 & 1066,4 & 109220 & 1431,2 & 109508 & 706,3 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+    \cline{1-6} 
+    109335 & 1253,0 & 109220 & 1800,0 & 109508 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+    \cline{1-6} 
+    109335 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+    \cline{1-2} 
+\end{tabular}
+}
+\captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{d493 MULTI START (costo ottimo 35002)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s)\tabularnewline
+            \hline 
+            36948 & 1,8 & 36912 & 2,4 & 36904 & 1,9 & 36459 & 1,6\tabularnewline
+            \hline 
+            36857 & 4,8 & 36895 & 4,9 & 36889 & 5,9 & 36409 & 37,6\tabularnewline
+            \hline 
+            36673 & 13,9 & 36821 & 12,1 & 36672 & 10,0 & 36256 & 91,0\tabularnewline
+            \hline 
+            36304 & 30,6 & 36771 & 20,6 & 36607 & 11,0 & 36175 & 1008,1\tabularnewline
+            \hline 
+            36257 & 191,1 & 36767 & 22,0 & 36393 & 15,8 & 36069 & 1059,5\tabularnewline
+            \hline 
+            36179 & 431,2 & 36633 & 31,5 & 36207 & 17,7 & 36069 & 1800,0\tabularnewline
+            \hline 
+            36157 & 1019,7 & 36588 & 32,3 & 36021 & 27,7 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            36157 & 1800,0 & 36534 & 68,8 & 36021 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            \multicolumn{1}{c}{} &  & 36441 & 90,3 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 36284 & 111,9 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 36253 & 278,9 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 36026 & 556,5 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 36026 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{cc|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{rat575 MULTI START (costo ottimo 6773)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{Costo} & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s)\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{7198} & 2,665 & 7284 & 2,226 & 7280 & 2,828 & 7230 & 2,307\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{7077} & 33,559 & 7208 & 6,366 & 7193 & 7,738 & 7203 & 4,532\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{7077} & 1800 & 7192 & 8,302 & 7166 & 9,767 & 7201 & 13,739\tabularnewline
+            \hline 
+            &  & 7186 & 10,762 & 7161 & 26,771 & 7149 & 15,732\tabularnewline
+            \cline{3-8} 
+            &  & 7164 & 12,977 & 7141 & 46,01 & 7141 & 47,113\tabularnewline
+            \cline{3-8} 
+            &  & 7153 & 18,606 & 7100 & 74,421 & 7118 & 356,143\tabularnewline
+            \cline{3-8} 
+            &  & 7152 & 26,139 & 7081 & 293,085 & 7060 & 613,947\tabularnewline
+            \cline{3-8} 
+            &  & 7122 & 83,84 & 7079 & 860,752 & 7055 & 870,445\tabularnewline
+            \cline{3-8} 
+            &  & 7084 & 295,355 & 7079 & 1800 & 7055 & 1800\tabularnewline
+            \cline{3-8} 
+            &  & 7084 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{d657 MULTI START (costo ottimo 48912)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s) & Costo & Tempo(s)\tabularnewline
+            \hline 
+            53830 & 3,2 & 52927 & 3,7 & 53398 & 3,2 & 52952 & 3,9\tabularnewline
+            \hline 
+            52167 & 6,4 & 52766 & 6,1 & 53368 & 6,3 & 52463 & 13,1\tabularnewline
+            \hline 
+            51703 & 12,8 & 52504 & 13,5 & 51720 & 10,5 & 51797 & 21,5\tabularnewline
+            \hline 
+            51680 & 27,4 & 52179 & 20,4 & 51550 & 58,2 & 51246 & 54,7\tabularnewline
+            \hline 
+            51561 & 47,3 & 51656 & 56,0 & 51512 & 317,0 & 50974 & 1030,6\tabularnewline
+            \hline 
+            51509 & 236,7 & 51430 & 85,7 & 51419 & 635,9 & 50974 & 1800,0\tabularnewline
+            \hline 
+            51406 & 329,1 & 51362 & 752,1 & 51230 & 895,8 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            51187 & 679,9 & 51109 & 941,9 & 51230 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            51032 & 861,0 & 51109 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-4} 
+            51032 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{u724 MULTI START (costo ottimo 41910)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            45295 & 6,1 & 45000 & 6,9 & 45065 & 6,4 & 44836 & 6,5\tabularnewline
+            \hline 
+            44761 & 10,6 & 44795 & 11,9 & 44891 & 17,9 & 44189 & 17,4\tabularnewline
+            \hline 
+            44535 & 19,3 & 44530 & 28,7 & 44528 & 22,9 & 44182 & 84,6\tabularnewline
+            \hline 
+            44079 & 48,2 & 44163 & 41,4 & 44460 & 149,9 & 44161 & 259,9\tabularnewline
+            \hline 
+            43864 & 1290,6 & 44151 & 72,2 & 44451 & 244,1 & 44054 & 386,8\tabularnewline
+            \hline 
+            43864 & 1800,0 & 44136 & 372,2 & 44439 & 337,9 & 43749 & 990,8\tabularnewline
+            \hline 
+            \multicolumn{1}{c}{} &  & 43979 & 603,3 & 43977 & 371,0 & 43711 & 1135,6\tabularnewline
+            \cline{3-8} 
+            \multicolumn{1}{c}{} &  & 43856 & 760,0 & 43971 & 1245,1 & 43711 & 1800,0\tabularnewline
+            \cline{3-8} 
+            \multicolumn{1}{c}{} &  & 43852 & 1420,2 & 43953 & 1303,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 43852 & 1800,0 & 43915 & 1380,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 43915 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{cccc|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{rat783 MULTI START (costo ottimo 8806)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)} & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{9485} & \multicolumn{1}{c|}{6,2} & \multicolumn{1}{c|}{9460} & 7,6 & 9356 & 4,9 & 9401 & 5,0\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{9315} & \multicolumn{1}{c|}{11,2} & \multicolumn{1}{c|}{9317} & 19,9 & 9314 & 8,6 & 9399 & 31,7\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{9284} & \multicolumn{1}{c|}{434,1} & \multicolumn{1}{c|}{9265} & 395,6 & 9310 & 128,0 & 9376 & 88,8\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{9284} & \multicolumn{1}{c|}{1800,0} & \multicolumn{1}{c|}{9265} & 1800,0 & 9284 & 323,8 & 9369 & 127,7\tabularnewline
+            \hline 
+            &  &  &  & 9264 & 1071,2 & 9368 & 136,2\tabularnewline
+            \cline{5-8} 
+            &  &  &  & 9264 & 1800,0 & 9358 & 175,5\tabularnewline
+            \cline{5-8} 
+            &  &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9320 & 262,4\tabularnewline
+            \cline{7-8} 
+            &  &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9312 & 377,0\tabularnewline
+            \cline{7-8} 
+            &  &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9304 & 559,9\tabularnewline
+            \cline{7-8} 
+            &  &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9264 & 785,0\tabularnewline
+            \cline{7-8} 
+            &  &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9242 & 1207,1\tabularnewline
+            \cline{7-8} 
+            &  &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9242 & 1800,0\tabularnewline
+            \cline{7-8} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{cc|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{dsj1000 MULTI START (costo ottimo 18659688 )}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{Costo} & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{20068535} & 19,4 & 20270696 & 13,6 & 20334609 & 14,3 & 19965496 & 21,9\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{19852900} & 239,8 & 20138131 & 26,8 & 19978177 & 34,8 & 19960654 & 66,8\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{19828957} & 279,7 & 19865783 & 79,5 & 19975814 & 213,2 & 19914229 & 165,1\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{19828957} & 1800,0 & 19852720 & 1579,5 & 19946138 & 469,5 & 19818264 & 306,9\tabularnewline
+            \hline 
+            &  & 19741229 & 1720,5 & 19930787 & 607,3 & 19750658 & 838,6\tabularnewline
+            \cline{3-8} 
+            &  & 19741229 & 1800,0 & 19841513 & 718,0 & 19750658 & 1800,0\tabularnewline
+            \cline{3-8} 
+            & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 19802820 & 1729,8 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 19802820 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\subsubsection*{TABU SEARCH}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|cc|c|c|cccc|}
+            \hline 
+            \multicolumn{8}{|c|}{lin318 TABU SEARCH (costo ottimo 42029)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline
+            \multicolumn{1}{|c|}{42935} & 0 & 43231 & 0 & \multicolumn{1}{c|}{43020} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{43094} & 0\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{42935} & 1800 & 43221 & 1240,856 & \multicolumn{1}{c|}{43020} & \multicolumn{1}{c|}{1800} & \multicolumn{1}{c|}{43094} & 1800\tabularnewline
+            \hline 
+            \multicolumn{1}{c}{} &  & 43194 & 1241,153 &  &  &  & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 43175 & 1241,67 &  &  &  & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 43156 & 1241,962 &  &  &  & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 43156 & 1800 &  &  &  & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-4} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|cccc}
+            \hline 
+            \multicolumn{8}{|c|}{pr439 TABU SEARCH (costo ottimo 107217)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            109335 & 0,0 & 109220 & 0,0 & \multicolumn{1}{c|}{109508} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{109240} & \multicolumn{1}{c|}{0,0}\tabularnewline
+            \hline 
+            109300 & 2,2 & 109158 & 1,2 & \multicolumn{1}{c|}{109499} & \multicolumn{1}{c|}{2,7} & \multicolumn{1}{c|}{109086} & \multicolumn{1}{c|}{4,1}\tabularnewline
+            \hline 
+            109245 & 3,7 & 108910 & 2,5 & \multicolumn{1}{c|}{109302} & \multicolumn{1}{c|}{4,2} & \multicolumn{1}{c|}{108967} & \multicolumn{1}{c|}{7,3}\tabularnewline
+            \hline 
+            109242 & 4,0 & 108906 & 252,5 & \multicolumn{1}{c|}{109070} & \multicolumn{1}{c|}{5,0} & \multicolumn{1}{c|}{108955} & \multicolumn{1}{c|}{7,8}\tabularnewline
+            \hline 
+            109188 & 4,4 & 108904 & 253,1 & \multicolumn{1}{c|}{109070} & \multicolumn{1}{c|}{1800,0} & \multicolumn{1}{c|}{108887} & \multicolumn{1}{c|}{8,3}\tabularnewline
+            \hline 
+            109185 & 293,8 & 108896 & 254,4 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{108862} & \multicolumn{1}{c|}{1016,3}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            109175 & 294,7 & 108890 & 255,0 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{108862} & \multicolumn{1}{c|}{1800,0}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            109173 & 295,6 & 108791 & 256,2 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            109135 & 297,3 & 108766 & 256,8 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            109110 & 298,1 & 108745 & 257,4 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            109097 & 299,0 & 108742 & 257,9 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            109051 & 300,6 & 108720 & 312,3 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            109018 & 301,4 & 108715 & 312,8 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            109001 & 302,9 & 108713 & 313,5 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108981 & 303,7 & 108654 & 353,6 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108977 & 304,4 & 108582 & 354,2 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108974 & 305,2 & 108571 & 354,8 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108927 & 306,5 & 108569 & 355,4 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108888 & 307,2 & 108530 & 356,6 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108884 & 307,9 & 108505 & 357,1 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108882 & 308,6 & 108480 & 357,7 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108837 & 310,5 & 108459 & 358,2 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108816 & 311,0 & 108449 & 452,2 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108814 & 311,6 & 108438 & 452,8 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108762 & 656,2 & 108432 & 453,5 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108737 & 656,8 & 108413 & 454,7 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108716 & 657,3 & 108392 & 455,2 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108696 & 657,9 & 108382 & 455,8 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108691 & 658,5 & 108379 & 456,4 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            108691 & 1800,0 & 108379 & 1800,0 &  &  &  & \tabularnewline
+            \cline{1-4} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|cccc}
+            \hline 
+            \multicolumn{8}{|c|}{d493 TABU SEARCH (costo ottimo 35002)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            36157 & 0,0 & 36026 & 0,0 & \multicolumn{1}{c|}{36021} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{36069} & \multicolumn{1}{c|}{0,0}\tabularnewline
+            \hline 
+            36129 & 0,6 & 35954 & 0,8 & \multicolumn{1}{c|}{36019} & \multicolumn{1}{c|}{2,0} & \multicolumn{1}{c|}{36049} & \multicolumn{1}{c|}{1,0}\tabularnewline
+            \hline 
+            36128 & 1,5 & 35953 & 1,2 & \multicolumn{1}{c|}{36003} & \multicolumn{1}{c|}{2,7} & \multicolumn{1}{c|}{36033} & \multicolumn{1}{c|}{1,7}\tabularnewline
+            \hline 
+            36120 & 2,7 & 35911 & 3,0 & \multicolumn{1}{c|}{35988} & \multicolumn{1}{c|}{6,5} & \multicolumn{1}{c|}{36021} & \multicolumn{1}{c|}{208,5}\tabularnewline
+            \hline 
+            36113 & 12,6 & 35904 & 5,5 & \multicolumn{1}{c|}{35987} & \multicolumn{1}{c|}{1409,0} & \multicolumn{1}{c|}{36019} & \multicolumn{1}{c|}{209,2}\tabularnewline
+            \hline 
+            36091 & 14,7 & 35900 & 8,1 & \multicolumn{1}{c|}{35985} & \multicolumn{1}{c|}{1409,8} & \multicolumn{1}{c|}{36018} & \multicolumn{1}{c|}{401,4}\tabularnewline
+            \hline 
+            36071 & 17,8 & 35897 & 200,7 & \multicolumn{1}{c|}{35985} & \multicolumn{1}{c|}{1800,0} & \multicolumn{1}{c|}{36016} & \multicolumn{1}{c|}{402,1}\tabularnewline
+            \hline 
+            36063 & 18,7 & 35894 & 201,4 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{36006} & \multicolumn{1}{c|}{477,1}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            36026 & 23,8 & 35891 & 202,3 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{36004} & \multicolumn{1}{c|}{598,8}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            36024 & 24,7 & 35890 & 203,1 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{36002} & \multicolumn{1}{c|}{599,6}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            36022 & 25,6 & 35885 & 204,5 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{36001} & \multicolumn{1}{c|}{600,3}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            36021 & 320,8 & 35882 & 205,2 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35998} & \multicolumn{1}{c|}{666,1}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            36009 & 322,6 & 35881 & 256,0 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35996} & \multicolumn{1}{c|}{666,8}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            36002 & 324,5 & 35876 & 257,6 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35994} & \multicolumn{1}{c|}{667,6}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35999 & 325,3 & 35873 & 258,4 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35993} & \multicolumn{1}{c|}{862,3}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35998 & 326,2 & 35868 & 259,9 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35986} & \multicolumn{1}{c|}{863,1}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35992 & 327,8 & 35865 & 260,6 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35967} & \multicolumn{1}{c|}{863,8}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35991 & 328,6 & 35862 & 261,4 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35962} & \multicolumn{1}{c|}{864,7}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35983 & 330,1 & 35859 & 262,1 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35959} & \multicolumn{1}{c|}{865,4}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35976 & 330,8 & 35845 & 262,8 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35956} & \multicolumn{1}{c|}{866,2}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35969 & 331,5 & 35842 & 325,6 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35954} & \multicolumn{1}{c|}{867,0}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35966 & 332,2 & 35837 & 327,0 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35953} & \multicolumn{1}{c|}{867,7}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35964 & 1082,4 & 35830 & 327,7 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{35953} & \multicolumn{1}{c|}{1800,0}\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            35955 & 1468,0 & 35827 & 328,5 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            35955 & 1800,0 & 35826 & 908,5 &  &  &  & \tabularnewline
+            \cline{1-4} 
+            \multicolumn{1}{c}{} &  & 35823 & 1016,8 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35820 & 1017,6 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35817 & 1018,4 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35812 & 1021,4 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35810 & 1080,7 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35807 & 1081,3 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35805 & 1082,0 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35803 & 1082,7 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35801 & 1209,3 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35798 & 1210,0 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35795 & 1210,7 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35778 & 1392,0 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35775 & 1392,8 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35772 & 1393,6 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35771 & 1394,4 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35769 & 1395,8 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35766 & 1396,6 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35765 & 1397,3 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35755 & 1588,0 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35746 & 1588,8 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35743 & 1589,5 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35742 & 1590,2 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} &  & 35742 & 1800,0 &  &  &  & \tabularnewline
+            \cline{3-4} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  &  & \tabularnewline
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|cccccc}
+            \hline 
+            \multicolumn{8}{|c|}{rat575 TABU SEARCH (costo ottimo 6773)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            7077 & 0,0 & \multicolumn{1}{c|}{7084} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{7079} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{7055} & \multicolumn{1}{c|}{0}\tabularnewline
+            \hline 
+            7075 & 0,8 & \multicolumn{1}{c|}{7084} & \multicolumn{1}{c|}{1800} & \multicolumn{1}{c|}{7078} & \multicolumn{1}{c|}{455,9} & \multicolumn{1}{c|}{7049} & \multicolumn{1}{c|}{0,8}\tabularnewline
+            \hline 
+            7062 & 2,1 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7077} & \multicolumn{1}{c|}{546,6} & \multicolumn{1}{c|}{7034} & \multicolumn{1}{c|}{1,2}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7055 & 3,2 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7075} & \multicolumn{1}{c|}{547,7} & \multicolumn{1}{c|}{7033} & \multicolumn{1}{c|}{4,6}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7046 & 5,2 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7074} & \multicolumn{1}{c|}{548,9} & \multicolumn{1}{c|}{7032} & \multicolumn{1}{c|}{5,2}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7045 & 729,4 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7073} & \multicolumn{1}{c|}{647,4} & \multicolumn{1}{c|}{7021} & \multicolumn{1}{c|}{7,0}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7043 & 730,5 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7072} & \multicolumn{1}{c|}{648,4} & \multicolumn{1}{c|}{7019} & \multicolumn{1}{c|}{9,0}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7042 & 731,6 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7071} & \multicolumn{1}{c|}{1369,5} & \multicolumn{1}{c|}{7018} & \multicolumn{1}{c|}{561,0}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7040 & 733,6 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7070} & \multicolumn{1}{c|}{1370,5} & \multicolumn{1}{c|}{7014} & \multicolumn{1}{c|}{562,3}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7038 & 734,5 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7069} & \multicolumn{1}{c|}{1372,5} & \multicolumn{1}{c|}{7013} & \multicolumn{1}{c|}{563,5}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7036 & 735,5 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7067} & \multicolumn{1}{c|}{1373,4} & \multicolumn{1}{c|}{7012} & \multicolumn{1}{c|}{565,8}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7034 & 736,5 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7066} & \multicolumn{1}{c|}{1374,4} & \multicolumn{1}{c|}{7010} & \multicolumn{1}{c|}{566,9}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7033 & 737,4 &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7066} & \multicolumn{1}{c|}{1800} & \multicolumn{1}{c|}{7009} & \multicolumn{1}{c|}{568,0}\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            7032 & 917,4 &  &  &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7008} & \multicolumn{1}{c|}{569,1}\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            7031 & 918,5 &  &  &  & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{7008} & \multicolumn{1}{c|}{1800}\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            7030 & 920,4 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7028 & 921,3 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7027 & 922,3 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7026 & 923,4 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7025 & 1006,1 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7023 & 1007,2 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7022 & 1008,3 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7021 & 1187,9 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7020 & 1188,9 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7019 & 1189,9 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7018 & 1364,6 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7017 & 1365,5 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7016 & 1366,5 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7013 & 1537,6 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7012 & 1538,9 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7011 & 1541,5 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7010 & 1542,7 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7006 & 1545,0 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7004 & 1546,0 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7003 & 1547,1 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7002 & 1548,2 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            7001 & 1550,3 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            6999 & 1551,2 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            6997 & 1552,2 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            6996 & 1553,1 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            6995 & 1554,0 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            6992 & 1555,0 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+            6992 & 1800,0 &  &  &  &  &  & \tabularnewline
+            \cline{1-2} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|cc|c|c|cc}
+            \hline 
+            \multicolumn{8}{|c|}{d657 TABU SEARCH (costo ottimo 48912)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            51032 & 0,0 & \multicolumn{1}{c|}{51109} & 0,0 & 51230 & 0,0 & \multicolumn{1}{c|}{50974} & \multicolumn{1}{c|}{0}\tabularnewline
+            \hline 
+            51020 & 2,3 & \multicolumn{1}{c|}{51097} & 2,3 & 51221 & 2,2 & \multicolumn{1}{c|}{50974} & \multicolumn{1}{c|}{1800}\tabularnewline
+            \hline 
+            50953 & 12,5 & \multicolumn{1}{c|}{51095} & 7,2 & 51210 & 5,6 &  & \tabularnewline
+            \cline{1-6} 
+            50945 & 16,7 & \multicolumn{1}{c|}{51092} & 8,8 & 51159 & 7,1 &  & \tabularnewline
+            \cline{1-6} 
+            50927 & 34,0 & \multicolumn{1}{c|}{51065} & 10,5 & 51150 & 9,4 &  & \tabularnewline
+            \cline{1-6} 
+            50915 & 39,8 & \multicolumn{1}{c|}{51046} & 11,4 & 51142 & 19,1 &  & \tabularnewline
+            \cline{1-6} 
+            50904 & 41,3 & \multicolumn{1}{c|}{50999} & 15,9 & 51135 & 112,9 &  & \tabularnewline
+            \cline{1-6} 
+            50889 & 102,8 & \multicolumn{1}{c|}{50995} & 17,8 & 51124 & 114,5 &  & \tabularnewline
+            \cline{1-6} 
+            50882 & 107,0 & \multicolumn{1}{c|}{50990} & 22,9 & 51116 & 116,1 &  & \tabularnewline
+            \cline{1-6} 
+            50879 & 109,0 & \multicolumn{1}{c|}{50990} & 1800,0 & 51111 & 117,6 &  & \tabularnewline
+            \cline{1-6} 
+            50876 & 112,9 &  &  & 51105 & 120,7 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50872 & 114,7 &  &  & 51099 & 122,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50870 & 116,7 &  &  & 51095 & 123,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50869 & 118,6 &  &  & 51054 & 126,2 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50868 & 120,5 &  &  & 51048 & 127,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50864 & 124,2 &  &  & 51045 & 128,9 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50860 & 125,9 &  &  & 51044 & 576,2 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50859 & 127,7 &  &  & 51037 & 676,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50794 & 130,9 &  &  & 51035 & 678,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50786 & 132,5 &  &  & 51030 & 679,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50778 & 134,0 &  &  & 51029 & 681,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50772 & 135,7 &  &  & 51028 & 682,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50769 & 137,4 &  &  & 51024 & 685,4 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50761 & 141,6 &  &  & 51020 & 686,8 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50750 & 142,8 &  &  & 51017 & 688,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50741 & 144,1 &  &  & 51015 & 689,4 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50734 & 145,3 &  &  & 51014 & 690,8 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50728 & 251,8 &  &  & 51007 & 693,4 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50726 & 253,1 &  &  & 51001 & 694,5 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50725 & 254,3 &  &  & 50995 & 695,8 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50716 & 356,6 &  &  & 50990 & 697,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50702 & 358,2 &  &  & 50986 & 698,3 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50701 & 359,8 &  &  & 50986 & 1800,0 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            50700 & 361,3 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50696 & 364,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50690 & 365,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50686 & 366,9 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50674 & 369,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50666 & 370,8 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50663 & 371,9 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50659 & 814,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50657 & 815,6 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50651 & 818,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50648 & 819,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50645 & 1152,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50641 & 1153,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50639 & 1154,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50634 & 1155,7 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50626 & 1157,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50619 & 1272,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50616 & 1273,3 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            50616 & 1800,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{u724 TABU SEARCH (costo ottimo 41910)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            43864 & 0 & 43915 & 0 & 43852 & 0 & 43711 & 0\tabularnewline
+            \hline 
+            43845 & 1,1 & 43910 & 10,2 & 43833 & 1,2 & 43692 & 1,3\tabularnewline
+            \hline 
+            43842 & 4,2 & 43868 & 12,4 & 43824 & 37,6 & 43680 & 7,8\tabularnewline
+            \hline 
+            43779 & 13,9 & 43867 & 274,9 & 43819 & 1458,8 & 43677 & 163,1\tabularnewline
+            \hline 
+            43745 & 15,1 & 43861 & 277,0 & 43818 & 1461,0 & 43670 & 296,0\tabularnewline
+            \hline 
+            43732 & 22,5 & 43860 & 279,1 & 43811 & 1465,2 & 43661 & 297,8\tabularnewline
+            \hline 
+            43723 & 138,5 & 43836 & 283,1 & 43803 & 1467,5 & 43659 & 299,6\tabularnewline
+            \hline 
+            43715 & 140,2 & 43819 & 285,0 & 43796 & 1469,6 & 43657 & 303,0\tabularnewline
+            \hline 
+            43711 & 141,9 & 43815 & 286,9 & 43794 & 1471,8 & 43653 & 304,6\tabularnewline
+            \hline 
+            43708 & 145,3 & 43813 & 288,8 & 43793 & 1473,8 & 43650 & 306,2\tabularnewline
+            \hline 
+            43707 & 277,7 & 43812 & 290,6 & 43789 & 1475,9 & 43649 & 307,7\tabularnewline
+            \hline 
+            43703 & 279,3 & 43804 & 294,2 & 43783 & 1479,9 & 43648 & 309,2\tabularnewline
+            \hline 
+            43700 & 281,0 & 43797 & 295,9 & 43778 & 1481,8 & 43647 & 584,7\tabularnewline
+            \hline 
+            43698 & 282,7 & 43795 & 297,6 & 43774 & 1483,7 & 43643 & 586,2\tabularnewline
+            \hline 
+            43696 & 284,3 & 43793 & 299,2 & 43768 & 1485,6 & 43639 & 587,8\tabularnewline
+            \hline 
+            43694 & 287,5 & 43786 & 305,5 & 43765 & 1487,4 & 43635 & 589,3\tabularnewline
+            \hline 
+            43691 & 289,1 & 43786 & 1800 & 43763 & 1489,2 & 43632 & 591,0\tabularnewline
+            \hline 
+            43682 & 413,5 & \multicolumn{1}{c}{} &  & 43761 & 1491,2 & 43632 & 1800\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            43668 & 415,0 & \multicolumn{1}{c}{} &  & 43760 & 1494,8 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            43664 & 416,7 & \multicolumn{1}{c}{} &  & 43759 & 1496,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            43661 & 418,4 & \multicolumn{1}{c}{} &  & 43752 & 1499,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            43661 & 1800 & \multicolumn{1}{c}{} &  & 43748 & 1501,1 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 43745 & 1502,7 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 43740 & 1504,1 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 43740 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{rat783 TABU SEARCH (costo ottimo 8806)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            9284 & 0 & 9264 & 0 & 9265 & 0 & 9242 & 0\tabularnewline
+            \hline 
+            9283 & 59,138 & 9263 & 1,598 & 9257 & 1,352 & 9234 & 10,865\tabularnewline
+            \hline 
+            9280 & 66,021 & 9244 & 36,956 & 9256 & 4,652 & 9227 & 12,11\tabularnewline
+            \hline 
+            9278 & 73,23 & 9243 & 46,365 & 9255 & 312,909 & 9226 & 319,17\tabularnewline
+            \hline 
+            9277 & 80,592 & 9237 & 75,046 & 9254 & 315,584 & 9225 & 324,048\tabularnewline
+            \hline 
+            9276 & 187,071 & 9236 & 77,554 & 9249 & 318,202 & 9223 & 326,39\tabularnewline
+            \hline 
+            9274 & 188,977 & 9234 & 180,455 & 9248 & 323,082 & 9222 & 328,707\tabularnewline
+            \hline 
+            9273 & 190,821 & 9233 & 182,178 & 9246 & 325,655 & 9220 & 333,319\tabularnewline
+            \hline 
+            9267 & 336,05 & 9232 & 817,879 & 9245 & 328,17 & 9218 & 335,499\tabularnewline
+            \hline 
+            9266 & 337,778 & 9230 & 961,186 & 9244 & 330,618 & 9217 & 337,708\tabularnewline
+            \hline 
+            9265 & 339,488 & 9226 & 963,541 & 9242 & 335,162 & 9216 & 339,933\tabularnewline
+            \hline 
+            9264 & 341,182 & 9223 & 965,863 & 9241 & 337,401 & 9215 & 342,214\tabularnewline
+            \hline 
+            9263 & 342,961 & 9221 & 968,187 & 9240 & 339,715 & 9214 & 346,54\tabularnewline
+            \hline 
+            9262 & 807,17 & 9220 & 972,935 & 9239 & 341,989 & 9213 & 348,609\tabularnewline
+            \hline 
+            9261 & 809,36 & 9219 & 975,038 & 9238 & 348,087 & 9212 & 350,655\tabularnewline
+            \hline 
+            9260 & 811,598 & 9218 & 977,245 & 9237 & 350,126 & 9211 & 352,693\tabularnewline
+            \hline 
+            9259 & 813,923 & 9208 & 981,403 & 9236 & 352,109 & 9210 & 354,751\tabularnewline
+            \hline 
+            9258 & 818,163 & 9207 & 983,363 & 9235 & 355,929 & 9209 & 360,401\tabularnewline
+            \hline 
+            9257 & 820,26 & 9206 & 985,374 & 9234 & 357,908 & 9208 & 362,363\tabularnewline
+            \hline 
+            9256 & 822,233 & 9205 & 987,334 & 9233 & 359,712 & 9208 & 1800\tabularnewline
+            \hline 
+            9245 & 826,103 & 9204 & 991,107 & 9232 & 361,496 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9244 & 827,873 & 9203 & 993,077 & 9231 & 363,321 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9243 & 829,747 & 9202 & 994,903 & 9230 & 365,161 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9242 & 831,591 & 9201 & 996,771 & 9229 & 530,5 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9241 & 833,401 & 9199 & 1122,157 & 9228 & 532,25 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9240 & 835,158 & 9196 & 1124,374 & 9227 & 677,756 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9239 & 836,958 & 9195 & 1126,53 & 9226 & 679,984 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            9239 & 1800 & 9194 & 1128,633 & 9225 & 682,174 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            \multicolumn{1}{c}{} &  & 9192 & 1132,679 & 9223 & 686,373 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9191 & 1134,628 & 9221 & 688,342 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9190 & 1136,655 & 9220 & 690,422 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9189 & 1142,332 & 9219 & 692,373 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9188 & 1144,31 & 9218 & 694,368 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9187 & 1146,111 & 9217 & 698,042 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9186 & 1147,922 & 9216 & 699,793 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} &  & 9186 & 1800 & 9215 & 701,541 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{3-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9214 & 703,321 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 9214 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{
+        \begin{tabular}{|c|c|cc|c|c|cc}
+            \hline 
+            \multicolumn{8}{|c|}{dsj1000 TABU SEARCH (costo ottimo 18659688)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)}\tabularnewline
+            \hline 
+            19828957 & 0,0 & \multicolumn{1}{c|}{19802820} & 0,0 & 19741229 & 0,0 & \multicolumn{1}{c|}{19750658} & \multicolumn{1}{c|}{0,0}\tabularnewline
+            \hline 
+            19815585 & 10,0 & \multicolumn{1}{c|}{19799454} & 3,8 & 19737657 & 3,7 & \multicolumn{1}{c|}{19747109} & \multicolumn{1}{c|}{5,2}\tabularnewline
+            \hline 
+            19815108 & 28,3 & \multicolumn{1}{c|}{19792630} & 11,3 & 19734229 & 44,4 & \multicolumn{1}{c|}{19744713} & \multicolumn{1}{c|}{14,8}\tabularnewline
+            \hline 
+            19814543 & 37,8 & \multicolumn{1}{c|}{19784187} & 29,1 & 19721723 & 47,1 & \multicolumn{1}{c|}{19741026} & \multicolumn{1}{c|}{31,7}\tabularnewline
+            \hline 
+            19806185 & 45,7 & \multicolumn{1}{c|}{19781812} & 33,8 & 19721431 & 117,4 & \multicolumn{1}{c|}{19731537} & \multicolumn{1}{c|}{65,7}\tabularnewline
+            \hline 
+            19802768 & 57,2 & \multicolumn{1}{c|}{19779585} & 52,1 & 19717868 & 121,6 & \multicolumn{1}{c|}{19726726} & \multicolumn{1}{c|}{69,1}\tabularnewline
+            \hline 
+            19793270 & 60,2 & \multicolumn{1}{c|}{19779059} & 517,1 & 19716480 & 543,5 & \multicolumn{1}{c|}{19723170} & \multicolumn{1}{c|}{72,5}\tabularnewline
+            \hline 
+            19763782 & 204,9 & \multicolumn{1}{c|}{19777739} & 521,6 & 19714929 & 547,6 & \multicolumn{1}{c|}{19703317} & \multicolumn{1}{c|}{82,7}\tabularnewline
+            \hline 
+            19735109 & 209,9 & \multicolumn{1}{c|}{19775888} & 530,1 & 19714904 & 551,7 & \multicolumn{1}{c|}{19703270} & \multicolumn{1}{c|}{86,1}\tabularnewline
+            \hline 
+            19731456 & 215,0 & \multicolumn{1}{c|}{19774017} & 534,2 & 19713214 & 559,4 & \multicolumn{1}{c|}{19700268} & \multicolumn{1}{c|}{100,9}\tabularnewline
+            \hline 
+            19731152 & 224,7 & \multicolumn{1}{c|}{19772302} & 538,3 & 19711789 & 563,2 & \multicolumn{1}{c|}{19700268} & \multicolumn{1}{c|}{1800,0}\tabularnewline
+            \hline 
+            19730940 & 229,5 & \multicolumn{1}{c|}{19771185} & 542,4 & 19711668 & 566,9 &  & \tabularnewline
+            \cline{1-6} 
+            19730819 & 234,2 & \multicolumn{1}{c|}{19769005} & 546,5 & 19711574 & 570,4 &  & \tabularnewline
+            \cline{1-6} 
+            19730725 & 238,9 & \multicolumn{1}{c|}{19768426} & 550,5 & 19710059 & 577,4 &  & \tabularnewline
+            \cline{1-6} 
+            19730702 & 243,7 & \multicolumn{1}{c|}{19766651} & 554,6 & 19709646 & 580,8 &  & \tabularnewline
+            \cline{1-6} 
+            19730312 & 252,8 & \multicolumn{1}{c|}{19766604} & 558,6 & 19709256 & 584,2 &  & \tabularnewline
+            \cline{1-6} 
+            19729922 & 257,1 & \multicolumn{1}{c|}{19764803} & 566,3 & 19708959 & 587,7 &  & \tabularnewline
+            \cline{1-6} 
+            19729558 & 265,7 & \multicolumn{1}{c|}{19763166} & 570,1 & 19708912 & 591,2 &  & \tabularnewline
+            \cline{1-6} 
+            19729161 & 269,7 & \multicolumn{1}{c|}{19762155} & 574,0 & 19708322 & 597,8 &  & \tabularnewline
+            \cline{1-6} 
+            19728767 & 273,9 & \multicolumn{1}{c|}{19761116} & 577,6 & 19707759 & 601,0 &  & \tabularnewline
+            \cline{1-6} 
+            19728650 & 277,9 & \multicolumn{1}{c|}{19760999} & 581,2 & 19707258 & 604,2 &  & \tabularnewline
+            \cline{1-6} 
+            19728023 & 285,7 & \multicolumn{1}{c|}{19760914} & 584,8 & 19706871 & 607,4 &  & \tabularnewline
+            \cline{1-6} 
+            19727374 & 289,5 & \multicolumn{1}{c|}{19759230} & 591,8 & 19650420 & 924,4 &  & \tabularnewline
+            \cline{1-6} 
+            19726873 & 293,2 & \multicolumn{1}{c|}{19758836} & 595,2 & 19649525 & 1107,9 &  & \tabularnewline
+            \cline{1-6} 
+            19726194 & 300,5 & \multicolumn{1}{c|}{19758499} & 598,6 & 19648888 & 1112,5 &  & \tabularnewline
+            \cline{1-6} 
+            19725501 & 303,8 & \multicolumn{1}{c|}{19758269} & 601,9 & 19647427 & 1121,0 &  & \tabularnewline
+            \cline{1-6} 
+            19725050 & 307,2 & \multicolumn{1}{c|}{19758172} & 605,3 & 19645696 & 1125,2 &  & \tabularnewline
+            \cline{1-6} 
+            19724943 & 310,6 & \multicolumn{1}{c|}{19757525} & 611,7 & 19644087 & 1129,4 &  & \tabularnewline
+            \cline{1-6} 
+            19724021 & 314,0 & \multicolumn{1}{c|}{19756962} & 614,6 & 19642735 & 1133,5 &  & \tabularnewline
+            \cline{1-6} 
+            19723280 & 320,3 & \multicolumn{1}{c|}{19756504} & 617,5 & 19642341 & 1137,6 &  & \tabularnewline
+            \cline{1-6} 
+            19722482 & 323,4 & \multicolumn{1}{c|}{19756107} & 620,5 & 19641226 & 1145,5 &  & \tabularnewline
+            \cline{1-6} 
+            19721767 & 326,4 & \multicolumn{1}{c|}{19755810} & 623,5 & 19640768 & 1149,4 &  & \tabularnewline
+            \cline{1-6} 
+            19720766 & 329,6 & \multicolumn{1}{c|}{19755465} & 1165,3 & 19640647 & 1153,3 &  & \tabularnewline
+            \cline{1-6} 
+            19720177 & 332,8 & \multicolumn{1}{c|}{19754597} & 1168,3 & 19640553 & 1157,3 &  & \tabularnewline
+            \cline{1-6} 
+            19717160 & 464,4 & \multicolumn{1}{c|}{19754261} & 1171,4 & 19638988 & 1164,6 &  & \tabularnewline
+            \cline{1-6} 
+            19716116 & 469,6 & \multicolumn{1}{c|}{19754261} & 1800,0 & 19638598 & 1168,0 &  & \tabularnewline
+            \cline{1-6} 
+            19711421 & 474,7 &  &  & 19638301 & 1171,4 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19711406 & 480,0 &  &  & 19638103 & 1174,9 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19710425 & 516,8 &  &  & 19637628 & 1181,5 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19709515 & 521,8 &  &  & 19637065 & 1184,5 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19708784 & 526,9 &  &  & 19636652 & 1187,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19708328 & 536,9 &  &  & 19636409 & 1190,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19707525 & 541,7 &  &  & 19636292 & 1193,6 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19706950 & 551,1 &  &  & 19636035 & 1712,2 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19705597 & 555,8 &  &  & 19635837 & 1715,8 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19704368 & 560,3 &  &  & 19635743 & 1719,4 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19703208 & 565,0 &  &  & 19634106 & 1726,5 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19702524 & 573,5 &  &  & 19633693 & 1730,0 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19701524 & 577,6 &  &  & 19633306 & 1733,5 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19701501 & 581,7 &  &  & 19633063 & 1736,8 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19700099 & 589,5 &  &  & 19632624 & 1743,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19698904 & 593,3 &  &  & 19632023 & 1746,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19698140 & 597,1 &  &  & 19631565 & 1749,1 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19697790 & 601,0 &  &  & 19631268 & 1752,2 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19697669 & 604,7 &  &  & 19631243 & 1755,2 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19696418 & 612,0 &  &  & 19631243 & 1800,0 &  & \tabularnewline
+            \cline{1-2} \cline{5-6} 
+            19695967 & 615,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19695577 & 619,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19695460 & 622,4 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19692004 & 628,9 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19691367 & 631,9 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19690909 & 634,9 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19690515 & 637,9 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19689161 & 739,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19675235 & 744,3 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19674849 & 855,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19674407 & 859,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19672795 & 866,7 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19671244 & 870,6 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19669888 & 874,4 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19669767 & 878,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19669430 & 885,3 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19669033 & 888,7 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19668639 & 892,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19668289 & 895,6 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19668266 & 899,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19667379 & 905,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19666648 & 908,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19666258 & 911,6 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19665893 & 1151,8 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19665256 & 1155,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19664814 & 1158,7 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19664420 & 1162,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19664070 & 1165,6 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19662153 & 1172,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19661460 & 1175,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19661002 & 1178,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19660612 & 1181,1 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19660400 & 1184,2 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+            19660400 & 1800,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \tabularnewline
+            \cline{1-2} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\FloatBarrier
+
+\subsubsection*{GENETICO}
+
+\newcolumntype{C}{>{\centering\arraybackslash}p{11em}}
+
+\FloatBarrier
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{lin318 GENETICO GEN\#20 (costo ottimo 42029)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            67669 & 0,1\tabularnewline
+            \hline 
+            46016 & 0,9\tabularnewline
+            \hline 
+            45290 & 2,1\tabularnewline
+            \hline 
+            44701 & 8,7\tabularnewline
+            \hline 
+            44481 & 18,2\tabularnewline
+            \hline 
+            44027 & 27,5\tabularnewline
+            \hline 
+            43660 & 38,3\tabularnewline
+            \hline 
+            43570 & 65,2\tabularnewline
+            \hline 
+            43488 & 65,7\tabularnewline
+            \hline 
+            43457 & 455,4\tabularnewline
+            \hline 
+            43347 & 457,1\tabularnewline
+            \hline 
+            43157 & 458,2\tabularnewline
+            \hline 
+            43120 & 470,4\tabularnewline
+            \hline 
+            43053 & 476,9\tabularnewline
+            \hline 
+            43044 & 534,1\tabularnewline
+            \hline 
+            42960 & 1674,0\tabularnewline
+            \hline 
+            42960 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+\caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{pr439 GENETICO GEN\#20 (costo ottimo 107217)}\tabularnewline
+            \hline 
+            \hline 
+            178844 & 0,2\tabularnewline
+            \hline 
+            172081 & 0,2\tabularnewline
+            \hline 
+            111632 & 5,5\tabularnewline
+            \hline 
+            111364 & 150,2\tabularnewline
+            \hline 
+            111301 & 203,1\tabularnewline
+            \hline 
+            111265 & 207,7\tabularnewline
+            \hline 
+            111134 & 235,9\tabularnewline
+            \hline 
+            110839 & 259,0\tabularnewline
+            \hline 
+            110667 & 309,8\tabularnewline
+            \hline 
+            110623 & 875,3\tabularnewline
+            \hline 
+            110508 & 1319,7\tabularnewline
+            \hline 
+            110508 & 1800\tabularnewline
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{d493 GENETICO GEN\#20 (costo ottimo 35002)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            50521 & 0,3\tabularnewline
+            \hline 
+            37341 & 5,2\tabularnewline
+            \hline 
+            37107 & 8,0\tabularnewline
+            \hline 
+            36996 & 17,9\tabularnewline
+            \hline 
+            36936 & 32,9\tabularnewline
+            \hline 
+            36855 & 54,3\tabularnewline
+            \hline 
+            36810 & 115,7\tabularnewline
+            \hline 
+            36780 & 116,8\tabularnewline
+            \hline 
+            36771 & 117,6\tabularnewline
+            \hline 
+            36751 & 130,3\tabularnewline
+            \hline 
+            36683 & 527,4\tabularnewline
+            \hline 
+            36525 & 1176,5\tabularnewline
+            \hline 
+            36525 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{rat575 GENETICO GEN\#20 (costo ottimo 6773)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            10225 & 0,3\tabularnewline
+            \hline 
+            9927 & 0,3\tabularnewline
+            \hline 
+            9858 & 0,3\tabularnewline
+            \hline 
+            9613 & 0,3\tabularnewline
+            \hline 
+            7411 & 8,1\tabularnewline
+            \hline 
+            7332 & 14,6\tabularnewline
+            \hline 
+            7317 & 112,0\tabularnewline
+            \hline 
+            7268 & 122,3\tabularnewline
+            \hline 
+            7263 & 277,5\tabularnewline
+            \hline 
+            7256 & 278,9\tabularnewline
+            \hline 
+            7238 & 283,3\tabularnewline
+            \hline 
+            7228 & 283,9\tabularnewline
+            \hline 
+            7206 & 338,7\tabularnewline
+            \hline 
+            7124 & 1175,1\tabularnewline
+            \hline 
+            7124 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{d657 GENETICO GEN\#20 (costo ottimo 48912)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            67669 & 0,1\tabularnewline
+            \hline 
+            46016 & 0,9\tabularnewline
+            \hline 
+            45290 & 2,1\tabularnewline
+            \hline 
+            44701 & 8,7\tabularnewline
+            \hline 
+            44481 & 18,2\tabularnewline
+            \hline 
+            44027 & 27,5\tabularnewline
+            \hline 
+            43660 & 38,3\tabularnewline
+            \hline 
+            43570 & 65,2\tabularnewline
+            \hline 
+            43488 & 65,7\tabularnewline
+            \hline 
+            43457 & 455,4\tabularnewline
+            \hline 
+            43347 & 457,1\tabularnewline
+            \hline 
+            43157 & 458,2\tabularnewline
+            \hline 
+            43120 & 470,4\tabularnewline
+            \hline 
+            43053 & 476,9\tabularnewline
+            \hline 
+            43044 & 534,1\tabularnewline
+            \hline 
+            42960 & 1674,0\tabularnewline
+            \hline 
+            42960 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{u724 GENETICO GEN\#20 (costo ottimo 41910)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            64140 & 0,5\tabularnewline
+            \hline 
+            45937 & 18,8\tabularnewline
+            \hline 
+            44988 & 58,6\tabularnewline
+            \hline 
+            44351 & 116,3\tabularnewline
+            \hline 
+            44279 & 1114,6\tabularnewline
+            \hline 
+            44279 & 1800,0\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{rat783 GENETICO GEN\#20 (costo ottimo 8806)}\tabularnewline
+            \hline 
+            \hline 
+            13519 & 0,4\tabularnewline
+            \hline 
+            13180 & 0,5\tabularnewline
+            \hline 
+            9672 & 12,9\tabularnewline
+            \hline 
+            9562 & 30,1\tabularnewline
+            \hline 
+            9552 & 57,6\tabularnewline
+            \hline 
+            9536 & 76,5\tabularnewline
+            \hline 
+            9516 & 79,8\tabularnewline
+            \hline 
+            9485 & 89,2\tabularnewline
+            \hline 
+            9482 & 101,4\tabularnewline
+            \hline 
+            9426 & 125,2\tabularnewline
+            \hline 
+            9403 & 656,9\tabularnewline
+            \hline 
+            9386 & 800,9\tabularnewline
+            \hline 
+            9380 & 806,2\tabularnewline
+            \hline 
+            9380 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+\begin{adjustbox}{center}
+    \begin{tabular}{|C|C|}
+        \hline 
+        \multicolumn{2}{|c|}{dsj1000 GENETICO GEN\#20 (costo ottimo 18659688)}\tabularnewline
+        \hline 
+        \hline 
+        28530708 & 0,7\tabularnewline
+        \hline 
+        28339022 & 0,9\tabularnewline
+        \hline 
+        27940942 & 1,5\tabularnewline
+        \hline 
+        27704229 & 1,7\tabularnewline
+        \hline 
+        20180860 & 55,9\tabularnewline
+        \hline 
+        19914677 & 113,8\tabularnewline
+        \hline 
+        19899518 & 215,1\tabularnewline
+        \hline 
+        19886374 & 950,6\tabularnewline
+        \hline 
+        19885127 & 1241,2\tabularnewline
+        \hline 
+        19885127 & 1800,0\tabularnewline
+        \hline 
+    \end{tabular}
+\end{adjustbox}
+\caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\FloatBarrier
+
+\subsubsection*{VNS}
+
+\FloatBarrier
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{lin318 VNS (costo ottimo 42029)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            44328 & 0,0 & 45631 & 0,0 & 45189 & 0,0 & 44805 & 0,0\tabularnewline
+            \hline 
+            44293 & 0,1 & 44369 & 0,2 & 44674 & 0,2 & 44459 & 1,7\tabularnewline
+            \hline 
+            44242 & 0,1 & 44163 & 0,3 & 44375 & 0,5 & 44411 & 1,9\tabularnewline
+            \hline 
+            44128 & 3,0 & 43344 & 0,7 & 44365 & 3,1 & 44251 & 2,1\tabularnewline
+            \hline 
+            43691 & 3,3 & 43320 & 286,4 & 43945 & 7,2 & 44128 & 2,7\tabularnewline
+            \hline 
+            43675 & 3,4 & 43310 & 637,1 & 43901 & 7,3 & 44034 & 2,9\tabularnewline
+            \hline 
+            43639 & 4,8 & 43233 & 637,2 & 43807 & 7,7 & 43968 & 3,0\tabularnewline
+            \hline 
+            43591 & 6,1 & 43146 & 914,6 & 43685 & 27,2 & 43655 & 3,1\tabularnewline
+            \hline 
+            43583 & 25,0 & 43142 & 914,6 & 43574 & 27,3 & 43579 & 3,2\tabularnewline
+            \hline 
+            43369 & 25,0 & 43142 & 1800 & 43447 & 81,3 & 43578 & 38,1\tabularnewline
+            \hline 
+            43282 & 95,7 & \multicolumn{1}{c}{} &  & 43392 & 81,7 & 43524 & 61,8\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            43280 & 937,2 & \multicolumn{1}{c}{} &  & 43374 & 124,6 & 43316 & 289,0\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            43163 & 955,1 & \multicolumn{1}{c}{} &  & 43230 & 137,8 & 43211 & 790,5\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            43052 & 1483,7 & \multicolumn{1}{c}{} &  & 43168 & 771,2 & 42984 & 1560,1\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            43052 & 1800 & \multicolumn{1}{c}{} &  & 43129 & 1385,1 & 42984 & 1800\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 43129 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{pr439 VNS (costo ottimo 107217)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            115162 & 0,0 & 115118 & 0,0 & 118329 & 0,0 & 116833 & 0,0\tabularnewline
+            \hline 
+            114445 & 0,1 & 113644 & 0,6 & 117757 & 0,3 & 116375 & 1,9\tabularnewline
+            \hline 
+            113959 & 0,9 & 113100 & 6,5 & 117749 & 0,5 & 114772 & 2,9\tabularnewline
+            \hline 
+            113010 & 1,3 & 112843 & 7,2 & 117469 & 2,8 & 114236 & 6,1\tabularnewline
+            \hline 
+            112977 & 3,1 & 112083 & 37,8 & 116925 & 4,2 & 114226 & 8,2\tabularnewline
+            \hline 
+            112431 & 8,9 & 111462 & 66,1 & 113697 & 5,2 & 112902 & 11,1\tabularnewline
+            \hline 
+            112400 & 9,4 & 111095 & 67,5 & 113573 & 5,3 & 112328 & 18,4\tabularnewline
+            \hline 
+            111864 & 19,0 & 111013 & 67,9 & 113007 & 15,0 & 111610 & 18,8\tabularnewline
+            \hline 
+            111378 & 19,2 & 110754 & 203,2 & 112911 & 15,5 & 111182 & 79,3\tabularnewline
+            \hline 
+            111219 & 19,3 & 110613 & 379,3 & 112512 & 17,0 & 110818 & 139,9\tabularnewline
+            \hline 
+            111153 & 26,1 & 110219 & 490,3 & 110844 & 18,4 & 110367 & 293,0\tabularnewline
+            \hline 
+            110824 & 26,5 & 109775 & 568,4 & 110598 & 46,9 & 110297 & 391,1\tabularnewline
+            \hline 
+            110700 & 26,7 & 109764 & 1219,9 & 110580 & 84,4 & 110229 & 976,1\tabularnewline
+            \hline 
+            109214 & 28,0 & 109167 & 1220,5 & 110249 & 192,0 & 110138 & 976,3\tabularnewline
+            \hline 
+            108691 & 1343,0 & 109167 & 1800 & 110132 & 368,4 & 109942 & 1468,1\tabularnewline
+            \hline 
+            108691 & 1800 & \multicolumn{1}{c}{} &  & 109930 & 994,4 & 109942 & 1800\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 109563 & 1086,7 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 109287 & 1173,8 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 109287 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|cc|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{d493 VNS (costo ottimo 35002)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            37367 & 0,0 & \multicolumn{1}{c|}{37017} & 0,0 & 37712 & 0,0 & 37356 & 0,0\tabularnewline
+            \hline 
+            37302 & 4,0 & \multicolumn{1}{c|}{36771} & 14,6 & 37561 & 0,8 & 37256 & 0,3\tabularnewline
+            \hline 
+            37210 & 8,3 & \multicolumn{1}{c|}{36736} & 66,1 & 37519 & 1,5 & 37062 & 1,0\tabularnewline
+            \hline 
+            37114 & 8,8 & \multicolumn{1}{c|}{36593} & 82,2 & 37328 & 2,3 & 37022 & 105,9\tabularnewline
+            \hline 
+            37065 & 10,1 & \multicolumn{1}{c|}{36495} & 522,8 & 37285 & 2,6 & 36960 & 106,5\tabularnewline
+            \hline 
+            36888 & 12,1 & \multicolumn{1}{c|}{36344} & 1170,5 & 37263 & 5,4 & 36902 & 107,2\tabularnewline
+            \hline 
+            36833 & 20,5 & \multicolumn{1}{c|}{36344} & 1800 & 37177 & 5,9 & 36784 & 107,5\tabularnewline
+            \hline 
+            36546 & 27,8 &  &  & 36894 & 10,7 & 36579 & 108,0\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            36532 & 28,2 &  &  & 36813 & 14,2 & 36530 & 108,8\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            36452 & 31,1 &  &  & 36738 & 94,7 & 36519 & 113,5\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            36421 & 537,5 &  &  & 36550 & 97,0 & 36388 & 136,3\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            36276 & 537,9 &  &  & 36517 & 124,4 & 36296 & 136,8\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            36276 & 1800 &  &  & 36484 & 125,1 & 36296 & 1800\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 36431 & 144,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 36398 & 144,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 36260 & 273,5 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 36260 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{rat575 VNS (costo ottimo 6773)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            7239 & 0,0 & 7342 & 0,0 & 7318 & 0,0 & 7369 & 0,0\tabularnewline
+            \hline 
+            7233 & 34,4 & 7312 & 0,8 & 7294 & 0,4 & 7366 & 0,4\tabularnewline
+            \hline 
+            7232 & 57,6 & 7287 & 15,7 & 7283 & 5,8 & 7316 & 2,0\tabularnewline
+            \hline 
+            7229 & 58,2 & 7276 & 16,5 & 7277 & 6,1 & 7270 & 3,0\tabularnewline
+            \hline 
+            7226 & 71,9 & 7250 & 18,6 & 7274 & 8,4 & 7269 & 4,0\tabularnewline
+            \hline 
+            7203 & 130,5 & 7248 & 19,1 & 7265 & 20,9 & 7240 & 6,5\tabularnewline
+            \hline 
+            7192 & 132,2 & 7188 & 127,2 & 7231 & 26,4 & 7229 & 114,3\tabularnewline
+            \hline 
+            7171 & 300,1 & 7186 & 313,7 & 7200 & 80,6 & 7207 & 115,6\tabularnewline
+            \hline 
+            7171 & 1800,0 & 7173 & 381,3 & 7189 & 511,7 & 7181 & 520,9\tabularnewline
+            \hline 
+            \multicolumn{1}{c}{} &  & 7173 & 1800,0 & 7180 & 833,6 & 7157 & 992,6\tabularnewline
+            \cline{3-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 7176 & 869,9 & 7157 & 1800,0\tabularnewline
+            \cline{5-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 7174 & 871,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 7161 & 872,1 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 7129 & 873,5 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 7129 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|c|c|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{d657 VNS (costo ottimo 48912)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            52642 & 0,0 & 52724 & 0,0 & 52852 & 0,0 & 53319 & 0,0\tabularnewline
+            \hline 
+            52583 & 3,1 & 52629 & 1,6 & 52484 & 1,1 & 53304 & 0,8\tabularnewline
+            \hline 
+            52443 & 17,5 & 52283 & 29,2 & 52157 & 3,1 & 53274 & 1,7\tabularnewline
+            \hline 
+            52271 & 19,7 & 52199 & 88,0 & 52053 & 100,1 & 53141 & 2,4\tabularnewline
+            \hline 
+            52145 & 42,1 & 52166 & 89,0 & 52035 & 100,6 & 52650 & 3,0\tabularnewline
+            \hline 
+            52072 & 46,4 & 52154 & 120,9 & 51824 & 145,5 & 52037 & 3,4\tabularnewline
+            \hline 
+            52058 & 51,0 & 51923 & 126,3 & 51789 & 147,6 & 51922 & 136,8\tabularnewline
+            \hline 
+            51944 & 63,9 & 51874 & 152,2 & 51785 & 148,4 & 51667 & 147,5\tabularnewline
+            \hline 
+            51767 & 70,8 & 51409 & 153,1 & 51733 & 420,5 & 51352 & 149,8\tabularnewline
+            \hline 
+            51669 & 214,3 & 51109 & 177,2 & 51703 & 421,5 & 51352 & 1800,0\tabularnewline
+            \hline 
+            51648 & 319,5 & 50997 & 179,8 & 51620 & 422,3 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            51580 & 325,7 & 50872 & 180,4 & 51602 & 425,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            51462 & 326,8 & 50768 & 181,6 & 51550 & 429,8 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            51051 & 388,2 & 50768 & 1800,0 & 51405 & 431,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-6} 
+            51051 & 1800,0 & \multicolumn{1}{c}{} &  & 51235 & 433,1 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 51224 & 885,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 51194 & 889,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 50809 & 1194,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 50809 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|c|c|cc|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{u724 VNS (costo ottimo 41910)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            45228 & 0,001 & 44729 & 0,001 & \multicolumn{1}{c|}{44683} & 0,001 & 45146 & 0,001\tabularnewline
+            \hline 
+            45054 & 41,522 & 44669 & 3,564 & \multicolumn{1}{c|}{44505} & 54,886 & 45022 & 0,69\tabularnewline
+            \hline 
+            44987 & 47,077 & 44636 & 28,622 & \multicolumn{1}{c|}{44441} & 56,136 & 45001 & 25,236\tabularnewline
+            \hline 
+            44957 & 183,277 & 44496 & 112,255 & \multicolumn{1}{c|}{44390} & 834,913 & 44965 & 26,903\tabularnewline
+            \hline 
+            44788 & 211,512 & 44459 & 1083,77 & \multicolumn{1}{c|}{44316} & 1118,98 & 44929 & 27,838\tabularnewline
+            \hline 
+            44786 & 415,122 & 44331 & 1284,459 & \multicolumn{1}{c|}{44316} & 1800,0 & 44846 & 79,558\tabularnewline
+            \hline 
+            44500 & 438,924 & 44196 & 1708,761 &  &  & 44763 & 117,202\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            44381 & 479,237 & 44196 & 1800,0 &  &  & 44681 & 124,146\tabularnewline
+            \cline{1-4} \cline{7-8} 
+            44246 & 483,172 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 44567 & 345,671\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            44201 & 744,046 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 44556 & 458,118\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            44201 & 1800,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 44416 & 459,21\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 44270 & 1151,915\tabularnewline
+            \cline{7-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 44202 & 1152,22\tabularnewline
+            \cline{7-8} 
+            \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  &  & 44202 & 1800,0\tabularnewline
+            \cline{7-8} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{cccc|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{rat783 VNS (costo ottimo 8806)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{Costo} & \multicolumn{1}{c|}{Tempo (s)} & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{9399} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{9432} & 0,0 & 9606 & 0,0 & 9459 & 0,0\tabularnewline
+            \hline 
+            \multicolumn{1}{|c|}{9399} & \multicolumn{1}{c|}{1800} & \multicolumn{1}{c|}{9418} & 24,7 & 9596 & 0,7 & 9453 & 53,0\tabularnewline
+            \hline 
+            & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{9393} & 26,2 & 9578 & 2,5 & 9452 & 639,3\tabularnewline
+            \cline{3-8} 
+            & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{9371} & 117,1 & 9563 & 43,9 & 9448 & 911,3\tabularnewline
+            \cline{3-8} 
+            & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{9366} & 118,0 & 9562 & 44,7 & 9439 & 912,4\tabularnewline
+            \cline{3-8} 
+            & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{9356} & 120,2 & 9528 & 47,6 & 9426 & 1000,8\tabularnewline
+            \cline{3-8} 
+            & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{9356} & 1800 & 9523 & 63,5 & 9402 & 1660,8\tabularnewline
+            \cline{3-8} 
+            &  &  &  & 9513 & 78,4 & 9394 & 1677,7\tabularnewline
+            \cline{5-8} 
+            &  &  &  & 9504 & 84,9 & 9384 & 1683,0\tabularnewline
+            \cline{5-8} 
+            &  &  &  & 9495 & 95,3 & 9384 & 1800\tabularnewline
+            \cline{5-8} 
+            &  &  &  & 9488 & 139,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9477 & 140,1 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9466 & 163,8 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9445 & 164,0 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9443 & 168,9 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9421 & 169,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9420 & 390,7 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9419 & 391,7 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9415 & 392,4 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9406 & 976,6 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+            &  &  &  & 9406 & 1800 & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{5-6} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
+
+\vspace*{\fill}
+{
+    \centering
+    \centerline{\begin{tabular}{|c|c|cc|c|c|c|c|}
+            \hline 
+            \multicolumn{8}{|c|}{dsj1000 VNS (costo ottimo 18659688)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1} & \multicolumn{2}{c|}{Thread2} & \multicolumn{2}{c|}{Thread3} & \multicolumn{2}{c|}{Thread4}\tabularnewline
+            \hline 
+            Costo & Tempo (s) & \multicolumn{1}{c|}{Costo} & Tempo (s) & Costo & Tempo (s) & Costo & Tempo (s)\tabularnewline
+            \hline 
+            20388124 & 0,0 & \multicolumn{1}{c|}{19933316} & 0,0 & 20179476 & 0,0 & 20192173 & 0,0\tabularnewline
+            \hline 
+            20350385 & 0,9 & \multicolumn{1}{c|}{19901388} & 3,9 & 20041915 & 8,3 & 20190252 & 17,1\tabularnewline
+            \hline 
+            20315711 & 29,2 & \multicolumn{1}{c|}{19819155} & 23,8 & 20037603 & 822,0 & 20161855 & 136,0\tabularnewline
+            \hline 
+            20273258 & 82,7 & \multicolumn{1}{c|}{19818600} & 849,1 & 20010375 & 889,4 & 20068673 & 149,9\tabularnewline
+            \hline 
+            20207005 & 90,0 & \multicolumn{1}{c|}{19811979} & 850,2 & 19968630 & 890,5 & 20063392 & 158,9\tabularnewline
+            \hline 
+            20202303 & 92,6 & \multicolumn{1}{c|}{19811979} & 1800,0 & 19930678 & 1750,2 & 20054192 & 159,4\tabularnewline
+            \hline 
+            20196943 & 95,1 &  &  & 19918893 & 1755,2 & 19926458 & 160,8\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            20059067 & 113,1 &  &  & 19918893 & 1800,0 & 19856223 & 638,3\tabularnewline
+            \cline{1-2} \cline{5-8} 
+            20054941 & 119,3 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 19834387 & 1649,3\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            20023983 & 150,4 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &  & 19834387 & 1800,0\tabularnewline
+            \cline{1-2} \cline{7-8} 
+            19976516 & 314,6 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} 
+            19892262 & 324,5 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} 
+            19861128 & 1082,7 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} 
+            19861128 & 1800,0 &  & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}\tabularnewline
+            \cline{1-2} 
+        \end{tabular}
+    }
+    \captionof{table}{Tabella risultati instanze con numero di nodi compreso tra \textbf{$200$} e \textbf{$299$} $+$ algoritmi esatti}
+}
+\vspace*{\fill}
 
 \end{document}
