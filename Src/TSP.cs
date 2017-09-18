@@ -562,7 +562,7 @@ namespace TSPCsharp
                 OriginallyPopulated = Utility.NextPopulation(instance, sizePopulation, OriginallyPopulated, ChildPoulation);
 
                 //currentBestPath contains the best path of the current population
-                currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
+                currentBestPath = Utility.BestSolution(OriginallyPopulated);
 
                 if (currentBestPath.cost < incumbentSol.cost)
                 {
@@ -1062,46 +1062,73 @@ namespace TSPCsharp
         static void Polishing(Cplex cplex, Instance instance, Process process, Random rnd, int sizePopulation, Stopwatch clock)
         {
 
+            //Definisco l' oggetto che codifica la soluzione che rappresenta l' incumbent(miglio soluzione in assoluto fra tutte le generazioni)
             PathGenetic incumbentSol = new PathGenetic();
+
+            //Miglior soluzione all' interno di una generazione
             PathGenetic currentBestPath = null;
 
+            //Popolazione padre corrente
             List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
+            
+            //Popolazione figlia
             List<PathGenetic> ChildPoulation = new List<PathGenetic>();
 
             List<int>[] listArray = Utility.BuildSLComplete(instance);
 
+            //Costruisco il modello
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);
-
-            //cplex.SetParam(Cplex.Param.Preprocessing.Presolve, false);
-            cplex.SetParam(Cplex.DoubleParam.EpGap, 0.5);
+            
+            //Installo la lazy
+            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, false));
+            
+            //Ripristino il numero di thread al numero di core logici
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
-            cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, false));//Installo la lazy 
 
-            for (int i = 0; i < sizePopulation; i++)
-            {
-                OriginallyPopulated.Add(Utility.NearestNeightborGenetic(instance, rnd, false, listArray));
-                //OriginallyPopulated[i].path = Utility.InterfaceForTwoOpt(OriginallyPopulated[i].path);
+            //Setto un EpGap di 0.2(molto alto) in modo da produrre nel più breve tempo possibile una soluzione
+            cplex.SetParam(Cplex.DoubleParam.EpGap, 0.1);
 
-                //TwoOpt(instance, OriginallyPopulated[i]);
-
-                //OriginallyPopulated[i].path = Utility.Reverse(OriginallyPopulated[i].path);
-            }
-
+            for (int i = 0; i < sizePopulation; i++)                       
+                OriginallyPopulated.Add(Utility.NearestNeightborGeneticPolish(instance, rnd, listArray));
+            
             do
             {
                 for (int i = 0; i < sizePopulation; i++)
                 {
                     if ((i != 0) && (i % 2 != 0))
-                        ChildPoulation.Add(Utility.GenerateChildRins(cplex, instance, process, x, OriginallyPopulated[i], OriginallyPopulated[i - 1]));
+                        ChildPoulation.Add(Utility.GenerateChildPolish(cplex, instance, x, OriginallyPopulated[i], OriginallyPopulated[i - 1]));                   
                 }
 
                 OriginallyPopulated = Utility.NextPopulation(instance, sizePopulation, OriginallyPopulated, ChildPoulation);
-                currentBestPath = Utility.BestSolution(OriginallyPopulated, incumbentSol);
+
+                //Miglio soluzione della popolazione attualE
+                currentBestPath = Utility.BestSolution(OriginallyPopulated);
 
                 if (currentBestPath.cost < incumbentSol.cost)
                 {
+                    //Aggiorno la soluzione incumbent
                     incumbentSol = (PathGenetic)currentBestPath.Clone();
-                    Utility.PrintGeneticSolution(instance, process, incumbentSol);
+
+                    //Print the new incombent solution
+
+                    StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+
+                    for (int i = 0; i < instance.NNodes; i++)
+                    {
+                        for (int j = i + 1; j < instance.NNodes; j++)
+                        {
+                            int pos = Utility.xPos(i, j, instance.NNodes);
+
+                            if (incumbentSol.path[pos] >= 0.5)
+                            {
+                                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
+                                file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            }
+                        }
+                    }
+
+                    file.Close();
+                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentSol.cost, -1);                                  
                 }
 
                 ChildPoulation.RemoveRange(0, ChildPoulation.Count);
@@ -1110,6 +1137,5 @@ namespace TSPCsharp
 
             Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
         }
-
     }
 }

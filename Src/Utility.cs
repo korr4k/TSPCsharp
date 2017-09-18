@@ -411,6 +411,16 @@ namespace TSPCsharp
                 return 2;
         }
 
+        static int RndGeneticPolish(Random rnd)
+        {
+            double tmp = rnd.NextDouble();
+            if (tmp < 0.85)
+                return 0;
+            else  
+                return 1;
+        }
+
+        
         static int RndGenetic(Random rnd)
         {
             double tmp = rnd.NextDouble();
@@ -423,6 +433,7 @@ namespace TSPCsharp
             else
                 return 3;
         }
+        
 
         public static void PrintHeuristicSolution(Instance instance, Process process,  PathStandard pathG, double incumbentCost, int typeSol)
         {
@@ -533,18 +544,19 @@ namespace TSPCsharp
             return nextGeneration;
         }
 
-        public static PathGenetic BestSolution(List<PathGenetic> percorsi, PathGenetic migliorCamminoAssoluto)
+        public static PathGenetic BestSolution(List<PathGenetic> population)
         {
-            PathGenetic migliorCamminoGenerazione = migliorCamminoAssoluto;
+            PathGenetic currentBestPath = population[0];
 
-            for (int i = 1; i < percorsi.Count; i++)
+            for (int i = 1; i < population.Count; i++)
             {
-                if (percorsi[i].cost < migliorCamminoGenerazione.cost)
-                    migliorCamminoGenerazione = percorsi[i];
+                if (population[i].cost < currentBestPath.cost)
+                    currentBestPath = population[i];
             }
 
-            return migliorCamminoGenerazione;
+            return currentBestPath;
         }
+
 
         static int FillRoulette(List<int> roulette, List<PathGenetic> CurrentGeneration)
         {
@@ -848,62 +860,109 @@ namespace TSPCsharp
             }
         }
 
-        public static PathGenetic GenerateChildRins(Cplex cplex, Instance instance, Process process, INumVar[] x, PathGenetic mother, PathGenetic father)
+        //Generating a new heuristic solution for the Polish Algorithm
+        public static PathGenetic NearestNeightborGeneticPolish(Instance instance, Random rnd, List<int>[] listArray)
         {
-            PathGenetic child;
-            int[] path = new int[instance.NNodes];
+            //Vettore che codifica il percorso g
+            int[] heuristicSolutionCplex = new int[(instance.NNodes - 1) * instance.NNodes / 2];
+         
+            //Costo del circuito prodotto
+            double cost = 0;
 
-            int[] m = InterfaceForTwoOpt(mother.path);
-            //PrintGeneticSolution(instance, process, mother.path);
-            int[] f = InterfaceForTwoOpt(father.path);
-            //PrintGeneticSolution(instance, process, father.path);
+            //Rappresenta il lato corrente
+            int[] currentEdge = new int[2];
 
-            for (int i = 0; i < m.Length; i++)
+           
+            //List that contains all nodes belonging to the graph 
+            List<int> availableNodes = new List<int>();
+
+
+            currentEdge[0] = 0;
+            
+            availableNodes.Add(currentEdge[0]);
+
+            for (int i = 1; i < instance.NNodes; i++)
             {
-                if (m[i] == f[i] || f[m[i]] == i)
-                    x[xPos(i, m[i], m.Length)].LB = 1;
-            }
+                bool found = false;
+                int plus = RndGeneticPolish(rnd);
+                int nextNode = listArray[currentEdge[0]][plus];
 
-            cplex.Solve();
-
-            double[] actualX = cplex.GetValues(x);
-
-            int tmp = 0;
-            int[] available = new int[instance.NNodes];
-
-            for (int i = 0; i < instance.NNodes - 1; i++)
-            {
-                for (int j = 0; j < instance.NNodes; j++)
+                do
                 {
-                    if (tmp != j && available[j] == 0)
+                    //We control that the selected node has never been visited
+                    if (availableNodes.Contains(nextNode) == false)
                     {
-                        int position = xPos(tmp, j, instance.NNodes);
+                        currentEdge[1] = nextNode;
+                        int pos = xPos(currentEdge[0], currentEdge[1], instance.NNodes);
 
-                        if (actualX[position] >= 0.5)
-                        {
-                            path[tmp] = j;
-                            tmp = j;
-                            available[j] = 1;
-                        }
+                        cost += (int)Point.Distance(instance.Coord[currentEdge[0]], instance.Coord[currentEdge[1]], instance.EdgeType);
+
+                        heuristicSolutionCplex[pos] = 1;
+
+                        availableNodes.Add(nextNode);
+
+                        currentEdge[0] = nextNode;
+
+                        found = true;
                     }
-                }
+                    else
+                    {
+                        plus++;
+                        if (plus >= instance.NNodes - 1)
+                        {
+                            nextNode = listArray[currentEdge[0]][0];
+                            plus = 0;
+                        }
+                        else
+                            nextNode = listArray[currentEdge[0]][0 + plus];
+                    }
+
+                } while (!found);
             }
 
-            child = new PathGenetic(Reverse(path), instance);
-            //PrintGeneticSolution(instance, process, child.path);
+            
+            heuristicSolutionCplex[xPos(0, currentEdge[1], instance.NNodes)] = 1;
 
-            for (int i = 0; i < m.Length; i++)
-            {
-                if (m[i] == f[i] || i == f[m[i]])
-                    x[xPos(i, m[i], m.Length)].LB = 0;
-            }
+            cost += (int)Point.Distance(instance.Coord[0], instance.Coord[currentEdge[1]], instance.EdgeType);
 
-            return child;
+            return new PathGenetic(heuristicSolutionCplex, cost);
         }
 
-        static double[] ConvertIntArrayToDoubleArray(int[] adD)
+        public static PathGenetic GenerateChildPolish(Cplex cplex, Instance instance, INumVar[] x, PathGenetic mother, PathGenetic father)
         {
-            return adD.Select(d => (double)d).ToArray();
+            //Percorso di codifica del figlio
+            int[] path = new int[mother.path.Length];
+
+            //Fisso le variabili in soluzione in entrambi i genitori
+            for (int i = 0; i < mother.path.Length; i++)
+            {            
+                if (mother.path[i] == 1 && father.path[i] == 1)
+                    x[i].LB = 1;                                    
+            }
+           
+            //Risolvo il modello
+            cplex.Solve();
+           
+            //Ottengo la soluzione ottima calcolata da Cplex
+            double[] pathChild = cplex.GetValues(x);
+
+            //Traduco il vettore restituitomi in un vettore di interi
+            for (int i = 0; i< mother.path.Length; i++)
+            {
+                if(pathChild[i] >= 0.5)
+                    path[i] = 1;
+                else
+                    path[i] = 0;
+            }
+
+            //Creiamo il figlio
+            PathGenetic child = new PathGenetic(path, cplex.GetObjValue());
+
+            //Fisso il LB di tutte le variabili a 
+            for (int i = 0; i < mother.path.Length; i++)          
+                x[i].LB = 0;
+            
+            return child;
         }
     }
 }
