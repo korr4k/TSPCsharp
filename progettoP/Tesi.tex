@@ -94,14 +94,23 @@ literate={à}{{\`a}}1 {è}{{\`e}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {é}{{\'e}}1,
 
 \section*{SEZIONE UNO}
 
-Il presente progetto riguarda la progettazione di un software in grado di risolvere istanze del problema "Il Commesso Viaggiatore" applicando differenti algoritmi risolutori. L'obiettivo di questo testo è quello di descrivere le tecniche utilizzate e di confrontare i risultati ottenuti in termini di efficienza e bontà\`a della soluzione prodotta. Verrà\`a fornita una descrizione degli strumenti e l'ambiente di sviluppo utilizzati e sarà\`a analizzato il codice di programmazione realizzato; non mancheranno paragrafi dedicati ad approfondire concetti teorici senza i quali la comprensione del codice potrebbe risultare meno chiara. 
+Questa tesi tratta lo studio di molteplici metodi risolutivi per il "Problema del commesso viaggiatore", indicato in lingua inglese con la sigla \textbf{TSP}\footnote{Travelling Salesman Problem.}. Il testo segue di pari passo lo sviluppo di un software risolutivo da noi realizzato e pertanto, oltre a nozioni puramente teoriche, vengono anche presentati in maniera dettagliata sia l'ambiente di sviluppo utilizzato che il codice di programmazione.
+
+A seguire è possibile trovare i risultati in entrambe le forme tabellari che grafiche di svariati test eseguiti con lo scopo di verificare la bontà di quanto prodotto.
+
+La sezione finale del testo, contiene una appendice dove sono riportati tutte quelle porzioni del codice di programmazione realizzato che sono di minore interesse per lo scopo del progetto ma comunque essenziali per totale comprensione di ogni sua tecnicalità.
 
 \subsection*{INTRODUZIONE}
 
-Questa capitolo introduttivo \`e dedicato alla storia, alle applicazioni e correnti sfide riguardanti uno dei pi\`u importanti problemi che la disciplina di Ricerca Operativa si trova ad affrontare, ossia il problema del commesso viaggiatore(Travelling Salesman Problem -TSP). 
-Il nome deriva dalla sua pi\`u tipica rappresentazione: data una rete di città\`a, connesse tramite delle strade, si vuole trovare il percorso di minore distanza che un commesso viaggiatore deve seguire per visitare tutte le città\`a una ed una sola volta e ritornare alla città\`a di partenza. Per quanto detto, risulta naturale modellare il TSP come un grafo pesato i cui nodi modellizzano le città\`a relative al problema in questione mentre i possibili collegamenti tra le località\`a sono modellati con gli archi del grafo i cui pesi possono rappresentare,per esempio, la distanza esistente fra la coppia di nodi collegati dall’arco. Chiaramente è possibile assegnare i pesi in modo arbitrario secondo le nostre esigenze, ad esempio si potrebbe anche tenere conto dei tempi di percorrenza o eventuali pedaggi presenti nei singoli percorsi. Come è facile immaginare, il TSP può essere quindi utilizzato per una infinità di problemi pratici ma anche teorici:\\
-Il problema del commesso viaggiatore riveste un ruolo notevole nell'ambito di problemi di logistica distributiva, detti anche di routing. Questi riguardano l’organizzazione di sistemi di distribuzione di beni e servizi. Esempi di problemi di questo genere sono la movimentazione di pezzi o semilavorati tra reparti di produzione, la raccolta e distribuzione di materiali, lo smistamento di merci da centri di produzione a di distribuzione.
-Sebbene le applicazioni nel contesto dei trasporti siano le più naturali per il TSP, la semplicità\`a del modello ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
+Utilizziamo questa sezione introduttiva per parlare della storia, le applicazioni e correnti sfide riguardanti il \textit{TSP}, da sempre uno dei problemi più discussi e studiati nella disciplina della \textbf{Ricerca Operativa} soprattutto grazie alla sua rilevanza in numerose applicazioni pratiche.
+
+
+Il particolare nome \textit{TSP} deriva dalla sua più tipica rappresentazione: data una rete di città tra loro connesse attraverso specifiche strade, ci si chiede quale sia il percorso \textbf{migliore} che un commesso viaggiatore dovrebbe seguire nel caso in cui volesse visitare ogni luogo una ed una sola volta ritornando infine al punto di partenza. Per quanto detto, risulta naturale modellare questo problema attraverso un grafo pesato i cui nodi rappresentano le città mentre ed i lati corrispondono alle vie di accesso che le collegano. Per quanto riguarda il \textbf{peso} da attribuire a queste ultime è possibile utilizzare qualsivoglia tecnica: una semplice lunghezza fisica, tempi di percorrenza, la presenza di pedaggi sono solo alcuni esempi.
+
+Data questa situazione possiamo notare come sia molto facile mutarla in infinite altre, sia di uso pratico che teorico. Fondamentali sono le applicazioni nell'ambito della logistica distributiva più comunemente note come problemi di routing. Questi non riguardano solamente il classico smistamento di pacchetti in una rete internet ma anche l’organizzazione di sistemi di distribuzione per beni e servizi:  movimentazione di pezzi o semilavorati tra reparti di produzione, raccolta e distribuzione di materiali, smistamento di merci da centri di produzione a quelli di distribuzione e molto altro ancora.
+
+Nel corso degli anni sono nate anche diverse app
+Sebbene le applicazioni nel contesto dei trasporti rimangano comunque le più naturali, la semplicità del \textit{modello} ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
 Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poiché\`e esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
 
 
@@ -7281,7 +7290,7 @@ Come più volte ripetuto è stato posto un tempo limite pari a $30$ minuti il qu
 
 \FloatBarrier
 
-\subsubsection*{GENETICO}
+\subsubsection*{POLISHING OLD}
 
 \FloatBarrier
 
@@ -7801,6 +7810,740 @@ Come più volte ripetuto è stato posto un tempo limite pari a $30$ minuti il qu
             19949773 & 1965,0\tabularnewline
             \hline 
             19949773 & 1800,0\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\FloatBarrier
+
+\subsubsection*{POLISHING NEW}
+
+\FloatBarrier
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{lin318 POLISHING GEN\#20 (costo ottimo 42029)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            54981 & 0,1\tabularnewline
+            \hline 
+            51105 & 6,2\tabularnewline
+            \hline 
+            49247 & 13,5\tabularnewline
+            \hline 
+            47680 & 20,1\tabularnewline
+            \hline 
+            46976 & 26,5\tabularnewline
+            \hline 
+            46911 & 32,4\tabularnewline
+            \hline 
+            46388 & 37,5\tabularnewline
+            \hline 
+            46111 & 42,1\tabularnewline
+            \hline 
+            45970 & 46,7\tabularnewline
+            \hline 
+            45650 & 51,7\tabularnewline
+            \hline 
+            45049 & 57,4\tabularnewline
+            \hline 
+            44750 & 63,3\tabularnewline
+            \hline 
+            44551 & 69,0\tabularnewline
+            \hline 
+            44090 & 79,1\tabularnewline
+            \hline 
+            43998 & 83,4\tabularnewline
+            \hline 
+            43927 & 87,8\tabularnewline
+            \hline 
+            43835 & 91,9\tabularnewline
+            \hline 
+            43596 & 96,3\tabularnewline
+            \hline 
+            43143 & 109,2\tabularnewline
+            \hline 
+            43089 & 117,4\tabularnewline
+            \hline 
+            42921 & 137,7\tabularnewline
+            \hline 
+            42878 & 181,9\tabularnewline
+            \hline 
+            42855 & 225,8\tabularnewline
+            \hline 
+            42832 & 271,1\tabularnewline
+            \hline 
+            42820 & 275,0\tabularnewline
+            \hline 
+            42797 & 286,0\tabularnewline
+            \hline 
+            42778 & 293,5\tabularnewline
+            \hline 
+            42769 & 335,2\tabularnewline
+            \hline 
+            42752 & 380,8\tabularnewline
+            \hline 
+            42711 & 729,0\tabularnewline
+            \hline 
+            42692 & 777,4\tabularnewline
+            \hline 
+            42667 & 874,4\tabularnewline
+            \hline 
+            42642 & 958,9\tabularnewline
+            \hline 
+            42629 & 1024,6\tabularnewline
+            \hline 
+            42605 & 1272,4\tabularnewline
+            \hline 
+            42575 & 1604,5\tabularnewline
+            \hline 
+            42550 & 1652,1\tabularnewline
+            \hline 
+            42550 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{pr439 POLISHING GEN\#20 (costo ottimo 107217)}\tabularnewline
+            \hline 
+            \hline 
+            \multicolumn{2}{|c|}{Thread1}\tabularnewline
+            \hline 
+            Costo & Tempo (s)\tabularnewline
+            \hline 
+            134289 & 0,1\tabularnewline
+            \hline 
+            124339 & 9,8\tabularnewline
+            \hline 
+            122260 & 18,1\tabularnewline
+            \hline 
+            120612 & 33,9\tabularnewline
+            \hline 
+            118650 & 41,1\tabularnewline
+            \hline 
+            118050 & 47,9\tabularnewline
+            \hline 
+            116941 & 55,1\tabularnewline
+            \hline 
+            116030 & 62,0\tabularnewline
+            \hline 
+            114880 & 75,5\tabularnewline
+            \hline 
+            113888 & 88,1\tabularnewline
+            \hline 
+            113629 & 101,2\tabularnewline
+            \hline 
+            112983 & 107,3\tabularnewline
+            \hline 
+            112872 & 113,4\tabularnewline
+            \hline 
+            112828 & 119,9\tabularnewline
+            \hline 
+            112785 & 137,8\tabularnewline
+            \hline 
+            112782 & 161,5\tabularnewline
+            \hline 
+            112733 & 184,9\tabularnewline
+            \hline 
+            112461 & 249,7\tabularnewline
+            \hline 
+            112458 & 256,0\tabularnewline
+            \hline 
+            112409 & 262,2\tabularnewline
+            \hline 
+            112401 & 268,8\tabularnewline
+            \hline 
+            112260 & 286,8\tabularnewline
+            \hline 
+            112173 & 299,0\tabularnewline
+            \hline 
+            112165 & 317,2\tabularnewline
+            \hline 
+            112129 & 380,4\tabularnewline
+            \hline 
+            111704 & 440,0\tabularnewline
+            \hline 
+            111668 & 450,7\tabularnewline
+            \hline 
+            111640 & 472,3\tabularnewline
+            \hline 
+            111631 & 550,8\tabularnewline
+            \hline 
+            111484 & 663,4\tabularnewline
+            \hline 
+            111456 & 723,5\tabularnewline
+            \hline 
+            111309 & 729,4\tabularnewline
+            \hline 
+            111289 & 762,8\tabularnewline
+            \hline 
+            111252 & 882,4\tabularnewline
+            \hline 
+            111180 & 949,2\tabularnewline
+            \hline 
+            111040 & 1073,3\tabularnewline
+            \hline 
+            110852 & 1263,8\tabularnewline
+            \hline 
+            110781 & 1342,3\tabularnewline
+            \hline 
+            110376 & 1537,1\tabularnewline
+            \hline 
+            110376 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{d493 POLISHING GEN\#20 (costo ottimo 35002)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            41715 & 0,1\tabularnewline
+            \hline 
+            39768 & 20,8\tabularnewline
+            \hline 
+            38964 & 40,2\tabularnewline
+            \hline 
+            38593 & 53,0\tabularnewline
+            \hline 
+            38148 & 66,0\tabularnewline
+            \hline 
+            37575 & 77,2\tabularnewline
+            \hline 
+            37232 & 87,0\tabularnewline
+            \hline 
+            37203 & 96,8\tabularnewline
+            \hline 
+            36875 & 107,5\tabularnewline
+            \hline 
+            36768 & 116,7\tabularnewline
+            \hline 
+            36574 & 125,2\tabularnewline
+            \hline 
+            36469 & 133,6\tabularnewline
+            \hline 
+            36428 & 142,1\tabularnewline
+            \hline 
+            36329 & 158,9\tabularnewline
+            \hline 
+            36277 & 167,4\tabularnewline
+            \hline 
+            36227 & 175,9\tabularnewline
+            \hline 
+            36096 & 184,2\tabularnewline
+            \hline 
+            36064 & 192,4\tabularnewline
+            \hline 
+            36053 & 215,4\tabularnewline
+            \hline 
+            36045 & 223,3\tabularnewline
+            \hline 
+            36042 & 239,1\tabularnewline
+            \hline 
+            36039 & 245,9\tabularnewline
+            \hline 
+            36032 & 253,5\tabularnewline
+            \hline 
+            36006 & 261,0\tabularnewline
+            \hline 
+            35947 & 268,1\tabularnewline
+            \hline 
+            35882 & 289,3\tabularnewline
+            \hline 
+            35864 & 443,1\tabularnewline
+            \hline 
+            35862 & 450,7\tabularnewline
+            \hline 
+            35861 & 540,7\tabularnewline
+            \hline 
+            35775 & 614,4\tabularnewline
+            \hline 
+            35726 & 974,8\tabularnewline
+            \hline 
+            35720 & 1443,6\tabularnewline
+            \hline 
+            35714 & 1464,8\tabularnewline
+            \hline 
+            35695 & 1544,0\tabularnewline
+            \hline 
+            35690 & 1565,0\tabularnewline
+            \hline 
+            35690 & 1800,0\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{rat575 POLISHING GEN\#20 (costo ottimo 6773)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            8540 & 0,2\tabularnewline
+            \hline 
+            7800 & 36,7\tabularnewline
+            \hline 
+            7767 & 60,9\tabularnewline
+            \hline 
+            7449 & 79,8\tabularnewline
+            \hline 
+            7405 & 99,8\tabularnewline
+            \hline 
+            7369 & 116,3\tabularnewline
+            \hline 
+            7332 & 129,9\tabularnewline
+            \hline 
+            7276 & 144,1\tabularnewline
+            \hline 
+            7245 & 173,7\tabularnewline
+            \hline 
+            7163 & 187,7\tabularnewline
+            \hline 
+            7133 & 201,4\tabularnewline
+            \hline 
+            7128 & 214,2\tabularnewline
+            \hline 
+            7095 & 228,0\tabularnewline
+            \hline 
+            7070 & 240,7\tabularnewline
+            \hline 
+            7014 & 267,5\tabularnewline
+            \hline 
+            7005 & 280,8\tabularnewline
+            \hline 
+            7002 & 293,5\tabularnewline
+            \hline 
+            6948 & 307,2\tabularnewline
+            \hline 
+            6938 & 320,5\tabularnewline
+            \hline 
+            6922 & 333,8\tabularnewline
+            \hline 
+            6917 & 346,6\tabularnewline
+            \hline 
+            6896 & 359,1\tabularnewline
+            \hline 
+            6895 & 369,8\tabularnewline
+            \hline 
+            6887 & 382,3\tabularnewline
+            \hline 
+            6884 & 394,6\tabularnewline
+            \hline 
+            6883 & 407,5\tabularnewline
+            \hline 
+            6879 & 420,1\tabularnewline
+            \hline 
+            6877 & 432,5\tabularnewline
+            \hline 
+            6875 & 454,9\tabularnewline
+            \hline 
+            6873 & 480,8\tabularnewline
+            \hline 
+            6871 & 612,6\tabularnewline
+            \hline 
+            6870 & 643,2\tabularnewline
+            \hline 
+            6867 & 759,4\tabularnewline
+            \hline 
+            6866 & 881,4\tabularnewline
+            \hline 
+            6864 & 893,1\tabularnewline
+            \hline 
+            6860 & 1006,8\tabularnewline
+            \hline 
+            6855 & 1645,6\tabularnewline
+            \hline 
+            6855 & 1800,0\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{d657 POLISHING GEN\#20 (costo ottimo 48912)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            61347 & 0,2\tabularnewline
+            \hline 
+            56669 & 21,9\tabularnewline
+            \hline 
+            55895 & 41,1\tabularnewline
+            \hline 
+            55054 & 78,1\tabularnewline
+            \hline 
+            54228 & 95,5\tabularnewline
+            \hline 
+            52536 & 109,2\tabularnewline
+            \hline 
+            52506 & 123,2\tabularnewline
+            \hline 
+            52452 & 149,4\tabularnewline
+            \hline 
+            52097 & 161,7\tabularnewline
+            \hline 
+            51585 & 174,7\tabularnewline
+            \hline 
+            51433 & 186,9\tabularnewline
+            \hline 
+            51114 & 199,8\tabularnewline
+            \hline 
+            50643 & 224,1\tabularnewline
+            \hline 
+            50485 & 235,9\tabularnewline
+            \hline 
+            50401 & 259,4\tabularnewline
+            \hline 
+            50367 & 304,2\tabularnewline
+            \hline 
+            50283 & 326,4\tabularnewline
+            \hline 
+            50261 & 337,4\tabularnewline
+            \hline 
+            50252 & 409,5\tabularnewline
+            \hline 
+            50221 & 429,2\tabularnewline
+            \hline 
+            50177 & 532,3\tabularnewline
+            \hline 
+            50176 & 542,7\tabularnewline
+            \hline 
+            50132 & 589,7\tabularnewline
+            \hline 
+            50131 & 617,9\tabularnewline
+            \hline 
+            50090 & 721,2\tabularnewline
+            \hline 
+            50069 & 759,6\tabularnewline
+            \hline 
+            50063 & 769,1\tabularnewline
+            \hline 
+            50021 & 815,2\tabularnewline
+            \hline 
+            50001 & 919,2\tabularnewline
+            \hline 
+            49993 & 928,9\tabularnewline
+            \hline 
+            49973 & 949,5\tabularnewline
+            \hline 
+            49945 & 967,5\tabularnewline
+            \hline 
+            49942 & 1004,3\tabularnewline
+            \hline 
+            49883 & 1106,3\tabularnewline
+            \hline 
+            49865 & 1135,3\tabularnewline
+            \hline 
+            49822 & 1144,8\tabularnewline
+            \hline 
+            49777 & 1257,1\tabularnewline
+            \hline 
+            49766 & 1367,3\tabularnewline
+            \hline 
+            49721 & 1377,2\tabularnewline
+            \hline 
+            49715 & 1480,8\tabularnewline
+            \hline 
+            49677 & 1679,7\tabularnewline
+            \hline 
+            49664 & 1784,9\tabularnewline
+            \hline 
+            49664 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{u724 POLISHING GEN\#20 (costo ottimo 41910)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            51626 & 0,2\tabularnewline
+            \hline 
+            49285 & 21,4\tabularnewline
+            \hline 
+            48591 & 39,7\tabularnewline
+            \hline 
+            47940 & 56,6\tabularnewline
+            \hline 
+            46975 & 73,8\tabularnewline
+            \hline 
+            46558 & 89,4\tabularnewline
+            \hline 
+            46129 & 105,9\tabularnewline
+            \hline 
+            45741 & 121,6\tabularnewline
+            \hline 
+            45662 & 137,3\tabularnewline
+            \hline 
+            45308 & 153,1\tabularnewline
+            \hline 
+            45163 & 168,4\tabularnewline
+            \hline 
+            44871 & 184,2\tabularnewline
+            \hline 
+            44321 & 198,7\tabularnewline
+            \hline 
+            44181 & 213,9\tabularnewline
+            \hline 
+            44006 & 243,1\tabularnewline
+            \hline 
+            43871 & 273,1\tabularnewline
+            \hline 
+            43801 & 302,7\tabularnewline
+            \hline 
+            43767 & 317,5\tabularnewline
+            \hline 
+            43647 & 331,9\tabularnewline
+            \hline 
+            43560 & 346,1\tabularnewline
+            \hline 
+            43450 & 359,8\tabularnewline
+            \hline 
+            43440 & 387,3\tabularnewline
+            \hline 
+            43432 & 415,1\tabularnewline
+            \hline 
+            43408 & 457,0\tabularnewline
+            \hline 
+            43314 & 600,7\tabularnewline
+            \hline 
+            43305 & 664,4\tabularnewline
+            \hline 
+            43271 & 677,6\tabularnewline
+            \hline 
+            43256 & 718,5\tabularnewline
+            \hline 
+            43200 & 865,4\tabularnewline
+            \hline 
+            43170 & 913,9\tabularnewline
+            \hline 
+            43127 & 1046,7\tabularnewline
+            \hline 
+            43095 & 1059,2\tabularnewline
+            \hline 
+            43064 & 1083,9\tabularnewline
+            \hline 
+            43033 & 1130,7\tabularnewline
+            \hline 
+            43002 & 1176,0\tabularnewline
+            \hline 
+            42988 & 1198,6\tabularnewline
+            \hline 
+            42978 & 1327,2\tabularnewline
+            \hline 
+            42917 & 1586,8\tabularnewline
+            \hline 
+            42916 & 1599,0\tabularnewline
+            \hline 
+            42855 & 1611,4\tabularnewline
+            \hline 
+            42845 & 1748,9\tabularnewline
+            \hline 
+            42826 & 1800\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{rat783 POLISHING GEN\#20 (costo ottimo 8806)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            11112 & 0,3\tabularnewline
+            \hline 
+            10506 & 47,1\tabularnewline
+            \hline 
+            10299 & 81,3\tabularnewline
+            \hline 
+            10120 & 116,8\tabularnewline
+            \hline 
+            10021 & 145,6\tabularnewline
+            \hline 
+            9894 & 174,6\tabularnewline
+            \hline 
+            9769 & 208,7\tabularnewline
+            \hline 
+            9544 & 233,3\tabularnewline
+            \hline 
+            9521 & 261,9\tabularnewline
+            \hline 
+            9494 & 287,6\tabularnewline
+            \hline 
+            9400 & 310,7\tabularnewline
+            \hline 
+            9381 & 334,0\tabularnewline
+            \hline 
+            9350 & 354,2\tabularnewline
+            \hline 
+            9295 & 375,8\tabularnewline
+            \hline 
+            9273 & 399,0\tabularnewline
+            \hline 
+            9238 & 435,1\tabularnewline
+            \hline 
+            9220 & 454,7\tabularnewline
+            \hline 
+            9212 & 473,1\tabularnewline
+            \hline 
+            9209 & 536,1\tabularnewline
+            \hline 
+            9204 & 554,2\tabularnewline
+            \hline 
+            9189 & 572,2\tabularnewline
+            \hline 
+            9185 & 593,1\tabularnewline
+            \hline 
+            9178 & 624,8\tabularnewline
+            \hline 
+            9175 & 666,3\tabularnewline
+            \hline 
+            9170 & 685,6\tabularnewline
+            \hline 
+            9168 & 726,6\tabularnewline
+            \hline 
+            9167 & 923,6\tabularnewline
+            \hline 
+            9165 & 957,9\tabularnewline
+            \hline 
+            9160 & 1128,5\tabularnewline
+            \hline 
+            9157 & 1145,2\tabularnewline
+            \hline 
+            9152 & 1240,2\tabularnewline
+            \hline 
+            9150 & 1271,4\tabularnewline
+            \hline 
+            9147 & 1436,0\tabularnewline
+            \hline 
+            9146 & 1634,5\tabularnewline
+            \hline 
+            9146 & 1800,0\tabularnewline
+            \hline 
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Tabella risultati instanze con numero di nodi inferiore a \textbf{$200$} $+$ algoritmi esatti}
+\end{table}
+
+\begin{table}
+    \begin{adjustbox}{center}
+        \begin{tabular}{|C|C|}
+            \hline 
+            \multicolumn{2}{|c|}{dsj1000 POLISHING GEN\#20 (costo ottimo 18659688)}\tabularnewline
+            \hline 
+            \hline 
+            Costo & Tempo(s)\tabularnewline
+            \hline 
+            24494420 & 0,4\tabularnewline
+            \hline 
+            22674664 & 76,3\tabularnewline
+            \hline 
+            21691770 & 158,5\tabularnewline
+            \hline 
+            21155611 & 256,3\tabularnewline
+            \hline 
+            20987474 & 325,0\tabularnewline
+            \hline 
+            20616148 & 356,1\tabularnewline
+            \hline 
+            20422249 & 388,6\tabularnewline
+            \hline 
+            20213051 & 418,5\tabularnewline
+            \hline 
+            20178946 & 472,5\tabularnewline
+            \hline 
+            20143854 & 496,5\tabularnewline
+            \hline 
+            20011270 & 523,3\tabularnewline
+            \hline 
+            20007438 & 549,7\tabularnewline
+            \hline 
+            19845787 & 577,3\tabularnewline
+            \hline 
+            19787330 & 601,7\tabularnewline
+            \hline 
+            19784020 & 627,0\tabularnewline
+            \hline 
+            19738981 & 674,3\tabularnewline
+            \hline 
+            19703485 & 721,7\tabularnewline
+            \hline 
+            19701881 & 746,1\tabularnewline
+            \hline 
+            19697274 & 865,4\tabularnewline
+            \hline 
+            19693950 & 907,0\tabularnewline
+            \hline 
+            19642970 & 1138,3\tabularnewline
+            \hline 
+            19629331 & 1159,7\tabularnewline
+            \hline 
+            19626007 & 1180,0\tabularnewline
+            \hline 
+            19614747 & 1198,8\tabularnewline
+            \hline 
+            19605271 & 1237,8\tabularnewline
+            \hline 
+            19600250 & 1297,9\tabularnewline
+            \hline 
+            19592437 & 1341,1\tabularnewline
+            \hline 
+            19559338 & 1555,4\tabularnewline
+            \hline 
+            19553706 & 1595,0\tabularnewline
+            \hline 
+            19551042 & 1634,7\tabularnewline
+            \hline 
+            19535350 & 1654,9\tabularnewline
+            \hline 
+            19525508 & 1674,1\tabularnewline
+            \hline 
+            19502251 & 1732,7\tabularnewline
+            \hline 
+            19502251 & 1800,0\tabularnewline
             \hline 
         \end{tabular}
     \end{adjustbox}

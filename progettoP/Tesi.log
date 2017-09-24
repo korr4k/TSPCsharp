@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.9.7)  23 SEP 2017 16:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.9.7)  24 SEP 2017 21:44
 entering extended mode
 **./Tesi.tex
 (Tesi.tex
@@ -922,70 +922,70 @@ LaTeX Info: Redefining \nameref on input line 93.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 109.
+LaTeX Font Info:    Try loading font information for U+msa on input line 97.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 109.
+LaTeX Font Info:    Try loading font information for U+msb on input line 97.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/Corrado/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
-<Immagini/"Progetto C Sharp".png, id=34, 717.43031pt x 499.8675pt>
+<Immagini/"Progetto C Sharp".png, id=40, 717.43031pt x 499.8675pt>
 File: Immagini/"Progetto C Sharp".png Graphic file (type png)
 <use Immagini/"Progetto C Sharp".png>
-Package pdftex.def Info: Immagini/"Progetto C Sharp".png  used on input line 13
-2. on input line 132.
+Package pdftex.def Info: Immagini/"Progetto C Sharp".png  used on input line 14
+1. on input line 141.
 Package pdftex.def Info: Requested size: 469.75502pt x 327.30501pt on input lin
-e 132.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 144.
+e 141.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 153.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 144.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 153.
  [3 <./Immagini/Progetto C Sharp.png>]
-Overfull \hbox (31.41246pt too wide) in paragraph at lines 155--156
+Overfull \hbox (31.41246pt too wide) in paragraph at lines 164--165
 []\T1/cmr/m/n/10.95 A questo punto è pos-si-bile im-portare at-traverso le di-r
 et-tive \T1/cmr/bx/n/10.95 us-ing \T1/cmr/m/n/10.95 sia \T1/cmr/bx/n/10.95 ILOG
 .CPLEX \T1/cmr/m/n/10.95 che \T1/cmr/bx/n/10.95 ILOG.Concert\T1/cmr/m/n/10.95 .
  
  []
 
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 178.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 187.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 ) [4]
-Overfull \hbox (4.40698pt too wide) in paragraph at lines 201--202
+Overfull \hbox (4.40698pt too wide) in paragraph at lines 210--211
 []\T1/cmr/m/n/10.95 Apriamo in-fine la classe del nos-tro pro-getto nella quale
  vogliamo uti-liz-zare la DLL ed uti-lizzi-amo
  []
 
 
-Overfull \hbox (42.60631pt too wide) in paragraph at lines 204--205
+Overfull \hbox (42.60631pt too wide) in paragraph at lines 213--214
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][]  
  []
 
 
-Overfull \hbox (42.60631pt too wide) in paragraph at lines 208--209
+Overfull \hbox (42.60631pt too wide) in paragraph at lines 217--218
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (6.88007pt too wide) in paragraph at lines 218--219
+Overfull \hbox (6.88007pt too wide) in paragraph at lines 227--228
 \T1/cmr/m/n/10.95 Nella sua for-mal-iz-zazione più gen-erale, il prob-lema del 
 Commesso Vi-ag-gia-tore con-siste nell'individuare
  []
 
 
-Overfull \hbox (9.24182pt too wide) in paragraph at lines 218--219
+Overfull \hbox (9.24182pt too wide) in paragraph at lines 227--228
 \T1/cmr/m/n/10.95 un cir-cuito hamil-to-ni-ano di costo min-imo per un dato gra
 fo ori-en-tato $\OML/cmm/m/it/10.95 G \OT1/cmr/m/n/10.95 = (\OML/cmm/m/it/10.95
  V; A\OT1/cmr/m/n/10.95 )$\T1/cmr/m/n/10.95 , dove $\OML/cmm/m/it/10.95 V \OT1/
@@ -993,186 +993,186 @@ cmr/m/n/10.95 =$\T1/cmr/m/n/10.95 {$[]$}$$
  []
 
 [5]
-<Immagini/"subtour".jpg, id=76, 601.64775pt x 374.5995pt>
+<Immagini/"subtour".jpg, id=75, 601.64775pt x 374.5995pt>
 File: Immagini/"subtour".jpg Graphic file (type jpg)
 <use Immagini/"subtour".jpg>
-Package pdftex.def Info: Immagini/"subtour".jpg  used on input line 250. on inp
-ut line 250.
+Package pdftex.def Info: Immagini/"subtour".jpg  used on input line 259. on inp
+ut line 259.
 Package pdftex.def Info: Requested size: 469.75502pt x 292.48938pt on input lin
-e 250.
+e 259.
  [6] [7 <./Immagini/subtour.jpg>]
-Overfull \hbox (3.5661pt too wide) in paragraph at lines 297--298
+Overfull \hbox (3.5661pt too wide) in paragraph at lines 306--307
 []\T1/cmr/bx/n/10.95 Concorde \T1/cmr/m/n/10.95 con-te-nente i file sor-genti i
 n lin-guag-gio C del pro-gramma Con-corde[][][][][] la cui trat-tazione
  []
 
 [8] [9]
-Underfull \hbox (badness 1127) in paragraph at lines 373--373
+Underfull \hbox (badness 1127) in paragraph at lines 382--382
 []\T1/cmr/m/n/10.95 Rappresenta il nome del file di in-put
  []
 
 
-Underfull \hbox (badness 2961) in paragraph at lines 373--373
+Underfull \hbox (badness 2961) in paragraph at lines 382--382
 \T1/cmr/m/n/10.95 con-te-nente l'istanza del prob-lema del
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 374--374
+Underfull \hbox (badness 10000) in paragraph at lines 383--383
 []\T1/cmr/m/n/10.95 Rappresenta i sec-ondi trascorsi
  []
 
 
-Underfull \hbox (badness 8094) in paragraph at lines 378--378
+Underfull \hbox (badness 8094) in paragraph at lines 387--387
 []\T1/cmr/m/n/10.95 Rappresenta il miglior lower bound
  []
 
 
-Underfull \hbox (badness 8094) in paragraph at lines 379--379
+Underfull \hbox (badness 8094) in paragraph at lines 388--388
 []\T1/cmr/m/n/10.95 Rappresenta il miglior lower bound
  []
 
 
-Underfull \hbox (badness 8094) in paragraph at lines 380--380
+Underfull \hbox (badness 8094) in paragraph at lines 389--389
 []\T1/cmr/m/n/10.95 Rappresenta il miglior lower bound
  []
 
 
-Underfull \vbox (badness 10000) detected at line 381
+Underfull \vbox (badness 10000) detected at line 390
  []
 
-[10]
-Overfull \hbox (153.79875pt too wide) in paragraph at lines 402--403
+[10] [11]
+Overfull \hbox (153.79875pt too wide) in paragraph at lines 411--412
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
-[11]
-Underfull \hbox (badness 5302) in paragraph at lines 424--424
+
+Underfull \hbox (badness 5302) in paragraph at lines 433--433
 \T1/cmr/m/n/10.95 mostra a video: si è scelto di
  []
 
 
-Underfull \hbox (badness 2197) in paragraph at lines 424--424
+Underfull \hbox (badness 2197) in paragraph at lines 433--433
 \T1/cmr/m/n/10.95 con-dizionare l' es-e-cuzione di molte
  []
 
 
-Overfull \hbox (6.3698pt too wide) in paragraph at lines 425--425
+Overfull \hbox (6.3698pt too wide) in paragraph at lines 434--434
  \T1/cmr/m/n/10.95 TICKS_PER_SECOND 
  []
 
 
-Underfull \hbox (badness 3826) in paragraph at lines 425--425
+Underfull \hbox (badness 3826) in paragraph at lines 434--434
 \T1/cmr/m/n/10.95 unità di misura per il tempo di
  []
 
 [12]
-Overfull \hbox (32.97293pt too wide) in paragraph at lines 448--450
+Overfull \hbox (32.97293pt too wide) in paragraph at lines 457--459
 \T1/cmr/m/n/10.95 La classe \T1/cmr/bx/n/10.95 Path-Ge-netic \T1/cmr/m/n/10.95 
 uti-liz-zata per mem-o-riz-zare i dati di una soluzione gener-ica, es-tende \T1
 /cmr/bx/n/10.95 Path-Stan-dard
  []
 
 [13]
-Overfull \hbox (17.12997pt too wide) in paragraph at lines 494--497
+Overfull \hbox (17.12997pt too wide) in paragraph at lines 503--506
 \T1/cmr/m/n/10.95 Lo sviluppo del pro-gramma è in-iziato re-al-iz-zando una op-
 por-tuna fun-zione per in-ter-pretare cor-ret-ta-mente
  []
 
 [14] [15] [16]
-Overfull \hbox (15.23125pt too wide) in paragraph at lines 596--598
+Overfull \hbox (15.23125pt too wide) in paragraph at lines 605--607
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][]  
  []
 
 [17]
-Overfull \hbox (65.61943pt too wide) in paragraph at lines 675--677
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 684--686
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][]  
  []
 
 
-Overfull \hbox (330.1574pt too wide) in paragraph at lines 679--680
+Overfull \hbox (330.1574pt too wide) in paragraph at lines 688--689
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (8.00603pt too wide) in paragraph at lines 694--695
+Overfull \hbox (8.00603pt too wide) in paragraph at lines 703--704
 []\T1/cmr/bx/n/10.95 options\T1/cmr/m/n/10.95 : A questo parametro pos-sono es-
 sere pas-sate solo i seguenti due val-ori dell' enu-mer-azione
  []
 
 
-Overfull \hbox (7.80334pt too wide) in paragraph at lines 698--699
+Overfull \hbox (7.80334pt too wide) in paragraph at lines 707--708
 []\T1/cmr/bx/n/10.95 StringSplitOptions.RemoveEmptyEntries\T1/cmr/m/n/10.95 : i
 n-dica che gli el-e-menti dell'array ri-tor-nato
  []
 
 [18]
-Overfull \hbox (3.5395pt too wide) in paragraph at lines 723--724
+Overfull \hbox (3.5395pt too wide) in paragraph at lines 732--733
 \T1/cmr/m/n/10.95 In questo para-grafo ve-dremo come è pos-si-bile creare da pr
 o-gramma un mod-ello matem-atico at-traverso
  []
 
 
-Overfull \hbox (5.44371pt too wide) in paragraph at lines 728--729
+Overfull \hbox (5.44371pt too wide) in paragraph at lines 737--738
 \T1/cmr/m/n/10.95 Per is-tanziare un nuovo mod-ello di pro-gram-mazione lin-ear
 e è nec-es-sario in-izial-iz-zare un \T1/cmr/bx/n/10.95 en-vi-ron-ment
  []
 
 
-Overfull \hbox (71.91795pt too wide) in paragraph at lines 748--750
+Overfull \hbox (71.91795pt too wide) in paragraph at lines 757--759
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][]  
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 761--762
+Underfull \hbox (badness 10000) in paragraph at lines 770--771
 
  []
 
 [19]
-Overfull \hbox (267.17216pt too wide) in paragraph at lines 768--770
+Overfull \hbox (267.17216pt too wide) in paragraph at lines 777--779
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 790--791
+Underfull \hbox (badness 10000) in paragraph at lines 799--800
 
  []
 
 
-Overfull \hbox (3.25421pt too wide) in paragraph at lines 792--795
+Overfull \hbox (3.25421pt too wide) in paragraph at lines 801--804
 \T1/cmr/m/n/10.95 Una ul-te-ri-ore con-sid-er-azione nec-es-saria è la seguente
 : come mostrato poco fa il metodo \T1/cmr/bx/n/10.95 CPXnew-cols
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 792--795
+Underfull \hbox (badness 10000) in paragraph at lines 801--804
 
  []
 
 [20]
-Overfull \hbox (103.41057pt too wide) in paragraph at lines 803--804
+Overfull \hbox (103.41057pt too wide) in paragraph at lines 812--813
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][]  
  []
 
 
-Overfull \hbox (65.61943pt too wide) in paragraph at lines 810--811
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 819--820
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (449.82933pt too wide) in paragraph at lines 815--816
+Overfull \hbox (449.82933pt too wide) in paragraph at lines 824--825
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1180,7 +1180,7 @@ Overfull \hbox (449.82933pt too wide) in paragraph at lines 815--816
  []
 
 
-Overfull \hbox (544.30717pt too wide) in paragraph at lines 816--817
+Overfull \hbox (544.30717pt too wide) in paragraph at lines 825--826
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1189,32 +1189,32 @@ Overfull \hbox (544.30717pt too wide) in paragraph at lines 816--817
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 822--823
+Underfull \hbox (badness 10000) in paragraph at lines 831--832
 
  []
 
 
-Overfull \hbox (367.94853pt too wide) in paragraph at lines 827--828
+Overfull \hbox (367.94853pt too wide) in paragraph at lines 836--837
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][]  
  []
 
 [21]
-Overfull \hbox (40.42534pt too wide) in paragraph at lines 865--866
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 874--875
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (20.47646pt too wide) in paragraph at lines 882--884
+Overfull \hbox (20.47646pt too wide) in paragraph at lines 891--893
 \T1/cmr/m/n/10.95 Introduciamo ora una sec-onda in-ter-fac-cia \T1/cmr/bx/n/10.
 95 ILin-ear-Nu-m-Expr \T1/cmr/m/n/10.95 che come si può in-tuire viene im-ple-m
 en-tata
  []
 
 [22]
-Overfull \hbox (210.48546pt too wide) in paragraph at lines 916--918
+Overfull \hbox (210.48546pt too wide) in paragraph at lines 925--927
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1222,27 +1222,27 @@ Overfull \hbox (210.48546pt too wide) in paragraph at lines 916--918
  []
 
 
-Overfull \hbox (109.70909pt too wide) in paragraph at lines 920--922
+Overfull \hbox (109.70909pt too wide) in paragraph at lines 929--931
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (185.29137pt too wide) in paragraph at lines 922--923
+Overfull \hbox (185.29137pt too wide) in paragraph at lines 931--932
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 
-Overfull \hbox (5.18108pt too wide) in paragraph at lines 928--930
+Overfull \hbox (5.18108pt too wide) in paragraph at lines 937--939
 \T1/cmr/m/n/10.95 Nel primo caso risulta suf-fi-ciente in-vo-care i metodi non 
 statici \T1/cmr/bx/n/10.95 Ad-dMin-i-mize \T1/cmr/m/n/10.95 op-pure \T1/cmr/bx/
 n/10.95 Ad-dMax-i-mize
  []
 
 
-Overfull \hbox (26.8935pt too wide) in paragraph at lines 936--938
+Overfull \hbox (26.8935pt too wide) in paragraph at lines 945--947
 []\T1/cmr/m/n/10.95 Per quanto riguarda i vin-coli è nec-es-sario uti-liz-zare 
 i metodi \T1/cmr/bx/n/10.95 Ad-dEq\T1/cmr/m/n/10.95 , \T1/cmr/bx/n/10.95 Ad-dLe
 \T1/cmr/m/n/10.95 , \T1/cmr/bx/n/10.95 Ad-dGe \T1/cmr/m/n/10.95 che rispet-ti-v
@@ -1250,14 +1250,14 @@ a-mente
  []
 
 [23]
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 963--965
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 972--974
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 969--970
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 978--979
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1265,73 +1265,73 @@ Overfull \hbox (122.30614pt too wide) in paragraph at lines 969--970
  []
 
 
-Overfull \hbox (17.23354pt too wide) in paragraph at lines 975--976
+Overfull \hbox (17.23354pt too wide) in paragraph at lines 984--985
 []\T1/cmr/m/n/10.95 Spiegato come è pos-si-bile creare un mod-ello C# risulta c
 om-pren-si-bile la scelta di re-al-iz-zare un'opportuna
  []
 
 
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 978--979
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 987--988
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][]  
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 989--990
+Underfull \hbox (badness 10000) in paragraph at lines 998--999
 
  []
 
 
-Overfull \hbox (8.93625pt too wide) in paragraph at lines 997--999
+Overfull \hbox (8.93625pt too wide) in paragraph at lines 1006--1008
 \T1/cmr/m/n/10.95 nello stan-dard out-put da noi definito[][][][][]: in-izial-m
 ente tro-vi-amo le im-postazioni di risoluzione se-lezion-ate
  []
 
 [24]
-Overfull \hbox (15.81462pt too wide) in paragraph at lines 1028--1034
+Overfull \hbox (15.81462pt too wide) in paragraph at lines 1037--1043
 \T1/cmr/m/n/10.95 Il primo metodo sper-i-men-tato prende il nome di \T1/cmr/bx/
 n/10.95 LOOP\T1/cmr/m/n/10.95 . -----------------------------------------------
 --------------
  []
 
 
-Overfull \hbox (5.95378pt too wide) in paragraph at lines 1028--1034
+Overfull \hbox (5.95378pt too wide) in paragraph at lines 1037--1043
 \T1/cmr/m/n/10.95 É im-por-tante far no-tare che ogni it-er-azione del loop i v
 in-coli ag-giunti nella prece-dente sono ovvi-a-mente
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1028--1034
+Underfull \hbox (badness 10000) in paragraph at lines 1037--1043
 
  []
 
 
-Overfull \hbox (5.06567pt too wide) in paragraph at lines 1035--1038
+Overfull \hbox (5.06567pt too wide) in paragraph at lines 1044--1047
 []\T1/cmr/m/n/10.95 Per poter im-ple-mentare il metodo Loop risulta quindi ev-i
 -dente la ne-ces-sità di svilup-pare un'opportuna
  []
 
 
-Overfull \hbox (10.66077pt too wide) in paragraph at lines 1035--1038
+Overfull \hbox (10.66077pt too wide) in paragraph at lines 1044--1047
 \T1/cmr/m/n/10.95 con-nesse in-di-cando an-che quali lati sono a loro ap-parte-
 nenti. I det-tagli riguardo le loro im-ple-men-tazioni
  []
 
 
-Overfull \hbox (7.56967pt too wide) in paragraph at lines 1035--1038
+Overfull \hbox (7.56967pt too wide) in paragraph at lines 1044--1047
 \T1/cmr/m/n/10.95 sono vis-i-bili nella ap-pen-dice di questo testo, per ora sp
 eci-fichi-amo so-la-mente che al ter-mine dell'utilizzo
  []
 
 [25]
-Overfull \hbox (16.02403pt too wide) in paragraph at lines 1058--1062
+Overfull \hbox (16.02403pt too wide) in paragraph at lines 1067--1071
 \T1/cmr/m/n/10.95 Come già spec-i-fi-cato nella sezione riguardo il metodo \T1/
 cmr/bx/n/10.95 LOOP \T1/cmr/m/n/10.95 questi due metodi di sup-porto ap-parte-n
 enti
  []
 
 
-Overfull \hbox (5.88542pt too wide) in paragraph at lines 1063--1064
+Overfull \hbox (5.88542pt too wide) in paragraph at lines 1072--1073
 \T1/cmr/m/n/10.95 con-tenga all'indice $\OML/cmm/m/it/10.95 i \OMS/cmsy/m/n/10.
 95   \OML/cmm/m/it/10.95 esimo$ \T1/cmr/m/n/10.95 l'identificativo della \T1/cm
 r/bx/n/10.95 cc \T1/cmr/m/n/10.95 alla quale ap-par-tiene il nodo $\OML/cmm/m/i
@@ -1339,60 +1339,60 @@ t/10.95 i$[][][][][]\T1/cmr/m/n/10.95 . L'inizializzazione
  []
 
 [26]
-Overfull \hbox (449.82933pt too wide) in paragraph at lines 1081--1083
+Overfull \hbox (449.82933pt too wide) in paragraph at lines 1090--1092
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (0.61115pt too wide) in paragraph at lines 1090--1091
+Overfull \hbox (0.61115pt too wide) in paragraph at lines 1099--1100
 []\T1/cmr/bx/n/10.95 rcExpr\T1/cmr/m/n/10.95 : Lista all' in-terno della quale 
 ven-gono mem-o-riz-zate le espres-sioni con-te-nenti le vari-abili
  []
 
 
-Overfull \hbox (443.5308pt too wide) in paragraph at lines 1103--1105
+Overfull \hbox (443.5308pt too wide) in paragraph at lines 1112--1114
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][]  
  []
 
 [27] [28]
-Overfull \hbox (15.23125pt too wide) in paragraph at lines 1162--1163
+Overfull \hbox (15.23125pt too wide) in paragraph at lines 1171--1172
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (8.193pt too wide) in paragraph at lines 1175--1176
+Overfull \hbox (8.193pt too wide) in paragraph at lines 1184--1185
 \T1/cmr/m/n/10.95 cor-rente ci as-si-cura che le due liste \T1/cmr/bx/n/10.95 r
 c-Expr \T1/cmr/m/n/10.95 e \T1/cmr/bx/n/10.95 buffer-Co-ef-fRC \T1/cmr/m/n/10.9
 5 con-tengano tutti i dati per im-ple-mentare
  []
 
 [29]
-Overfull \hbox (0.35017pt too wide) in paragraph at lines 1186--1189
+Overfull \hbox (0.35017pt too wide) in paragraph at lines 1195--1198
 []\T1/cmr/bx/n/10.95 prima cat-e-go-ria\T1/cmr/m/n/10.95 : du-rante la risoluzi
 one del prob-lema at-traverso la tec-nica del \T1/cmr/bx/n/10.95 Branch&Cut\T1/
 cmr/m/n/10.95 ,
  []
 
 
-Overfull \hbox (3.11978pt too wide) in paragraph at lines 1189--1190
+Overfull \hbox (3.11978pt too wide) in paragraph at lines 1198--1199
 \T1/cmr/m/n/10.95 risul-tano espo-nen-ziali rispetto al nu-mero di vari-abili c
 he carat-ter-iz-zano il prob-lema in ques-tione.
  []
 
 [30]
-<Immagini/"InterfacciaGrafica".jpg, id=526, 759.43726pt x 155.98276pt>
+<Immagini/"InterfacciaGrafica".jpg, id=528, 759.43726pt x 155.98276pt>
 File: Immagini/"InterfacciaGrafica".jpg Graphic file (type jpg)
 <use Immagini/"InterfacciaGrafica".jpg>
 Package pdftex.def Info: Immagini/"InterfacciaGrafica".jpg  used on input line 
-1217. on input line 1217.
+1226. on input line 1226.
 Package pdftex.def Info: Requested size: 469.75502pt x 96.48695pt on input line
- 1217.
+ 1226.
  [31 <./Immagini/InterfacciaGrafica.jpg>]
-Overfull \hbox (103.3999pt too wide) in paragraph at lines 1231--1232
+Overfull \hbox (103.3999pt too wide) in paragraph at lines 1240--1241
 \OT1/cmr/m/n/10.95 [0\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10
 .95 listArray\OT1/cmr/m/n/10.95 [0])[0]]\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.9
 5 [0\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 listArray\OT1
@@ -1408,7 +1408,7 @@ n/10.95 (\OML/cmm/m/it/10.95 listArray\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 i
  []
 
 
-Overfull \hbox (229.38103pt too wide) in paragraph at lines 1266--1267
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 1275--1276
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1416,383 +1416,383 @@ Overfull \hbox (229.38103pt too wide) in paragraph at lines 1266--1267
  []
 
 [32]
-Overfull \hbox (160.09727pt too wide) in paragraph at lines 1270--1271
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 1279--1280
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (204.18694pt too wide) in paragraph at lines 1274--1275
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 1283--1284
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 
-Overfull \hbox (5.2434pt too wide) in paragraph at lines 1294--1295
+Overfull \hbox (5.2434pt too wide) in paragraph at lines 1303--1304
 []\T1/cmr/m/n/10.95 Dove chiara-mente \T1/cmr/bx/n/10.95 x \T1/cmr/m/n/10.95 è 
 il vet-tore con-te-nente i rifer-i-menti alle vari-abili uti-liz-zate dal mod-e
 llo matem-atico
  []
 
 
-Overfull \hbox (0.23787pt too wide) in paragraph at lines 1298--1303
+Overfull \hbox (0.23787pt too wide) in paragraph at lines 1307--1312
 \T1/cmr/m/n/10.95 elim-i-na-tion all'interno di un sis-tema. Ciò che varia risp
 etto al metodo \T1/cmr/bx/n/10.95 Loop \T1/cmr/m/n/10.95 pre-sen-tato in prece-
 denza
  []
 
 [33]
-<Immagini/"Callback".jpg, id=605, 376.40625pt x 140.32425pt>
+<Immagini/"Callback".jpg, id=607, 376.40625pt x 140.32425pt>
 File: Immagini/"Callback".jpg Graphic file (type jpg)
 <use Immagini/"Callback".jpg>
-Package pdftex.def Info: Immagini/"Callback".jpg  used on input line 1306. on i
-nput line 1306.
+Package pdftex.def Info: Immagini/"Callback".jpg  used on input line 1315. on i
+nput line 1315.
 Package pdftex.def Info: Requested size: 469.75502pt x 175.13722pt on input lin
-e 1306.
+e 1315.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1310--1311
+Underfull \hbox (badness 10000) in paragraph at lines 1319--1320
 
  []
 
 
-Overfull \hbox (2.62569pt too wide) in paragraph at lines 1314--1315
+Overfull \hbox (2.62569pt too wide) in paragraph at lines 1323--1324
 []\T1/cmr/m/n/10.95 Maggiore è il nu-mero di vin-coli che an-di-amo ad in-serir
 e, mag-giore di-venta il tempo di risoluzione
  []
 
 [34 <./Immagini/Callback.jpg>]
-Overfull \hbox (2.47267pt too wide) in paragraph at lines 1331--1333
+Overfull \hbox (2.47267pt too wide) in paragraph at lines 1340--1342
 []\T1/cmr/m/n/10.95 Dove, come al solito, cplex è l'instanza della classe \T1/c
 mr/bx/n/10.95 Cplex \T1/cmr/m/n/10.95 sulla quale defini-amo il mod-ello matem-
 atico
  []
 
 
-Overfull \hbox (191.58989pt too wide) in paragraph at lines 1336--1338
+Overfull \hbox (191.58989pt too wide) in paragraph at lines 1345--1347
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][]  
  []
 
 [35] [36]
-Overfull \hbox (6.51692pt too wide) in paragraph at lines 1399--1401
+Overfull \hbox (6.51692pt too wide) in paragraph at lines 1408--1410
 []\T1/cmr/bx/n/10.95 Add\T1/cmr/m/n/10.95 : è la fun-zione era-di-tata dalla cl
 asse \T1/cmr/bx/n/10.95 Lazy-Con-straint-Call-back \T1/cmr/m/n/10.95 che per-me
 -tte di ag-giun-gere
  []
 
 [37]
-<Immagini/"SoluzioneFrazionaria".jpg, id=657, 417.9615pt x 373.395pt>
+<Immagini/"SoluzioneFrazionaria".jpg, id=659, 417.9615pt x 373.395pt>
 File: Immagini/"SoluzioneFrazionaria".jpg Graphic file (type jpg)
 <use Immagini/"SoluzioneFrazionaria".jpg>
 Package pdftex.def Info: Immagini/"SoluzioneFrazionaria".jpg  used on input lin
-e 1421. on input line 1421.
+e 1430. on input line 1430.
 Package pdftex.def Info: Requested size: 469.75502pt x 419.6866pt on input line
- 1421.
+ 1430.
  [38 <./Immagini/SoluzioneFrazionaria.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 1440--1441
+Underfull \hbox (badness 10000) in paragraph at lines 1449--1450
 
  []
 
 [39]
-Overfull \hbox (116.7607pt too wide) in paragraph at lines 1469--1471
+Overfull \hbox (116.7607pt too wide) in paragraph at lines 1478--1480
 \T1/cmr/m/n/10.95 L'installazione di questo tipo di call-back avviene at-traver
 so l'invocazione della rou-tine \T1/cmr/bx/n/10.95 CPXset-lazy-con-straint-call
 -back-func
  []
 
 
-Overfull \hbox (210.48546pt too wide) in paragraph at lines 1474--1476
+Overfull \hbox (210.48546pt too wide) in paragraph at lines 1483--1485
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (260.87364pt too wide) in paragraph at lines 1500--1502
+Overfull \hbox (260.87364pt too wide) in paragraph at lines 1509--1511
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [40]
-Overfull \hbox (75.07999pt too wide) in paragraph at lines 1529--1530
+Overfull \hbox (75.07999pt too wide) in paragraph at lines 1538--1539
 []\T1/cmr/m/n/10.95 Successivamente è nec-es-sario as-seg-nare al parametro \T1
 /cmr/bx/n/10.95 *user-ac-tion_p \T1/cmr/m/n/10.95 il val-ore \T1/cmr/bx/n/10.95
  CPX_CALLBACK_DEFAULT\T1/cmr/m/n/10.95 . 
  []
 
 
-Overfull \hbox (36.48619pt too wide) in paragraph at lines 1531--1532
+Overfull \hbox (36.48619pt too wide) in paragraph at lines 1540--1541
 []\T1/cmr/m/n/10.95 Per ot-tenere la soluzione del ri-las-sa-mento con-tinuo è 
 nec-es-sario uti-liz-zare il metodo \T1/cmr/bx/n/10.95 CPXget-call-bac-kn-odex
  []
 
 
-Overfull \hbox (166.3958pt too wide) in paragraph at lines 1535--1537
+Overfull \hbox (166.3958pt too wide) in paragraph at lines 1544--1546
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (24.17696pt too wide) in paragraph at lines 1542--1543
+Overfull \hbox (24.17696pt too wide) in paragraph at lines 1551--1552
 []\T1/cmr/m/n/10.95 Per quanto riguarda env, cb-data, where-from vale la de-scr
 izione vista per il metodo my-Lazy-Call-Back; 
  []
 
 
-LaTeX Warning: Command \textendash invalid in math mode on input line 1548.
+LaTeX Warning: Command \textendash invalid in math mode on input line 1557.
 
 [41]
-Underfull \hbox (badness 6510) in paragraph at lines 1564--1564
+Underfull \hbox (badness 6510) in paragraph at lines 1573--1573
 [][][]\T1/cmr/m/n/9 Notiamo in re-altà che l'implementazione delle \T1/cmr/m/it
 /9 user-cut call-back \T1/cmr/m/n/9 avviene sem-pre in con-comi-tanza
  []
 
 
-Overfull \hbox (204.18694pt too wide) in paragraph at lines 1570--1572
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 1579--1581
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][]  
  []
 
 
-Overfull \hbox (235.67955pt too wide) in paragraph at lines 1578--1580
+Overfull \hbox (235.67955pt too wide) in paragraph at lines 1587--1589
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][]  
  []
 
 [42]
-Overfull \hbox (134.90318pt too wide) in paragraph at lines 1591--1593
+Overfull \hbox (134.90318pt too wide) in paragraph at lines 1600--1602
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 1602--1603
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 1611--1612
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][]  
  []
 
 
-Overfull \hbox (4.39053pt too wide) in paragraph at lines 1623--1624
+Overfull \hbox (4.39053pt too wide) in paragraph at lines 1632--1633
 []\T1/cmr/bx/n/10.95 *elist\T1/cmr/m/n/10.95 : vet-tore di di-men-sione $\OT1/c
 mr/m/n/10.95 2 \OMS/cmsy/m/n/10.95  \OML/cmm/m/it/10.95 econut$\T1/cmr/m/n/10.
 95 , con-tiene al suo in-terno tutti i lati del grafo carat-ter-iz-zati
  []
 
 [43]
-Overfull \hbox (12.84775pt too wide) in paragraph at lines 1641--1642
+Overfull \hbox (12.84775pt too wide) in paragraph at lines 1650--1651
 \T1/cmr/m/n/10.95 con-nessa, è strut-turato in modo che comp-scount[i] con-teng
 a il nu-mero di nodi pre-sente nell'i-esima
  []
 
 
-Overfull \hbox (81.30016pt too wide) in paragraph at lines 1645--1646
+Overfull \hbox (81.30016pt too wide) in paragraph at lines 1654--1655
 \T1/cmr/m/n/10.95 as-seg-nare sia alle vari-abili che ai pun-ta-tori il medes-i
 mo nome che as-sumono all'interno di \T1/cmr/m/it/10.95 CC-cut_connect_componen
 ts\T1/cmr/m/n/10.95 . 
  []
 
 
-Overfull \hbox (128.60466pt too wide) in paragraph at lines 1660--1661
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 1669--1670
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][]  
  []
 
 
-Overfull \hbox (65.61943pt too wide) in paragraph at lines 1661--1662
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 1670--1671
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (449.82933pt too wide) in paragraph at lines 1669--1671
+Overfull \hbox (449.82933pt too wide) in paragraph at lines 1678--1680
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][]  
  []
 
 [44]
-Overfull \hbox (6.31863pt too wide) in paragraph at lines 1695--1696
+Overfull \hbox (6.31863pt too wide) in paragraph at lines 1704--1705
 \T1/cmr/m/n/10.95 ap-parte-nenti alla t-esima com-po-nente con-nessa mem-o-riz-
 zata in \T1/cmr/m/it/10.95 comps\T1/cmr/m/n/10.95 . Si os-serva che \T1/cmr/m/i
 t/10.95 k2 \T1/cmr/m/n/10.95 è in-izial-iz-zato
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 1706--1707
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 1715--1716
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][]  
  []
 
 
-Overfull \hbox (40.42534pt too wide) in paragraph at lines 1708--1709
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 1717--1718
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  
  []
 
 
-Overfull \hbox (317.56035pt too wide) in paragraph at lines 1726--1728
+Overfull \hbox (317.56035pt too wide) in paragraph at lines 1735--1737
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][]  
  []
 
 [45]
-Overfull \hbox (223.0825pt too wide) in paragraph at lines 1758--1760
+Overfull \hbox (223.0825pt too wide) in paragraph at lines 1767--1769
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][]  
  []
 
 
-Overfull \hbox (41.19702pt too wide) in paragraph at lines 1762--1763
+Overfull \hbox (41.19702pt too wide) in paragraph at lines 1771--1772
 []\T1/cmr/m/n/10.95 Dove oc-corre so-la-mente far no-tare che la fun-zione call
 -back da noi definita prende il nome \T1/cmr/bx/n/10.95 doit-Func-Concorde
  []
 
 [46]
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 1781--1783
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 1790--1792
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][]  
  []
 
 
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1817--1818
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1826--1827
 [][][][][]  
  []
 
 
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1818--1819
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1827--1828
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][]  
  []
 
 
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 1819--1820
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 1828--1829
 [][][][][]  
  []
 
 [47]
-Overfull \hbox (260.87364pt too wide) in paragraph at lines 1825--1827
+Overfull \hbox (260.87364pt too wide) in paragraph at lines 1834--1836
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (12.72504pt too wide) in paragraph at lines 1838--1842
+Overfull \hbox (12.72504pt too wide) in paragraph at lines 1847--1851
 \T1/cmr/m/n/10.95 Fino a questo mo-mento sono stati pre-sen-tati al-go-ritmi ch
 e, alla loro nat-u-rale ter-mi-nazione, garan-tis-cono
  []
 
-<Immagini/"ProceduraGreedy".jpg, id=870, 358.941pt x 280.6485pt>
+<Immagini/"ProceduraGreedy".jpg, id=872, 358.941pt x 280.6485pt>
 File: Immagini/"ProceduraGreedy".jpg Graphic file (type jpg)
 <use Immagini/"ProceduraGreedy".jpg>
 Package pdftex.def Info: Immagini/"ProceduraGreedy".jpg  used on input line 185
-0. on input line 1850.
+9. on input line 1859.
 Package pdftex.def Info: Requested size: 469.75502pt x 367.29251pt on input lin
-e 1850.
+e 1859.
 [48]
-Overfull \hbox (3.79161pt too wide) in paragraph at lines 1860--1861
+Overfull \hbox (3.79161pt too wide) in paragraph at lines 1869--1870
 \T1/cmr/m/n/10.95 let-ter-atura. Limi-ti-amoci quindi ad una de-scrizione del c
 on-cetto fon-da-men-tale alla base dell'algoritmo:
  []
 
 
-Overfull \hbox (4.47183pt too wide) in paragraph at lines 1860--1861
+Overfull \hbox (4.47183pt too wide) in paragraph at lines 1869--1870
 \T1/cmr/m/n/10.95 dato un qual-si-asi per-corso (soluzione) parziale, il modo m
 igliore per am-pli-arlo è ba-nal-mente at-traverso
  []
 
 [49 <./Immagini/ProceduraGreedy.jpg>]
-<Immagini/"ng".jpg, id=899, 1223.16975pt x 462.528pt>
+<Immagini/"ng".jpg, id=901, 1223.16975pt x 462.528pt>
 File: Immagini/"ng".jpg Graphic file (type jpg)
 <use Immagini/"ng".jpg>
-Package pdftex.def Info: Immagini/"ng".jpg  used on input line 1864. on input l
-ine 1864.
+Package pdftex.def Info: Immagini/"ng".jpg  used on input line 1873. on input l
+ine 1873.
 Package pdftex.def Info: Requested size: 469.75502pt x 177.63272pt on input lin
-e 1864.
+e 1873.
  [50 <./Immagini/ng.jpg>]
-Overfull \hbox (134.90318pt too wide) in paragraph at lines 1882--1883
+Overfull \hbox (134.90318pt too wide) in paragraph at lines 1891--1892
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 1884--1885
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 1893--1894
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][]  
  []
 
 
-Overfull \hbox (311.26183pt too wide) in paragraph at lines 1908--1909
+Overfull \hbox (311.26183pt too wide) in paragraph at lines 1917--1918
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [51]
-Overfull \hbox (241.97807pt too wide) in paragraph at lines 1929--1931
+Overfull \hbox (241.97807pt too wide) in paragraph at lines 1938--1940
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [52]
-<Immagini/"2-opt".png, id=977, 676.5275pt x 227.85126pt>
+<Immagini/"2-opt".png, id=979, 676.5275pt x 227.85126pt>
 File: Immagini/"2-opt".png Graphic file (type png)
 <use Immagini/"2-opt".png>
-Package pdftex.def Info: Immagini/"2-opt".png  used on input line 1958. on inpu
-t line 1958.
+Package pdftex.def Info: Immagini/"2-opt".png  used on input line 1967. on inpu
+t line 1967.
 Package pdftex.def Info: Requested size: 469.75502pt x 158.21535pt on input lin
-e 1958.
+e 1967.
 
-Overfull \hbox (10.56955pt too wide) in paragraph at lines 1962--1966
+Overfull \hbox (10.56955pt too wide) in paragraph at lines 1971--1975
 []\T1/cmr/m/n/10.95 Viene da sé che ap-pli-care l'approccio $\OT1/cmr/m/n/10.95
  2 \OMS/cmsy/m/n/10.95   \OML/cmm/m/it/10.95 Opt$ \T1/cmr/m/n/10.95 a qual-si-a
 si cop-pia di archi non garan-tisce un miglio-ra-mento
  []
 
 
-Overfull \hbox (27.19856pt too wide) in paragraph at lines 1962--1966
+Overfull \hbox (27.19856pt too wide) in paragraph at lines 1971--1975
 \T1/cmr/m/n/10.95 migliore[][][][][] è nec-es-sario con-frontare tutte le cop-p
 ie pos-si-bili ot-te-nendo quindi una com-p-lessità com-putazione
  []
 
 [53 <./Immagini/2-opt.png (PNG copy)>]
-Overfull \hbox (7.30736pt too wide) in paragraph at lines 1982--1984
+Overfull \hbox (7.30736pt too wide) in paragraph at lines 1991--1993
 \T1/cmr/m/n/10.95 per-me-tte di mem-o-riz-zare una soluzione del prob-lema come
  un per-corso or-di-nato. Molto sem-plice-mente
  []
 
 
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 2001--2002
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2010--2011
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 2002--2003
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2011--2012
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 2003--2004
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2012--2013
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 [54]
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 2004--2006
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2013--2015
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 
-Overfull \hbox (160.09727pt too wide) in paragraph at lines 2006--2007
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2015--2016
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][]  
  []
 
 
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 2007--2009
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2016--2018
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [55]
-Overfull \hbox (128.60466pt too wide) in paragraph at lines 2051--2052
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2060--2061
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1800,7 +1800,7 @@ Overfull \hbox (128.60466pt too wide) in paragraph at lines 2051--2052
  []
 
 
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 2054--2055
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2063--2064
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1808,14 +1808,14 @@ Overfull \hbox (122.30614pt too wide) in paragraph at lines 2054--2055
  []
 
 
-Overfull \hbox (254.57512pt too wide) in paragraph at lines 2073--2075
+Overfull \hbox (254.57512pt too wide) in paragraph at lines 2082--2084
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (29.171pt too wide) in paragraph at lines 2077--2077
+Overfull \hbox (29.171pt too wide) in paragraph at lines 2086--2086
 [][]\T1/cmr/bx/n/12 GENERAZIONE NU-MERI CA-SU-ALI - SE-MERAN-DOM DA SPOSTARE!!!
 !!!!!!!!!!!!
  []
@@ -1823,142 +1823,142 @@ Overfull \hbox (29.171pt too wide) in paragraph at lines 2077--2077
 [56]
 File: Immagini/"ng".jpg Graphic file (type jpg)
 <use Immagini/"ng".jpg>
-Package pdftex.def Info: Immagini/"ng".jpg  used on input line 2111. on input l
-ine 2111.
+Package pdftex.def Info: Immagini/"ng".jpg  used on input line 2120. on input l
+ine 2120.
 Package pdftex.def Info: Requested size: 469.75502pt x 177.63272pt on input lin
-e 2111.
+e 2120.
 
-Overfull \hbox (4.4605pt too wide) in paragraph at lines 2115--2116
+Overfull \hbox (4.4605pt too wide) in paragraph at lines 2124--2125
 \T1/cmr/m/n/10.95 come parametro un in-tero che setta il val-ore del seme: sarà
  a questo punto com-pito del pro-gram-ma-tore
  []
 
 [57]
-Overfull \hbox (6.66415pt too wide) in paragraph at lines 2135--2140
+Overfull \hbox (6.66415pt too wide) in paragraph at lines 2144--2149
 \T1/cmr/m/n/10.95 rap-p-re-sen-tano ipotetiche soluzioni al prob-lema dato. Ogn
 i in-di-viduo della popo-lazione viene cod-i-fi-cato
  []
 
 [58]
-Overfull \hbox (1.78905pt too wide) in paragraph at lines 2154--2155
+Overfull \hbox (1.78905pt too wide) in paragraph at lines 2163--2164
 []\T1/cmr/bx/n/10.95 Crossover uni-forme\T1/cmr/m/n/10.95 : con-siste nello sca
 m-biare ca-sual-mente el-e-menti tra le soluzioni can-di-date
  []
 
-<Immagini/"selezioneSP".jpg, id=1116, 1362.89175pt x 317.38576pt>
+<Immagini/"selezioneSP".jpg, id=1118, 1362.89175pt x 317.38576pt>
 File: Immagini/"selezioneSP".jpg Graphic file (type jpg)
 <use Immagini/"selezioneSP".jpg>
-Package pdftex.def Info: Immagini/"selezioneSP".jpg  used on input line 2161. o
-n input line 2161.
+Package pdftex.def Info: Immagini/"selezioneSP".jpg  used on input line 2170. o
+n input line 2170.
 Package pdftex.def Info: Requested size: 469.75502pt x 109.39165pt on input lin
-e 2161.
+e 2170.
 [59 <./Immagini/selezioneSP.jpg>]
-<Immagini/"Mutazione".jpg, id=1125, 1357.4715pt x 168.02776pt>
+<Immagini/"Mutazione".jpg, id=1127, 1357.4715pt x 168.02776pt>
 File: Immagini/"Mutazione".jpg Graphic file (type jpg)
 <use Immagini/"Mutazione".jpg>
-Package pdftex.def Info: Immagini/"Mutazione".jpg  used on input line 2186. on 
-input line 2186.
+Package pdftex.def Info: Immagini/"Mutazione".jpg  used on input line 2195. on 
+input line 2195.
 Package pdftex.def Info: Requested size: 469.75502pt x 58.14655pt on input line
- 2186.
+ 2195.
 
-Overfull \hbox (67.31856pt too wide) in paragraph at lines 2192--2198
+Overfull \hbox (67.31856pt too wide) in paragraph at lines 2201--2207
 \T1/cmr/m/n/10.95 DI-CI-AMO DOPO???????. La prima gen-er-azione viene ot-tenuta
  at-traverso il metodo \T1/cmr/bx/n/10.95 Near-est-Neight-bor-Ge-netic
  []
 
 [60 <./Immagini/Mutazione.jpg>] [61]
-Overfull \hbox (90.81352pt too wide) in paragraph at lines 2217--2218
+Overfull \hbox (90.81352pt too wide) in paragraph at lines 2226--2227
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (286.06773pt too wide) in paragraph at lines 2224--2225
+Overfull \hbox (286.06773pt too wide) in paragraph at lines 2233--2234
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ]  
  []
 
 
-Overfull \hbox (210.48546pt too wide) in paragraph at lines 2227--2229
+Overfull \hbox (210.48546pt too wide) in paragraph at lines 2236--2238
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (65.61943pt too wide) in paragraph at lines 2243--2245
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 2252--2254
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [62]
-Overfull \hbox (304.9633pt too wide) in paragraph at lines 2262--2264
+Overfull \hbox (304.9633pt too wide) in paragraph at lines 2271--2273
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2281--2282
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2290--2291
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2288--2289
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2297--2298
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][]  
  []
 
 [63]
-Overfull \hbox (367.94853pt too wide) in paragraph at lines 2341--2343
+Overfull \hbox (367.94853pt too wide) in paragraph at lines 2350--2352
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [64] [65]
-Overfull \hbox (3.27429pt too wide) in paragraph at lines 2399--2400
+Overfull \hbox (3.27429pt too wide) in paragraph at lines 2408--2409
 \T1/cmr/m/n/10.95 gen-er-azione sceglien-done gli el-e-menti tra la vec-chia ge
 n-er-azione ed i suoi figli at-traverso una es-trazione
  []
 
 
-Overfull \hbox (512.81456pt too wide) in paragraph at lines 2403--2405
+Overfull \hbox (512.81456pt too wide) in paragraph at lines 2412--2414
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (9.10065pt too wide) in paragraph at lines 2438--2439
+Overfull \hbox (9.10065pt too wide) in paragraph at lines 2447--2448
 []\T1/cmr/m/n/10.95 La creazione della nuova gen-er-azione avviene es-traendo v
 al-ori ran-dom non su-pe-ri-ori ad \T1/cmr/m/it/10.95 up-perEx-trem-ity\T1/cmr/
 m/n/10.95 ,
  []
 
 [66]
-Overfull \hbox (90.81352pt too wide) in paragraph at lines 2457--2458
+Overfull \hbox (90.81352pt too wide) in paragraph at lines 2466--2467
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [67] [68]
-Overfull \hbox (4.54501pt too wide) in paragraph at lines 2505--2506
+Overfull \hbox (4.54501pt too wide) in paragraph at lines 2514--2515
 []\T1/cmr/m/n/10.95 In lin-guag-gio \T1/cmr/bx/n/10.95 C# \T1/cmr/m/n/10.95 l'o
 perazione di warm-start avviene at-traverso il metodo non statico \T1/cmr/bx/n/
 10.95 Ad-dMIP-Start
  []
 
 [69]
-<Immagini/"PreProcessing".jpg, id=1352, 754.017pt x 373.395pt>
+<Immagini/"PreProcessing".jpg, id=1354, 754.017pt x 373.395pt>
 File: Immagini/"PreProcessing".jpg Graphic file (type jpg)
 <use Immagini/"PreProcessing".jpg>
-Package pdftex.def Info: Immagini/"PreProcessing".jpg  used on input line 2533.
- on input line 2533.
+Package pdftex.def Info: Immagini/"PreProcessing".jpg  used on input line 2542.
+ on input line 2542.
 Package pdftex.def Info: Requested size: 754.01515pt x 373.39409pt on input lin
-e 2533.
+e 2542.
 
-Overfull \hbox (95.75633pt too wide) in paragraph at lines 2533--2535
+Overfull \hbox (95.75633pt too wide) in paragraph at lines 2542--2544
  [][] 
  []
 
 [70 <./Immagini/PreProcessing.jpg>]
-Overfull \hbox (367.94853pt too wide) in paragraph at lines 2557--2558
+Overfull \hbox (367.94853pt too wide) in paragraph at lines 2566--2567
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1967,14 +1967,14 @@ Overfull \hbox (367.94853pt too wide) in paragraph at lines 2557--2558
  []
 
 
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 2560--2561
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2569--2570
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][]  
  []
 
 
-Overfull \hbox (430.93376pt too wide) in paragraph at lines 2563--2564
+Overfull \hbox (430.93376pt too wide) in paragraph at lines 2572--2573
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1983,7 +1983,7 @@ Overfull \hbox (430.93376pt too wide) in paragraph at lines 2563--2564
  []
 
 
-Overfull \hbox (418.33672pt too wide) in paragraph at lines 2564--2565
+Overfull \hbox (418.33672pt too wide) in paragraph at lines 2573--2574
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -1991,54 +1991,54 @@ Overfull \hbox (418.33672pt too wide) in paragraph at lines 2564--2565
  []
 
 
-Overfull \hbox (134.90318pt too wide) in paragraph at lines 2565--2566
+Overfull \hbox (134.90318pt too wide) in paragraph at lines 2574--2575
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (197.88841pt too wide) in paragraph at lines 2568--2569
+Overfull \hbox (197.88841pt too wide) in paragraph at lines 2577--2578
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2579--2580
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2588--2589
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [71]
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 2601--2602
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 2610--2611
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (286.06773pt too wide) in paragraph at lines 2609--2610
+Overfull \hbox (286.06773pt too wide) in paragraph at lines 2618--2619
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2615--2616
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2624--2625
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (46.72386pt too wide) in paragraph at lines 2616--2618
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2625--2627
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (330.1574pt too wide) in paragraph at lines 2618--2619
+Overfull \hbox (330.1574pt too wide) in paragraph at lines 2627--2628
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2046,7 +2046,7 @@ Overfull \hbox (330.1574pt too wide) in paragraph at lines 2618--2619
  []
 
 
-Overfull \hbox (260.87364pt too wide) in paragraph at lines 2619--2620
+Overfull \hbox (260.87364pt too wide) in paragraph at lines 2628--2629
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2054,13 +2054,13 @@ Overfull \hbox (260.87364pt too wide) in paragraph at lines 2619--2620
  []
 
 
-Overfull \hbox (160.09727pt too wide) in paragraph at lines 2631--2633
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2640--2642
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][]  
  []
 
 [72]
-Overfull \hbox (349.05296pt too wide) in paragraph at lines 2650--2651
+Overfull \hbox (349.05296pt too wide) in paragraph at lines 2659--2660
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2068,13 +2068,13 @@ Overfull \hbox (349.05296pt too wide) in paragraph at lines 2650--2651
  []
 
 
-Overfull \hbox (78.21648pt too wide) in paragraph at lines 2654--2656
+Overfull \hbox (78.21648pt too wide) in paragraph at lines 2663--2665
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][]  
  []
 
 
-Overfull \hbox (128.60466pt too wide) in paragraph at lines 2659--2660
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2668--2669
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2082,7 +2082,7 @@ Overfull \hbox (128.60466pt too wide) in paragraph at lines 2659--2660
  []
 
 
-Overfull \hbox (405.73967pt too wide) in paragraph at lines 2662--2663
+Overfull \hbox (405.73967pt too wide) in paragraph at lines 2671--2672
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2090,14 +2090,14 @@ Overfull \hbox (405.73967pt too wide) in paragraph at lines 2662--2663
  []
 
 
-Overfull \hbox (248.2766pt too wide) in paragraph at lines 2665--2666
+Overfull \hbox (248.2766pt too wide) in paragraph at lines 2674--2675
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (550.6057pt too wide) in paragraph at lines 2668--2669
+Overfull \hbox (550.6057pt too wide) in paragraph at lines 2677--2678
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2105,7 +2105,7 @@ Overfull \hbox (550.6057pt too wide) in paragraph at lines 2668--2669
  []
 
 
-Overfull \hbox (323.85887pt too wide) in paragraph at lines 2674--2675
+Overfull \hbox (323.85887pt too wide) in paragraph at lines 2683--2684
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2113,38 +2113,38 @@ Overfull \hbox (323.85887pt too wide) in paragraph at lines 2674--2675
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2675--2677
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2684--2686
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][]  
  []
 
 
-Overfull \hbox (40.42534pt too wide) in paragraph at lines 2680--2681
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 2689--2690
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
   
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2681--2683
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2690--2692
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 2692--2693
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2701--2702
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][]  
  []
 
 [73]
-Overfull \hbox (128.60466pt too wide) in paragraph at lines 2696--2697
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2705--2706
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
 
-Overfull \hbox (349.05296pt too wide) in paragraph at lines 2702--2703
+Overfull \hbox (349.05296pt too wide) in paragraph at lines 2711--2712
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2153,7 +2153,7 @@ Overfull \hbox (349.05296pt too wide) in paragraph at lines 2702--2703
  []
 
 
-Overfull \hbox (600.99388pt too wide) in paragraph at lines 2705--2706
+Overfull \hbox (600.99388pt too wide) in paragraph at lines 2714--2715
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2162,7 +2162,7 @@ Overfull \hbox (600.99388pt too wide) in paragraph at lines 2705--2706
  []
 
 
-Overfull \hbox (594.69536pt too wide) in paragraph at lines 2706--2707
+Overfull \hbox (594.69536pt too wide) in paragraph at lines 2715--2716
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2171,14 +2171,14 @@ Overfull \hbox (594.69536pt too wide) in paragraph at lines 2706--2707
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2707--2708
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2716--2717
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (424.63524pt too wide) in paragraph at lines 2712--2713
+Overfull \hbox (424.63524pt too wide) in paragraph at lines 2721--2722
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2186,51 +2186,51 @@ Overfull \hbox (424.63524pt too wide) in paragraph at lines 2712--2713
  []
 
 
-Overfull \hbox (40.42534pt too wide) in paragraph at lines 2713--2715
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 2722--2724
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (160.09727pt too wide) in paragraph at lines 2737--2738
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2746--2747
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (204.18694pt too wide) in paragraph at lines 2738--2739
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 2747--2748
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][]  
  []
 
 
-Overfull \hbox (59.3209pt too wide) in paragraph at lines 2742--2743
+Overfull \hbox (59.3209pt too wide) in paragraph at lines 2751--2752
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (78.21648pt too wide) in paragraph at lines 2746--2748
+Overfull \hbox (78.21648pt too wide) in paragraph at lines 2755--2757
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [74]
-Overfull \hbox (103.41057pt too wide) in paragraph at lines 2760--2761
+Overfull \hbox (103.41057pt too wide) in paragraph at lines 2769--2770
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2763--2764
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2772--2773
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 []  
  []
 
 
-Overfull \hbox (361.65001pt too wide) in paragraph at lines 2765--2766
+Overfull \hbox (361.65001pt too wide) in paragraph at lines 2774--2775
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2238,13 +2238,13 @@ Overfull \hbox (361.65001pt too wide) in paragraph at lines 2765--2766
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 2770--2771
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2779--2780
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (229.38103pt too wide) in paragraph at lines 2778--2780
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 2787--2789
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2252,14 +2252,14 @@ Overfull \hbox (229.38103pt too wide) in paragraph at lines 2778--2780
  []
 
 
-Overfull \hbox (71.91795pt too wide) in paragraph at lines 2780--2781
+Overfull \hbox (71.91795pt too wide) in paragraph at lines 2789--2790
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2787--2788
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2796--2797
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][]  
@@ -2267,11 +2267,11 @@ Overfull \hbox (27.8283pt too wide) in paragraph at lines 2787--2788
 
 [75]
 
-LaTeX Warning: Command \` invalid in math mode on input line 2806.
+LaTeX Warning: Command \` invalid in math mode on input line 2815.
 
 Missing character: There is no à in font cmr10!
 
-Overfull \hbox (15.32906pt too wide) in paragraph at lines 2814--2815
+Overfull \hbox (15.32906pt too wide) in paragraph at lines 2823--2824
 \T1/cmr/m/n/10.95 speci-fico [] definisce la mas-sima dis-tanza di \T1/cmr/bx/n
 /10.95 Ham-ming[][][][][] \T1/cmr/m/n/10.95 che può sus-sis-tere fra $\OML/cmm/
 m/it/10.95 x[]$ \T1/cmr/m/n/10.95 e $\OML/cmm/m/it/10.95 x$[][][][][] \T1/cmr/m
@@ -2279,26 +2279,26 @@ m/it/10.95 x[]$ \T1/cmr/m/n/10.95 e $\OML/cmm/m/it/10.95 x$[][][][][] \T1/cmr/m
  []
 
 [76]
-Overfull \hbox (17.81178pt too wide) in paragraph at lines 2825--2826
+Overfull \hbox (17.81178pt too wide) in paragraph at lines 2834--2835
 \T1/cmr/m/n/10.95 Presentiamo ora il codice \T1/cmr/bx/n/10.95 com-men-tato \T1
 /cmr/m/n/10.95 che re-al-izza la tec-nica \T1/cmr/m/it/10.95 Lo-cal Branch-ing 
 \T1/cmr/m/n/10.95 in ver-sione \T1/cmr/bx/n/10.95 asim-met-rica
  []
 
 
-Overfull \hbox (14.24576pt too wide) in paragraph at lines 2829--2830
+Overfull \hbox (14.24576pt too wide) in paragraph at lines 2838--2839
 \T1/cmr/m/n/10.95 uti-liz-zati[][][][][] sono so-la-mente $[]$, rag-giun-gi-bil
 i in pro-gres-sione una volta che i prece-denti fal-lis-cono[][][][][]. 
  []
 
 
-Overfull \hbox (185.29137pt too wide) in paragraph at lines 2833--2835
+Overfull \hbox (185.29137pt too wide) in paragraph at lines 2842--2844
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (172.69432pt too wide) in paragraph at lines 2849--2850
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2858--2859
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2306,47 +2306,47 @@ Overfull \hbox (172.69432pt too wide) in paragraph at lines 2849--2850
  []
 
 
-Overfull \hbox (166.3958pt too wide) in paragraph at lines 2853--2854
+Overfull \hbox (166.3958pt too wide) in paragraph at lines 2862--2863
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (185.29137pt too wide) in paragraph at lines 2856--2857
+Overfull \hbox (185.29137pt too wide) in paragraph at lines 2865--2866
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [77]
-Overfull \hbox (34.12682pt too wide) in paragraph at lines 2861--2863
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 2870--2872
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][]  
  []
 
 
-Overfull \hbox (204.18694pt too wide) in paragraph at lines 2866--2867
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 2875--2876
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2867--2869
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2876--2878
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][]  
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 2869--2870
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2878--2879
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (128.60466pt too wide) in paragraph at lines 2872--2873
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2881--2882
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2354,37 +2354,37 @@ Overfull \hbox (128.60466pt too wide) in paragraph at lines 2872--2873
  []
 
 
-Overfull \hbox (153.79875pt too wide) in paragraph at lines 2875--2876
+Overfull \hbox (153.79875pt too wide) in paragraph at lines 2884--2885
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2876--2878
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2885--2887
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (97.11205pt too wide) in paragraph at lines 2878--2879
+Overfull \hbox (97.11205pt too wide) in paragraph at lines 2887--2888
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (71.91795pt too wide) in paragraph at lines 2881--2882
+Overfull \hbox (71.91795pt too wide) in paragraph at lines 2890--2891
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 2890--2892
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2899--2901
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (197.88841pt too wide) in paragraph at lines 2892--2893
+Overfull \hbox (197.88841pt too wide) in paragraph at lines 2901--2902
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2392,58 +2392,58 @@ Overfull \hbox (197.88841pt too wide) in paragraph at lines 2892--2893
  []
 
 
-Overfull \hbox (2.6342pt too wide) in paragraph at lines 2898--2900
+Overfull \hbox (2.6342pt too wide) in paragraph at lines 2907--2909
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (141.2017pt too wide) in paragraph at lines 2903--2904
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2912--2913
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2905--2907
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2914--2916
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (172.69432pt too wide) in paragraph at lines 2907--2908
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2916--2917
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (116.00761pt too wide) in paragraph at lines 2908--2909
+Overfull \hbox (116.00761pt too wide) in paragraph at lines 2917--2918
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (141.2017pt too wide) in paragraph at lines 2909--2911
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2918--2920
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [78]
-Overfull \hbox (109.70909pt too wide) in paragraph at lines 2911--2912
+Overfull \hbox (109.70909pt too wide) in paragraph at lines 2920--2921
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (46.72386pt too wide) in paragraph at lines 2912--2913
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2921--2922
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][]  
  []
 
 
-Overfull \hbox (147.50023pt too wide) in paragraph at lines 2916--2917
+Overfull \hbox (147.50023pt too wide) in paragraph at lines 2925--2926
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2451,97 +2451,97 @@ Overfull \hbox (147.50023pt too wide) in paragraph at lines 2916--2917
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 2917--2918
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 2926--2927
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (21.52977pt too wide) in paragraph at lines 2926--2927
+Overfull \hbox (21.52977pt too wide) in paragraph at lines 2935--2936
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
   
  []
 
 
-Overfull \hbox (46.72386pt too wide) in paragraph at lines 2930--2931
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2939--2940
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (147.50023pt too wide) in paragraph at lines 2933--2934
+Overfull \hbox (147.50023pt too wide) in paragraph at lines 2942--2943
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
   
  []
 
 
-Overfull \hbox (40.42534pt too wide) in paragraph at lines 2938--2940
+Overfull \hbox (40.42534pt too wide) in paragraph at lines 2947--2949
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 2940--2941
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 2949--2950
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 []  
  []
 
 
-Overfull \hbox (84.515pt too wide) in paragraph at lines 2947--2948
+Overfull \hbox (84.515pt too wide) in paragraph at lines 2956--2957
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
 
  []
 
 
-Overfull \hbox (46.72386pt too wide) in paragraph at lines 2950--2951
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2959--2960
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (160.09727pt too wide) in paragraph at lines 2951--2952
+Overfull \hbox (160.09727pt too wide) in paragraph at lines 2960--2961
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (204.18694pt too wide) in paragraph at lines 2952--2954
+Overfull \hbox (204.18694pt too wide) in paragraph at lines 2961--2963
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][]  
  []
 
 
-Overfull \hbox (229.38103pt too wide) in paragraph at lines 2954--2955
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 2963--2964
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][]  
  []
 
 
-Overfull \hbox (59.3209pt too wide) in paragraph at lines 2960--2961
+Overfull \hbox (59.3209pt too wide) in paragraph at lines 2969--2970
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][]  
  []
 
 [79]
-Overfull \hbox (34.12682pt too wide) in paragraph at lines 2962--2964
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 2971--2973
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (128.60466pt too wide) in paragraph at lines 2965--2967
+Overfull \hbox (128.60466pt too wide) in paragraph at lines 2974--2976
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (178.99284pt too wide) in paragraph at lines 2972--2973
+Overfull \hbox (178.99284pt too wide) in paragraph at lines 2981--2982
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
@@ -2549,117 +2549,117 @@ Overfull \hbox (178.99284pt too wide) in paragraph at lines 2972--2973
  []
 
 
-Overfull \hbox (122.30614pt too wide) in paragraph at lines 2975--2976
+Overfull \hbox (122.30614pt too wide) in paragraph at lines 2984--2985
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (141.2017pt too wide) in paragraph at lines 2981--2982
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 2990--2991
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 []  
  []
 
 
-Overfull \hbox (172.69432pt too wide) in paragraph at lines 2982--2983
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2991--2992
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][]  
  []
 
 
-Overfull \hbox (153.79875pt too wide) in paragraph at lines 2983--2985
+Overfull \hbox (153.79875pt too wide) in paragraph at lines 2992--2994
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (46.72386pt too wide) in paragraph at lines 2985--2986
+Overfull \hbox (46.72386pt too wide) in paragraph at lines 2994--2995
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (172.69432pt too wide) in paragraph at lines 2990--2991
+Overfull \hbox (172.69432pt too wide) in paragraph at lines 2999--3000
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (141.2017pt too wide) in paragraph at lines 2996--2997
+Overfull \hbox (141.2017pt too wide) in paragraph at lines 3005--3006
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (481.32195pt too wide) in paragraph at lines 3008--3010
+Overfull \hbox (481.32195pt too wide) in paragraph at lines 3017--3019
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (273.47069pt too wide) in paragraph at lines 3011--3012
+Overfull \hbox (273.47069pt too wide) in paragraph at lines 3020--3021
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [80]
-Overfull \hbox (27.8283pt too wide) in paragraph at lines 3041--3042
+Overfull \hbox (27.8283pt too wide) in paragraph at lines 3050--3051
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
 [][][][][][][]  
  []
 
 [81]
-Overfull \hbox (34.12682pt too wide) in paragraph at lines 3062--3064
+Overfull \hbox (34.12682pt too wide) in paragraph at lines 3071--3073
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][]  
  []
 
 
-Overfull \hbox (8.93272pt too wide) in paragraph at lines 3080--3081
+Overfull \hbox (8.93272pt too wide) in paragraph at lines 3089--3090
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [82]
-<Immagini/"circuitoF".jpg, id=1881, 376.40625pt x 285.4665pt>
+<Immagini/"circuitoF".jpg, id=1883, 376.40625pt x 285.4665pt>
 File: Immagini/"circuitoF".jpg Graphic file (type jpg)
 <use Immagini/"circuitoF".jpg>
-Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 3121. on 
-input line 3121.
+Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 3130. on 
+input line 3130.
 Package pdftex.def Info: Requested size: 469.75502pt x 356.28775pt on input lin
-e 3121.
-<Immagini/"circuitoH".jpeg, id=1882, 380.622pt x 284.86424pt>
+e 3130.
+<Immagini/"circuitoH".jpeg, id=1884, 380.622pt x 284.86424pt>
 File: Immagini/"circuitoH".jpeg Graphic file (type jpg)
 <use Immagini/"circuitoH".jpeg>
-Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 3127. on
- input line 3127.
+Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 3136. on
+ input line 3136.
 Package pdftex.def Info: Requested size: 469.75502pt x 351.59799pt on input lin
-e 3127.
-<Immagini/"circuitoC".jpg, id=1883, 377.61075pt x 284.262pt>
+e 3136.
+<Immagini/"circuitoC".jpg, id=1885, 377.61075pt x 284.262pt>
 File: Immagini/"circuitoC".jpg Graphic file (type jpg)
 <use Immagini/"circuitoC".jpg>
-Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 3133. on 
-input line 3133.
+Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 3142. on 
+input line 3142.
 Package pdftex.def Info: Requested size: 469.75502pt x 353.63933pt on input lin
-e 3133.
+e 3142.
  [83 <./Immagini/circuitoF.jpg>] [84 <./Immagini/circuitoH.jpeg>] [85 <./Immagi
 ni/circuitoC.jpg>]
-Overfull \hbox (229.38103pt too wide) in paragraph at lines 3150--3151
+Overfull \hbox (229.38103pt too wide) in paragraph at lines 3159--3160
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 
-Overfull \hbox (65.61943pt too wide) in paragraph at lines 3167--3168
+Overfull \hbox (65.61943pt too wide) in paragraph at lines 3176--3177
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][]  
  []
 
 [86]
-Overfull \hbox (3.63159pt too wide) in paragraph at lines 3209--3210
+Overfull \hbox (3.63159pt too wide) in paragraph at lines 3218--3219
 \OML/cmm/m/it/10.95 n[]$\T1/cmr/m/n/10.95 . Per con-ven-zione, sup-po-nendo $\O
 ML/cmm/m/it/10.95 indice[] < indice[]$ \T1/cmr/m/n/10.95 vale $\OML/cmm/m/it/10
 .95 nearestNeighIsolNode\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 indice[]\OT1/cm
@@ -2667,291 +2667,291 @@ r/m/n/10.95 ] =
  []
 
 [87]
-Overfull \hbox (267.17216pt too wide) in paragraph at lines 3230--3231
+Overfull \hbox (267.17216pt too wide) in paragraph at lines 3239--3240
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][]  
  []
 
 [88]
-<Immagini/"Spec1".jpg, id=2008, 298.11375pt x 252.19218pt>
+<Immagini/"Spec1".jpg, id=2010, 298.11375pt x 252.19218pt>
 File: Immagini/"Spec1".jpg Graphic file (type jpg)
 <use Immagini/"Spec1".jpg>
-Package pdftex.def Info: Immagini/"Spec1".jpg  used on input line 3291. on inpu
-t line 3291.
+Package pdftex.def Info: Immagini/"Spec1".jpg  used on input line 3300. on inpu
+t line 3300.
 Package pdftex.def Info: Requested size: 298.11302pt x 252.19156pt on input lin
-e 3291.
-<Immagini/"Spec2".jpg, id=2009, 298.11375pt x 252.19218pt>
+e 3300.
+<Immagini/"Spec2".jpg, id=2011, 298.11375pt x 252.19218pt>
 File: Immagini/"Spec2".jpg Graphic file (type jpg)
 <use Immagini/"Spec2".jpg>
-Package pdftex.def Info: Immagini/"Spec2".jpg  used on input line 3297. on inpu
-t line 3297.
+Package pdftex.def Info: Immagini/"Spec2".jpg  used on input line 3306. on inpu
+t line 3306.
 Package pdftex.def Info: Requested size: 298.11302pt x 252.19156pt on input lin
-e 3297.
-<Immagini/"Spec3".jpg, id=2010, 298.11375pt x 228.855pt>
+e 3306.
+<Immagini/"Spec3".jpg, id=2012, 298.11375pt x 228.855pt>
 File: Immagini/"Spec3".jpg Graphic file (type jpg)
 <use Immagini/"Spec3".jpg>
-Package pdftex.def Info: Immagini/"Spec3".jpg  used on input line 3303. on inpu
-t line 3303.
+Package pdftex.def Info: Immagini/"Spec3".jpg  used on input line 3312. on inpu
+t line 3312.
 Package pdftex.def Info: Requested size: 298.11302pt x 228.85443pt on input lin
-e 3303.
-<Immagini/"Spec4".jpg, id=2011, 298.11375pt x 233.37187pt>
+e 3312.
+<Immagini/"Spec4".jpg, id=2013, 298.11375pt x 233.37187pt>
 File: Immagini/"Spec4".jpg Graphic file (type jpg)
 <use Immagini/"Spec4".jpg>
-Package pdftex.def Info: Immagini/"Spec4".jpg  used on input line 3309. on inpu
-t line 3309.
+Package pdftex.def Info: Immagini/"Spec4".jpg  used on input line 3318. on inpu
+t line 3318.
 Package pdftex.def Info: Requested size: 298.11302pt x 233.37129pt on input lin
-e 3309.
+e 3318.
  [89 <./Immagini/Spec1.jpg>] [90 <./Immagini/Spec2.jpg> <./Immagini/Spec3.jpg>]
  [91 <./Immagini/Spec4.jpg>] [92]
-<Immagini/GRAFI_ESATTI/"berlin52".png, id=2060, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"berlin52".png, id=2062, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"berlin52".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"berlin52".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"berlin52".png  used on input li
-ne 3403. on input line 3403.
+ne 3412. on input line 3412.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3403.
+ 3412.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3403--3405
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3412--3414
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"st70".png, id=2061, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"st70".png, id=2063, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"st70".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"st70".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"st70".png  used on input line 3
-410. on input line 3410.
+419. on input line 3419.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3410.
+ 3419.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3410--3412
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3419--3421
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"eil76".png, id=2062, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"eil76".png, id=2064, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"eil76".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"eil76".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"eil76".png  used on input line 
-3417. on input line 3417.
+3426. on input line 3426.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3417.
+ 3426.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3417--3419
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3426--3428
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr76".png, id=2063, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr76".png, id=2065, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr76".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr76".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr76".png  used on input line 3
-424. on input line 3424.
+433. on input line 3433.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3424.
+ 3433.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3424--3426
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3433--3435
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"rat99".png, id=2064, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"rat99".png, id=2066, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"rat99".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"rat99".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat99".png  used on input line 
-3431. on input line 3431.
+3440. on input line 3440.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3431.
+ 3440.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3431--3433
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3440--3442
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroA100".png, id=2065, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroA100".png, id=2067, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroA100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroA100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA100".png  used on input lin
-e 3438. on input line 3438.
+e 3447. on input line 3447.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3438.
+ 3447.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3438--3440
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3447--3449
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroB100".png, id=2066, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroB100".png, id=2068, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroB100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroB100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB100".png  used on input lin
-e 3445. on input line 3445.
+e 3454. on input line 3454.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3445.
+ 3454.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3445--3447
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3454--3456
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroC100".png, id=2067, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroC100".png, id=2069, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroC100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroC100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroC100".png  used on input lin
-e 3452. on input line 3452.
+e 3461. on input line 3461.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3452.
+ 3461.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3452--3454
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3461--3463
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroD100".png, id=2068, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroD100".png, id=2070, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroD100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroD100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroD100".png  used on input lin
-e 3459. on input line 3459.
+e 3468. on input line 3468.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3459.
+ 3468.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3459--3461
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3468--3470
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroE100".png, id=2069, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroE100".png, id=2071, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroE100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroE100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroE100".png  used on input lin
-e 3466. on input line 3466.
+e 3475. on input line 3475.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3466.
+ 3475.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3466--3468
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3475--3477
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"eil101".png, id=2070, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"eil101".png, id=2072, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"eil101".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"eil101".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"eil101".png  used on input line
- 3473. on input line 3473.
+ 3482. on input line 3482.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3473.
+ 3482.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3473--3475
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3482--3484
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"lin105".png, id=2071, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"lin105".png, id=2073, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"lin105".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"lin105".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"lin105".png  used on input line
- 3480. on input line 3480.
+ 3489. on input line 3489.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3480.
+ 3489.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3480--3482
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3489--3491
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"bier127".png, id=2072, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"bier127".png, id=2074, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"bier127".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"bier127".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"bier127".png  used on input lin
-e 3487. on input line 3487.
+e 3496. on input line 3496.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3487.
+ 3496.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3487--3489
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3496--3498
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"ch130".png, id=2073, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"ch130".png, id=2075, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"ch130".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"ch130".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"ch130".png  used on input line 
-3494. on input line 3494.
+3503. on input line 3503.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3494.
+ 3503.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3494--3496
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3503--3505
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr144".png, id=2074, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr144".png, id=2076, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr144".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr144".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr144".png  used on input line 
-3501. on input line 3501.
+3510. on input line 3510.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3501.
+ 3510.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3501--3503
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3510--3512
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroA150".png, id=2075, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroA150".png, id=2077, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroA150".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroA150".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA150".png  used on input lin
-e 3508. on input line 3508.
+e 3517. on input line 3517.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3508.
+ 3517.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3508--3510
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3517--3519
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroB150".png, id=2076, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroB150".png, id=2078, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroB150".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroB150".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB150".png  used on input lin
-e 3515. on input line 3515.
+e 3524. on input line 3524.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3515.
+ 3524.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3515--3517
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3524--3526
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"ch150".png, id=2077, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"ch150".png, id=2079, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"ch150".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"ch150".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"ch150".png  used on input line 
-3522. on input line 3522.
+3531. on input line 3531.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3522.
+ 3531.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3522--3524
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3531--3533
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr152".png, id=2078, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr152".png, id=2080, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr152".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr152".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr152".png  used on input line 
-3529. on input line 3529.
+3538. on input line 3538.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3529.
+ 3538.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3529--3531
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3538--3540
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"u159".png, id=2079, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"u159".png, id=2081, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"u159".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"u159".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"u159".png  used on input line 3
-536. on input line 3536.
+545. on input line 3545.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3536.
+ 3545.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3536--3538
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3545--3547
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"rat195".png, id=2080, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"rat195".png, id=2082, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"rat195".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"rat195".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat195".png  used on input line
- 3543. on input line 3543.
+ 3552. on input line 3552.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3543.
+ 3552.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3543--3545
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3552--3554
  [][] 
  []
 
@@ -2967,87 +2967,87 @@ mmagini/GRAFI_ESATTI/kroE100.png>] [104 <./Immagini/GRAFI_ESATTI/eil101.png>]
 _ESATTI/kroB150.png>] [111 <./Immagini/GRAFI_ESATTI/ch150.png>] [112 <./Immagin
 i/GRAFI_ESATTI/pr152.png>] [113 <./Immagini/GRAFI_ESATTI/u159.png>] [114 <./Imm
 agini/GRAFI_ESATTI/rat195.png>]
-<Immagini/GRAFI_ESATTI/"kroA200".png, id=2201, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroA200".png, id=2203, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroA200".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroA200".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA200".png  used on input lin
-e 3588. on input line 3588.
+e 3597. on input line 3597.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3588.
+ 3597.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3588--3590
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3597--3599
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroB200".png, id=2202, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroB200".png, id=2204, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroB200".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroB200".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB200".png  used on input lin
-e 3595. on input line 3595.
+e 3604. on input line 3604.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3595.
+ 3604.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3595--3597
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3604--3606
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"tsp225".png, id=2203, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"tsp225".png, id=2205, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"tsp225".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"tsp225".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"tsp225".png  used on input line
- 3602. on input line 3602.
+ 3611. on input line 3611.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3602.
+ 3611.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3602--3604
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3611--3613
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr226".png, id=2204, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr226".png, id=2206, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr226".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr226".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr226".png  used on input line 
-3609. on input line 3609.
+3618. on input line 3618.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3609.
+ 3618.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3609--3611
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3618--3620
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"gil262".png, id=2205, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"gil262".png, id=2207, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"gil262".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"gil262".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"gil262".png  used on input line
- 3616. on input line 3616.
+ 3625. on input line 3625.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3616.
+ 3625.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3616--3618
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3625--3627
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"a280".png, id=2206, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"a280".png, id=2208, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"a280".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"a280".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"a280".png  used on input line 3
-623. on input line 3623.
+632. on input line 3632.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3623.
+ 3632.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3623--3625
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3632--3634
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr299".png, id=2207, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr299".png, id=2209, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr299".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr299".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr299".png  used on input line 
-3630. on input line 3630.
+3639. on input line 3639.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 3630.
+ 3639.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 3630--3632
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 3639--3641
  [][] 
  []
 
@@ -3116,27 +3116,39 @@ Overfull \vbox (452.36911pt too high) has occurred while \output is active []
 
 [183] [184]
 
-LaTeX Warning: Float too large for page by 231.96907pt on input line 7572.
+LaTeX Warning: Float too large for page by 231.96907pt on input line 7581.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 7810.
 [185] [186] [187] [188] [189] [190] [191] [192] [193]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 7810.
+
+LaTeX Warning: Float too large for page by 7.96931pt on input line 8009.
+
+
+LaTeX Warning: Float too large for page by 35.96928pt on input line 8285.
+
+
+LaTeX Warning: Float too large for page by 21.9693pt on input line 8383.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 8553.
+[194
+
+] [195] [196] [197] [198] [199] [200] [201] [202]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 8553.
  (Tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 7810.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 7810.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 8553.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 8553.
 
 Package rerunfilecheck Info: File `Tesi.out' has not changed.
 (rerunfilecheck)             Checksum: 112F2550288246F1A6C00208FC2443E6;122.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 7810.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 8553.
  ) 
 Here is how much of TeX's memory you used:
- 15708 strings out of 493314
- 230121 string characters out of 3136264
+ 15727 strings out of 493314
+ 230353 string characters out of 3136264
  393298 words of memory out of 3000000
  17165 multiletter control sequences out of 15000+200000
  27266 words of font info for 69 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,13n,77p,1355b,1925s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,13n,77p,1355b,1913s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
 C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:
 /Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/P
@@ -3166,9 +3178,9 @@ r/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/s
 fti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/sftt
 1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipa10.pfb>
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipabx10.pfb>
-Output written on Tesi.pdf (193 pages, 2903365 bytes).
+Output written on Tesi.pdf (202 pages, 2924486 bytes).
 PDF statistics:
- 3072 PDF objects out of 3580 (max. 8388607)
- 1801 named destinations out of 2073 (max. 500000)
+ 3123 PDF objects out of 3580 (max. 8388607)
+ 1820 named destinations out of 2073 (max. 500000)
  247 words of extra memory for PDF output out of 10000 (max. 10000000)
 
