@@ -2539,20 +2539,21 @@ Utility.PreProcessingTSP(instance, x);
 
 
 \vspace{2\baselineskip}
-RINS
-\vspace{2\baselineskip}
-
-Nell’esplorazione di un albero di ricerca, generalmente due soluzioni sono a disposizione: la soluzione incumbent che è ammissibile rispetto al vincolo di interezza, ma non è ottima finché l’ottimizzazione non ha termine e la soluzione è caratterizzata da un valore migliore di quello della soluzione incumbentdel rilassamento continuo del nodo corrente che molto spesso non è intera, ma che è caratterizzata da un valore migliore di quello della soluzione incumbent.
-
-L' algoritmo \textbf{RINS}(Relaxation Induced Neighborhood Search) è un algoritmo euristico che utilizza la tecnica dell' hard fixing ed è implementato all' interno di Cplex. 
-Quali variabili fissare risulta essere un scelta molto importante poichè determina l' intorno che verrà da cplex esplorato. L' algoritmo RINS necessità di due soluzioni ammissibili come input e fissa in soluzione le variabili comuni sia ad x1 che a x2. 
-
-
-\vspace{2\baselineskip}
 POLISHING
 \vspace{2\baselineskip}
 
-L' algortitomo polishing è un euristico che sfrutta l' algoritmo RINS all' interno dell' algoritmo genetico. 
+L' algoritmo polishing /footnote{Utilizzato anche all' interno di Cplex e brevettato da quest' ultimo,realizzato da Edward Rothberg} è un euristico che sfrutta l' algoritmo RINS all' interno dell' algoritmo genetico per la generazione di un figlio a partire dai due genitori. 
+La tecnica Relaxation Induced Neighborhood Search(RINS) nasce nel 2004 per opera di \textbf{Emilie Danna}, \textbf{Edward Rothberg} \footnote{Fondatore di GuRoBi assieme a Zonghao Gu e Robert Bixby, quest' ultimo fondatore di Cplex} e \textbf{Claude Le Pape}. Come fatto notare nei precedenti paragrafi, l' inconveniente dell' hard fixing è la scelta di quali variabili fissare in soluzione e quali lasciare libere: questa scelta caratterizza le prestazioni dell' algoritmo(migliori sono i fissaggi migliore è la soluzione prodotta).
+L' idea del RINS è molto semplice: date due soluzioni x_1 e x_2 di un un MIP, vengono fissate le variabili il cui valore è il medesimo generando così un intorno che può essere esplorato da un solver, Cplex /footnote{Cplex stesso ha l' algoritmo RINS al suo interno, a differenza del polishing non è brevettato} nel nostro caso. Naturalmente più le soluzioni x_1 e x_2 sono \textit{simili} tra loro, più variabili fisso, minore è la dimensione dell' intorno che devo esplorare e di conseguenza il tempo che Cplex implega nel calcolo della soluzione ottima. Inoltre, qualora x_1 e x_2 siano anche prossime all' ottimo,le variabili che vengono fissate molto probabilmente apparterranno pure alla soluzione ottima e quindi "fisso bene"(al contrario di quanto si faceva nell' hard fixing che fissavo a caso).
+
+Il figlio, nel genetico da noi realizzato e discusso nel paragrafo X, viene creato attraverso il metodo GenerateChild  utilizzando la funzione Repair per garantire che il figlio prodotto sia sempre un circuito hamiltoniano. Il metodo Repair, oltre ad avere una complessità computazionale O(n^2), non garantisce che il costo del figlio sia buono, né tanto meno migliore di quello dei genitori tanto che è necessario, con una probabilità bassa per via del costo computazionale, effettuare sul figlio un 2-opt al fine di migliorargli il costo evitando così che l' algoritmo saturi dopo poche iterazioni. 
+
+Applicando l' algoritmo RINS  a padre e madre, è invece garantito che la soluzione prodotta risulti essere almeno buona quanto la migliore dei suoi genitori(entrambi i genitori appartengono all' intorno) ed inoltre viene prodotta il tempi molto brevi avendo fissato la stra grande maggioranza delle variabili: ciò  rendono l' algoritmo polishing oltre che di facile implementazione /footnote{Al contrario del Repair la cui implementazione non è banale} anche estremamente efficiente.
+
+Passiamo ora a discutere il codice realizzato.
+
+[...]
+
 
 \vspace{2\baselineskip}
 LOCAL BRANCHING

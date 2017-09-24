@@ -937,7 +937,10 @@ namespace TSPCsharp
             for (int i = 0; i < mother.path.Length; i++)
             {            
                 if (mother.path[i] == 1 && father.path[i] == 1)
-                    x[i].LB = 1;                                    
+                    x[i].LB = 1;
+
+                else if (mother.path[i] == 0 && father.path[i] == 0)
+                    x[i].UB = 0;
             }
            
             //Risolvo il modello
@@ -959,9 +962,11 @@ namespace TSPCsharp
             PathGenetic child = new PathGenetic(path, cplex.GetObjValue());
 
             //Fisso il LB di tutte le variabili a 
-            for (int i = 0; i < mother.path.Length; i++)          
+            for (int i = 0; i < mother.path.Length; i++)
+            {
                 x[i].LB = 0;
-            
+                x[i].UB = 1;
+            }
             return child;
         }
     }
