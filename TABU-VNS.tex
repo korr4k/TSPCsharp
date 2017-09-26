@@ -1,0 +1,492 @@
+\chapter{Tabu search}
+\section{Cenni storici}
+La parola tabu indica “una proibizione imposta da regole sociali come misura protettiva” oppure come qualcosa “proibito perchè costituisce un rischio”.
+La forma di Tabu Search più in uso oggi si deve a Fred Glover, anche se idee simili erano state abbozzate in contemporanea da P. Hansen, mentre il concetto fondamentale di usare
+proibizioni per incoraggiare una diversificazione della ricerca appare in vari lavori precedenti, ad esempio nell'algoritmo di Kernighan–Lin per il partizionamento dei grafi.
+Numerosi esperimenti computazionali effettuati, dimostrano che la Tabu Search è ormai una
+tecnica di ottimizzazione affermata, che può competere con quasi tutti i metodi noti e che,
+grazie alla sua flessibilità, può battere molte delle procedure classiche di ottimizzazione.
+Insieme al Simulated Annealing e agli algoritmi genetici, la Tabu Search è stata indicata dal Committee on the Next Decade of Operations Research come tecnica molto promettente per il trattamento futuro di applicazioni pratiche, inoltre può essere formalmente
+dimostrata la convergenza asintotica verso la soluzione ottima della Tabu Search.
+In seguito, U. Faigle e W. Kern hanno proposto una versione probabilistica della Tabu
+Search che converge quasi sicuramente ad un ottimo globale. Tali risultati teorici, sebbene
+interessanti, sono piuttosto irrilevanti per le applicazioni pratiche. L'obiettivo della Tabu Search, come di altre tecniche euristiche, è di trovare rapidamente soluzioni buone a
+problemi che spesso non permettono di determinare soluzioni ottime in tempi ragionevoli.
+Il successo diffuso nelle applicazioni pratiche di ottimizzazione ha stimolato negli ultimi anni una rapida crescita della ricerca con tabù.
+Tabu Search si basa sulla premessa che la soluzione dei problemi deve incorporare una memoria adattabile e reagire durante l'esplorazione. L'uso della memoria adattabile contrasta con strutture "senza memoria", come quelle ispirate a fenomeni della fisica e della biologia, con quelle a "memoria rigida" esemplificate dal "branch and bound". 
+L'enfasi sull'esplorazione attiva (e quindi finalizzata) nella Tabu Search, sia in condizione deterministica che probabilistica, deriva dal presupposto che una cattiva scelta strategica può dare più informazioni rispetto a una buona scelta casuale.
+\newpage
+
+\section{Applicazioni della Tabu Search}
+La Ricerca Tabu può essere impiegata in vari campi, tra cui:
+\begin{itemize}
+\item Instradamento (problema del commesso viaggiatore, instradamento di veicoli, capacità dell'instradamento, tempo di finestra per l'instradamento, instradamento diversificato, instradamento a flotta
+mista, viaggio dell'acquirente, programmazione del convoglio);
+\item Programmazione (tempo di attraversamento delle celle di produzione, elaborazione di una pianificazione, pianificazione della forza lavoro, programmazione Aula, programmazione di macchine, programmazione di processi produttivi flow-shop o job shop, sequenziamento e dosaggio);
+\item Telecomunicazioni (instradamento delle chiamate, imballaggio della larghezza di banda, posizionamento dell'"Hub" della struttura, percorso di assegnazione, struttura della rete per i servizi, pianificazione dello sconto al cliente, la non immunità architetturale, reti sincrone ottiche);
+\item Progettazione (progettazione a computer, reti con tolleranza di errore, struttura della rete di trasporto, spazio di progettazione architettonica, schema di coerenza, struttura di reti a canone fisso, problemi di taglio irregolare, pianificazione della disposizione aziendale); 
+\item Produzione, Magazzino e Investimenti (produzione flessibile, produzione Just-in-Time, parte di selezione della capacità MRP, pianificazione di un inventario multi-voce, sconto per volume di acquisto, mescolamento degli gli investimenti fissi);
+\item Localizzazione e allocazione (posizionamento ed assegnazione delle diverse materie prime, assegnazione quadratica, assegnazione semi-quadratica, assegnazione multilivello generalizzata) ;
+\item Logica ed Intelligenza Artificiale (massima soddisfacibilità, logica probabilistica, raggruppamento, modello di riconoscimento o classificazione, integrità dei dati, formazione di reti neurali, struttura di reti neurali); 
+\item Ottimizzazione di grafi (il grafo di partizionamento, partizionamento di “clique” o cricca, problemi di cricca massima, pianificazione di massimizzazione grafica, problemi di P-medio, grafica dei colori);
+\item Tecnologia (inversione sismica, distribuzione di energia elettrica, progettazione di ingegneria strutturale, volume minimo di ellissoidi, costruzione della stazione spaziale, posizionamento di celle di circuito, ricerca Off-Shore di idrocarburi); 
+\item Ottimizzazione Generale Combinatoria (programmazione in zero-uno, ottimizzazione della carica fissa, programmazione non lineare non convessa, strutture tutto o niente, programmazione a due livelli);
+\end{itemize}
+
+
+\section{Tabu Search}
+Il metodo più noto di ricerca nel "neighbourhood", usato per trovare il valore minimo di una funzione $f$ con valore reale in un insieme $S$, è il "metodo di discesa" attraverso i seguenti passi:
+\begin{enumerate}
+\item Scegli una soluzione di partenza $s \in S$;
+\item Trova il migliore $s' \in N(s)$ (ad es. tale che $f(s')<=f(k)$ $\forall k \in N(s)$);
+\item Se $f(s')>=f(s)$ allora stop. Altrimenti imposta $s=s'$ e torna al punto 2.
+\end{enumerate}
+Questo metodo può fermarsi ad un minimo locale di $f$ ma non ad un minimo globale. In generale, $N(s)$ non è definito esplicitamente, bisogna cercare $s'$ esplorando diverse direzioni rispetto ad $s$.
+
+Un primo passo verso la definizione di Tabu Search sta nel ridefinire il metodo appena esposto come segue:
+\begin{enumerate}
+\item Scegli una soluzione di partenza $s$ in $S$;
+\item Genera un sottoinsieme $V^*$ di soluzioni in $N(s)$;
+\item Trova un ottimo $s'$ in $V^*$ (per es. tale che $f(s')<=f(k) \forall$ $k \in V^*$) ed imposta $s=s'$;
+\item Se $f(s')>=f(s)$ allora stop. Altrimenti torna al punto 2.
+\end{enumerate}
+Nel primo metodo introdotto si era posto $V^* = N(i)$, questo spesso risulta essere troppo costoso in termini di tempo ed un appropriata scelta di $V^*$ può portare ad un sostanziale miglioramento.\\
+
+Con alcuni miglioramenti a quanto già esposto è possibile avvicinarsi ulteriormente alla definizione vera e propria dell'algoritmo Tabu Search.\\
+Indichiamo con:\\ 
+$s^*$ := la migliore soluzione trovata;\\
+$k$ := contatore di iterazioni;
+\begin{enumerate}
+\item Scegli una soluzione di partenza $s \in S$. Imposta $s^*=s$ e $k=0$;
+\item Imposta $k = k+1$ e genera un sottoinsieme $V^*$ di soluzioni in $N(s,k)$;
+\item Scegli un $s'$ ottimo in $V^*$ (rispetto ad $f$ o ad una funzione modificata $\widetilde{f}$) ed imposta $s=j$;
+\item Se $f(s)<f(s^*)$ allora imposta $s^*=s$;
+\item Se è incontrata una condizione di arresto, allora stop. Altrimenti torna al punto 2.
+\end{enumerate}
+
+Si può osservare che in questa ultima formulazione viene incluso il classico metodo di discesa.\\
+Ora siamo pronti per descrivere la Tabu Search, definiamo:\\
+$s$ soluzione;\\
+$m$ numero delle mosse;\\
+$tr(s,m) \in Tr (r=1,...,t)$ come insieme di condizioni tabù;\\
+$ar(s,m) \in Ar(s,m) (r=1,...,a)$ come condizioni di aspirazione (rilassamento dalla condizione di tabù);\\
+$\widetilde{f} = f$ + Intensificazione + Diversificazione;
+
+\begin{enumerate}
+\item Scegli una soluzione di partenza $s \in S$. Imposta $s^*=s$ e $k=0$;
+\item Imposta $k=k+1$ e genera un sottoinsieme $V^*$ di soluzioni in $N(s,k)$ tale che nessuna delle condizioni tabù $tr(s,m) \in Tr$ con $(r=1,...,t)$ sia violata a meno di essere evasa con le condizioni di aspirazione $ar(s,m) \in Ar(i,m)$ con $(r=1,...,a)$;
+\item Scegli un ottimo $s'=s+m \in V^*$ (rispetto ad f od alla funzione $\widetilde{f}$) ed imposta $s=s'$;
+\item Se $f(s) < f(s^*)$ allora imposta $s^*=s$;
+\item Aggiorna le condizioni di tabù e di aspirazione;
+\item Se si incontra una condizione di arresto, allora stop. Altrimenti torna al punto 2.
+\end{enumerate}
+
+\section{Caratteristiche}
+La Tabu Search può essere vista come segue: data una funzione $f(x)$ da ottimizzare su un insieme $X$, La Tabu Search inizia come la ricerca locale, procedendo iterativamente passando da una soluzione ad un'altra, fino a quando il criterio di terminazione scelto viene soddisfatto. Ad ogni $x \in X$ viene associato un intorno di $N(x) \subset X$, e ogni soluzione $x$ di $N(x)$ è raggiungibile da $x$ con un'operazione chiamata "mossa". Tabu Search va oltre la ricerca locale modificando di $N(x)$, sostituendolo con un altro intorno $N^*(x)$, progredendo nella ricerca in modo efficace. Un aspetto fondamentale del Tabu search è l'utilizzo di particolari strutture di memoria che servono per determinare $N^*(x)$ e quindi di organizzare l'esplorazione dello spazio.
+Le soluzioni ammesse a $N^*(x)$ da queste strutture di memoria vengono determinate in vari modi. Uno di questi, identifica le soluzioni incontrate nel corso di un determinato percorso  e vieta loro di appartenere a $N^*(x)$ e vengono marcate come "tabù".
+Il termine tabù supera il suo stretto significato etimologico in quanto questa restrizione potrà essere evasa quando saranno soddisfatte particolari condizioni di garanzia. Un modo utile per la visualizzazione e l'attuazione del presente processo è quello di immaginare di sostituire le iniziali classificazioni tabù delle soluzioni, cioè quelle escluse dalla scelta di $N*(x)$, secondo la loro dipendenza dagli elementi che compongono lo stato tabù che introduce sanzioni per scoraggiarne in maniera significativa la scelta. Inoltre, le valutazioni tabù includono periodicamente anche incentivi per incoraggiare la scelta di altri tipi di soluzioni, a causa di livelli di aspirazione ed influenze a lungo termine. Va sottolineato che il concetto di un intorno di TS è diverso da quello utilizzato nella ricerca locale, abbracciando i tipi di mosse impiegate nei processi costruttivi e distruttivi (dove le basi per tali spostamenti sono quindi chiamati intorni costruttivi ed intorni distruttivi). Tali usi allargati del concetto di intorno rafforzano una prospettiva fondamentale di Tabu search, che è quella di definire gli intorni in modo dinamico, che può includere o tenere conto simultaneamente di diversi tipi di mosse da meccanismi successivamente identificati.
+
+\section{Implementazione Tabu Search}
+Presentiamo ora il codice commentato che implementa l'algoritmo Tabu Search per risolvere il problema del commesso viaggiatore(TSP), partendo dalla classe \textbf{Tabu}, la quale contiene un insieme di utility per l'esecuzione dell'algoritmo implementato nel metodo \textbf{TabuSearch}. 
+
+\subsection{Classe Tabu}
+\begin{lstlisting}
+namespace TSPCsharp
+{
+    public class Tabu
+    {
+        string mode;
+        string originalMode;
+        List<string> tabuVector;
+        Instance inst;
+        int threshold;
+
+        public Tabu(string mode, Instance inst, int threshold)
+        {
+            this.mode = mode;
+            this.originalMode = mode;
+            this.inst = inst;
+            this.threshold = threshold;
+            this.tabuVector = new List<string>();
+        }
+
+        //Metodo per controllare se il lato è tabu
+        public bool IsTabu(int a, int b)
+        {
+            if (tabuVector.Contains(a + ";" + b) ||
+                tabuVector.Contains(b + ";" + a))
+                return true;
+            else
+                return false;
+        }
+		
+		//Metodo per inserire una coppia di lati nella lista tabu
+        public void AddTabu(int a, int b, int c, int d)
+        {
+            if (mode == "A" && tabuVector.Count >= (threshold - 1))
+            {
+                //passo in modalità B
+                mode = "B";
+            }
+            else if (mode == "B")
+            {
+                if (tabuVector.Count >= 50)
+                {
+                    //rimuovo i primi 10
+                    for (int i = 0; i < 10; i++)
+                    {
+                        tabuVector.RemoveAt(i);
+                    }
+                }
+                else
+                    mode = "A";
+            }
+            //Controllo se i lati sono già presenti nella lista
+            if (!tabuVector.Contains(a + ";" + b))
+                tabuVector.Add(a + ";" + b);
+            if (!tabuVector.Contains(c + ";" + d))
+                tabuVector.Add(c + ";" + d);
+        }
+
+        public void Clear()
+        {
+            mode = originalMode;
+            tabuVector.Clear();
+        }
+		
+		//Metodo che ritorna la lunghezza della lista delle operazioni tabu
+        public int TabuLenght()
+        {
+            return tabuVector.Count;
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{Metodo TabuSearch}
+
+L' intestazione del metodo risulta essere:
+
+\begin{lstlisting}
+static void TabuSearch(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe \textit{Instance} contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall'utente;
+    \item \textbf{rnd}: istanza della classe \textit{Random} precedentemente inizializzato con un seme random diverso per ogni iterazione del programma;
+    \item \textbf{clock}:
+    \item \textbf{choice}:
+\end{itemize}
+
+\begin{lstlisting}
+static void TabuSearch(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+        {
+            int typeSol = 0;
+			//mi ritorna una lista che ha all'indice 0 in ordine crescente tutti i nodi più vicini al nodo 0 e 
+            //cosi via per tutti i nodi            
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            //Solizione 
+            PathStandard incumbentSol;
+            //Soluzione da cui partire
+            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            incumbentSol = (PathStandard)solHeuristic.Clone();
+            
+            //Stampa della soluzione
+            Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+
+            //Viene selezionata la modalità di partenza e impostata la soglia pari a 100
+            Tabu tabu = new Tabu("A", instance, 100);
+            TabuSearch(instance, process, tabu, solHeuristic, incumbentSol, clock);
+
+            solHeuristic = (PathStandard)incumbentSol.Clone();
+            TwoOpt(instance, solHeuristic);
+
+            Utility.PrintHeuristicSolution(instance, process, solHeuristic, incumbentSol.cost, typeSol);
+
+            Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+        }
+\end{lstlisting}
+
+\subsection{Implementazione Tabu Search}
+
+Dopo aver presentato la classe Tabu entriamo ora nei dettagli implementativi dell'algoritmo
+
+\begin{lstlisting}
+static void TabuSearch(Instance instance, Process process, Tabu tabu, PathStandard currentSol, PathStandard incumbentPath, Stopwatch clock)
+        {
+            //Variabile utilizzata per la stampa con GNU plot
+            int typeSol;
+            //Indice da cui inizia la ricerca
+            int indexStart = 0;
+            //Variabile che contiene lo scambio migliore
+            string nextBestMove = "";
+            //Guadagno migliore possibile
+            double bestGain = double.MaxValue;
+            //Indici dei nodi coinvolti nello scambio
+            int a, b, c, d;
+            //Variabili che memorizzano le distanze tra i nodi
+            double distAC, distBD, distTotABCD;
+
+            //fino al timelimit
+            do
+            {
+                //Viene eseguita un operazione 2-opt e controllato se l'operazione è tabu
+                for (int j = 0; j < instance.NNodes; j++, indexStart = b)
+                {
+                    a = indexStart;
+                    b = currentSol.path[a];
+                    c = currentSol.path[b];
+                    d = currentSol.path[c];
+
+                    for (int i = 0; i < instance.NNodes - 3; i++, c = d, d = currentSol.path[c])
+                    {
+                        //Se l'operazione non è Tabu è possibile eseguire lo scambio
+                        if (!tabu.IsTabu(a, c) && !tabu.IsTabu(b, d))
+                        {
+                            distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
+                            distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
+
+                            distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
+                                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
+                            //Se ho un best gain più piccolo faccio lo scambio
+                            if ((distAC + distBD) - distTotABCD < bestGain && (distAC + distBD) != distTotABCD)
+                            {
+                                //Nodi coinvolti nello scambio
+                                nextBestMove = a + ";" + b + ";" + c + ";" + d;
+                                bestGain = (distAC + distBD) - distTotABCD;
+                            }
+                        }
+                    }
+                }
+
+                string[] currentElements = nextBestMove.Split(';');
+                a = int.Parse(currentElements[0]);
+                b = int.Parse(currentElements[1]);
+                c = int.Parse(currentElements[2]);
+                d = int.Parse(currentElements[3]);
+
+                //Eseguo lo scmabio nel percorso (da b a c) a (da c a d)
+                Utility.SwapRoute(c, b, currentSol);
+
+                currentSol.path[a] = c;
+                currentSol.path[b] = d;
+
+                currentSol.cost += bestGain;
+
+                //Aggiorno l'incumbent
+                if (incumbentPath.cost > currentSol.cost)
+                {
+                    incumbentPath = (PathGenetic)currentSol.Clone();
+                }
+
+                if (bestGain < 0)
+                    typeSol = 0;
+                else
+                {
+                    //Lo scambio è peggiorativo, di conseguenza viene memorizzato come operazione tabu
+                    tabu.AddTabu(a, b, c, d);
+                    typeSol = 1;
+                }
+
+                Utility.PrintHeuristicSolution(instance, process, currentSol, incumbentPath.cost, typeSol);
+                bestGain = double.MaxValue;
+
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+        }
+\end{lstlisting}
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\chapter{VNS}
+La Variable Neighborhood Search (VNS) è uno dei più noti algoritmi di ricerca metaeuristici e viene utilizzata per trovare una soluzione ottima spostandosi da un neighborhood all'altro.
+Indichiamo con $N_k$ con $k=1,...,k_{max}$ l'insieme finito di neighborhood preselezionati, e con $N_k(x)$ l'iniseme delle soluzioni di x nel k-esimo neighborhood. L'agoritmo base del VNS può essere descritto come segue:\\\\
+
+Inizializzazione: 
+\begin{itemize}
+\item selezionare l'insieme di neighborhood $N_k$, $K=1,...,k_{max}$ che verranno utilizzati nella ricerca;
+\item trovare una soluzione iniziale;
+\item selezionare una stopping condition. Nella nostra implementazione come stopping condition utilizziamo un timelimit impostato a 3600 [s].
+\end{itemize} 
+
+Ripetere i seguenti passi fino a che la stopping condition viene soddisfatta: 
+\begin{enumerate}
+\item $k \leftarrow 1 $
+\item Ripetere i seguenti passaggi fino a che $k=k_{max}$;
+\begin{itemize}
+\item \textbf{Shaking}: generare un $x'$ random dal k-esimo neighborhood di x $(x' \in N_k(x))$;
+\item \textbf{Local search}: eseguire la ricerca di una soluzione ottima locale che indichiamo con $x''$ utilizzando $x'$ come soluzione di partenza.
+\item \textbf{Move or not}: se la soluzione trovata è migliore dell'incumbent, $x' \leftarrow x''$ e continuare la ricerca in $N_1 (k \leftarrow 1)$; altrimenti $k \leftarrow k+1$;
+\end{itemize}
+\end{enumerate}
+
+Un'osservazione molto importante riguarda il fatto che la soluzione $x'$ al passo 2 viene generata in modo casuale in modo da eliminare la ciclicità che si verificherebbe se essa venisse scelta in modo deterministico.\\
+Dato che l'ottimo locale all'interno di un neighborhood non è necessariamente lo stesso all'interno di un altro, il passaggio da un neighborhood ad un altro può essere fatto che all'interno della fase di local search.
+
+ 
+
+
+
+
+\section{Implementazione VNS}
+
+Per risolvere il problema del commesso viaggiatore con l'impiego del VNS come neighborhood abbiamo utilizzato lo spazio delle soluzioni generate attraverso il 2-opt e quelle ottenute attraverso uno scambio 3-opt.
+
+\subsection{Metodo VNS}
+
+L' intestazione del metodo risulta essere:
+
+\begin{lstlisting}
+static void VNS(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe \textit{Instance} contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall'utente;
+    \item \textbf{rnd}: istanza della classe \textit{Random} precedentemente inizializzato con un seme random diverso per ogni iterazione del programma;
+    \item \textbf{clock}:
+    \item \textbf{choice}:
+\end{itemize}
+
+\begin{lstlisting}
+static void VNS(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+        {
+            int typeSol = 0;
+            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            PathStandard incumbentSol;
+            PathStandard solHeuristic = Utility.NearestNeightbor(instance, rnd, listArray);
+            incumbentSol = (PathStandard)solHeuristic.Clone();
+            Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+
+            do
+            {
+            	//Eseguo un'operazione 2-opt 
+                TwoOpt(instance, solHeuristic);
+				
+				//se la soluzione migliora aggiorno l'incumbent
+                if (incumbentSol.cost > solHeuristic.cost)
+                {
+                    incumbentSol = (PathStandard)solHeuristic.Clone();
+
+                    Utility.PrintHeuristicSolution(instance, process, incumbentSol, incumbentSol.cost, typeSol);
+
+                    Console.WriteLine("Incumbed changed");
+                }
+                //se la soluzione non migliora proseguo
+                else
+                    Console.WriteLine("Incumbed not changed");
+				//chiamo il metodo VNS
+                VNS(instance, solHeuristic, rnd);
+
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+
+            Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
+        }
+\end{lstlisting}
+
+\subsection{Implementazione VNS}
+Come visto nell'introduzione al metodo VNS, esso comporta l'esecuzione di un'operazione di 3-opt la quale cerca comporta la variazione di 3 lati nel circuito, nella speranza di trovare, con le successive operazioni di 2-opt, una soluzione migliore di quella corrente.
+
+L' intestazione del metodo risulta essere:
+
+\begin{lstlisting}
+static void VNS(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: oggetto della classe \textit{Instance} contenente tutti i dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall'utente;
+    \item \textbf{currentSol}: istanza della classe \textit{PathStandard} contenente la soluzione corrente;
+    \item \textbf{rnd}: istanza della classe \textit{Random} precedentemente inizializzato con un seme random diverso per ogni iterazione del programma;.
+\end{itemize}
+
+\begin{lstlisting}
+static void VNS(Instance instance, PathStandard currentSol, Random rnd)
+        {
+        	//Indici dei nodi coinvolti nello scambio 3-opt
+            int a, b, c, d, e, f;
+
+            a = rnd.Next(currentSol.path.Length);
+            b = currentSol.path[a];
+
+            do
+            {
+                c = rnd.Next(currentSol.path.Length);
+                d = currentSol.path[c];
+            } while ((a == c && b == d) || a == d || b == c);
+
+            do
+            {
+                e = rnd.Next(currentSol.path.Length);
+                f = currentSol.path[e];
+            } while ((e == a && f == b) || e == b || f == a || (e == c && f == d) || e == d || f == c);
+
+            List<int> order = new List<int>();
+			
+			//Eseguo lo scambio 3-opt
+            for (int i = 0, index = 0; i < currentSol.path.Length && order.Count != 4; i++, index = currentSol.path[index])
+            {
+                if (a == index)
+                {
+                    order.Add(a);
+                    order.Add(b);
+                    i++;
+                    index = currentSol.path[index];
+                }
+                else if (c == index)
+                {
+                    order.Add(c);
+                    order.Add(d);
+                    i++;
+                    index = currentSol.path[index];
+                }
+                else if (e == index)
+                {
+                    order.Add(e);
+                    order.Add(f);
+                    i++;
+                    index = currentSol.path[index];
+                }
+            }
+
+            if (order[0] != a && order[2] != a)
+            {
+                order.Add(a);
+                order.Add(b);
+            }
+            else if (order[0] != c && order[2] != c)
+            {
+                order.Add(c);
+                order.Add(d);
+            }
+            else
+            {
+                order.Add(e);
+                order.Add(f);
+            }
+
+            Utility.SwapRoute(order[2], order[1], currentSol);
+
+            currentSol.path[order[0]] = order[2];
+
+            Utility.SwapRoute(order[4], order[3], currentSol);
+
+            currentSol.path[order[1]] = order[4];
+
+            currentSol.path[order[3]] = order[5];
+
+            currentSol.cost += Point.Distance(instance.Coord[order[0]], instance.Coord[order[2]], instance.EdgeType) +
+                Point.Distance(instance.Coord[order[1]], instance.Coord[order[4]], instance.EdgeType) +
+                Point.Distance(instance.Coord[order[3]], instance.Coord[order[5]], instance.EdgeType) -
+                Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) -
+                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType) -
+                Point.Distance(instance.Coord[e], instance.Coord[f], instance.EdgeType);
+
+        }
+\end{lstlisting}
+\end{document}
