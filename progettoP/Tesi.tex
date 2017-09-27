@@ -56,7 +56,7 @@ keywordstyle=\color{bluekeywords},
 stringstyle=\color{redstrings},
 basicstyle=\ttfamily\small,
 extendedchars=true,
-literate={à}{{\`a}}1 {è}{{\`e}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {é}{{\'e}}1,
+literate={à}{{\`a}}1 {è}{{\`e}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {é}{{\'e}}1 {ì}{{\`e}}1,
 }
 \lstset%
 {%
@@ -1888,7 +1888,7 @@ Di seguito è riportata la realizzazione del codice tenendo presente che è rich
 
 \begin{lstlisting}
 
-public static PathGenetic NearestNeighbour(Instance instance, Random rnd, List<int>[] listArray)
+public static PathGenetic NearestNeighbor(Instance instance, Random rnd, List<int>[] listArray)
 {
 // heuristicSolution is the path of the current heuristic solution to generate
     int[] heuristicSolution = new int[instance.NNodes];
@@ -1964,7 +1964,7 @@ A discapito quindi di un concetto molto basilare, l'algoritmo $2-opt$\footnote{I
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Immagini/"2-opt".png}
+    \includegraphics[width=\textwidth]{Immagini/"2-opt".jpeg}
     \caption{Esempio di azione nell'algoritmo 2-opt}
 \end{figure}
 
@@ -2064,7 +2064,7 @@ List<int>[] listArray = Utility.BuildSLComplete(instance);
 do
 {
 //Using the nearest neighbour technique
-heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
+heuristicSol = Utility.NearestNeighbor(instance, rnd, listArray);
 
 //Using the 2-Opt technique on the nearest neighbour solution produced
 TwoOpt(instance, heuristicSol);
@@ -2687,7 +2687,7 @@ instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
 INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
 //Utilizzo del NearestNeightbor per iniziare a costruire la soluzione di partenza
-PathStandard heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
+PathStandard heuristicSol = Utility.NearestNeighbor(instance, rnd, listArray);
 
 //Applicazione del 2-Opt per completare la soluzione di partenza
 TwoOpt(instance, heuristicSol);
@@ -2882,7 +2882,7 @@ INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 List<int>[] listArray = Utility.BuildSLComplete(instance);
 
 //Prima parte della creazione della soluzione di partenza, si utilizza la tecnica del nearest neigh
-PathStandard heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
+PathStandard heuristicSol = Utility.NearestNeighbor(instance, rnd, listArray);
 
 ///Seconda parte della creazione della soluzione di partenza, si applica un semplice 2-Opt
 TwoOpt(instance, heuristicSol);
@@ -3006,13 +3006,502 @@ do
 instance.BestSol = incumbentSol;
 instance.BestLb = incumbentCost;
 
-\subsection*{RINS}
+\end{lstlisting}
 
 \subsection*{POLISHING}
 
+L'algoritmo \textbf{polishing}/footnote{Polishing è utilizzato anche all'interno di Cplex stesso ed è inoltre brevettato da quest'ultimo, la realizzazione è da attribuirsi ad Edward Rothberg} è di fatto l'ultima tecnica presentata in questa tesi e fa parte degli algoritmi \textbf{matheuristici}.
+
+\textit{Polishing} non introduce di per sè novità ma bensì combina le migliori caratteristiche degli algoritmi \textbf{genetici} LINK!!!!! e di \textbf{Relaxation Induced Neighborhood Search} conosciuto più comunemente con la sigla \textbf{RINS}. Quest'ultimo nasce nel 2004 per opera di \textbf{Emilie Danna}, \textbf{Edward Rothberg} \footnote{Uno dei fondatori di \textbf{GuRoBi}, software solver concorrente a \textbf{Cplex}.} e \textbf{Claude Le Pape}. \'E stato ampiente discusso nei precedenti paragrafi come nei metodi \textbf{matheuristici} il fattore caratterizzante sia la realizzazione del \textit{fissaggio} di alcune variabili del modello matematico in modo tale da limitare le possibili soluzioni e quindi i tempi di esecuzione da parte del solver. \textit{RINS} definisce una regola molto semplice a tale scopo: date due soluzioni $x_1$ e $x_2$, valide per il \textbf{MIP} preso in analisi, ogni variabili che assume lo stesso valore in entrambe deve essere fissata nel nuovo modello a tale valore. Naturalmente più $x_1$ ed $x_2$ sono \textit{simili} tra loro, più variabili fisso e quindi minore diventa la dimensione dell'intorno che il solver esplora.
+
+\textit{RINS} sembra quindi un buon metodo da applicare in presenza di due soluzioni molto simili a quella ottima $x_{opt}$, è plausibile assumere che in tal caso il fissaggio vada a riguardare in gran parte valori concordi ad $x_{opt}$. La proprietà più importante è da vedersi nella estrema velocità di questa tecnica nel caso di problemi come il \textbf{TSP}, dove con un ordine del numero di variabili pari a \textbf{$O(n^2)$} solamente \textbf{n} assumo valore $1$ in una qualsiasi soluzione mentre le restanti $0$\footnote{Naturalmente anche il caso opposto ha pari valenza}. Come conseguenza diretta si ha che indipendentemente da come sono state ottenute $x_1$ e $x_2$ la probabilità che una qualsiasi variabili assuma valore $0$ in entrambe è estremamente elevata.
+
+Ed è proprio in questo punto che entrano in gioco i metodi euristici \textbf{genetici}, durante la produzione di ogni nuova generazione si presenta la necessità di creare un gran numero di nuove soluzioni a partire da quelle già presenti. Questi algoritmi affrono quindi la possibilità di applicare \textit{RINS} in modo continuo su soluzioni via via più \textit{vicine} a quella ottima. Quanto appena esposto si pone alla base degli algoritmi \textbf{polishing}.
+
+\subsection*{PROBLEMATICHE DELLA TECNICA POLISHING}
+
+\textit{Polishing} eredita una problematica fondamentale dagli algoritmi \textit{genetici} dai noi volutamente non risolta in questi ultimi in modo tale evidenziarne l'importanza: stiamo parlando della possibilità dell'algoritmo di saturare dopo un certo periodo inversamente proporzionale alla grandezza dela popolazione scelta. Mano a mano che nuove generazioni di popolazione vengono create, la probabilità che queste contengano soluzioni sempre più simili tra loro cresce portando così ad una saturazione per quanto riguarda la ricerca di un miglioramento\footnote{Verrà indicata come \textbf{saturazione di primo tipo} nei commenti al codice.}.
+
+Naturalmente questo fattore non è sempre un male in quanto se la saturazione dovesse avvenire nelle vicinanze del valore ottimo lo scopo dell'algoritmo potrebbe essere considerato raggiunto in quato metodo euristico. Questo fatto diventa però più probabile all'aumento della grandezza della popolazione e quindi del numero di soluzioni facenti parte di ogni generazione con l'inevitabile aumento dei tempi di calcolo.
+
+Come evidenziato dai test riguardanti l'algoritmo genetico da noi implementato LINK!!!!!, la problematica esposta è molto evidente già dalle istanze con meno nodi vista necessità di utilizzare una popolazione molto piccola. La situazione per quanto riguarda l'algoritmo \textit{polishing} sarebbe stata la medesima indipendentemente dal fatto che quest'ultimo ci permettesse nella media di triplicare la grandezza di ogni generazione grazie all'uso di \textit{RINS}.
+
+La necessità di creare un metodo \textbf{anti saturazione} ci ha portato a ragione sul perchè gli algoritmi genetici offrono potenzilamente ottimi risultati: combinare soluzioni \textit{buone} con altre \textit{peggiori} può portare, attraverso varie generazioni, a risultati molto migliori di quelli raggiungibili con il solo uso di \textit{buone} soluzioni.
+
+Abbiamo quindi pensato di riapplicare questo principio in caso di saturazione e cioè sostituire una parte della generazione attuale con nuovi elementi, nel nostro caso generati nello stesso modo di quelli appartenenti alla prima generazione e quindi attraverso l'uso del \textbf{Nearestneighbour}\footnote{Vedremo come in realtà è stato effettuato del leggero ulteriore tuning di questo metodo in base al numero di saturazioni consecutive senza alcun miglioramento dell'incumbent.} LINK!!!!!!!!. Ipoteticamente la nostra idea è che in caso di saturazione le soluzioni facenti parte della attuale generazione abbiano ormai raggiunto un discreto fissaggio delle variabili al loro interno. Una loro combinazione con soluzioni potenzialmente peggiori attraverso \textit{RINS} dovrebbe portare ad una ulteriore selezione interna al fissaggio appena citato mantenendo valida così solo la sua porzione migliore.
+
+Indipendentemente da quale istanza sia stata da noi testata i risultati sono stati sorprendenti, con il progredire delle varie risoluzioni la probabilità di ottenere un miglioramento solamente dopo una operazione di anti saturazione continuava ad aumentare.
+
+Il successivo nodo da discutere è naturalmente come capire quando ci si trova in una situazione di saturazione. I due fattori da noi considerati sono stati i seguenti: 
+
+\begin{itemize}
+\item \textbf{Numero di generazioni successive senza miglioramenti dell'incumbent}: il valore da noi considerato è stato di $\textbf{10}$;
+\item \textbf{Tempo impiegato per definire una nuova generazione}: questo parametro è più complesso del precedente in quanto dipende da diversi fattori quali l'hardware utilizzato e l'istanza utilizzata. Abbiamo quindi svolto diversi test e la formula che per noi ha prodotto il risultato desiderato per le istanze testate è
+
+\begin{equation}\label{eq:tGen}
+\displaystyle t_{GenTot}[s] = 0.085 * (\#Nodi / 10) * grandezzaPopolazione)
+\end{equation}
+\end{itemize}
+
+Esiste una seconda problematica molto meno evidente e che può essere ricondotta ad un diverso tipo di saturazione, questa volta interno ad ogni generazione\footnote{Verrà indicata come \textbf{saturazione di secondo} tipo nei commenti al codice.}. Al crescere della complessità dell'istanza analizzata, in genere determinata dal numero di nodi $n$ e quindi da quello dei lati/variabili, può capitare che pochi \textit{figli} vengano generati in tempi molto più lunghi rispetto ai restati della stessa generazione. La conseguenza è quindi un \textit{ritardo} dell'algoritmo nel passaggio alla iterazione successiva senza però nessuna garanzia di un guadagno finale in termini di bontà dell'incumbent.
+
+La nostra scelta è stata quindi di limitare questa situazione preferendo produrre più generazioni possibili. Le modalità di attuazione per questa idea sono multiple e variano nella loro intrusività con la normale prosecuzione dell'algoritmo. Ad esempio, una volta calcolati un certo numero di figli, si potrebbe iniziare a tenere traccia dei loro tempi di generazione medi e limitare i successivi di conseguenza.
+
+La tecnica proposta è leggermente diversa da quest'ultima, meno lmitante e sfrutta la nozione fondamentale che la creazione dei nuovi figli, in ogni generazione esclusa la prima, avviene in multi threading: il calcolatore mette a disposizione un numero di thread pari ai propri processori virtuali, i quali generano in modo autonomo un nuovo \textit{figlio}. Questo richiede di attivare multiple istanze di Cplex contemporaneamente, tra loro scorrelate e che utilizzino un solo thread.
+
+Fatta questa premessa, indicando con $m$ il numero di \textit{figli} da creare ad ogni generazione e con $z$ il numero di thread a disposizione, la nostra tecnica prevede di tenere traccia di quanto tempo impiega l'algoritmo per ottenere $m-z$ figli. Tale intervallo è pesato proprio su $m-z$ ed in base al valore finale ottenuto si attuano limitazioni per i restanti $z$ \textit{figli}.
+
+\begin{equation}\label{eq:tMZ}
+\displaystyle t_{mzP}[s] = t_{mz}/(m-z)
+\end{equation}
+
+Entrando più nel dettaglio si limita il tempo per completare i restanti figli, per costruzione ora calcolabili tutti in parallelo, a :
+
+\begin{itemize}
+    \item \textbf{$10$ secondi}: se $t_{mzP}$ è inferiore a tale valore;
+    \item \textbf{$t_{mzP}$}: se questo è compreso tra $10$ e $300$ secondi;
+    \item \textbf{$300$ secondi}: se  $t_{mzP}$ è superiore a tale valore;
+\end{itemize}
+
+La descrizione di come questa seconda tecnica anti saturazione è stata implementata viene rimandata alla appendice in quanto risulta particolarmente complessa ma di relativo interesse. Prima di passare alla sezione successiva dove viene discusso come attivare thread multipli ed assegnargli compiti specifici facciamo solamente notare che per come è stato costruito, $t_{mzP}$ è pari, ma in genere \textbf{superiore} al tempo medio necessario per calcolare $z$ figli parallelamente.
+
+\subsection*{UTILIZZARE MULTIPLE ISTANZE DI CPLEX IN PARALLELO}
+
+L'utilizzo di multiple istanze di cplex, tra loro indipendenti ed attive contemporaneamente su appositi threads viene introdotto solamente ora in quanto tutti gli algoritmi discussi precedentemente al \textbf{polishing} sono stati presentati nella loro versione più base dove era l'unica istanza di Cplex a lavorare in più threads. In realtà i test che verranno presentati in questa tesi fanno tutti uso di una versione modificata delle tecniche proposte che appunto sfrutta più istanze di Cplex attive contemporaneamente.
+
+Il motivo di tale scelta è che permette di ottenere multipli output ma con prestazioni chiaramente limitate. Teniamo sempre ben presente che lo scopo delle varie prove proposte è il confronto delle tecniche studiate e non una loro analisi in termini di prestazioni assolute in quanto queste sono molto dipendenti dall'hardware utilizzato.
+
+Questo ragionamento non riguarda gli algoritmi \textit{genetico} e \textit{polishing} dato che si è scelto di elaborare in parallelo solamente i \textit{figli} di ogni generazione e quindi l'output prodotto è comunque unico.
+
+Per quanto riguarda il \textit{genetico} il motivo è molto semplice: il calcolo delle soluzione \textit{figlie} a partire da due soluzioni \textit{genitori} è molto semplice e non impiega grandi risorse hardware. \'E quindi motivato un approccio multi-threading e dato che la bontà di tali algoritmi dipende molto dal numero di generazioni che si creano è preferibile velocizzare tale processo piuttosto che attivare più algoritmi genetici contemporaneamente.
+
+D'altro canto l'algoritmo \textit{polishing}, tenendo comunque valida la motivazione appena esposta per il \textit{genetico}, si deve considerare che si utilizza Cplex per generare un nuovo \textit{figlio} e che tale solver non garantisce risultati migliori se gli si condece più threads\footnote{Visitare contemporaneamente più nodi dell'albero decisionale durante la fase di \textbf{Branch\&Cut} non garantisce di terminare la risoluzione più velocemente rispetto all'analisi di un solo nodo ma a pieno potenziale hardware.}.
+
+Vediamo quindi la struttura generale per attivare multipli threads in linguaggio \textbf{C\#}. \'E possibile trovare una applicazione pratica nell'esposizione del codice relativo all'algoritmo \textit{polishing} nella sezione successiva, mentre maggiori dettagli per tutti gli altri metodi risolutivi verranno forniti assieme ai test eseguiti.
+
+Esistono molteplici metodi per ottenere il risultato desiderato, quello che esponiamo prevede l'uso della classe \textbf{ThreadPool}\footnote{Appartenente allo spazio dei nomi \textbf{System.Threading}.} la quale fornisce il metodo statico fondamentale \textbf{QueueUserWorkItem} che delaga al sistema la creazione di un nuovo thread il quale esegue una qualsivoglia porzione di codice con a disposizione tutte le variabili del thread chiamante:
+
+\begin{lstlisting}
+ThreadPool.QueueUserWorkItem(o =>
+{
+        \\Codice generico
+});
+\end{lstlisting}
+
+Due semplici considerazioni: per prima cosa si nota che non è necessario istanziare un oggetto della classe \textbf{ThreadPool} ed in secondo luogo il nuovo thread viene gestito in background dal sistema ed attivato il prima possibile. Questo significa che il guadagno ottenuto nell'evitare qualsivoglia tipo di attesa, comporta la prosecuzione immediata del thread originale e soprattuto la mancanza di metodo diretto per conoscere quando le operazioni eseguite background terminano.
+
+Per i nostri scopi queste mancanze devono essere obbligatoriamente risolte per entrambi gli algoritmi \textbf{genetico} e \textbf{polishing} che necessitano di sincronizzazione per il calcolo delle varie generazioni.
+
+Introduciamo quindi le due classi \textbf{ManualResetEvent} e \textbf{WaitHandle} che una volta combinate rispondono esattamente alle nostre esigenze: un oggetto di tipo \textit{ManualResetEvent} una volta istanziato può essere \textit{gestito} dalla classe \textit{WaitHandle} la quale dispone del metodo statico \textbf{WaitAll}. Fintanto che tutti gli oggetti da lei gestita non chiamano il metodo \textbf{Set()} il thread su cui viene eseguita la chiamata \textit{WaitAll(...)} è posto in attesa.
+
+La generazione di multipli thread deve quindi essere gestita nel seguente modo:
+
+\begin{lstlisting}
+var resetEventList = new List<ManualResetEvent>();
+
+for (int i = 0; i < contatore; i++)
+{
+    resetEventList.Add(new ManualResetEvent(false));
+    
+    ManualResetEvent mRE = resetEventList[i];
+    
+    ThreadPool.QueueUserWorkItem(o =>
+    {
+        Generico codice
+        mRE.Set();
+    });
+}
+
+WaitHandle.WaitAll(resetEventList.ToArray());
+\end{lstlisting}
+
+Concludiamo infine con un commento tecnico al codice appena presentato. Come si può notare nel caso in cui si chiami \textbf{ThreadPool.QueueUserWorkItem} all'interno di un ciclo e, nello specifico, se il codice al suo interno dipende da quale iterazione genera la chiamata, è necessario creare un nuovo riferimento per tutte le variabili dipendenti da quanto appena detto. Come accennato in precedenza, l'operazione \textit{QueueUserWorkItem} programma la creazione di un nuovo thread ed i riferimenti alle variabili utilizzate sono assegnati unicamente al suo effettivo avvio. Se quest'ultima operazione viene quindi posticipata durante successive iterazione del ciclo si incorre inevitabilmente in errori multipli.
+
+Apparentemente la soluzione proposta non dovrebbe risolvere tale problema: si tratta però di un \textit{pattern} automaticamente riconosciuto dal compilatore presente nelle ultime versioni del framework C\#, introdotto appositamente per tale scopo.
+
+\subsection*{IMPLEMENTAZIONE POLISHING}
+
+In questa sezione vengono presentate le parti più importanti del codice di programmazione che realizza il metodo \textit{matheuristico polishing} discusso. Data la natura di quest'ultimo, la struttura generica del codice è molto simile a quella del metodo genetico LINK!!!!!!!!, pertanto non sono discussi nel dettagli gli aspetti comuni tra i due algoritmi.
+
+Iniziamo con la classica firma del metodo:
+
+\begin{lstlisting} 
+static void Polishing(Instance instance, Random rnd, Process process, int sizePopulation, Stopwatch clock)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: riferimento all'oggetto contenente tutte le informazioni relative all' istanza del Problema del Commesso Viaggiatore corrente;
+    \item \textbf{rnd}: istanza della classe Random utilizzata per la generazione dei numeri casuali, un eventuale seme random deve essere già stato assegnatogli;
+    \item \textbf{process}: istanza della classe Process, utilizzata per la stampa su file e a video tramite GNUPlot delle soluzioni trovate, deve essere già stata inizializzata dal metodo chiamante;
+    \item \textbf{sizePopulation}: Dimensione della popolazione di ogni generazione, in altre parole il numero di soluzioni facenti parte di queste ultime;
+    \item \textbf{clock}: Oggetto che funge da cronometro;
+\end{itemize}
+
+Come prima operazione, trattandosi di un metodo matheuristco è necessario preparare i riferimenti a Cplex e quindi costruire il modello di partenza ovviamente privo di alcun taglio. Ricordiamo inoltre che il codice presentato utilizza il multithreading per genere più \textit{figli} contemporaneamente e pertanto sono necessarie multiple istanze di Cplex e relativi modelli matematici:
+
+\begin{lstlisting}
+//Lista contenente i riferimenti alle istanze degli oggetti di tipo Cplex
+List<Cplex> CplexList = new List<Cplex>();
+
+//Lista contenente i riferimenti alle variabili utilizzate dagli oggetti di tipo Cplex nel proprio modello matematico
+List<INumVar[]> xList = new List<INumVar[]>();
+
+//Data una popolazione di n elementi si creano n/2 figli 
+for (int i = 0; i < sizePopulation / 2; i++)
+{
+    //Inizializzazione degli oggetti di tipo Cplex
+    CplexList.Add(new Cplex());
+    //Settaggio di un seme random basato sui ticks di sistema rappresentanti l'istante attuale
+    CplexList[i].SetParam(Cplex.Param.RandomSeed, (int)(DateTime.Now.Ticks & 0x0000FFFF));
+
+    //Per ogni oggetto Cplex inizializzato se ne definice il modello matematico, viene inoltre aggiunto 
+    //il riferimento delle variabili utilizzate alla apposita lista in modo tale che il generico j-esimo
+    //oggetto Cplex in CplexList abbia le proprie nella j-esima posizione di xList
+    xList.Add(Utility.BuildModel(CplexList[i], instance, -1));
+
+    //Installazione lazyconstraint callback
+    CplexList[i].Use(new TSPLazyConsCallback(CplexList[i], xList[i], instance, false));
+
+    //Inizializzazione di un aborter per ogni oggetti Cplex, utilizzato per gestire la saturazione di 
+    //secondo tipo
+    CplexList[i].Use(new Cplex.Aborter());
+}
+\end{lstlisting}
+
+Devono essere inizializzati anche gli oggetti che andranno a contenere i \textit{percorsi} delle varie soluzioni trovate. Viene utilizzata a tale scopo la classe \textbf{PathGenetic} LINK!!!!!! dove in questo caso il percorso è memorizzato sempre all'interno della variabile \textbf{path} ma rispettando la struttura delle variabili di Cplex: molto semplicemente $path[i]$ assume valore $1$ se e solo se la variabile di indice $i-esimo$ della soluzione a cui si fa riferimento vale anch'essa $1$, in caso contrario deve valere $0$.
+
+\begin{lstlisting}
+//Definisco l'oggetto che codifica la soluzione incumbent (miglior soluzione in assoluto fra tutte le generazioni)
+PathGenetic incumbentSol = new PathGenetic();
+
+//Miglior soluzione all'interno della nuova generazione calcolata ad ogni iterazione
+PathGenetic currentBestPath = null;
+
+//Popolazione della generazione attuale
+List<PathGenetic> CurrentPopulation = new List<PathGenetic>();
+
+//Figli della generazione attuale
+List<PathGenetic> ChildPoulation = new List<PathGenetic>();
+\end{lstlisting}
+
+La prima generazione, come anche l'anti saturazione di primo tipo, sfrutta una nuova versione del metodo \textbf{Nearest Neighbour} visto LINK!!!!!!! dove sono introdotte tre variazioni fondamentali:
+
+\begin{itemize}
+    \item Il circuito deve essere memorizzato all'interno degli oggetti \textit{PathGenetic} seguento la struttra descritta in precedenza;
+    \item Il nodo iniziale per la costruzione del circuito è sempre quello di indice $0$ così che l'algoritmo \textit{RINS} abbia più possibilità di fissare anche variabili comuni di valore $1$;
+    \item La probabilità di utilizzare il lato più corto disponibile oppure il successivo, dipende dal numero di nodi della istanza analizzata e da quante saturazioni di primo tipo successive avvengono;
+    In particolare si ha che la probabilità di selezione il lato migliore cresce al crescere dei nodi della istanza in quanto creare soluzioni di partenza più dissimili tra loro aumenta ulteriormente i tempi di generazione dei \textit{figli}. Infine questa probabilità è abbassata del $5\%$ ad ogni saturazione di primo tipo consecutiva (\textit{malus} resettato al primo miglioramento trovato) così da variare progressivamente le soluzioni introdotte;
+\end{itemize}
+
+I dettagli implementativi riguardanti il metodo \textbf{NearestNeightborPolishing} sono presenti LINK!!!!! all'interno della appendice.
+
+\begin{lstlisting}
+//listArray[i][y] = z ; implica che il nodo di indice z è l'y-esimo più vicino a quello di indice i
+List<int>[] listArray = Utility.BuildSLComplete(instance);
+
+for (int i = 0; i < sizePopulation; i++)
+{
+    //Generazione di una soluzione e conseguente aggiunta del suo riferimento nella apposita lista
+    CurrentPopulation.Add(Utility.NearestNeightborPolishing(instance, rnd, listArray, 0));
+    
+    //Aggiornamento valore incumbent
+    if (currentBestPath == null || currentBestPath.Cost > CurrentPopulation[i].Cost)
+        currentBestPath = CurrentPopulation[i];
+}
+\end{lstlisting}
+
+Per poter cominciare la generazione ciclica delle varie generazioni sono necessarie inizializzazioni di variabili di \textit{servizio}, il settaggio del numero di \textbf{Threads} massimosi utilizzabile dalla classe \textit{ThreadPool} e lo start del cronometro. I dettagli riguardanti l'anti saturazione di primo tipo sono riportati nella apposita sezione LINK!!!! della appendice.
+
+\begin{lstlisting}
+//ThreadPool può programmare un numero massimo di threads pari ai core virtuali della macchina per la //generazione di nuovi figli, ed un thread aggiuntivo di servizio utilizzato per evitare la saturazione
+//di secondi tipo e cioè evitare che alcuni figli impieghino troppo tempo a generarsi rispetto agli
+//altri della stessa generazione. Questo thread rimane per la maggior parte del tempo in attesa
+ThreadPool.SetMaxThreads(CplexList[0].GetNumCores() + 1, CplexList[0].GetNumCores() + 1);
+
+//Questa variabile memorizza il tempo impiegato per generare i figli della attuale generazione
+double timeC;
+
+//Contatore di generazioni successive che non migliorano l'incumbent e generate in tempi validi per
+//contribuire alla saturazione di primo tipo
+int cntSat = 0;
+
+//Contatore di saturazioni di primo tipo consecutive
+int cntSatProgr = 0;
+
+//Oggetti necessari per l'anti saturazione di secondo tipo, utilizzata per impedire che alcuni figli
+//impieghino troppo tempo per la loro creazione rispetto ad altri della stessa generazione
+object lockPol;
+EventWaitHandle ewhCnt;
+EventWaitHandle ewhCntComplete;
+
+//Eventuale start del cronometro
+if (!clock.IsRunning)
+    clock.Start();
+\end{lstlisting}
+
+La creazione delle varie generazioni di soluzioni per il \textbf{TSP} corrente avviene all'interno di un ciclo \textbf{do-while} di durata temporale pari al tempo limite indicato da parte dell'utente. Di seguito è riportato il codice commentato che gestisce la creazione della nuova generazione. Il metodo \textbf{GenerateChildPolish} è analizzato a fine sezione.
+
+\begin{lstlisting}
+//Inizializzazione variabili che gestiscono la saturazione di secondo tipo
+lockPol = new object();
+EventWaitHandle ewhCnt = new EventWaitHandle(false, EventResetMode.AutoReset);
+EventWaitHandle ewhCntComplete = new EventWaitHandle(false, EventResetMode.AutoReset);
+
+//Aggiornamento dei time limit di Cplex in modo tale che venga sempre lasciato almeno un secondo e mezzo
+//per la generazione di ogni figlio
+for (int i = 0; i < sizePopulation / 2; i++)
+{
+    if (instance.TimeLimit - (clock.ElapsedMilliseconds / 1000.0) > 1.5)
+    {
+        CplexList[i].SetParam(Cplex.Param.TimeLimit, instance.TimeLimit - (clock.ElapsedMilliseconds / 1000.0));
+        
+        CplexList[i].SetParam(Cplex.Param.DetTimeLimit, Program.TICKS_PER_SECOND * CplexList[i].GetParam(Cplex.Param.TimeLimit));
+    }
+    else
+    {
+        CplexList[i].SetParam(Cplex.Param.TimeLimit, 1.5);
+        
+        CplexList[i].SetParam(Cplex.Param.DetTimeLimit, Program.TICKS_PER_SECOND * CplexList[i].GetParam(Cplex.Param.TimeLimit));
+    }
+}
+
+//resetEventC contiene la lista di ManualResetEvent utilizzati per segnalare quando un figlio è stato
+//creato
+List<ManualResetEvent> resetEventC = new List<ManualResetEvent>();
+
+//resetEventSat è utilizzato per segnalare quando il thread di supporto per gestire la durata dei figli
+//termina
+ManualResetEvent resetEventSat = new ManualResetEvent(false);
+
+//resetEventList viene popolata di tutti i riferimenti di resetEventC e resetEventSat ed questo oggetto ad
+//essere gestito dalla classe WaitHandle
+List<ManualResetEvent> resetEventList = new List<ManualResetEvent>();
+
+//index è una variabile di supporto utilizzata per accoppiare correttamente i genitori dei figli
+int[] index = new int[sizePopulation / 2];
+//Popolamento di index e di resetEventList, un oggetto ManualResetEvent per ogni figlio
+for (int i = 0; i < sizePopulation/2; i++)
+{
+    index[i] = i * 2 + 1;
+    resetEventList.Add(new ManualResetEvent(false));
+}
+
+
+//Richiesta di attivavazione del thread di servizio che monitora e gestisce il tempo con cui vengono 
+//generati i figli, è compito del metodo MonitorCplex gestire quindi la saturazione di secondo tipo
+ThreadPool.QueueUserWorkItem(o =>
+{
+    MonitorCplex(CplexList[0].GetNumCores(), CplexList, sizePopulation, ewhCnt, ewhCntComplete);
+    resetEventSat.Set();
+});
+
+//resetEventSat è aggiunto alla lista resetEvent
+resetEvent.Add(resetEventSat);
+
+//Prima di proseguire è necessario che il thread di servizio venga creato e MonitorCplex abbia completato 
+//l'inizializzazione locale. Viene conferito un tempo di attesa limite di 50 ms
+ewhCntComplete.WaitOne(50);
+
+//startG tiene traccia dell'istante iniziale relativo alla creazione della nuova generazione
+double startG = clock.ElapsedMilliseconds / 1000.0;
+
+
+//ThreadPool setta la coda di thread per la creazione in parallelo di tutti i figli, le variabili
+//ManualResetEvent utilizzate per segnalare il completamente di questi ultimi sono aggiunte a resetEvent
+foreach(int i in index)
+{
+    int y = i;
+    ManualResetEvent mRE = resetEventList[(y - 1) / 2];
+
+    ThreadPool.QueueUserWorkItem(o =>
+    {
+        ChildPoulation.Add(Utility.GenerateChildPolish(CplexList[(y - 1) / 2], (Instance)instance.Clone(), xList[(y - 1) / 2], CurrentPopulation[y - 1], CurrentPopulation[y], lockPol, ewhCnt, ewhCntComplete));
+        mRE.Set();
+    });
+
+    resetEvent.Add(mRE);
+}
+
+//Fino a che tutti i thread richiesti da ThreadPool, e quindi la generazione di tutti i figli ed il thread
+//di servizio, terminano non si prosegue
+WaitHandle.WaitAll(resetEvent.ToArray());
+
+//Reset degli oggetti Cplex.Aborter per ogni oggetto Cplex
+for (int i = 0; i < sizePopulation / 2; i++)
+{
+    CplexList[i].Use(new Cplex.Aborter());
+}
+
+//La effettiva nuova generazione viene creata sfruttando la precedente ed i suoi figli nello stesso modo
+//del metodo genetico
+CurrentPopulation = Utility.NextPopulation(instance, sizePopulation, CurrentPopulation, ChildPoulation);
+
+//Tempo totale misurato in secondi impiegato per la creazione della nuova generazione
+timeC = clock.ElapsedMilliseconds / 1000.0 - startG;
+
+//Aggiorno il riferimento alla soluzione migliore della nuova generazione
+currentBestPath = Utility.BestSolution(CurrentPopulation);
+\end{lstlisting}
+
+La corrente iterazione del ciclo \textit{do-while} termina con la verifica del miglioramento dell'incumbent, in tal caso si procede anche alla stampa della nuova soluzione ed al reset dei contatori per la saturazione di primo tipo.
+
+\begin{lstlisting} 
+//Aggiornamento della soluzione incumbent
+incumbentSol = (PathGenetic)currentBestPath.Clone();
+
+//Stampa della nuova miglior soluzione
+Utility.PrintGeneticSolution(instance, process, incumbentSol);
+
+//Reset contatori saturazione di primo tipo
+cntSat = 0;
+cntSatProgr = 0;
+\end{lstlisting}
+
+Nel caso in cui non ci sia un miglioramento inizia il processo di anti saturazione di primo tipo.
+
+\begin{lstlisting}
+//Verifca se il tempo impiegato rientra nei parametri di saturazione
+if (timeC < 0.085 * (instance.NNodes / 10) * sizePopulation)
+    cntSat++;
+else
+    cntSat = 0;
+
+//Nel caso in cui 10 generazioni consecutive non migliorative rientrano nei parametri di saturazione
+//avvio il metodo anti saturazione di primo tipo
+if (cntSat == 10)
+{
+    //Calcolo la diminuzione della probabilità che il metodo NearestNeighbor tenti di selezionare ad ogni
+    //iterazione il lato meno costoso
+    double minus = 0.05 * cntSatProgr;
+
+    //Rimozione di un quarto delle soluzioni della corrente generazione, più precisamente sono sempre
+    //rimosse quelle di indice 0, 4, 8, ecc...
+    for (int i = 0; i < sizePopulation / 4; i++)
+    {
+        CurrentPopulation.RemoveAt(sizePopulation - (4 * (i + 1)));
+    }
+
+    //Rimpiazzo le soluzioni rimosse con delle nuove generate dal Nearest Neighbour
+    for (int i = 0; i < sizePopulation / 4; i++)
+    {
+        CurrentPopulation.Insert(4 * i, Utility.NearestNeightborPolishing(instance, rnd, listArray, minus));
+        
+        //Nel caso improbabile che una delle nuove soluzioni migliori l'incumbent aggiorno tale valore
+        if (CurrentPopulation[4 * i].Cost < currentBestPath.cost)
+        {
+            currentBestPath = CurrentPopulation[CurrentPopulation.Count - 1];
+        }
+    }
+
+    //Aggiorno i contatori di saturazione di primo tipo
+    cntSatProgr++;
+    cntSat = 0;
+}
+\end{lstlisting}
+
+Si conclude questa sezione con la dovuta analisi del metodo \textbf{GenerateChildPolish} che utilizza l'algoritmo \textit{RINS} per creare un \textit{figlio} a partire da due genitori.
+
+\begin{lstlisting}
+public static PathGenetic GenerateChildPolish(Cplex cplex, Instance instance, INumVar[] x, PathGenetic mother, PathGenetic father, object lockPol, EventWaitHandle ewhCnt, EventWaitHandle ewhCntComplete)
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{cplex}: oggetto della classe Cplex utilizzato per risolvere il modello;
+    \item \textbf{instance}: riferimento alla classe Instance, accesso solo in lettura;
+    \item \textbf{x}: vettore contenente i riferimenti alla variabili del modello matematico di cplex;
+    \item \textbf{mother}: primo dei due circuiti genitori;
+    \item \textbf{father}: secondo dei due circuiti genitori;
+    \item \textbf{lockPol, ewhCnt, ewhCntComplete}: oggetti necessari per segnalare in modo il completamento della generazione della soluzione \textit{figlio}, maggiori dettagli LINK!!!!!!;
+\end{itemize}
+
+Il contenuto di questa funzione è molto semplice, si procede inizialmente al fissaggio secondo la tecnica \textit{RINS} delle variabili a valore comune nei due circuiti \textit{genitori} ed inoltre il migliore tra questi viene settato come \textbf{warm-start}\footnote{La definizione di un warm-start è necessaria in quanto può capitare che Cplex non generi una soluzione valida entro il tempo limite fissato causando successivamente una eccezione.}:
+
+\begin{lstlisting}
+//Il percorso della soluzione figlio viene inizializzzato
+int[] path = new int[mother.Path.Length];
+
+//Fissaggio delle variabili comuni tra i due genitori a valore 1
+for (int i = 0; i < mother.path.Length; i++)
+{
+    if (mother.Path[i] == 1 && father.Path[i] == 1)
+    x[i].LB = 1;
+}
+
+//Fissaggio delle variabili comuni tra i due genitori a valore 0
+for (int i = 0; i < mother.path.Length; i++)
+{
+    if (mother.Path[i] == 0 && father.Path[i] == 0)
+    x[i].UB = 0;
+}
+
+//cplex.AddMIPStart accetta unicamente un vettore di double come warm-start mentre all'interno
+//degli oggetti di tipo PathGenetic è utilizzato un vettore di interi
+if (mother.Cost > father.Cost)
+    cplex.AddMIPStart(x, ConvertIntArrayToDoubleArray(father.Path));
+else
+    cplex.AddMIPStart(x, ConvertIntArrayToDoubleArray(mother.Path));
+    
+//Il modello matematico definito viene risolto da Cplex
+cplex.Solve();
+\end{lstlisting}
+
+Terminata la risoluzione del modello matematico, operazione che può anche essere stata forzata con un abort nel caso in cui si ricada nella saturazione di secondo tipo, è necessario risvegliare il thread di servizio in modo tale da comunicargli il completamento della generazione di un figlio. 
+
+Tale thread può gestire una sola comunicazione per volta, è necessario creare quindi un sistema di serializzazione: i threads che gestiscono la creazione di un figlio devono essere certi che il thread di servizio non stia gestendo altre segnalazioni di completamento.
+
+\begin{lstlisting}
+//Se la terminazione non è avvenuta in seguito ad un abort dovuto a saturazione di secondo tipo
+//si comunica al thread di servizio il completamento della generazione di un figlio
+if (!cplex.GetAborter().IsAborted())
+{
+    //lockPol viene utilizzato per serializzare delle comunicazioni di completamento
+    //se non è disponibile si attende la chiamata Monitor.Pulse(lockPol) da parte di un altro thread
+    lock (lockPol)
+    {
+        //Viene comunicata il completamento del figlio ed atomicamente si attende una segnalazione
+        //da parte del thread di servizio: solo dopo tale segnalazione è possibile liberare il lock su
+        //lockPol
+        WaitHandle.SignalAndWait(ewhCnt, ewhCntComplete, 1000, false);
+        //Monitor.Pulse(lockPol) risveglia un qualsiasi thread in attesa su lockPol
+        Monitor.Pulse(lockPol);
+    }
+}
+\end{lstlisting}
+
+Completata la fase di sincronizzazione non rimane altro che leggere la soluzione trovata da Cplex, popolare un apposito oggetto \textbf{PathGentic} contenente il nuovo figlio e restituirlo, non prima di aver eliminato il fissaggio delle variabili secondo \textit{RINS}.
+
+\begin{lstlisting}
+//Si ottiene il valore delle variabili nella soluzione figlio trovata
+double[] pathChild = cplex.GetValues(x);
+
+//Popolamento del vettore path
+for (int i = 0; i < mother.path.Length; i++)
+{
+    if (pathChild[i] >= 0.5)
+        path[i] = 1;
+    else
+        path[i] = 0;
+}
+
+//Viene creato l'oggetto di tipo PathGenetic per il figlio generato
+child = new PathGenetic(path, cplex.GetObjValue());
+
+
+//Reset delle variabili modificate secondo la tecnica RINS
+for (int i = 0; i < mother.path.Length; i++)
+{
+    x[i].LB = 0;
+    x[i].UB = 1;
+}
+
+return child;
+\end{lstlisting}
+
 \section*{APPENDICE}
 
-\subsection*{METODO MODIFYMODEL (APPENDICE)}
+\subsection*{METODO MODIFYMODEL}
 
 Il metodo ModifyModel fissa in soluzione, con una certa percentuale p, lati che appartengono ad una soluzione ammissibile. La sua firma risulta essere:
 
@@ -3027,9 +3516,8 @@ Dove:
     \item \textbf{x}: vettore contenente le variabili del modello;
     \item \textbf{rnd}: istanza della classe Random utilizzata per la generazione dei numeri casuali;
     \item \textbf{percentageFixing}: Probabilità con cui un lato viene fissato in soluzione;
-    \item \textbf{solution}: Vettore che codifica la soluzione ammissibile su cui si fissano in soluzione i lati.
+    \item \textbf{solution}: Vettore che codifica la soluzione ammissibile su cui si fissano in soluzione i lati;
 \end{itemize}
-
 
 L' idea dell' algoritmo consiste nel scandire tutti i lati appartenenti alla soluzione ammissibile fornitagli in ingresso, invocare per ognuno lato il metodo \textbf{RandomSelect} e se ritorna 1 viene fissato il lato altrimenti no. Per fissarlo si pone semplicemente il LB della variabile ad esso associata a 1.  Il ciclo do - while serve per ripete il fissaggio qualora si fissino tutti i lati o non si vincoli solo un lato poichè non avrebbe senso a questo punto far partire cplex. Al termine del metodo viene effettuato il preprocessing discusso del paragrafo precedente.
 
@@ -3280,6 +3768,268 @@ for (int i = 1; i < population.Count; i++)
 }
 
 return currentBestPath;
+
+\end{lstlisting}
+
+\subsection*{NEARESTNEIGHBORPOLISHING \& RNDPLUSPOLISHING}
+
+Il metodo \textbf{NearestNeightborPolishing} applica una versione dell'algoritmo \textbf{NearestNeightbor} LINK!!!!! compatibile con il metodo matheuristico \textbf{Polishing}.
+Viene memorizzato il circuito in modo compatibile alle variabili di Cplex\footnote{Se la variabile di indice $i$ ha valore $x$ allora il vettore che descrive il circuito sarà $vect[i] = x$.}, utilizza come nodo di partenza sempre e solo quello di indice $0$ ed utilizza una propria versione del metodo \textbf{RndPlus}\footnote{\textbf{RndPlus} determina se la selezione del lato migliore possibile oppure uno dei successivi ad ogni iterazione dell'algoritmo \textbf{NearestNeighbor}.} chiamata \textbf{RndPlusPolishing}.
+
+\begin{lstlisting}
+
+public static PathGenetic NearestNeightborPolishing(Instance instance, Random rnd, List<int>[] listArray, double minus)
+
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{instance}: riferimento alla classe Instance contenente le informazioni riguardanti l'istanza presa in analisi;
+    \item \textbf{rnd}: variabile utilizzata per ottenere valori random, precedentemente inizializzata;
+    \item \textbf{listArray}: listArray[i][j] = z; implica che il nodo di indice $z$ è il $j-esimo$ più vicino a quello di indice $i$ nella attuale istanza;
+    \item \textbf{minus}: valore necessario per il metodo \textbf{RndPlusPolishing};
+\end{itemize}
+
+Di seguito si riporta il codice commentato
+
+\begin{lstlisting}
+
+//Vettore in cui memorizzo il nuovo circuito, (instance.NNodes - 1) * instance.NNodes / 2 corrisponde
+//al numero totale di lati presenti
+int[] heuristicSolutionCplex = new int[(instance.NNodes - 1) * instance.NNodes / 2];
+
+//Costo del circuito prodotto
+double cost = 0;
+
+//Memorizza i nodi che delimitano il lato preso in analisi 
+int[] currentNodes = new int[2];
+
+//Nodi facenti parte del circuito
+List<int> notAvailableNodes = new List<int>();
+
+//Il nodo di partenza è sempre quello di indice 0
+currentNodes[0] = 0;
+
+//Il nodo di indice 0 è non più disponibile per costruzione
+notAvailableNodes.Add(currentNodes[0]);
+
+//I lati da inserire nel circuito sono in numero pari al numero di nodi della istanza
+for (int i = 1; i < instance.NNodes; i++)
+{
+    //Se falso significa che l'attuale iterazione del ciclo non ha ancora aggiunto un nuovo lato al circuito
+    bool found = false;
+    //Dal nodo corrente si tenta di passare al nodo plus-iesimo più vicino
+    int plus = RndPlusPolishing(instance, rnd, minus);
+    int nextNode = listArray[currentNodes[0]][plus];
+
+    do
+    {
+        //Si controlla se il nextNode selezionato è ancora disponibile
+        if (notAvailableNodes.Contains(nextNode) == false)
+        {
+            //Il lato da aggiungere ha estremi i nodi di indice currentNodes[0] e currentNodes[1]
+            currentNodes[1] = nextNode;
+            //Si trova l'indice utilizzato da Cplex per memorizzare la variabile relativa al nodo
+            //selezionato
+            int pos = xPos(currentNodes[0], currentNodes[1], instance.NNodes);
+
+            //Il costo corrente del circuito è aggiornato
+            cost += (int)Point.Distance(instance.Coord[currentNodes[0]], instance.Coord[currentNodes[1]], instance.EdgeType);
+
+            //Il vettore che descrive il circuito è aggiornato
+            heuristicSolutionCplex[pos] = 1;
+
+            //Aggiornamento dei nodi non disponibili e della nuova estremità del circuito
+            notAvailableNodes.Add(nextNode);
+            currentNodes[0] = nextNode;
+            found = true;
+        }
+        else
+        {
+            //Nel caso il nodo selezionato non sia disponible si passa al successivo
+            //meno distante
+            plus++;
+            if (plus >= instance.NNodes - 1)
+            {
+                nextNode = listArray[currentNodes[0]][0];
+                plus = 0;
+            }
+            else
+                nextNode = listArray[currentNodes[0]][0 + plus];
+        }
+    } while (!found);
+}
+
+//Il circuito viene effettivamente chiuso collegando l'ultimo nodo selezionato a quello di indice 0
+heuristicSolutionCplex[xPos(0, currentNodes[1], instance.NNodes)] = 1;
+//Il costo viene aggiornato
+cost += (int)Point.Distance(instance.Coord[0], instance.Coord[currentNodes[1]], instance.EdgeType);
+//Una variabile di tipo PathGenetic viene restituita, Path e costo sono settati di conseguenza
+return new PathGenetic(heuristicSolutionCplex, cost);
+
+\end{lstlisting}
+
+Il metodo \textbf{RndPlusPolishing} agisce in base al numero di nodi della istanza considerata, i valori settati non seguono nessuna regola teorica ma sono il risultato di diversi tuning eseguiti durante la fase di test.
+
+\begin{lstlisting}
+//Valore random tra 0 (compreso) ed 1 (non compreso)
+double tmp = rnd.NextDouble();
+
+if (instance.NNodes < 400)
+{
+    if (tmp < 0.75 - minus)
+        //Signica che si tenta di collegare il nodo più vicino a quello attuale
+        return 0;
+    else
+        //Signica che si tenta di collegare il secondo nodo più vicino a quello attuale
+        return 1;
+}else if (instance.NNodes < 600)
+{
+    if (tmp < 0.8 - minus)
+        return 0;
+    else
+        return 1;
+}
+else if (instance.NNodes < 800)
+{
+    if (tmp < 0.9 - minus)
+        return 0;
+    else
+        return 1;
+}
+else
+{
+    if (tmp < 0.95 - minus)
+        return 0;
+    else
+        return 1;
+}
+
+\end{lstlisting}
+
+\subsection*{POLISHING - GESTIONE ALGORITMICA SATURAZIONE DI SECONDO TIPO}
+
+Ricordando che nell'algoritmo polishing, la saturazione di secondo tipo avviene quando gli ultimi $m$\footnote{Dove $m$ è il numero di \textit{figli} calcolati costantemente in modo parallelo da $m$ threads.} \textit{figli} non ancora determinati richiedono un tempo troppo elevato rispetto ai loro \textit{fratelli}.
+
+L'idea per gestire questa problematica è molto semplice: una volta terminata la creazione di tutti i \textit{figli}, eccetto gli ulti $m$, si attende ancora un certo tempo $T_r$ LINK!!!!! dopodiché si lancia una operazione di abort su tutte le istanze di Cplex. Quelle che hanno già terminato la propria risoluzione non subiscono alcun effetto mentre le altre la terminano in modo \textit{sicuro}.
+
+Tutto questo viene gestito dal metodo \textbf{MonitorCplex} eseguito in background su un apposito thread. Le problematiche che incorrono sono principalmente due:
+\begin{itemize}
+    \item La comunicazione tra i thread che generano i nuovi \textit{figli} e \textit{MonitorCplex} deve essere serializzata.
+    \item Fare in modo che, se durante la attesa del tempo $T_r$, tutti i figli sono completati e quindi \textbf{non} è presente saturazione di secondo tipo, \textit{MonitorCplex} termini immediatamente così che l'algoritmo di polishing possa proseguire senza inutili ritardi.
+\end{itemize}
+
+Per superare questi due ostacoli è necessario introdurre due classi \textbf{WaitHandle} e \textbf{EventWaitHandle}\footnote{Entrambe le classi \textit{WaitHandle} e \textit{EventWaitHandle} fanno parte dello spazio dei nomi System.Threading.}: la prima dispone dell'essenziale metodo \textbf{SignalAndWait(WaitHandle toSignal, WaitHandle toWaitOn)} il quale atomicamente risveglia un thread in attesa su \textbf{toSignal} e pone il chiamante esso stesso in atteso su \textbf{toWaitOn}.
+
+La soluzione proposta per ottenere una completa sincronizzazione tra tutti i threads in gioco è descritta dalla seguente immagine:
+
+\FloatBarrier
+
+\begin{figure}[htbp]
+    \centering
+    \scalebox{0.5}{\includegraphics{Immagini/"DiagrammaPolishing".png}}
+    \caption{Diagramma segnalazione serializzata completamento figlio}
+\end{figure}
+
+\FloatBarrier
+
+Banalmente come già visto nel paragrafo LINK!!!!! il metodo \textbf{GenerateChildPolish} una volta terminato il comando \textbf{Cplex.Solve()} usa il codice:
+
+\begin{lstlisting}
+
+if (!cplex.GetAborter().IsAborted())
+{
+    lock (lockPol)
+    {
+        WaitHandle.SignalAndWait(ewhCnt, ewhCntComplete, 1000, false);
+        Monitor.Pulse(lockPol);
+    }
+}
+
+\end{lstlisting}
+
+Dove l'operazione \textit{WaitHandle.SignalAndWait} ha un timeout di un secondo\footnote{Questo intervallo di tempo è enormemente superiore ad una normale attesa e quindi assicura il corretto funzionamento della sincronizzazione. Essendo la situazione di timeout altrettanto rara non si hanno effetti reali per quanto riguarda un rallentamento dell'algoritmo \textit{polishing}} in quanto può capitare che l'operazione di abort sia avviata tra il test della clausola \textbf{if} e l'esecuzione di \textbf{WaitHandle.SignalAndWait} stesso creando così una attesa infinita.
+
+Completata la creazione del proprio figlio, il thread che esegue \textbf{GenerateChildPolish} effettua la segnalazione, attende la sua totale gestione da parte di \textbf{MonitorCplex} e libera \textbf{lockPol}.
+
+Di seguito è riportato infine il codice completo e commentato del metodo \textit{MonitorCplex}:
+
+\begin{lstlisting}
+
+public static void MonitorCplex(int numThreadsPar, List<Cplex> cplexList, int sizePop, EventWaitHandle ewhCnt, EventWaitHandle ewhCntComplete)
+{
+    //Cronometro che determina se è necessario un abort o meno di Cplex
+    Stopwatch clock = new Stopwatch();
+    clock.Start();
+    //Dati sizePop si creano sempre sizePop/2 figli
+    int sizeCh = sizePop / 2;
+
+    //Quanti figli è necessario che si completino prima di avviare il controllo anti saturazione
+    int maxWait = sizeCh - numThreadsPar;
+
+    //Inizializzazione contatore figli completati
+    int cnt = 0;
+    
+    //Inizializzazione tempo di attesa anti saturazione
+    double tmpSingleThread = 0;
+
+    //Si attendono maxWait segnalazioni di figli completati
+    do
+    {
+        //Il thread corrente attende su ewhCnt e risveglia un thread, se presente,
+        //in attesa su ewhCntComplete
+        WaitHandle.SignalAndWait(ewhCntComplete, ewhCnt);
+        //Una volta risvegliato si procede in modo serializzato all'incremento del contatore cnt
+        cnt++;
+        //Raggiunta la soglia fissata?
+        if (cnt == maxWait)
+        {
+            //Si salva il tempo impiegato per la risoluzione completa di maxWait figli
+            tmpSingleThread = clock.ElapsedMilliseconds / cnt;
+            clock.Stop();
+        }
+    } while (cnt != maxWait);
+
+    //Il valore di attesa finale è settato nei seguenti millisecondi
+    if (tmpSingleThread < 10000) //se minore di 10 secondi lo impongo a 10 secondi
+        tmpSingleThread = 10000;
+    else if (tmpSingleThread > 300000) //se maggiore di 5 minuti secondi lo impongo a 5 minuti
+        tmpSingleThread = 300000;
+
+    //Il clock viene riavviato
+    clock.Restart();
+
+    do
+    {
+        //Si attendono le restanti segnalazioni aggiornado ad ognuna di esse il timeout
+        if (WaitHandle.SignalAndWait(ewhCntComplete, ewhCnt, (int)(tmpSingleThread - clock.ElapsedMilliseconds), false))
+        {
+            cnt++;
+        }
+        else
+        {
+            clock.Stop();
+
+            //Tutte le istanze di Cplex subiscono un abort sicuro se ancora in fase risolutiva
+            Cplex.Aborter aborter;
+
+            foreach (Cplex cplex in cplexList)
+            {
+                aborter = new Cplex.Aborter();
+                cplex.Use(aborter);
+                aborter.Abort();
+            }
+            //Gestita la saturazione il thread di supporto può essere terminato al più presto possibile
+            return;
+        }
+    } while (cnt != sizeCh);//Tutti i figli sono stati generati senza saturazione, esco senza ulteriore
+    //attesa
+    
+    //Prima di uscire si sblocca il thread che ha inoltrato l'ultima segnalazione
+    //evito il timeout di un secondo
+    ewhCntComplete.Set();
+}
 
 \end{lstlisting}
 
