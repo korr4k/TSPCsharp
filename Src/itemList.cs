@@ -4,11 +4,11 @@
     {
         public itemList(double distance, int index)
         {
-            this.dist = distance;
+            this.distance = distance;
             this.index = index;
         }
 
-        public double dist { get; set; }
-        public int index { get; set; }
+        internal double distance { get; set; }
+        internal int index { get; set; }
     }
 }

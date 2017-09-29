@@ -5,230 +5,39 @@ namespace TSPCsharp
 {
     public class Instance
     {
-        // input data
-        int nNodes;
-        Point[] coord;
+        //Dati input utente
 
-        // parameters 
-        string edgeType;                        // used in Point.distance()
-        double timeLimit;                       // overall time limit, in sec.s
-        string inputFile;                       // input file
-
-        // global data
-        double tStart;                          // real starting time 
-        double xBest;                           // best sol. available  
-       
-        double[] bestSol;                       // best sol. available    
-        double bestLb;                          // best lower bound available
+        //Nome file
+        internal string inputFile { get; set; }
+        //Tempo limite di esecuzione
+        internal double timeLimit { get; set; }
 
 
-        // model:   
-        //int xStart;
-        //int qStart;
-        //int bigQStart;
-        //int sStart;
-        //int bigSStart;
-        //int yStart;
-        //int fStart;
-        int xStart;
+        //Dati ricavati dal file di input
 
-        // parameters used to build GNUPlot panel
-        double xMin = Double.MaxValue;
-        double xMax = Double.MinValue;
-        double yMin = Double.MaxValue;
-        double yMax = Double.MinValue;
+        //Numero di nodi
+        internal int nNodes { get; set; }
+        //Coordinate (x,y) di ogni nodo
+        internal Point[] coord { get; set; }
+
+        //Determina come calcolare la distanza tra due punti
+        internal string edgeType { get; set; }
 
 
-        //get and set methods for all parameters:
-
-        public int NNodes
-        {
-            get
-            {
-                return nNodes;
-            }
-
-            set
-            {
-                nNodes = value;
-            }
-        }
-
-        public string EdgeType
-        {
-            get
-            {
-                return edgeType;
-            }
-
-            set
-            {
-                edgeType = value;
-            }
-        }
-
-        public double TimeLimit
-        {
-            get
-            {
-                return timeLimit;
-            }
-
-            set
-            {
-                timeLimit = value;
-            }
-        }
-
-        public string InputFile
-        {
-            get
-            {
-                return inputFile;
-            }
-
-            set
-            {
-                inputFile = value;
-            }
-        }
-
-        public double TStart
-        {
-            get
-            {
-                return tStart;
-            }
-
-            set
-            {
-                tStart = value;
-            }
-        }
-
-        public double XBest
-        {
-            get
-            {
-                return xBest;
-            }
-
-            set
-            {
-                xBest = value;
-            }
-        }
-
-
-        public double[] BestSol
-        {
-            get
-            {
-                return bestSol;
-            }
-
-            set
-            {
-                bestSol = value;
-            }
-        }
-
-        public double BestLb
-        {
-            get
-            {
-                return bestLb;
-            }
-
-            set
-            {
-                bestLb = value;
-            }
-        }
+        //Parametri da definire durante la risoluzione
         
-        public Point[] Coord
-        {
-            get
-            {
-                return coord;
-            }
+        //Costo della migliore soluzione intera trovata
+        internal double xBest { get; set; }
+        //Valore di ogni lato nella migliore soluzione intera trovata
+        internal double[] bestSol { get; set; }
+        //Migliore lower bound trovato, utilizzato in alcuni algoritmi
+        internal double bestLb { get; set; }
 
-            set
-            {
-                coord = value;
-            }
-        }
-
-        public int XStart
-        {
-            get
-            {
-                return xStart;
-            }
-
-            set
-            {
-                xStart = value;
-            }
-        }
-
-        public double XMin
-        {
-            get
-            {
-                return xMin;
-            }
-
-            set
-            {
-                xMin = value;
-            }
-        }
-
-        public double XMax
-        {
-            get
-            {
-                return xMax;
-            }
-
-            set
-            {
-                xMax = value;
-            }
-        }
-
-        public double YMin
-        {
-            get
-            {
-                return yMin;
-            }
-
-            set
-            {
-                yMin = value;
-            }
-        }
-
-        public double YMax
-        {
-            get
-            {
-                return yMax;
-            }
-
-            set
-            {
-                yMax = value;
-            }
-        }
-    
-        //Used to print the points stored in instance.Coord vector
+        //Metodo statico che stampa all'interno della Console le coordinate di tutti i punti memorizzati nell'oggeto instance ricevuto
         static public void Print(Instance inst)
         {
-            for (int i = 0; i < inst.NNodes; i++)
-                Console.WriteLine("Point #" + (i + 1) + "= (" + inst.Coord[i].X + "," + inst.Coord[i].Y + ")");
+            for (int i = 0; i < inst.nNodes; i++)
+                Console.WriteLine("Point #" + (i + 1) + "= (" + inst.coord[i].x + ";" + inst.coord[i].y + ")");
         }
     }
 }

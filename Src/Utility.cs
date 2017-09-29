@@ -17,14 +17,14 @@ namespace TSPCsharp
         //Setting the current real residual time for Cplex and some relative parameters
         public static void MipTimelimit(Cplex cplex, Instance instance, Stopwatch clock)
         {
-            double residualTime = instance.TStart + instance.TimeLimit - clock.ElapsedMilliseconds / 1000.0;
+            double residualTime = instance.timeLimit - clock.ElapsedMilliseconds / 1000.0;
 
             if (residualTime < 0.0)
                 residualTime = 0.0;
 
             cplex.SetParam(Cplex.IntParam.ClockType, 2);
             cplex.SetParam(Cplex.Param.TimeLimit, residualTime);                            // real time
-            cplex.SetParam(Cplex.Param.DetTimeLimit, Program.TICKS_PER_SECOND * cplex.GetParam(Cplex.Param.TimeLimit));			// ticks
+            cplex.SetParam(Cplex.Param.DetTimeLimit, 1000 * cplex.GetParam(Cplex.Param.TimeLimit));			// ticks
         }
 
         //Creation of the process used to interect with GNUPlot
@@ -43,7 +43,7 @@ namespace TSPCsharp
             Object Height = SystemInformation.VirtualScreen.Height;
 
             //Enabling GNUPlot commands
-            process.StandardInput.WriteLine("gnuplot\nset terminal wxt size {0},{1}\nset lmargin at screen 0.05\nset rmargin at screen 0.95\nset bmargin at screen 0.1\nset tmargin at screen 0.9\nset xrange [{2}:{3}]\nset yrange [{4}:{5}]", Convert.ToDouble(Width.ToString()) - 100, Convert.ToDouble(Height.ToString()) - 100, instance.XMin, instance.XMax, instance.YMin, instance.YMax);
+            process.StandardInput.WriteLine("gnuplot\nset terminal wxt size {0},{1}\nset lmargin at screen 0.05\nset rmargin at screen 0.95\nset bmargin at screen 0.1\nset tmargin at screen 0.9");
 
             return process;
         }
@@ -52,7 +52,7 @@ namespace TSPCsharp
         public static INumVar[] BuildModel(Cplex cplex, Instance instance, int nEdges)
         {
             //Init the model's variables
-            INumVar[] x = new INumVar[(instance.NNodes - 1) * instance.NNodes / 2];
+            INumVar[] x = new INumVar[(instance.nNodes - 1) * instance.nNodes / 2];
 
             /*
              *expr will hold all the expressions that needs to be added to the model
@@ -63,19 +63,19 @@ namespace TSPCsharp
 
 
             //Populating objective function
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                for (int j = i + 1; j < instance.NNodes; j++)
+                for (int j = i + 1; j < instance.nNodes; j++)
                 {
                     ////xPos return the correct position where to store the variable corresponding to the actual link (i,i)
-                    int position = xPos(i, j, instance.NNodes);
+                    int position = xPos(i, j, instance.nNodes);
 
                     if (nEdges > 0)
                         x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
                     else
                         x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
 
-                    expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+                    expr.AddTerm(x[position], Point.Distance(instance.coord[i], instance.coord[j], instance.edgeType));
                 }
             }
 
@@ -83,11 +83,11 @@ namespace TSPCsharp
             {
                 List<int>[] listArray = BuildSLComplete(instance);
 
-                for (int i = 0; i < instance.NNodes; i++)
+                for (int i = 0; i < instance.nNodes; i++)
                 {
                     for (int j = 0; j < nEdges; j++)
                     {
-                        int position = xPos(i, listArray[i][j], instance.NNodes);
+                        int position = xPos(i, listArray[i][j], instance.nNodes);
 
                         x[position].UB = 1;
                     }
@@ -99,17 +99,17 @@ namespace TSPCsharp
 
 
             //Starting to elaborate Ax
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
                 //Resetting expr
                 expr = cplex.LinearNumExpr();
 
-                for (int j = 0; j < instance.NNodes; j++)
+                for (int j = 0; j < instance.nNodes; j++)
                 {
                     //For each row i only the links (i,i) or (i,i) have coefficent 1
                     //xPos return the correct position where link is stored inside the vector x
                     if (i != j)//No loops wioth only one node
-                        expr.AddTerm(x[xPos(i, j, instance.NNodes)], 1);
+                        expr.AddTerm(x[xPos(i, j, instance.nNodes)], 1);
                 }
 
                 //Adding to Ax the current equation with known term 2 and name degree(<current i node>)
@@ -118,7 +118,7 @@ namespace TSPCsharp
 
             //Printing the complete model inside the file <name_file.tsp.lp>
             if (Program.VERBOSE >= -1)
-                cplex.ExportModel(instance.InputFile + ".lp");
+                cplex.ExportModel(instance.inputFile + ".lp");
 
             return x;
 
@@ -230,17 +230,17 @@ namespace TSPCsharp
         public static PathGenetic NearestNeighbour(Instance instance, Random rnd, List<int>[] listArray)
         {
             // heuristicSolution is the path of the current heuristic solution to generate
-            int[] heuristicSolution = new int[instance.NNodes];
+            int[] heuristicSolution = new int[instance.nNodes];
             double distHeuristic = 0;
 
-            int currentIndex = rnd.Next(instance.NNodes);
+            int currentIndex = rnd.Next(instance.nNodes);
             int startindex = currentIndex;
 
-            bool[] availableIndexes = new bool[instance.NNodes];
+            bool[] availableIndexes = new bool[instance.nNodes];
 
             availableIndexes[currentIndex] = true;
 
-            for (int i = 0; i < instance.NNodes - 1; i++)
+            for (int i = 0; i < instance.nNodes - 1; i++)
             {
                 bool found = false;
 
@@ -253,7 +253,7 @@ namespace TSPCsharp
                     if (availableIndexes[nextIndex] == false)
                     {
                         heuristicSolution[currentIndex] = nextIndex;
-                        distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[nextIndex], instance.EdgeType);
+                        distHeuristic += Point.Distance(instance.coord[currentIndex], instance.coord[nextIndex], instance.edgeType);
                         availableIndexes[nextIndex] = true;
                         currentIndex = nextIndex;
                         found = true;
@@ -261,7 +261,7 @@ namespace TSPCsharp
                     else
                     {
                         plus++;
-                        if (plus >= instance.NNodes - 1)
+                        if (plus >= instance.nNodes - 1)
                         {
                             nextIndex = listArray[currentIndex][0];
                             plus = 0;
@@ -274,7 +274,7 @@ namespace TSPCsharp
             }
 
             heuristicSolution[currentIndex] = startindex;
-            distHeuristic += Point.Distance(instance.Coord[currentIndex], instance.Coord[startindex], instance.EdgeType);
+            distHeuristic += Point.Distance(instance.coord[currentIndex], instance.coord[startindex], instance.edgeType);
 
             return new PathGenetic(heuristicSolution, distHeuristic);
         }
@@ -283,7 +283,7 @@ namespace TSPCsharp
         public static PathGenetic NearestNeighbourGenetic(Instance instance, Random rnd, bool rndStartPoint, List<int>[] listArray)
         {
             // heuristicSolution is the path of the current heuristic solution generate
-            int[] heuristicSolution = new int[instance.NNodes];
+            int[] heuristicSolution = new int[instance.nNodes];
 
             //List that contains all nodes belonging to the graph 
             List<int> availableNodes = new List<int>(); 
@@ -291,14 +291,14 @@ namespace TSPCsharp
 
             //rndStartPoint define if the starting point is random or always the node 0 
             if (rndStartPoint)
-                currenNode = rnd.Next(0, instance.NNodes);
+                currenNode = rnd.Next(0, instance.nNodes);
             else
                 currenNode = 0;
 
             heuristicSolution[0] = currenNode;
             availableNodes.Add(currenNode);
             
-            for (int i = 1; i < instance.NNodes; i++)
+            for (int i = 1; i < instance.nNodes; i++)
             {
                 bool found = false;
                 int plus = RndGenetic(rnd);
@@ -317,7 +317,7 @@ namespace TSPCsharp
                     else
                     {
                         plus++;
-                        if (plus >= instance.NNodes - 1)
+                        if (plus >= instance.nNodes - 1)
                         {
                             nextNode = listArray[currenNode][0];
                             plus = 0;
@@ -335,8 +335,8 @@ namespace TSPCsharp
         public static List<int>[] BuildSLComplete(Instance instance)
         {
             //SL and L stores the information regarding the nearest edges for each node 
-            List<itemList>[] SL = new List<itemList>[instance.NNodes];
-            List<int>[] L = new List<int>[instance.NNodes];
+            List<itemList>[] SL = new List<itemList>[instance.nNodes];
+            List<int>[] L = new List<int>[instance.nNodes];
 
             for (int i = 0; i < SL.Length; i++)
             {
@@ -346,11 +346,11 @@ namespace TSPCsharp
                 {
                     //Simply adding each possible links with its distance
                     if (i != j)
-                        SL[i].Add(new itemList(Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType), j));
+                        SL[i].Add(new itemList(Point.Distance(instance.coord[i], instance.coord[j], instance.edgeType), j));
                 }
 
                 //Sorting the list
-                SL[i] = SL[i].OrderBy(itemList => itemList.dist).ToList<itemList>();
+                SL[i] = SL[i].OrderBy(itemList => itemList.distance).ToList<itemList>();
                 //Only the index of the nearest nodes are relevants
                 L[i] = SL[i].Select(itemList => itemList.index).ToList<int>();
             }
@@ -400,10 +400,10 @@ namespace TSPCsharp
         {
 
             //Init the StreamWriter for the current solution
-            StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+            StreamWriter file = new StreamWriter(instance.inputFile + ".dat", false);
 
             //Printing the optimal solution and the GNUPlot input file
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
                 /*
                  *Current GNUPlot format is:
@@ -414,8 +414,8 @@ namespace TSPCsharp
                  *<Blank line> 
                  *-- next link --
                 */
-                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                file.WriteLine(instance.Coord[pathG.path[i]].X + " " + instance.Coord[pathG.path[i]].Y + " " + (pathG.path[i] + 1) + "\nEdges");
+                file.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                file.WriteLine(instance.coord[pathG.path[i]].x + " " + instance.coord[pathG.path[i]].y + " " + (pathG.path[i] + 1) + "\nEdges");
             }
 
             //GNUPlot input file needs to be closed
@@ -425,21 +425,21 @@ namespace TSPCsharp
             if (Program.VERBOSE >= -1)
             {
                 if(pathG.cost != incumbentCost)
-                    PrintGNUPlot(process, instance.InputFile, typeSol, pathG.cost, incumbentCost);
+                    PrintGNUPlot(process, instance.inputFile, typeSol, pathG.cost, incumbentCost);
                 else
-                    PrintGNUPlot(process, instance.InputFile, typeSol, pathG.cost, -1);
+                    PrintGNUPlot(process, instance.inputFile, typeSol, pathG.cost, -1);
             }
         }
 
         public static PathGenetic GenerateChild(Instance instance, Random rnd, PathGenetic mother, PathGenetic father, List<int>[] listArray)
         {
             PathGenetic child;
-            int[] pathChild = new int[instance.NNodes];
+            int[] pathChild = new int[instance.nNodes];
 
             //This variable defines the point of breaking the path of the father and that of the mother
-            int crossover = (rnd.Next(0, instance.NNodes));
+            int crossover = (rnd.Next(0, instance.nNodes));
 
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
                 if (i > crossover)
                     pathChild[i] = mother.path[i];
@@ -498,7 +498,7 @@ namespace TSPCsharp
                         NumbersExtracted.Add(roulette[numberExtracted]);
 
                         //We add to the next population the path having nRoulette equal to roulette[numberExtracted]
-                        nextGeneration.Add(FatherGeneration.Find(x => x.NRoulette == roulette[numberExtracted]));
+                        nextGeneration.Add(FatherGeneration.Find(x => x.nRoulette == roulette[numberExtracted]));
                     }
                 } while (find);
             }
@@ -521,12 +521,12 @@ namespace TSPCsharp
         static int FillRoulette(List<int> roulette, List<PathGenetic> CurrentGeneration)
         {
             int sizeRoulette = 0;
-            int proportionalityConstant = Estimate(CurrentGeneration[0].Fitness);
+            int proportionalityConstant = Estimate(CurrentGeneration[0].fitness);
 
             for (int i = 0; i < CurrentGeneration.Count; i++)
             {
-                int prob = (int)(CurrentGeneration[i].Fitness * proportionalityConstant);
-                CurrentGeneration[i].NRoulette = i;
+                int prob = (int)(CurrentGeneration[i].fitness * proportionalityConstant);
+                CurrentGeneration[i].nRoulette = i;
                 sizeRoulette += prob;
                 for (int j = 0; j < prob; j++)
                     roulette.Add(i);
@@ -548,30 +548,30 @@ namespace TSPCsharp
 
         public static void PrintGeneticSolution(Instance instance, Process process, PathGenetic Heuristic)
         {
-            StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+            StreamWriter file = new StreamWriter(instance.inputFile + ".dat", false);
 
-            for (int i = 0; i + 1 < instance.NNodes; i++)
+            for (int i = 0; i + 1 < instance.nNodes; i++)
             {
                 int vertice1 = Heuristic.path[i];
                 int vertice2 = Heuristic.path[i + 1];
-                file.WriteLine(instance.Coord[vertice1].X + " " + instance.Coord[vertice1].Y + " " + (vertice1 + 1));
-                file.WriteLine(instance.Coord[vertice2].X + " " + instance.Coord[vertice2].Y + " " + (vertice2 + 1) + "\nEdges");
+                file.WriteLine(instance.coord[vertice1].x + " " + instance.coord[vertice1].y + " " + (vertice1 + 1));
+                file.WriteLine(instance.coord[vertice2].x + " " + instance.coord[vertice2].y + " " + (vertice2 + 1) + "\nEdges");
             }
-            file.WriteLine(instance.Coord[Heuristic.path[0]].X + " " + instance.Coord[Heuristic.path[0]].Y + " " + (Heuristic.path[0] + 1));
-            file.WriteLine(instance.Coord[Heuristic.path[instance.NNodes - 1]].X + " " + instance.Coord[Heuristic.path[instance.NNodes - 1]].Y + " " + (Heuristic.path[instance.NNodes - 1] + 1) + "\nEdges");
+            file.WriteLine(instance.coord[Heuristic.path[0]].x + " " + instance.coord[Heuristic.path[0]].y + " " + (Heuristic.path[0] + 1));
+            file.WriteLine(instance.coord[Heuristic.path[instance.nNodes - 1]].x + " " + instance.coord[Heuristic.path[instance.nNodes - 1]].y + " " + (Heuristic.path[instance.nNodes - 1] + 1) + "\nEdges");
 
             //GNUPlot input file needs to be closed
             file.Close();
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                PrintGNUPlot(process, instance.InputFile, 1, Heuristic.cost, -1);
+                PrintGNUPlot(process, instance.inputFile, 1, Heuristic.cost, -1);
         }
 
         //We modify randomly the path relative to the child
         static void Mutation(Instance instance, Random rnd, int[] pathChild)
         {
             int indexToModify = rnd.Next(0, pathChild.Length);
-            int newValue = rnd.Next(0, instance.NNodes);
+            int newValue = rnd.Next(0, instance.nNodes);
             pathChild[indexToModify] = newValue;
         }
 
@@ -591,9 +591,9 @@ namespace TSPCsharp
             List<int> pathIncomplete = new List<int>();
 
             //Is the path that it is a solution of TSP
-            int[] pathComplete = new int[instance.NNodes];
+            int[] pathComplete = new int[instance.nNodes];
 
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {              
                 if (pathIncomplete.Contains(pathChild[i]) == false)
                     pathIncomplete.Add(pathChild[i]);       
@@ -621,9 +621,9 @@ namespace TSPCsharp
         static void FindIsolatedNodes(Instance instance, int[] pathChild, List<int> isolatedNodes, List<int> nearestNeighIsolNode)
         {
             bool nodeIsVisited = false;
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                for (int j = 0; j < instance.NNodes; j++)
+                for (int j = 0; j < instance.nNodes; j++)
                 {
                     if (pathChild[j] == i)
                     {
@@ -675,7 +675,7 @@ namespace TSPCsharp
         static int ProbabilityTwoOpt(Instance instance, Random rnd)
         {
             //The probability to applying TwoOpt is proportional to the number of nodes
-            if (rnd.Next(1, instance.NNodes / 2) == 1)
+            if (rnd.Next(1, instance.nNodes / 2) == 1)
                 return 1;
             else
                 return 0;
@@ -733,7 +733,7 @@ namespace TSPCsharp
                     if (RandomSelect(rnd, percentageFixing) == 1)
                     {
                         x[i].LB = 1;
-                        fixedEdges.Add((xPosInv(i, instance.NNodes)));
+                        fixedEdges.Add((xPosInv(i, instance.nNodes)));
                     }
                 }
             }
@@ -820,14 +820,14 @@ namespace TSPCsharp
 
                 }
                 if (nodeLeft != currentEdge[0] || nodeRight != currentEdge[1])
-                    x[xPos(nodeLeft, nodeRight, instance.NNodes)].UB = 0;
+                    x[xPos(nodeLeft, nodeRight, instance.nNodes)].UB = 0;
             }
         }
 
         public static PathGenetic GenerateChildRins(Cplex cplex, Instance instance, Process process, INumVar[] x, PathGenetic mother, PathGenetic father)
         {
             PathGenetic child;
-            int[] path = new int[instance.NNodes];
+            int[] path = new int[instance.nNodes];
 
             int[] m = InterfaceForTwoOpt(mother.path);
             //PrintGeneticSolution(instance, process, mother.path);
@@ -845,15 +845,15 @@ namespace TSPCsharp
             double[] actualX = cplex.GetValues(x);
 
             int tmp = 0;
-            int[] available = new int[instance.NNodes];
+            int[] available = new int[instance.nNodes];
 
-            for (int i = 0; i < instance.NNodes - 1; i++)
+            for (int i = 0; i < instance.nNodes - 1; i++)
             {
-                for (int j = 0; j < instance.NNodes; j++)
+                for (int j = 0; j < instance.nNodes; j++)
                 {
                     if (tmp != j && available[j] == 0)
                     {
-                        int position = xPos(tmp, j, instance.NNodes);
+                        int position = xPos(tmp, j, instance.nNodes);
 
                         if (actualX[position] >= 0.5)
                         {

@@ -2,6 +2,11 @@
 \usepackage{fullpage}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\addto\captionsitalian{%
+    \renewcommand{\figurename}{Fig.}%
+    \renewcommand{\contentsname}{Tab.}%
+}
 \usepackage{empheq}
 \usepackage{color}
 \usepackage{listings}
@@ -63,7 +68,7 @@ literate={à}{{\`a}}1 {è}{{\`e}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {é}{{\'e}}1 {ì}{{
     emph=[1]%
     {%
         Process,
-        Cplex,
+        CPLEX,
         Program,
         IntParam,
         NumVarType,
@@ -106,367 +111,513 @@ Le caratteristiche del codice di programmazione, che risultano di minore interes
 
 Utilizziamo questa sezione introduttiva per parlare della storia, le applicazioni e correnti sfide riguardanti il \textit{TSP}, da sempre uno dei problemi più discussi e studiati nella disciplina della \textbf{Ricerca Operativa} soprattutto grazie alla sua rilevanza in numerose applicazioni pratiche.
 
+Il particolare nome \textit{TSP} deriva dalla sua più tipica rappresentazione: data una rete di città e strade che le collegano, ci si chiede quale sia il percorso \textbf{migliore} che un commesso viaggiatore dovrebbe seguire nel caso in cui voglia visitare ogni città una ed una sola volta ritornando infine al punto di partenza. Per quanto detto, risulta naturale modellare questo problema attraverso un grafo \textbf{pesato} i cui nodi rappresentano le città mentre ed i lati corrispondono alle vie di accesso che le collegano. Per quanto riguarda il \textbf{peso} da attribuire a queste ultime è possibile utilizzare qualsivoglia tecnica: una semplice lunghezza fisica, tempi di percorrenza o la presenza di pedaggi sono solo alcuni esempi.
 
-Il particolare nome \textit{TSP} deriva dalla sua più tipica rappresentazione: data una rete di città tra loro connesse attraverso specifiche strade, ci si chiede quale sia il percorso \textbf{migliore} che un commesso viaggiatore dovrebbe seguire nel caso in cui volesse visitare ogni luogo una ed una sola volta ritornando infine al punto di partenza. Per quanto detto, risulta naturale modellare questo problema attraverso un grafo pesato i cui nodi rappresentano le città mentre ed i lati corrispondono alle vie di accesso che le collegano. Per quanto riguarda il \textbf{peso} da attribuire a queste ultime è possibile utilizzare qualsivoglia tecnica: una semplice lunghezza fisica, tempi di percorrenza, la presenza di pedaggi sono solo alcuni esempi.
+Data questa situazione possiamo notare come sia molto facile mutarla in infinite altre, sia di uso pratico che teorico. Fondamentali sono le applicazioni nell'ambito della logistica distributiva più comunemente note come problemi di routing. Non ci riferisce solamente al classico smistamento di pacchetti in una rete internet ma anche l’organizzazione di sistemi di distribuzione per beni e servizi: movimentazione di pezzi o semilavorati tra reparti di produzione, raccolta e distribuzione di materiali, smistamento di merci da centri di produzione a quelli di distribuzione e molto altro ancora.
 
-Data questa situazione possiamo notare come sia molto facile mutarla in infinite altre, sia di uso pratico che teorico. Fondamentali sono le applicazioni nell'ambito della logistica distributiva più comunemente note come problemi di routing. Questi non riguardano solamente il classico smistamento di pacchetti in una rete internet ma anche l’organizzazione di sistemi di distribuzione per beni e servizi:  movimentazione di pezzi o semilavorati tra reparti di produzione, raccolta e distribuzione di materiali, smistamento di merci da centri di produzione a quelli di distribuzione e molto altro ancora.
+Sebbene le applicazioni nel contesto dei trasporti rimangano comunque le più naturali, la semplicità del \textit{modello} ha portato negli anni allo sviluppo di innumerevoli applicazioni nelle più svariate aree di interesse. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito\footnote{In questo esempio i fori da forare sono le città, le strade sono definite dai possibili movimenti della macchina ed il loro peso è il tempo necessario per spostare la testa del trapano.}
 
-Nel corso degli anni sono nate anche diverse app.
-Sebbene le applicazioni nel contesto dei trasporti rimangano comunque le più naturali, la semplicità del \textit{modello} ha portato a molte applicazioni interessanti in altre aree. Un esempio può essere la programmazione di una macchina per eseguire fori in un circuito. In questo caso i fori da forare sono le città e il costo del viaggio è il tempo necessario per spostare la testa del trapano da un foro all'altro. 
-Il problema del commesso viaggiatore risulta essere NP-hard: questo significa che, al momento, non è noto in letteratura un algoritmo che lo risolva in tempo polinomiale. Poiché\`e esiste sempre una istanza per cui il tempo di risoluzione cresce esponenzialmente non è sempre possibile utilizzare algoritmi esatti per risolvere il TPS. Risulta quindi necessario fornire algoritmi euristici, in grado di risolvere in modo efficace istanze con un numero elevato di nodi in tempi ragionevoli.
+Per inquadrare l'evoluzione temporale del \textit{TSP} è necessario risalire fino all'Ottocento e quindi ai matematici Sir William Rowan Hamilton e Thomas Penyngton. Il primo, ad esempio, durante l'anno 1857 nella città di Dublino e più specificatamente nel corso di una riunione della British Association for the Advancement of Science, descrisse il così detto  "Icosian game": questo consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro era originariamente composto da 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
+
+Questo problema è in realtà un particolarissimo TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati). Per veder nascere la formulazione più generale del TSP, proposta all'inizio di questa sezione, è necessario attendere il secolo successivo, negli anni Venti e Trenta per la precisione, con il matematico ed economista Karl Menger.
+
+Ciò non significa che furuno contemporaneamente proposti anche metodi risolutivi \textit{intelligenti}: per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni possibili, mantenendo il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso $n$ città è infatti esorbitante: dato un qualsiasi punto di partenza, ci sono a disposizione $(n - 1)$ scelte per il successivo, $(n - 2)$ per quello dopo ancora e così via, per un totale di $(n - 1)!$ percorsi anche se per simmetria quelli tra loro distinti risultano \textit{solamente} la metà $\frac{(n-1)!}{2}$.
+
+Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP anche se allora limitato ad un campione di $n = 49$ città: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali.
+
+Nel 1962, \textit{Procter and Gamble} bandì un concorso per 33 città mentre nel 1977 si miriva a collegare nel modo più efficiente possibile le 120 principali città della Germania Federale. La vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
+
+Nel 1987 Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 città ed in contemporanea Groetschel e Holland trovarono il TSP ottimale riguardante un giro del mondo passante per 666 mete di interesse.
+
+Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta ad un problema di 15.112 città tedesche, usando il metodo \textbf{cutting plane}, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
+
+Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 città della Svezia.
+
+Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando \textbf{CONCORDE}: fu trovato un percorso di 66.048.945 unità, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU.
+
+Questa carrellata storica mostra come il semplice passaggio da un decennio al successivo portava il superamento di ostacoli via via sempre maggiori a testimonianza dell'enorme studio svoltosi a livello globale, agevolato dallo sviluppo di hardware sempre migliore, portando infine alla comparsa dei primi \textbf{software solver}: tra i più noti troviamo \textbf{IBM ILOG CPLEX Optimization Studio} o più semplicemente \textbf{CPLEX} ed il già citato \textbf{Concorde}, entrambi utilizzati all'interno di questa tesi.
+
+\textit{CPLEX} è stato sviluppato da Robert E. Bixby /footnote{Docente presso la Rice University, Texas} e commercializzato a partire dal 1988 da \textbf{CPLEX Optimization Inc.}. Attualmente la licenza è proprietà di \textbf{IBM} la quale concede, per fini accademici e riveste un ruolo centrale in gran parte degli argomenti trattati in questa tesi.
+
+D'altro canto Concorde è stato utilizzato solo marginalmente e vi è dedicata una sezione apposita \hyperref[sec:ConcordeS]{Concorde}, per il momento basti pensare che ne è stata realizzata anche una versione per smartphone /footnote{Al giorno d' oggi solo per ambiente iOS, scaricabile gratuitamente dell' App Store} capace anch'essa di risolvere i più comuni problemi \textit{TSP} in frazioni di secondo.
+
+Tali risultati sembrerebbero andare teoricamente contro alla natura stessa dei \textit{TSP} in quanto è dimostrabile la loro appartenenza alla categoria di problemi \textbf{NP-hard}: ciò significa che, al momento, non è noto in letteratura un algoritmo che risolva una sua qualunque istanza in tempo \textbf{polinomiale}.
+
+Con la nascita di sempre nuove applicazioni aventi alla loro base problemi \textit{NP-hard}, è sorta la necessità di poter usufruire di algoritmi che valorizzassero maggiormente la velocità di risoluzione anche a discapito del ritrovamento della soluzione ottima, accontentandosi di assicurarne una solamente il più \textit{vicino} ad essa possibile. Tali algoritmi sono detti \textbf{euristici} e naturalmente ne sono presenti diversi anche per il \textit{TSP}: è proprio grazie ad un loro utilizzo combinato a tecniche esatte\footnote{Oltre ad hardware molto performante rispetto al passato.} che i \textit{solver} moderni possono raggiungere risultati apparentemente impensabili. Nel corso di questa tesi viene dato largo spazio ad entrambe le categorie algoritmiche \textit{esatte} ed \textit{euristiche}.
 
 
-Problemi matematici riconducibili al TSP furono trattati nell'Ottocento dal matematico irlandese Sir William Rowan Hamilton e dal matematico Britannico Thomas Penyngton.  Nel 1857, a Dublino, Rowan Hamilton descrisse un gioco, detto Icosian game, a una riunione della British Association for the Advancement of Science. Il gioco consisteva nel trovare un percorso che toccasse tutti i vertici di un icosaedro, passando lungo gli spigoli, ma senza mai percorrere due volte lo stesso spigolo. L'icosaedro ha 12 vertici, 30 spigoli e 20 facce identiche a forma di triangolo equilatero.
-Il gioco, venduto alla ditta J. Jacques and Sons per 25 sterline, fu brevettato a Londra nel 1859, ma vendette pochissimo. Questo problema \`e un TSP nel quale gli archi che collegano vertici adiacenti, e quindi corrispondono a spigoli dell'icosaedro, sono consentiti e gli altri no (si può pensare che richiedano moltissimo tempo e quindi vadano sicuramente scartati), per tale ragione si tratta di un caso molto particolare di TSP. La forma generale del TSP fu invece studiata solo negli anni Venti e Trenta del ventesimo secolo dal matematico ed economista Karl Menger. Tuttavia, per molto tempo non si ebbe altra idea che quella di generare e valutare tutte le soluzioni, il che mantenne il problema praticamente insolubile. Il numero totale dei differenti percorsi possibili attraverso le $n$ città\`a \`e facile da calcolare: data una città\`a di partenza, ci sono a disposizione $(n - 1)$ scelte per la seconda città\`a, $(n - 2)$ per la terza e così via. Il totale delle possibili scelte tra le quali cercare il percorso migliore in termini di costo \`e dunque $(n - 1)!$, ma dato che il problema ha simmetria, questo numero va diviso a metà. Insomma, date n città\`a, ci sono $\frac{(n-1)!}{2}$ percorsi che le collegano.
-
-Solo nel 1954, George Dantzig, Ray Fulkerson e Selmer Johnson proposero un metodo più raffinato per risolvere il TSP  su un campione di $n = 49$ città\`a: queste rappresentavano le capitali degli Stati Uniti e il costo del percorso era calcolato in base alle distanze stradali. 
-
-Nel 1962, Procter and Gamble bandì un concorso per 33 città\`a, nel 1977 fu bandito un concorso che collegasse le 120 principali città\`a della Germania Federale e la vittoria andò a Martin Gr\"otschel oggi Presidente del Konrad-Zuse-Zentrum f\"ur Informarionstechnik Berlin(ZIB) e docente presso la Technische Universit\"at Berlin(TUB).
-
-Nel 1987  Padberg e Rinaldi riuscirono a completare il giro degli Stati Uniti attraverso 532 città\`a. Nello stesso periodo Groetschel e Holland trovarono il TSP ottimale per il giro del mondo che passava per 666 mete importanti. 
-Nel 2001, Applegate, Bixby, Chvátal, and Cook trovarono la soluzione esatta a un problema di 15.112 città\`a tedesche, usando il metodo cutting plane, originariamente proposto nel 1954 da George Dantzig, Delbert Ray Fulkerson e Selmer Johnson. Il calcolo fu eseguito da una rete di 110 processori della Rice University e della Princeton University. Il tempo di elaborazione totale fu equivalente a 22,6 anni su un singolo processore Alpha a 500 MHz.
-Sempre Applegate, Bixby, Chv\a`tal, Cook, e Helsgaun trovarono nel Maggio del 2004 il percorso ottimale di 24,978 città\`a della Svezia. 
-Nel marzo 2005, il TSP riguardante la visita di tutti i 33.810 punti in una scheda di circuito fu risolto usando CONCORDE: fu trovato un percorso di 66.048.945 unità\`a, e provato che non poteva esisterne uno migliore. L'esecuzione richiese approssimativamente 15,7 anni CPU. 
-Ai giorni nostri il risolutore Concorde per il problema del commesso viaggiatore è utilizzato per ottenere soluzioni ottime su tutte le 110 istanze della libreria TSPLIB; l' istanza con più nodi in assoluto ha 85,900 città\`a. 
-
-
-\subsection*{AMBIENTE DI SVILUPPO: Cplex, Visual Studio e C\#}
+\subsection*{AMBIENTE DI SVILUPPO: CPLEX, Visual Studio e C\#}
 \label{sec:AmbienteSviluppoS}
 
-Il progetto è stato sviluppato in ambiente Windows, in particolare il sistema operativo scelto è Windows 10.\\
-Cplex è la componente principale del progetto, prima di procedere è perciò necessario assicurarsi per potervi interagire dall'IDE che si desidera utilizzare. Il nostro gruppo ha deciso di adottare come linguaggio di programmazione il \textbf{C\#}, successore del \textbf{C++} ed anch'esso orientato agli oggetti.\\
-L'IDE più comune per chi desidera utilizzare tale linguaggio è senza dubbio \textbf{Visual Studio}, sviluppato dalla stessa Microsoft e distribuito gratuitamente. La versione utilizzata in questo progetto e dunque quella a cui si farà riferimento in questa guida è \textbf{Visual Studio Community 2017}. Una volta aperto l'installer reperibile al seguente \href{https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community&rel=15#}{indirizzo} è sufficiente installare i pacchetti \textbf{Sviluppo per desktop .NET} e \textbf{Sviluppo di applicazioni desktop con C++} (vedremo in seguito perché sono necessari pacchetti C++).\\
-Una volta terminata l'installazione assicuriamoci di aver installare nella nostra macchina una versione di cplex pari o superiore alla \textbf{12.7.0}, quella da noi utilizzata è più precisamente la \textbf{12.7.0}.\\
-A questo punto non ci rimane altro che creare il nostro progetto all'interno di Visual Studio e di collegarvi le apposite librerie di Cplex. Selezionare quindi dal menu a tendina \textbf{Visual C\#} e quindi \textbf{App console (.NET Framework)}, forniamo il nome e percorso che desideriamo:
+Il progetto è stato sviluppato in ambiente Windows, in particolare il sistema operativo scelto è Windows 10.
+
+\textbf{CPLEX} è una componente centrale per progetto e quindi, prima di procedere, mostriamo i passi principali da eseguire per assicursi di potervi interagire dall'IDE\footnote{\textbf{Integrated Development Environment}: in altre parole è l'acronimo per \textit{ambiente di sviluppo (integrato)}.} scelto. Tra i diversi linguaggi di programmazione compatibili con \textit{CPLEX} si è scelto di utilizzare il \textbf{C\#}, successore del \textbf{C++} ed anch'esso orientato agli oggetti.
+
+L'\textit{IDE} più comune per chi desidera utilizzare tale linguaggio è senza dubbio \textbf{Visual Studio}, sviluppato dalla stessa \textbf{Microsoft} e distribuito gratuitamente. La versione utilizzata in questo progetto, e dunque quella a cui fa riferimento questa guida, è \textbf{Visual Studio Community 2017}. Una volta aperto l'installer reperibile al seguente \href{https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community&rel=15#}{indirizzo} è sufficiente selezionare i pacchetti \textbf{Sviluppo per desktop .NET} e \textbf{Sviluppo di applicazioni desktop con C++} (vedremo in seguito perché sono necessari pacchetti C++).
+
+Terminato questo processo, assicuriamoci che la versione di \textit{CPLEX} presente nella macchina sia \textbf{almeno} la \textbf{12.7.0}\footnote{Versioni precedenti non sono compatibili con \textit{Visual Studio Community 2017}.} utilizzata anche per questo progetto.
+
+Ogni progetto \textit{Visual Studio} che desidera utilizzare liberie esterne deve necessariamente settare le sue proprietà indicando le directory in cui è possibile reperirle. Creiamo un progetto \textbf{C\#} selezionando dal menu a tendina \textbf{Visual C\#} e quindi \textbf{App console (.NET Framework)}, forniamo il nome e percorso che desideriamo come mostrato in figura \hyperref[ProgettoCSharpImg]{(1)}.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Immagini/"Progetto C Sharp".png}
-    \caption{Creazione progetto C Sharp}
+    \scalebox{0.65}{\includegraphics{Immagini/"Progetto C Sharp".png}}
+    \caption{Creazione progetto C\#}
+    \label{ProgettoCSharpImg}
 \end{figure}
 
-Per connettere Cplex al nostro progetto sono necessari i seguenti passaggi:
+La connessione alle liberie di \textit{CPLEX} viene stabilita seguendo i passaggi seguenti:
 
-\begin{flushleft}
-    \hyphenpenalty=10000
-    \exhyphenpenalty=10000
-    
-    \begin{itemize}
-        
-        \item Selezionare la voce \textbf{Progetto} e quindi \textbf{Aggiungi riferimento...}
-        
-        \item Premere il pulsante \textbf{Sfoglia} e dopo essersi recati nella propria cartella di installazione di Cplex, in genere "C:\textbackslash Program Files\textbackslash IBM\textbackslash ILOG\textbackslash CPLEX\_Studio1271\textbackslash cplex" accedere alla sotto directory "\textbackslash bin\textbackslash x64\_win64" e selezionare i file \textbf{ILOG.CPLEX.dll} e \textbf{ILOG.Concert.dll}. Fatto ciò possiamo chiudere la finestra per la gestione dei riferimenti appena aperta
-        
-        \item Selezionare la voce \textbf{Compilazione} e quindi \textbf{Gestione configurazione..}, nella nuova finestra inserire nella voce  \textbf{Piattaforma} una nuova voce e selezionare \textbf{x64}. Per quanto riguarda la voce configurazione è indifferente selezionare la voce \textbf{Debug} oppure \textbf{Release}: come è facilmente intuibile nella prima modalità e differenza della seconda sarà possibile effettuare il classico debug con break points e gestione delle eccezioni a discapito di tempi di esecuzione leggermente più alti. Cogliamo quindi l'occasione per specificare che tutti i risultati proposti nel seguito di questo testo sono tutti stati ottenuti in modalità \textbf{Release} per il motivo indicato precedentemente.
-        
-    \end{itemize}
-    
-    
-\end{flushleft}
+\begin{itemize}
+    \item Selezionare la voce \textbf{Progetto} dai menù e quindi \textbf{Aggiungi riferimento...};
+    \item Premere il pulsante \textbf{Sfoglia} e dopo essersi recati nella propria cartella di installazione di \textit{CPLEX}, in genere "C:\textbackslash Program Files\textbackslash IBM\textbackslash ILOG\textbackslash CPLEX\_StudioXXXX\textbackslash cplex" accedere alla sotto directory "\textbackslash bin\textbackslash x64\_win64" e selezionare i file \textbf{ILOG.CPLEX.dll} e \textbf{ILOG.Concert.dll};
+    \item Selezionare la voce \textbf{Compilazione} dai menù e quindi \textbf{Gestione configurazione..}, nella nuova finestra inserire all'interno di \textbf{Piattaforma} un nuovo campo e selezionare \textbf{x64}\footnote{Il progetto utilizza 64 bit.}. Per quanto riguarda il campo \textbf{Configurazione} è indifferente selezionare \textbf{Debug} oppure \textbf{Release}: come è facilmente intuibile nella prima modalità offre tool di \textit{debug} aggiuntivi a discapito di una minima perdita prestazionale. Nel nostro caso la modalità \textbf{Release} è quella utilizzata per ottenere i risultati mostrati nella sezione \hyperref[sec:TestRisultatiS]{Test e Risultati};
+\end{itemize}
 
-A questo punto è possibile importare attraverso le direttive \textbf{using} sia \textbf{ILOG.CPLEX} che \textbf{ILOG.Concert}.
+La completa interazione con \textit{CPLEX} deve essere eseguita attraverso gli oggetti e le funzionalità offerta dai due pacchetti \textbf{ILOG.CPLEX} che \textbf{ILOG.Concert}, ora accessibili attraverso la direttiva \textbf{using}.
 
 \subsection*{Creazione ed utilizzo DLL C/C++ }
 \label{sec:CreazioneDLL}
 
-In questa sezione viene spiegato come sia possibile utilizzare codice esterno, compilato anche in linguaggi differenti dal C\#, sotto forma di \textbf{DLL}. In particolare nel nostro caso si è presentata la necessità di poter utilizzare codice scritto in linguaggio C appartenente al programma Concorde.
+In questa sezione viene spiegato come sia possibile utilizzare codice esterno, compilato anche in linguaggi differenti dal \textbf{C\#}, sotto forma di \textbf{DLL}. Nel nostro caso si giungerà ad un punto in cui è necessario servirsi del linguaggio di programmazione \textbf{C} per l'interazione con librerie di \textbf{Concorde} software solver dedicato ai \textit{TSPs}.
 
-La problematica principale con cui ci si scontra in questi casi è l'incompatibilità dei tipi, per noi questo è ancora più accentuato in quanto C al contrario di C\# non è un linguaggio orientato agli oggetti e l'interfaccia con Cplex segue un differente approccio. La soluzione migliore è stata quindi quella di passare al codice C solamente le informazioni fornite in input dall'utente e cioè il nome del file contenente i dati ed il time limit. In altre parole il codice C\# diventa solamente\footnote{In realtà mantiene anche un cronometro per il tempo di risoluzione} una interfaccia per richiamare la DLL, la quale dovrà gestire completamente la lettura dell'input, la risoluzione e la visualizzazione dei risultati\footnote{Tutte le stampe effettuate nella DLL vengono automaticamente reindirizzate nella finestra Console di default utilizzata dal C\#}.
+La problematica principale con cui ci si scontra in questi casi è l'incompatibilità dei tipi, qui ancora più accentuata in quanto \textit{C}, al contrario di \textit{C\#}, non è un linguaggio orientato agli oggetti e l'interfaccia con \textit{CPLEX} segue un differente approccio.
+
+La soluzione migliore è quella di comunicare alla \textit{DLL} solamente le informazioni fornite in input dall'utente e cioè il nome del file contenente i dati ed il time limit, così che possa gestire autonomamente l'intera procedura. In altre parole il codice \textit{C\#} diventa in questo caso solamente\footnote{In realtà mantiene anche un cronometro per il tempo di risoluzione.} una interfaccia per richiamare la \textit{DLL}\footnote{L'output standard della \textit{DLL} richiamata viene automaticamente settato a quello del progetto chiamante senza la necessità di eseguire alcun settaggio.}.
 
 Entriamo ora nel dettaglio della procedura da seguire:
 
-
-\hyphenpenalty=10000
-\exhyphenpenalty=10000
-
 \begin{itemize}
-    
-    \item Prima di tutto da Visual Studio creiamo un nuovo progetto selezionando la voce \textbf{Visual C++} e quindi \textbf{Progetto Win32}. Nel caso in cui questa opzioni siano assenti significa che durante l'installazione di Visual Studio non sono stati selezionati i pacchetti C++, per maggiori dettagli seguire la procedura indicata nella sezione apposita.
-    
-    \item Nelle schermate successive è necessario selezionare l'opzione \textbf{DLL} come tipo di applicazione e \textbf{Progetto vuoto} come opzione aggiuntiva.
-    
-    \item A questo punto dovrebbe essersi creato il nostro nuovo e vuoto progetto, dal menu \textbf{Esplora soluzioni} nella cartella \textbf{File di origine} premiamo il tasto destro ed aggiungiamo un nuovo elemento. Selezioniamo dal menu \textbf{File di C++ (.cpp)}, assegniamo il nome che preferiamo e premiamo il tasto \textbf{Aggiungi}.
-    
-    \item A questo punto il file appena creato verrà compilato come codice \textbf{C++} ma Concorde utilizza \textbf{C} perciò per prima cosa dobbiamo inserire 
+    \item Dall'interno di \textit{Visual Studio} creare un nuovo progetto selezionando la voce \textbf{Visual C++} e quindi \textbf{Progetto Win32}. Nel caso in cui queste opzioni siano assenti significa che durante l'installazione dell'\textit{IDE} non sono stati selezionati i pacchetti textit{C++}, per maggiori dettagli andare alla sezione \hyperref[sec:AmbienteSviluppoS]{Ambiente di sviluppo};
+    \item Nelle schermate successive è necessario selezionare l'opzione \textbf{DLL} come \textit{tipo di applicazione} e \textbf{Progetto vuoto} come \textit{opzione aggiuntiva};
+    \item Creatosi il nuovo e progetto vuoto, dal menu \textbf{Esplora soluzioni} nella cartella \textbf{File di origine} premiamo il tasto destro ed aggiungiamo un nuovo elemento. Selezioniamo dal menu \textbf{File di C++ (.cpp)}, assegniamo il nome che preferiamo ed infine il tasto \textbf{Aggiungi}.
+    \item Il file appena creato è compilato come codice \textbf{C++}, racchiudendolo però dentro
     \begin{lstlisting}
     extern "C"
     {
+        \\Codice..
     }
     \end{lstlisting}
-    In questo modo tutto il codice al suo interno viene compilato come \textbf{C}.
+    viene automaticamente interpretato come linguaggio \textbf{C}.
+    \item Definiamo il metodo \textit{entry point} per la DLL inserendo il prefisso \textbf{\_\_declspec(dllexport)}. Per semplificae la programmazione, è consigliabile sfruttare il punto di ingresso come una semplice interfaccia per la chiamata ad una seconda funzione che avvia effettivamente la risoluzione della istanza \textit{TSP}:
     
-    \item Definiamo ora l'entry point per la nostra DLL che si tratta di un semplice metodo con prefisso \textbf{\_\_declspec(dllexport)}. Nel nostro caso si è deciso di utilizzare il metodo entry point come semplice interfaccia per la chiamata di un altro metodo che procederà alla reale risoluzione del problema:
     \begin{lstlisting}
     __declspec(dllexport) int Concorde(char *fileName, int timeLimit)
     {
-        return exemain(strtok(fileName, "\0"), timeLimit);
+        return ExeMain(strtok(fileName, "\0"), timeLimit);
     }
     \end{lstlisting}
     
-    \item In modo analogo a come abbiamo appena creato questo file selezionando invece l'opzione per aggiungere file esistenti, importiamo tutti i file con estensione \textbf{.C} di cui necessitiamo da Concorde (maggiori dettagli riguardo quelli da noi utilizzati possono essere trovati nella sezione apposita).
+    \item In modo analogo alla creazione del file corrente, selezionando invece l'opzione per aggiungere file esistenti, importiamo tutte le componenti con estensione \textbf{.C} necessarie da Concorde. Una lista dettagliata è fornita nella sezione \hyperref[sec:ConcordeS]{Concorde}.
+    \item Settiamo ora le proprietà del progetto in modo tale che sia possibile utilizzare CPLEX, diverse guide sono già disponibili e la procedura non viene qui riportata. In aggiunta è necessario selezionare nel sottomenù \textbf{C/C++ $\rightarrow$ Generale $\rightarrow$ Directory di inclusione aggiuntive} la cartella dove sono presenti i file \textbf{.h} di Concorde.
+    \item Completata la stesura del codice, la effettiva creazione della \textit{DLL} è avviabile dal menu \textbf{Compilazione} selezionando la voce \textbf{Compila soluzione} \footnote{Assicurarsi che nella barra degli strumenti sia selezionata la modalità \textbf{release} a \textbf{64 bit}, in realtà è solamente sufficiente che i bit coincidano con quelli adottati nel progetto originale \textbf{C\#}.}. A compilazione terminata, la \textit{DLL} si trova all'interno della sottocartella \textbf{/x64/Release}.
+    \item Copiare la \textit{DLL} ottenuta nella directory del \textbf{progetto C\#}, in particolare su \textbf{/bin/x64/Release} e \textbf{/bin/x64/Debug}, per utilizzarla nelle due modalità.
+    \item L'importazione della \textit{DLL} all'interno di una classe \textit{C\#} del progetto avviene attraverso:
     
-    \item Settiamo ora le proprietà del progetto in modo tale che sia possibile utilizzare Cplex, diverse guide sono già disponibili e la procedura non viene qui riportata. In aggiunta è necessario selezionare nel sottomenù \textbf{C/C++ $\rightarrow$ Generale $\rightarrow$ Directory di inclusione aggiuntive} la cartella dove sono presenti i file \textbf{.h} di Concorde. 
-    
-    \item A questo punto non rimane altro che completare il nostro progetto inserendo i vari metodi necessari, maggiori dettagli nella sezione apposita. Fatto ciò siamo pronti a creare la DLL, dal menu \textbf{Compilazione} selezioniamo la voce \textbf{Compila soluzione} (assicuriamoci che nella barra degli strumenti sia selezionata la modalità release a 64 bit, in realtà è importante si utilizzino gli stessi bit che si adottano nel progetto originale). Terminata la compilazione la DLL si può trovare all'interno della cartella del progetto nella sottocartella \textbf{/x64/Release}.
-    
-    \item Posizioniamo la DLL all'interno della directory del nostro progetto C\# in particolare dentro \textbf{/bin/x64/Release} e \textbf{/bin/x64/Debug} per essere utilizzata nelle due modalità.
-    
-    \item Apriamo infine la classe del nostro progetto nella quale vogliamo utilizzare la DLL ed utilizziamo questo codice:
     \begin{lstlisting}
-    [DllImport("ConcordeDLL.dll")]
-    public static extern int Concorde(StringBuilder fileName, int timeLimit);
-    \end{lstlisting} 
-    Successivamente potremmo utilizzare il metodo esterno importato come se fosse stato definito all'interno della classe, nel nostro caso:
-    \begin{lstlisting}
-    Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
+    [DllImport("NOMEDLL.dll")]
+    public static extern int ENTRYPOINTDLL(StringBuilder fileName, int timeLimit);
     \end{lstlisting}
-    Da notare che la classe \textbf{StringBuilder} permette la conversione automatica del tipo \textbf{String} di C\# a \textbf{char*} di C.
     
+    Il metodo \textit{entry point} è quindi richiamabile come qualsiasi altra funzione.
 \end{itemize}
+    
+Prima di concludere la sezione, si specifica che la classe \textbf{StringBuilder} è una interfaccia naturale offerta da \textit{C\#} per la conversione automatica del proprio tipo \textbf{String} a \textbf{char*} del linguaggio \textit{C}.
+
+\newpage
 
 \section*{SEZIONE DUE}
 \label{sec:SezioneDueS}
 
+Questa breve sezione viene utilizzata per introdurre formalmente i \textit{TSP} ed in particolare il modello matematico generale che li descrive, evidenziando per quale motivo tali problemi appartengono alla categoria \textbf{NP-Hard}.
+
 \subsection*{MODELLO MATEMATICO}
 \label{sec:ModelloMatematicoS}
 
-Nella sua formalizzazione più generale, il problema del Commesso Viaggiatore consiste nell'individuare un circuito hamiltoniano di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ è un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ è un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi}. 
+Nella sua formalizzazione più generale, il Problema del Commesso Viaggiatore consiste nell'individuare un circuito \textbf{hamiltoniano} di costo minimo per un dato grafo orientato $G=(V,A)$, dove $V = $\{$ {v_1,\dots,v_n} $\}$ $ è un insieme di $n$ nodi e $A = $\{$ {(i,j): i, j \in V} $\}$ $ è un insieme di $m$ archi\footnote{Chiaramente sia $n$ che $m$ sono interi positivi.}.
 
-Senza perdita di generalità, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, che indicheremo con $c\_{ij}$, sia non negativo. Si osserva che aver imposto $c\_{ij} \ge 0$ non è limitativo poichè è sempre possibile sommare a tutti i costi una costante sufficientemente elevata che li renda positivi senza alterarne l'ordinamento delle soluzioni. 
-A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato: tale scelta deriva dal fatto che $c\_{ij}$ nel nostro lavoro rappresenta sempre la distanza (tipicamente euclidea) fra i vertici i e j si ha che:
-$$c_{ij} = c_{ji}$$
+Senza perdita di generalità, si suppone che il grafo $G$ sia completo e che il costo associato all'arco $[i,j]$, indicato con $c_{ij}$, sia non negativo. Si osservi che aver imposto $c_{ij} \ge 0$ non è limitativo poichè è sempre possibile sommare a tutti i costi una valore costante, sufficientemente elevato, in modo tale da renderli positivi senza alterarne l'ordinamento delle soluzioni.
 
-ossia il costo associato ad un arco non dipende dalla direzione dell'arco stesso. Quando il grafo è non orientato la famiglia di coppie non ordinate di elementi di V, ossia l'insieme degli archi, viene indicato con $E$.
-
-
-Definito il problema forniamo ora una sua possibile formulazione in termini di PLI. Introducendo le seguenti variabili decisionali:
-
-\[
-x_{e}=
-\begin{cases}
-1 & \text{se il lato $e \in E$ viene scelto nel circuito ottimo} \\
-0 & \text{altrimenti}
-\end{cases}
-\]
-
-si ottiene il problema:
+A differenza di quanto detto in precedenza, per tutto il proseguimento della tesi supporremmo il grafo $G$ non orientato. Tale scelta deriva dal fatto che $c_{ij}$, nel nostro contesto, rappresenta sempre la distanza, tipicamente euclidea, fra i vertici $i$ e $j$ pertanto:
 
 \begin{eqnarray}
-& \text{min}\displaystyle\underbrace{\sum_{e \in E} c_e x_e}\_{\text{costo circuito}} \\[1.5ex]
-&\displaystyle\underbrace{\sum_{e \in \delta(V)} x_e = 2}_{\text{due lati incidenti in }v}\text{,  }\forall v \in V \\[1.5ex]
-&0\leq x_e \leq 1 \text{ intera , }\forall e \in E
+c_{ij} = c_{ji}
 \end{eqnarray}
 
-L' insieme di vincoli definiti dalla (2) vengono chiamati vincoli di grado e impongono che in ogni vertice incidano esattamente due lati. In questa forma il modello è  compatto dato che il numero di vincoli è polinomiale rispetto alla dimensione dell'istanza ma non è completo poichè è sprovvisto dei vincoli di subtour che impediscono soluzioni il cui grafo risulta non connesso.
+Quando il grafo è non orientato, la famiglia di coppie non ordinate di elementi appartenenti a $V$ viene indicata per convenzione con la lettera $E$.
 
+Definita la nomenclatura del problema, si considera come variabili decisionali proprio i lati del grafo nel seguente modo:
+
+\begin{eqnarray}
+&\displaystyle x_{e}=
+\begin{cases}
+1 & \text{se il lato $e \in E$ viene scelto nella soluzione trovata} \\
+0 & \text{altrimenti}
+\end{cases}
+\end{eqnarray}
+
+Di conseguenza la formulazione del modello matematico diviene:
+
+\begin{eqnarray}
+\label{eqModel1}
+&\displaystyle \text{min}\displaystyle\underbrace{\sum_{e \in E} c_e x_e}_{\text{costo circuito}} \\[1.5ex]
+\label{eqModel2}
+& \displaystyle\underbrace{\sum_{e \in \delta(V)} x_e = 2}_{\text{due lati incidenti in }v}\text{,  }\forall v \in V \\[1.5ex]
+\label{eqModel3}
+&\displaystyle 0\leq x_e \leq 1 \text{ intera , }\forall e \in E
+\end{eqnarray}
+
+L'insieme definito da (\ref{eqModel2}) vengono chiamati \textbf{vincoli di grado} e impongono che in ogni vertice incidano esattamente due lati. Questa formulazione è si \textbf{compatta} in quanto il numero di vincoli è \textbf{polinomiale} rispetto ad $n$ ma contemporaneamente \textbf{non completa}: nessuna equazione impedisce la formazione di \textit{subtour} e quindi di ottenere una soluzione dove il grafo non risulti connesso.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Immagini/"subtour".jpg}
+    \scalebox{0.5}{\includegraphics[width=\textwidth]{Immagini/"subtour".jpg}}
     \caption{Soluzione con due subtour}
 \end{figure}
 
-\vspace{2\baselineskip}
-
-Una possibile formulazione per l'eliminazione dei subtour, detta appunto \textbf{subtour elimination}, risulta essere:
+Una possibile formulazione di vincoli atti ad impedire la formazione di subtour, detta appunto \textbf{subtour elimination}, risulta essere:
 
 \begin{eqnarray}
-&\displaystyle{\sum_{e \in E(S)}x_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
+\label{eqSubtourElimination}
+&\displaystyle{\sum_{e \in \delta(S)}x_e \geq 1} \text{ , } \forall S \subsetneq V \text{ : } 1 \in S \text{ , } |S| \geq 2
 \end{eqnarray}
 
-
-Il vincolo (4) indica che se si considera un sottoinsieme $S \subsetneq V$, che includa il vertice numerato con il simbolo 1, allora il taglio di G indotto da S:
-
-\begin{center}
-$\delta(S) = $\{$ {[i,j]\in E : i \in S, j \notin S} $\} $ $
-\end{center}
-
-deve contenere almeno un lato appartenente ad $E$: poichè tutti i subtour violano tale vincolo la soluzione ottima non potrà contenerne al suo interno.  
-Essendo il numero di questi vincoli pari ai sottoinsiemi $S$ distinti, il numero di tali vincoli risulta esponenziale rispetto alla dimensione dell'istanza. In particolare il valore di $S$, dato un numero $n$ di nodi, è $2^n$: questo perchè associando un bit ad ogni vertice (il cui valore definisce se appartiene o meno al sottoinsieme) un qualsiasi sottoinsieme risulta identificato da una sequenza di $n$ bit è quindi possibile definirne $2^n$ distinti. In realtà avendo noi imposto che il vertice 1 appartenga sempre ad ogni $S$ e che $S \subsetneq V$, si ha che il numero di vincoli di subtour risulti pari a  $2^{n-1} - 1$.
-
-Una seconda formulazione equivalente per esprimere i vincoli di subtour è la seguente:
+Il vincolo (\ref{eqSubtourElimination}) indica che se si considera un \textbf{qualunque} sottoinsieme $S \subsetneq V$, che includa il vertice numerato con il simbolo $1$, allora il taglio di G indotto da S:
 
 \begin{eqnarray}
+&\displaystyle\delta(S) = \{ {[i,j]\in E : i \in S, j \notin S} \}
+\end{eqnarray}
+
+deve contenere almeno un lato appartenente ad $E$: poichè tutti i subtour violano tale vincolo la soluzione ottima non potrà contenerne al suo interno.
+
+Analizzando il numero dei possibili sottoinsiemi $S$ distinti si nota che tale quantità risulta \textbf{esponenziale} rispetto ad $n$, pertanto è proprio la (\ref{eqSubtourElimination}) a rendere i \textit{TSPs} \textbf{NP-hard}.
+
+In particolare la dimensione di $S$, dato un numero $n$ di nodi, è $2^n$: immaginando di associare un bit ad ogni vertice (il cui valore definisce se appartiene o meno al sottoinsieme), e quindi di rappresentare un qualsiasi sottoinsieme attraverso una sequenza di $n$ bit se ne possono definire $2^n$ distinti. In realtà avendo imposto che il vertice $1$ appartenga sempre ad ogni $S$ e che $S \subsetneq V$, la quantità trovata va ridimensionata a $2^{n-1} - 1$, di grado comunque esponenziale rispetto ad $n$.
+
+Per completezza la (\ref{eqSubtourEliminationAlternativa}) mostra una formulazione alternativa della (\ref{eqSubtourElimination}) caratterizzata dal medesimo numero di disequazione:
+
+\begin{eqnarray}
+\label{eqSubtourEliminationAlternativa}
 &\displaystyle{\sum_{e \in E(S)}x_e \leq |S| - 1} \text{ , } \forall S \subsetneq V \text{ , } |S| \geq 2
 \end{eqnarray}
 
-La gestione di un numero esponenziale di vincoli implica in genere tempi di risoluzione troppo elevati. Nella pratica però non è necessario utilizzare tutti i vincoli di subtour elimination, è sufficiente considerarne un numero molto più ridotto. Non potendo conoscere in anticipo quali siano quelli essenziali sarà nostro compito progettare un opportuno separatore: ossia una funzione che fornita in ingresso una soluzione x* ottima per il modello corrente generi tutti i vincoli violati.
+La gestione \textbf{contemporanea} di un numero esponenziale di vincoli implica in genere tempi di risoluzione troppo elevati. Nella pratica però non è necessario inserirli tutti nel modello matematico, è sufficiente considerarne un numero molto più ridotto e cioè solamente quelli \textbf{utili} all'ottenimento della soluzione ottima. Non esiste alcun metodo che permetta di conoscere tale informazione in anticipo ed è compito degli algoritmi risolutori definire un opportuno \textbf{separatore}: una funzione che fornita in ingresso una soluzione $x^*$ ottima per il modello corrente generi tutti i vincoli violati da essa.
 
-\subsection*{INPUT FILE}
-\label{sec:InputFileS}
+L'aggiunta di tali disequazioni al modello matematico impone alla successiva risoluzione di trovare una soluzione ottima diversa dalla precedente $x^*$. Nel momento in cui il separatore non fornisce più alcun vincolo aggiuntivo significa che siamo in presenza dell'ottimo globale.
 
-Le istanze del problema del Commesso Viaggiatore fornite in input al programma sono state selezionata da un libreria presente al seguente indirizzo web: 
-
-\begin{center}
-\href{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}
-\end{center}
-
-Ogni istanza è memorizzata in un file di testo in un formato ben preciso, è stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}.
-
-\subsection*{STRUTTURA DEL PROGETTO}
-\label{sec:StrutturaProgettoS}
-
-I file che compongono il programma realizzato sono stati organizzati nel modo seguente; all' interno della cartella radice, da noi chiamata TSPCsharp, si sono create le seguenti sottocartelle:
-
-\begin{itemize}
-\item \textbf{Src} contenente il progetto di Visual Studio;
-\item \textbf{Data} include le istanze del problema del commesso viaggiatore appartenenti alla TSPlib;
-\item \textbf{Concorde} contenente i file sorgenti in linguaggio C del programma Concorde\footnote{Concorde è un software freeware sviluppato da \textbf{William Cook} per la risoluzione di problemi TSP} la cui trattazione è rimandata al Capitolo X.
-\end{itemize}
-
-Il software sviluppato è composto da dieci classi, riportiamo di seguito il nominativo di ognuna di esse:
-
-\begin{itemize}
-\item Instances
-\item ItemList
-\item PathGenetic
-\item PathStandard
-\item Point
-\item Program
-\item Tabu
-\item TSP
-\item TSPLazyConsCallback
-\item Utility
-\end{itemize}
-
-Per le classi Point, Instances, Program, TSP e Utility verrà fornita una descrizione in questo capitolo, le rimanenti classi verranno presentate nei capitoli successivi poichè una loro trattazione risulterebbe in questo momento prematura. 
+\newpage
 
 \section*{SEZIONE TRE}
 \label{sec:SezioneTreS}
 
+Questa sezione introduce la struttura del progetto per quanto riguarda la sua parte puramente di programmazione così da rendere la prosecuzione del testo più comprensibile e semplice.
+
+Sono presentate le principali classi e strutture dati realizzate utili a livello globale per tutti gli algoritmi implementati mentre altre di interesse più \textit{locale} vengono introdotte solamente più avanti nel momento più opportuno.
+
+\subsection*{STRUTTURA DEL PROGETTO VISUAL STUDIO}
+\label{sec:StrutturaProgettoVSS}
+
+Per prima cosa è importante chiarire l'organizzazione delle cartelle e files, una struttura ordinata agevola enormemente ogni fase del progetto: progettazione, stesura del codice, debugging, simulazione della release e versione finale.
+
+All'interno della cartella radice, da chiamata TSPCsharp, si sono create le seguenti sottocartelle:
+
+\begin{itemize}
+    \item \textbf{Src}: contiene il progetto della applicazione e quindi tutti i file sorgente;
+    \item \textbf{Data}: include le istanze \textit{TSP} utilizzabili dal software;
+    \item \textbf{Concorde}: contiene la porzione dei file sorgente, in linguaggio di programmazione \textit{C}, del software solver \textbf{Concorde} necessarie per il progetto;
+    \item \textbf{Output}: la directory dove l'applicazione pone i file di output prodotti;
+\end{itemize}
+
+Il software sviluppato è composto dalle seguenti dieci classi:
+
+\begin{itemize}
+    \item \textbf{Instance}
+    \item \textbf{ItemList}
+    \item \textbf{PathGenetic}
+    \item \textbf{PathStandard}
+    \item \textbf{Point}
+    \item \textbf{Program}
+    \item \textbf{Tabu}
+    \item \textbf{TSP}
+    \item \textbf{TSPLazyConsCallback}
+    \item \textbf{Utility}
+\end{itemize}
+
+Per le classi \textbf{Point}, \textbf{Instance}, \textbf{Program}, \textbf{TSP} e \textbf{Utility} viene fornita una descrizione in questo sezione essendo di interesse globale per tutto il progetto.
+
+Si specifica che le variabili globali di qualsiasi classe, presenti solamente in quelle che offrono strutture dati utili al programma, sono dichiarate con metodo di accesso \textbf{internal}\footnote{Membri interni sono accessibili solo all'interno di file nello stesso assembly.} e possiedono i propri metodi \textbf{Getter}\footnote{Utilizzato per leggere la variabile.} e \textbf{Setter}\footnote{Utilizzato per modificare la variabili.} che ne ereditano il livello di accessibilità. Il linguaggio di programmazione \textit{C\#} offre la seguente sintassi semplificata:
+
+\begin{lstlisting}
+    protected var variabile { get; set; }
+\end{lstlisting}
+
 \subsection*{CLASSE POINT}
 \label{sec:ClassePointS}
 
-La classe Point è stata realizzate al fine di memorizzare le coordinate in due dimensioni di un singolo nodo $n$, a tal fine sono presenti due variabili private, accessibili attraverso i propri metodi get e set, di tipo \textbf{double} chiamate rispettivamente \textbf{x} e \textbf{y}. Il costruttore della classe non fa altro che ricevere in input i valori da assegnare a queste ultime. La classe presenta inoltre un ulteriore metodo pubblico e statico chiamato \textbf{Distance} che permette il calcolo della distanza tra due nodi:
+La classe \textbf{Point} offre una struttura dati in grado di memorizzare le coordinate bidimensionali di un singolo nodo $n$.
+Presenta a tal fine le variabili globali \textbf{x} e \textbf{y} di tipo \textbf{double}. Il costruttore della classe non fa altro che ricevere in input i valori da assegnare a queste ultime. La classe presenta inoltre un ulteriore metodo pubblico e statico chiamato \textbf{Distance} che permette il calcolo della distanza tra due nodi:
 
 \begin{lstlisting}
     public static double Distance(Point p1, Point p2, string pointType)
 \end{lstlisting}
 
+Dove:
+
 \begin{itemize}
-\item \textbf{p1}: Rappresenta il primo nodo;
-\item \text{p2}: Rappresenta il secondo nodo;
-\item \textbf{pointType}: Rappresenta il modo con cui il costo relativo al lato che congiunge p1 con p2 viene calcolato; i valori che questo parametro può assumere sono i seguenti:
+\item \textbf{p1}: riferimento ad un oggetto della classe \textbf{Point} che rappresenta il primo nodo;
+\item \textbf{p2}: riferimento ad un oggetto della classe \textbf{Point} che rappresenta il primo nodo;
+\item \textbf{pointType}: stringa che descrive quale tipo di formula matematica si debba utilizzare per calcolare il costo del lato delimitato da \textbf{p1} e \textbf{p2}. Può assumere i seguenti valori:
     \begin{itemize}
     \item EUC\char`\_2D
     \item ATT
     \item MAN\char`\_2D
     \item GEO
-    \item MAX\char`\_2D    
+    \item MAX\char`\_2D
     \item CEIL\char`\_2D
     \end{itemize}
 \end{itemize}
 
-A titolo di esempio riportiamo il codice eseguito nel caso in cui pointType risulti uguale a EUC\char`\_2D dove il costo del lato deve risultare pari alla distanza euclidea dei due nodi. 
+Di seguito è riportato il codice del metodo \textbf{Distance} dove le formule matematiche utilizzate seguono le direttive indicate dai creatori delle istanze \textit{TSP} compatibili con l'applicazione\footnote{Il documento è reperibile al seguente \href{https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/tsp95.pdf}{indirizzo}.}.
 
 \begin{lstlisting}
+double xD = p1.x - p2.x;
+double yD = p1.y - p2.y;
 
- double xD = p1.X - p2.X;
- double yD = p1.Y - p2.Y;
- 
- if (pointType == "EUC\_2D")
- {
-     return (int)(Math.Sqrt(xD * xD + yD * yD) + 0.5);
- }
- else if ...
-            
+if (pointType == "EUC_2D")
+{
+    return (int)(Math.Sqrt(xD * xD + yD * yD) + 0.5);
+}
+else if (pointType == "MAN_2D")
+{
+    xD = Math.Abs(xD);
+    yD = Math.Abs(yD);
+return (int)(xD + yD + 0.5);
+}
+    else if (pointType == "MAX_2D")
+{
+    xD = Math.Abs(xD);
+    yD = Math.Abs(yD);
+
+    int fI = Convert.ToInt32(xD + 0.5);
+    int sI = Convert.ToInt32(yD + 0.5);
+    if (fI >= sI)
+        return fI;
+    else
+        return sI;
+}
+else if (pointType == "GEO")
+{
+    double PI = Math.PI;
+
+    int deg = (int)(p1.x + 0.5);
+    double min = p1.x - deg;
+    double latitude1 = PI * (deg + 5 * min / 3) / 180;
+
+    deg = (int)(p1.y + 0.5);
+    min = p1.y - deg;
+    double longitude1 = PI * (deg + 5 * min / 3.0) / 180;
+
+    deg = (int)(p2.x + 0.5);
+    min = p2.x - deg;
+    double latitude2 = PI * (deg + 5 * min / 3.0) / 180;
+    
+    deg = (int)(p2.y + 0.5);
+    min = p2.y - deg;
+    double longitude2 = PI * (deg + 5 * min / 3.0) / 180;
+    
+    double RRR = 6378.388;
+    double q1 = Math.Cos(longitude1 - longitude2);
+    double q2 = Math.Cos(latitude1 - latitude2);
+    double q3 = Math.Cos(latitude1 + latitude2);
+    
+    return (int)((RRR * Math.Acos(0.5 * ((1 + q1) * q2 - (1 - q1) * q3))) + 1);
+}
+else if (pointType == "ATT")
+{
+    double rij = Math.Sqrt((xD * xD + yD * yD) / 10.0);
+    int tij = Convert.ToInt32(rij);
+
+    if (tij < rij)
+        return tij + 1;
+    else
+        return tij;
+}
+else if (pointType == "CEIL_2D")
+{
+    return Math.Ceiling(Math.Sqrt(xD * xD + yD * yD) + 0.5);
+}
+
+//Nel caso in cui 
+throw new Exception("Bad input format");
 \end{lstlisting}
-
-Per quanto riguarda gli altri metodi di calcolo della distanza rimandiamo il lettore alla visione del codice.
 
 \subsection*{CLASSE INSTANCE}
 \label{sec:ClasseInstanceS}
 
-La classe Instance è stata creata per memorizzare tutti i dati caratterizzanti l'istanza del problema del Commesso Viaggiatore. La tabella sottostante fornisce un elenco di variabili ed array definite all'interno della classe assieme ad una loro breve descrizione. 
-
-
-\begin{center}
-
-    \begin{longtable}{ | p{4cm} | p{4cm} | p{7cm} |}
-    \hline
-    \begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& 
-    \begin{center} \textbf{Descrizione} \end{center}\\ \hline
-    \begin{center} int \end{center} & \begin{center} nNodes \end{center}& \vfill Rappresenta il numero di nodi dell' istanza del problema del Commesso Viaggiatore.\vfill \\ \hline
-    \begin{center} Point[ ] \end{center} & \begin{center} coord \end{center}& \vfill Vettore di Point contenente le coordinate di tutti i vertici del grafo.\vfill\\ \hline
-    \begin{center} string \end{center} & \begin{center} edgeType \end{center}&\vfill Definisce la modalità con cui calcolare la distanza fra due nodi.\vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} timeLimit \end{center}& \vfill Definisce la quantità massima di tempo che il programma dispone per il calcolo della soluzione.\vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} inputFile \end{center}&\vfill Rappresenta il nome del file di input contenente l'istanza del problema del Commesso Viaggiatore. \vfill\\ \hline
-    \begin{center} double \end{center} & \begin{center} tStart \end{center}& \vfill Rappresenta i secondi trascorsi dall'attivazione del cronometro al reale inizio delle operazioni di calcolo per la risoluzione del problema \vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} xBest \end{center}& \vfill Rappresenta il costo della soluzione ottima restituira da cplex.\vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} tBest \end{center}& \vfill Contiene la qantità di tempo impiegata per il calcolo della soluzione ottima. \vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} bestSol \end{center}& \vfill Rappresenta la soluzione ottima ritornata da Cplex.\vfill \\ \hline
-     \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
-    \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
-     \begin{center} double \end{center} & \begin{center} bestLb \end{center}& \vfill Rappresenta il miglior lower bound attualmente calcolato.\vfill \\ \hline
-    \end{longtable}
-\end{center}
-
-\textit{xMin e yMin ... mi servivano per gnuplot ma dato che ho messo l'autoscale credo non servano più. per xBest ok}
-
-L' unico metodo appartenente a questa classe, esclusi i vari getter e setter, è \textbf{Print}, la cui firma risulta essere:
+La classe \textbf{Instance} memorizza tutti i dati caratterizzanti l'istanza del Problema del Commesso Viaggiatore corrente. Essendo le variabili globali di questa classe numerose viene riportato il loro codice dichiarativo commentato:
 
 \begin{lstlisting}
-                  static public void Print(Instance inst)
+//Dati input utente
+
+//Nome file
+internal string inputFile { get; set; }
+//Tempo limite di esecuzione
+internal double timeLimit { get; set; }
+
+
+//Dati ricavati dal file di input
+
+//Numero di nodi
+internal int nNodes { get; set; }
+//Coordinate (x,y) di ogni nodo
+internal Point[] coord { get; set; }
+
+//Determina come calcolare la distanza tra due punti
+internal string edgeType { get; set; }
+
+
+//Parametri da definire durante la risoluzione
+
+//Costo della migliore soluzione intera trovata
+internal double xBest { get; set; }
+//Valore di ogni lato nella migliore soluzione intera trovata
+internal double[] bestSol { get; set; }
+//Migliore lower bound trovato, utilizzato in alcuni algoritmi
+internal double bestLb { get; set; }
 \end{lstlisting}
 
-dove:
+All'interno di questa classe è presente l'unico metodo pubblico e statico, esclusi i vari \textit{get} e \textit{set}, \textbf{Print} utilizzato per stampare all'interno della \textit{console} tutte le coordinate memorizzate in un oggetto di tipo \textbf{Instance} --> \textbf{coord}:
+
+\begin{lstlisting}
+static public void Print(Instance inst)
+\end{lstlisting}
+
+Dove:
 
 \begin{itemize}
-\item \textbf{inst}: oggetto della classe Instance contente tutti dati che descrivono l'istanza del problema del Commesso Viaggiatore fornita in ingresso dall' tente;
+\item \textbf{inst}: riferimento ad un oggetto della classe \textbf{Instance} contente tutti dati che descrivono l'istanza del Problema del Commesso Viaggiatore fornita in ingresso dall'utente;
 \end{itemize}
 
-Tale metodo stampa a video le coordinate di tutti i nodi memorizzati dentro \textbf{inst}. Viene di seguito riportato il codice:
+Il contenuto di \textbf{Print} è per definizione molto banale. L'unico aspetto degno di nota è che i reali indici identificativi dei nodi sono compresi tra i valori $1$ ed $n$ mentre, dato che nei linguaggi di programmazione le strutture dati \textit{contenitori} come ad esempio i \textbf{vettori} o le \textbf{liste} partono da $0$, il loro indice di memorizzazione è sempre scalato di uno. \textit{Print} è realizzato in modo tale da mostrare il reale indice di ogni nodo:
 
 \begin{lstlisting}
 for (int i = 0; i < inst.NNodes; i++)
-    Console.WriteLine("Point #" + (i + 1) + "= (" + inst.Coord[i].X + "," + inst.Coord[i].Y + ")");
+    Console.WriteLine("Point #" + (i + 1) + "= (" + inst.coord[i].x + ";" + inst.coord[i].y + ")");
+    
+    
+//Esempio di stampa:
+//Point #1= (x_1;y_1)
+//Point #2= (x_2;y_2)
+//..
+//Point #n= (x_n;y_n)
 \end{lstlisting}
 
 \subsection*{CLASSE PROGRAM}
 \label{sec:ClasseProgramS}
 
-La classe Program contiene il metodo Main che, come noto, rappresenta il punto di inizio del programma: attraverso le funzionalità di Visual Studio esso riceve in input l'array \textbf{argv} di stringhe contenente i parametri di input forniti dall'utente come il nome del file contenente l'input ed il time limit per la sua risoluzione. Appartengono a questa classe anche i metodi \textbf{ParseInst} e \textbf{Populate}: rispettivamente forniscono il parser per \textbf{argv} ed il parser del file di ingresso indicato con conseguente inizializzazione delle coordinate dei nodi. Firma e implementazione di tali metodi è rimandata al successivo capitolo.\\
-All'interno del metodo \textbf{Main} vengono eseguite in ordine le seguenti attività:
-\begin{itemize}
-    \item Creata una istanza della classe \textbf{Instance} ed invocati i due metodi precedentemente nominati.
-    \item Creato un oggetto della classe \textbf{Stopwatch}. Questa classe è fornita direttamente da Visual Studio appartenente al Namespace \textbf{System.Diagnostics} è fornisce le funzionalità di un cronometro compatibile al multithreading.
-    \item Invocato il metodo \textbf{TSPOpt} della classe \textbf{TSP} passandogli come parametri i due oggetti di tipo Instance e Stopwatch.
-    \item In caso di risultato positivo (una soluzione del problema è stata trovata) viene mostrato a video il risultato ottenuto ed il tempo di calcolo trascorso.
-    \item Viene effettuata una pulizia dei file creatisi durante l'esecuzione del problema.
-\end{itemize}
+\textbf{Program} è la classe \textit{entry point} del progetto creata automaticamente dall'\textit{IDE}. Contiene pertanto il metodo di \textit{ingresso} \textbf{Main} che per convenzione, all'interno del linguaggio \textit{C\#}, è sempre il primo ad essere eseguito: riceve quindi come parametro di ingresso un vettore di stringhe, chiamato \textbf{argv}, al cui interno si trova la riga di comando fornita dall'utente\footnote{\textit{Visual Studio} offre la possibilità di simulare l'utilizzo della riga di comando anche quando l'applicazione è avviata dall'interno dell'\textit{IDE} stesso.}.
 
-In tutto il nostro progetto si è cercato di utilizzare il minor numero possibile di variabili globali, in particolare solo all'interno di questa classe ne sono state definite due di seguito descritte:
+L'applicazione si aspetta  di trovarvi memorizzate le informazioni riguardanti il \textbf{tempo limite} di esecuzione e soprattutto il \textbf{nome} dell'istanza \textit{TSP} da risolvere\footnote{Reperibile all'interno dell'apposita cartella \textit{Data}.}.
 
-\begin{center}
-    
-    \begin{tabular}{ | p{1.5cm} | p{4cm} | p{2cm} | p{6.5cm} |}
-        \hline
-        \begin{center} \textbf{Tipo di dato} \end{center} & \begin{center}  \textbf{Nome} \end{center}& \begin{center} \textbf{Valore} \end{center} & \begin{center} \textbf{Descrizione} \end{center}\\ \hline
-        \begin{center} int \end{center} & \begin{center} VERBOSE \end{center}& \begin{center} 5 \end{center} & Regola quanto output il programma mostra a video: si è scelto di condizionare l' esecuzione di molte righe di codice che producevano una stampa a video in base al valore assunto da questa variabile. Si è deciso di ristringere il suo valore da 1 a 9, quando assume il valore 9 viene riportato a video il maggior numero possibile di stampe. \\ \hline
-        \begin{center} int \end{center} & \begin{center} TICKS\char`\_PER\char`\_SECOND \end{center} &  \begin{center}1000  \end{center}& Cplex utilizza i così detti ticks come unità di misura per il tempo di calcolo, questa costante indica quanti ne trascorrono in un secondo.\\ \hline
-        
-    \end{tabular}
-\end{center}
+La prima azione eseguita quindi dalla classe \textit{Program} è l'analisi del vettore \textit{argv}, operazione delagata al metodo \textbf{ParseInput} descritto alla seguente sezione \hyperref[sec:LetturaInputS]{Lettura Input File}.
+
+Successivamente è necessario effettuare l'accesso in lettura al file, indicato dall'utente, contenente le informazioni dell'istanza \textit{TSP} da risolvere. Anche questa operazione viene delegata ad un secondo metodo \textbf{Populate} analizzato nella sezione \hyperref[sec:MetodoPopulateS]{Metodo Populate}.
+
+Dichiarato e parzialmente popolato un oggetto di tipo \textbf{Instance} grazie ai metodi sopra citati, è invocato il metodo \textbf{Solve} contenuto nella \textbf{TSP}, la prossima ad essere descritta. Per ora basti sapere che \textit{Solve} chiede all'utente di indicare l'algoritmo risolutore che desidera applicare e provvede alla sua esecuzione.
+
+L'ultima operazione effettuata dal metodo \textit{Main} consiste nel richiedere all'utente se desidera eliminare i file con estensione \textbf{.dat} e \textbf{.lp} creatisi durante l'esecuzione del programma. I dettagli riguardanti i file generati con queste estensioni sono riportati nel seguito della tesi.
+
+\begin{lstlisting}
+foreach (string file in Directory.GetFiles("..\\..\\..\\..\\Output\\", "*.dat").Where(item => item.EndsWith(".dat")))
+{
+    File.Delete(file);
+}
+
+foreach (string file in Directory.GetFiles("..\\..\\..\\..\\Output\\", "*.lp").Where(item => item.EndsWith(".lp")))
+{
+    File.Delete(file);
+}
+\end{lstlisting}
+
+La classe \textit{Program} definisce l'unica costante globale pubblica di tutto il progetto:
+
+\begin{lstlisting}
+public const int VERBOSE = 5;
+\end{lstlisting}
+
+Le varie stampe a video eseguite tramite \textit{console} nella applicazione, sono classificate secondo una scala numerica di importanza in modo tale che: solo nel caso in cui il corrispettivo valore risulti infiore o pari al \textbf{VERBOSE} attuale l'istruzione sia realmente eseguita.
+
+\begin{lstlisting}
+if (VERBOSE >= 5)
+    Console.WriteLine("Esempio VERBOSE");
+\end{lstlisting}
 
 \subsection*{CLASSE TSP}
 \label{sec:ClasseTSPS}
 
-La classe \textbf{TSP} è stata pensata come il cuore del programma in quanto lo scheletro di tutti i metodi di risoluzione implementatisi trova al suo interno. Contiene un unico metodo pubblico che rappresenta quindi l'unico entry point per utilizzare questa classe: \textbf{TSPOpt}.
+La classe \textbf{TSP} è pensata come il cuore del programma in quanto la struttura principale di tutti i metodi risolutivi viene riportata al suo interno. Vi è presente un unico metodo pubblico \textbf{Solve}:
 
 \begin{lstlisting}
-static public bool TSPOpt(Instance instance, Stopwatch clock)
+static public void Solve(Instance instance)
 \end{lstlisting}
 
-Come già specificato nella descrizione della classe Program, TSPOpt è invocato dal metodo Main e pertanto maggiori dettagli riguardanti i suoi parametri di ingresso possono essere trovati nella sezione precedente.\\
-TSPOpt si preoccupa di istanziare i vari elementi utilizzati da tutti i metodi di risoluzione\footnote{Fatta eccezione per l'UserCutCallBack che è gestita esternamente da una DLL}, fornire all'utente un'interfaccia grafica che gli permetta di scegliere quale di questi ultimi voglia utilizzare e di conseguenza invoca il metodo privato della classe associato alla scelta effettuata.\\
-Entrando nello specifico per quanto riguarda gli elementi inizializzati troviamo un oggetto della classe \textbf{Cplex} che come già accennato in precedenza ci permetterà di stabilire una connessione con il programma Cplex ed utilizzarlo per la risoluzione del modello matematico, ed un oggetto \textbf{Process} che sostanzialmente viene da noi utilizzato per inizializzare e comunicare con il programma \textbf{GNUPlot}\footnote{Per maggiori dettagli si veda la sezione dedicata a GNUPlot}.
+Dove:
+
+\begin{itemize}
+\item \textbf{instance}: riferimento ad un oggetto della classe \textbf{Instance} contente tutti dati che descrivono l'istanza del Problema del Commesso Viaggiatore fornita in ingresso dall'utente;
+\end{itemize}
+
+Le operazioni eseguite da questo metodo sono raggruppabili in:
+
+\begin{itemize}
+    \item Inizializzazione degli oggetti comunemente utilizzati dalla maggior parte degli algoritmi risolutori;
+    \item Viene richiesto all'utente di indicare quale metodo di risoluzione desidera che venga applicato tra quelli disponibili. Se necessario richiede anche parametri aggiuntivi caratterizzanti la scelta effettuata;
+    \item Viene invocato il metodo correto per gestire la richiesta espressa dall'utente;
+    \item Nel caso in cui l'algoritmo abbia prodotto una soluzione valida, il suo costo ed il tempo di esecuzione trascorso sono stampati nella \textit{console};
+\end{itemize}
+
+Per quanto riguarda gli oggetti da inizializzare troviamo: un oggetto della classe \textbf{Stopwatch} utilizzato come cronometro per gestire il tempo di esecuzione trascorso (viene anche avviato), un oggetto della classe \textbf{Process} necessario per disegnare una qualsiasi soluzione attraverso il programma \textbf{GNUPlot} ed infine un oggetto di tipo \textbf{Cplex} utilizzato per interfacciarsi con l'omonimo software solver. Maggiori dettagli riguardanti la classe \textit{Stopwatch} sono forniti nella sezione \hyperref[sec:StopwatchS]{Classe Stopwatch}, per quanto riguarda l'inizializzazione dell'oggetto di tipo \textit{Process} ed il software \textit{GNUPlot} maggiori dettagli sono disponibili rispettivamente in \hyperref[sec:InitProcessS]{Metodo InitProcess} e \hyperref[sec:GNUPlotS]{GNUPlot}.
+
+\begin{lstlisting}
+
+//Inizializzazione oggetto di tipo Cplex
+Cplex cplex = new Cplex();
+//Inizializzazione oggetto di tipo Stopwatch
+Stopwatch clock = new Stopwatch();
+//Avvio del cronometro
+clock.Start();
+//Il metodo InitProcess della classe Utility fornisce un oggetto process inizializzato pronto per essere utilizzato
+//per la comunicazione con GNUPlot per disegnare il grafico di una qualsiasi soluzione trovata
+Process process = Utility.InitProcess(instance);
+
+\end{lstlisting}
+
+La comunicazione con l'utente per conoscere quale metodo di risoluzione desidera utilizzare è molto semplice ed avviene attraverso la scrittura e lettura di stringhe nella \textit{console C\#}, pertanto non viene qui riportata.
+
+L'avvio dello specifico algoritmo risolutivo viene riportato nella sezione ed esso dedicata in quanto al momento risulterebbe prematuro discuterne.
+
+Infine la stampa riguardante l'eventuale costo della migliore soluzione trovata ed il relativo tempo di esecuzione richiesto dall'algoritmo selezionato, più lo stop del cronometro, avviene nel seguente modo:
+
+\begin{lstlisting}
+
+//Program.VERBOSE >= 0 implica che la stampa venga sempre eseguita
+//Se l'algoritmo avviato non ha modificato il valore di instance.xBest significa che nessuna soluzione è stata trovata
+if(Program.VERBOSE >= 0 && instance.xBest != 0)
+    Console.WriteLine("The best solution found in " + clock.ElapsedMilliseconds / 1000 + " seconds has cost: " + instance.xBest);
+else
+    Console.WriteLine("No solution found in " + clock.ElapsedMilliseconds / 1000 + " seconds");
+    
+//Il cronometro viene fermato
+clock.Stop();
+
+\end{lstlisting}
 
 \subsection*{CLASSE UTILITY}
 \label{sec:ClasseUtilityS}
 
-La classe Utility può essere considerata come una libreria: contiene al suo interno solamente metodi \textbf{statici} che si è deciso di raggruppare al suo interno per rendere il codice il più compatto e leggibile possibile.
+La classe Utility può essere considerata come una libreria: contiene al suo interno solamente metodi \textbf{statici}, utilizzati dagli algoritmi risolutori implementati, che si è deciso di raggruppare al suo interno così da rendere il codice il più compatto e leggibile possibile. Questi saranno presenti durante il corso della tesi oppure inseriti nella sezione \hyperref[sec:AppendiceS]{Appendice}.
 
-\subsection{CLASSE PATHGENETIC}
+\subsection*{CLASSE PATHGENETIC}
 \label{sec:ClassePathGeneticS}
 
 La classe \textbf{PathGenetic} utilizzata per memorizzare i dati di una soluzione generica, estende \textbf{PathStandard} già discussa nel paragrafo X.Y. aggiungendo due campi utili solamente per gli algoritmi genetici: il primo di tipo \textit{double} memorizza la fitness associata alla soluzione, il secondo di tipo intero identifica il circuito all'atto dell'estrazione dei percorsi che formeranno la generazione successiva\footnote{I suddetti parametri prendono nome \textbf{fittness} e \textbf{nRoulette}}.
@@ -513,6 +664,15 @@ ANDREBBE UN COMMENTINO SU OGNUNO
 
 \section*{SEZIONE Quattro}
 \label{sec:SezioneQuattroS}
+
+
+Le istanze del problema del Commesso Viaggiatore fornite in input al programma sono state selezionata da un libreria presente al seguente indirizzo web: 
+
+\begin{center}
+    \href{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}
+\end{center}
+
+Ogni istanza è memorizzata in un file di testo in un formato ben preciso, è stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}.
 
 \subsection*{LETTURA INPUT FILE}
 \label{sec:LetturaInputS}
@@ -748,13 +908,13 @@ dove:
 \section*{SEZIONE CINQUE}
 \label{sec:SezioneCinqueS}
 
-In questo paragrafo vedremo come è possibile creare da programma un modello matematico attraverso l'uso di alcune routine appartenenti alla libreria di Cplex. Esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di Cplex da iterativo.
+In questo paragrafo vedremo come è possibile creare da programma un modello matematico attraverso l'uso di alcune routine appartenenti alla libreria di CPLEX. Esula dallo scopo di questa tesi fornire al lettore una descrizione del funzionamento di CPLEX da iterativo.
 
 
 \subsection*{COSTRUZIONE MODELLO IN LINGUAGGIO C}
 \label{sec:ModelloCS}
 
-Per istanziare un nuovo modello di programmazione lineare è necessario inizializzare un \textbf{environment} di Cplex utilizzando la funzione \textbf{CPXopenCPLEX} la quale ritorna un puntatore all'environment creato, la firma di tale funzione è:
+Per istanziare un nuovo modello di programmazione lineare è necessario inizializzare un \textbf{environment} di CPLEX utilizzando la funzione \textbf{CPXopenCPLEX} la quale ritorna un puntatore all'environment creato, la firma di tale funzione è:
 
 
 \begin{lstlisting}
@@ -801,7 +961,7 @@ int CPXnewcols (CPXENVptr env,CPXLPptr lp,int ccnt,double *obj, double *lb, doub
 dove:
 
 \begin{itemize}
-\item \textbf{env} : puntatore all'enviroment di Cplex nel quale vuole essere inserito il modello.
+\item \textbf{env} : puntatore all'enviroment di CPLEX nel quale vuole essere inserito il modello.
 \item \textbf{lp} : puntatore al problema di programmazione lineare.
 \item \textbf{ccnt} : intero che indica il numero delle nuove variabili che vengono aggiunte al problema.
 \item \textbf{obj} : array contenente per ogni variabile il relativo coefficiente 
@@ -848,7 +1008,7 @@ for (int i = 0; i < inst->nNodes; i++)
 
 \end{lstlisting}
 
-La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile Cplex associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice è  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C\#.\\
+La funzione chiamata xPos  riceve in ingresso un lato (i,j) del grafo e restituisce l'indice della variabile CPLEX associata a quest'ultimo. Dato che risulta possibile effettuare errori nella realizzazione di questa funzione, in questo punto del codice è  utile effettuare un controllo se il valore ritornato da xPos coincide con quello aspettato,in caso contrario viene sollevata una eccezione. Firma e dettagli implementativi di xPos saranno forniti nel paragrafo successivo in quanto è definita anche in C\#.\\
 
 Una volta definite le variabili è necessario creare i vincoli: per far ciò si è utilizzata la funzione \textbf{CPXnewrows}, la cui firma è:
 
@@ -859,7 +1019,7 @@ int CPXnewrows(CPXCENVptr env, CPXLPptr lp, int rcnt, const double * rhs, const 
 dove:
 
 \begin{itemize}
-\item \textbf{env}: puntatore all'enviroment di Cplex nel quale vuole essere inserito il modello.
+\item \textbf{env}: puntatore all'enviroment di CPLEX nel quale vuole essere inserito il modello.
 \item \textbf{lp}: puntatore al problema di programmazione lineare.
 \item \textbf{rcnt}: intero che definisce il numero di nuovi vincoli aggiunti al modello.
 \item \textbf{rhs}: array di lunghezza rcnt contenente il termine noto di ogni vincolo.
@@ -881,15 +1041,15 @@ Anche in questo caso anzichè aggiungere tutti i vincoli in una singola iterazio
 \subsection*{COSTRUZIONE E RISOLUZIONE DEL MODELLO MATEMATICO IN C\#}
 \label{sec:ModelloCSS}
 
-Per poter creare un modello matematico in Cplex, utilizzando come linguaggio di programmazione C\# è necessario creare inizialmente una istanza della classe \textbf{Cplex}:
+Per poter creare un modello matematico in CPLEX, utilizzando come linguaggio di programmazione C\# è necessario creare inizialmente una istanza della classe \textbf{CPLEX}:
 
 \begin{lstlisting}
-                           Cplex cplex = new Cplex();
+                           CPLEX cplex = new CPLEX();
 \end{lstlisting}
 
 Per creare il modello si associano, tramite opportune funzioni che descriveremo in questo paragrafo, all'istanza creata la funzione obbiettivo,le variabili e i vincoli del modello. 
 
-In C\# le variabili del modello sono oggetti il cui tipo deve implementare l'interfaccia \textbf{INumVar}. Non è necessario creare da noi una nuova classe infatti ci viene fornito il metodo \textbf{NumVar} della classe \textbf{Cplex}:
+In C\# le variabili del modello sono oggetti il cui tipo deve implementare l'interfaccia \textbf{INumVar}. Non è necessario creare da noi una nuova classe infatti ci viene fornito il metodo \textbf{NumVar} della classe \textbf{CPLEX}:
 
 \begin{lstlisting}
 public virtual INumVar NumVar(double lb, double ub, NumVarType type, string name)
@@ -910,7 +1070,7 @@ dove:
 \end{itemize}
 
 Che come si può notare nella firma ha come tipo di ritorno un tipo di oggetto che implementa l'interfaccia da noi desiderata. Vedremo nel seguito della trattazione quanto utili risultano essere le funzionalità offerta de quest'ultima.\\
-Introduciamo ora una seconda interfaccia \textbf{ILinearNumExpr} che come si può intuire viene implementata da oggetti che vogliono definire una espressione lineare. Anche in questo caso ci viene incontro la classe \textbf{Cplex} attraverso il metodo \textbf{LinearNumExpr}:
+Introduciamo ora una seconda interfaccia \textbf{ILinearNumExpr} che come si può intuire viene implementata da oggetti che vogliono definire una espressione lineare. Anche in questo caso ci viene incontro la classe \textbf{CPLEX} attraverso il metodo \textbf{LinearNumExpr}:
 \begin{lstlisting}
                 ILinearNumExpr expr = cplex.LinearNumExpr();
 \end{lstlisting}
@@ -956,7 +1116,7 @@ for (int i = 0; i < instance.NNodes; i++)
 \end{lstlisting}
 
 Espressioni lineari definite in questo modo possono essere utilizzate sia per definire la funzione obiettivo del modello ma anche per i suoi vincoli.\\
-Nel primo caso risulta sufficiente invocare i metodi non statici \textbf{AddMinimize} oppure \textbf{AddMaximize} della classe \textbf{Cplex} che rispettivamente definiscono una funzione obiettivo da minimizzare o da massimizzare, nel nostro caso:            
+Nel primo caso risulta sufficiente invocare i metodi non statici \textbf{AddMinimize} oppure \textbf{AddMaximize} della classe \textbf{CPLEX} che rispettivamente definiscono una funzione obiettivo da minimizzare o da massimizzare, nel nostro caso:            
 
 
 \begin{lstlisting}
@@ -1002,10 +1162,10 @@ cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
 
 \end{lstlisting}
 
-Spiegato come è possibile creare un modello C\# risulta comprensibile la scelta di realizzare un'opportuna funzione, chiamata \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che produce il modello matematico del Commesso Viaggiatore risolubile da Cplex:
+Spiegato come è possibile creare un modello C\# risulta comprensibile la scelta di realizzare un'opportuna funzione, chiamata \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che produce il modello matematico del Commesso Viaggiatore risolubile da CPLEX:
 
 \begin{lstlisting}
-public static INumVar[] BuildModel(Cplex cplex, Instance instance, int nEdges)
+public static INumVar[] BuildModel(CPLEX cplex, Instance instance, int nEdges)
 \end{lstlisting}
 
 dove:
@@ -1016,22 +1176,22 @@ dove:
 \item \textbf{nEdges}: Parametro la cui spiegazione è rimandata al capitolo...
 \end{itemize}
 
-Passiamo infine a descrivere i metodi necessari per risolvere il modello, ottenere il costo e la soluzione ottima calcolata da Cplex.\\
+Passiamo infine a descrivere i metodi necessari per risolvere il modello, ottenere il costo e la soluzione ottima calcolata da CPLEX.\\
 
-Per risolvere il modello è sufficiente invocare, sull'oggetto di classe Cplex dove è stato definito, il metodo \textbf{Solve}:
+Per risolvere il modello è sufficiente invocare, sull'oggetto di classe CPLEX dove è stato definito, il metodo \textbf{Solve}:
 
 \begin{lstlisting}
                          cplex.Solve();
 \end{lstlisting}
 
-Una volta avviata la risoluzione, Cplex fornisce in automatico informazioni sul processo stampate nello standard output da noi definito\footnote{Se non viene modificato di default risulta essere la classica console del progetto C\#}: inizialmente troviamo le impostazioni di risoluzione selezionate come ad esempio il numero di Thread .., successivamente ..  .\\
+Una volta avviata la risoluzione, CPLEX fornisce in automatico informazioni sul processo stampate nello standard output da noi definito\footnote{Se non viene modificato di default risulta essere la classica \textit{console} del progetto C\#}: inizialmente troviamo le impostazioni di risoluzione selezionate come ad esempio il numero di Thread .., successivamente ..  .\\
 Terminata l'operazione il costo della soluzione è memorizzato all'interno della variabile \textbf{ObjValue} di tipo \textbf{double} del solito oggetto \textbf{cplex}:
 
 \begin{lstlisting}
                         cplex.ObjValue; 
 \end{lstlisting}
 
-Naturalmente è anche possibile conoscere il valore assunto da ogni variabile nella soluzione fornitaci da Cplex tramite il metodo \textbf{GetValues} della classe \textbf{Cplex}:
+Naturalmente è anche possibile conoscere il valore assunto da ogni variabile nella soluzione fornitaci da CPLEX tramite il metodo \textbf{GetValues} della classe \textbf{CPLEX}:
 
 \begin{lstlisting}
                 public virtual double GetValues(INumVar[] var)
@@ -1111,7 +1271,7 @@ Passiamo ora al metodo \textbf{UpdateCC} che presenta la seguente firma:
 
 \begin{lstlisting}
 
-public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
+public static void UpdateCC(CPLEX cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
 
 \end{lstlisting}
 
@@ -1133,7 +1293,7 @@ A livello implementativo si è utilizzato un array di interi chiamato relatedCom
 
 \begin{lstlisting}
 
-public static void UpdateCC(Cplex cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,int[] relatedComponents, int i, int j)
+public static void UpdateCC(CPLEX cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,int[] relatedComponents, int i, int j)
 
 \end{lstlisting}
 
@@ -1214,12 +1374,12 @@ Il metodo Loop, indipendente dalla implementazione che si decide di utilizzare, 
 \'E infatti quest'ultimo fattore a risultare cruciale per molti problemi di programmazione lineare, a maggior ragione per quelli che, come il \textit{commesso viaggiatore}, vogliono studiare situazioni \textbf{np-difficili}\footnote{In letteratura è noto infatti che i problemi appartenenti a quest'ultima categoria sono caratterizzati da tempi di risoluzione, al caso peggiore, esponenziali rispetto al numero di variabili che li caratterizzano. Nel caso in cui siano definiti nel tipico linguaggio della programmazione lineare, la caratteristica appena esposta è riscontrabile da un numero di vincoli anch'esso esponenziale.}.
 Per quanto appena esposto si è pensato di progettare una variante del metodo \textbf{Loop} caratterizzata da una fase iniziale \textbf{euristica} i cui risultati vengono poi sfruttati da una seconda fase finale \textbf{esatta}. Durante la sua progettazione ci si accorge fin da subito che, come per ogni algoritmo euristico, non esistono specifici paletti che se fissati assicurano al \textbf{100\%} il raggiungimento dei propri obiettivi. Nel nostro caso ciò che desideriamo è chiaramente una fase \textit{euristica} più veloce di quella \textit{esatta} ma che produca anche risultati utili a quest'ultima. Abbiamo quindi deciso che, all'interno della nostra applicazione, sia l'utente stesso a poter settare alcuni parametri che rendono le due fasi più o meno differenti tra loro. In questo modo, basandosi sulle proprie esperienze e test, è possibile ottenere i risultati migliori per qualsiasi istanza del problema che si desidera risolvere.
 Entriamo ora nel dettaglio delle due fasi chiarendo fin da subito che tutte e due devono sempre fornire soluzioni \textbf{valide} per il problema che andiamo a risolvere. In realtà ciò che è interessante discutere riguarda quasi solamente la fase \textit{euristica} in quanto quella \textit{esatta} è in tutto e per tutto il classico metodo \textbf{Loop} già esposto in precedenza\footnote{Ciò che varia è solamente che il modello matematico iniziale dato in pasto alla fase \textit{esatta} presenta già dei vincoli di \textbf{subtour elimination} individuati dalla fase \textit{euristica} dove però il modello matematico di partenza presenta già alcuni vincoli di \textit{subtour elimination}.}.
-Esistono innumerevoli modi per rendere euristico il metodo \textbf{Loop}, possiamo suddividerli in tre grandi categorie: della prima fanno parte le tecniche che rendono la risoluzione stessa da parte di \textbf{Cplex} euristica, nella seconda ricadono i metodi che introducono nuovi vincoli al modello matematico ed infine la terza categoria è una semplice combinazione delle due precedenti. All'interno del nostro progetto sono state sviluppate tre varianti della fase \textit{euristica}, una per ogni categoria appena esposta:
+Esistono innumerevoli modi per rendere euristico il metodo \textbf{Loop}, possiamo suddividerli in tre grandi categorie: della prima fanno parte le tecniche che rendono la risoluzione stessa da parte di \textbf{CPLEX} euristica, nella seconda ricadono i metodi che introducono nuovi vincoli al modello matematico ed infine la terza categoria è una semplice combinazione delle due precedenti. All'interno del nostro progetto sono state sviluppate tre varianti della fase \textit{euristica}, una per ogni categoria appena esposta:
 
 \begin{itemize}
-    \item \textbf{prima categoria}: durante la risoluzione del problema attraverso la tecnica del \textbf{Branch\&Cut}, Cplex, oltre al banale calcolo della soluzione ottima per ogni nodo dell'albero decisionale, sfrutta internamente algoritmi euristici per agevolare il processo. Durante quest'ultimo si hanno quindi a disposizione due parametri, il primo è il costo della soluzione euristica migliore (\textbf{$C_{eu}$}), mentre il secondo è il classico costo \textbf{lower bound}\footnote{Nel nostro caso sarà il costo della migliore soluzione intera trovato.} (\textbf{$L_{b}$}). \'E importate far notare che questi valori mutano mano a mano che si procede alla costruzione dell'albero decisione, in particolare \textbf{$C_{eu}$} cresce mentre \textbf{$L_{b}$} scende fino a che, teoricamente, non coincidano.
-    La distanza \textbf{relativa} tra i due valori viene costantemente monitorata da Cplex e, se questa scende sotto la soglia minima del suo parametro interno \textbf{EpGap}, il processo di risoluzione viene considerato terminato e la miglior soluzione valida trovata viene restituita. Maggiori dettagli riguarda \textit{EpGap} sono forniti nel paragrafo ad esso dedicato LINK!!!!!!!, per ora ci basta dire che se di default è settato ad un valore vicino allo $0$, la sua variazione è proprio ciò che viene utilizzato nel nostro programma all'interno della fase \textit{euristica} del metodo \textit{Loop}.
-    Risulta estremamente intuitivo e facilmente verificabile che per una specifica istanza non è possibile a priori determinare quanto velocemente verrà raggiunto un certo gap durante la fase di \textit{Branch\&Cut}. E\' quindi consigliabile eseguire inizialmente il normale metodo \textbf{Loop}, analizzare l'output fornito da Cplex durante la risoluzione ed osservare per quale gap soluzioni successive dell'albero decisionale non producono più miglioramenti sostanziali e\\o richiedono tempi di esecuzione eccessivi. Per quanto detto il valore di \textbf{EpGap} viene lasciato a discrezione dell'utente;
+    \item \textbf{prima categoria}: durante la risoluzione del problema attraverso la tecnica del \textbf{Branch\&Cut}, CPLEX, oltre al banale calcolo della soluzione ottima per ogni nodo dell'albero decisionale, sfrutta internamente algoritmi euristici per agevolare il processo. Durante quest'ultimo si hanno quindi a disposizione due parametri, il primo è il costo della soluzione euristica migliore (\textbf{$C_{eu}$}), mentre il secondo è il classico costo \textbf{lower bound}\footnote{Nel nostro caso sarà il costo della migliore soluzione intera trovato.} (\textbf{$L_{b}$}). \'E importate far notare che questi valori mutano mano a mano che si procede alla costruzione dell'albero decisione, in particolare \textbf{$C_{eu}$} cresce mentre \textbf{$L_{b}$} scende fino a che, teoricamente, non coincidano.
+    La distanza \textbf{relativa} tra i due valori viene costantemente monitorata da CPLEX e, se questa scende sotto la soglia minima del suo parametro interno \textbf{EpGap}, il processo di risoluzione viene considerato terminato e la miglior soluzione valida trovata viene restituita. Maggiori dettagli riguarda \textit{EpGap} sono forniti nel paragrafo ad esso dedicato LINK!!!!!!!, per ora ci basta dire che se di default è settato ad un valore vicino allo $0$, la sua variazione è proprio ciò che viene utilizzato nel nostro programma all'interno della fase \textit{euristica} del metodo \textit{Loop}.
+    Risulta estremamente intuitivo e facilmente verificabile che per una specifica istanza non è possibile a priori determinare quanto velocemente verrà raggiunto un certo gap durante la fase di \textit{Branch\&Cut}. E\' quindi consigliabile eseguire inizialmente il normale metodo \textbf{Loop}, analizzare l'output fornito da CPLEX durante la risoluzione ed osservare per quale gap soluzioni successive dell'albero decisionale non producono più miglioramenti sostanziali e\\o richiedono tempi di esecuzione eccessivi. Per quanto detto il valore di \textbf{EpGap} viene lasciato a discrezione dell'utente;
     \item \textbf{seconda categoria}: come precedentemente indicato ad inizio paragrafo, i tempi di risoluzione risultano esponenziali rispetto al numero di variabili che caratterizzano il problema in questione. Limitarne il numero ha pertanto un impatto notevole nella risoluzione del modello matematico ed a tale scopo è possibile decidere di settare a priori il valore assunto da alcune variabili. Tanto migliore risulta essere la previsione così introdotta, migliori saranno i tempi di risoluzione ottenibili sia per la fase \textit{euristica} che quella \textit{esatta} del metodo \textit{Loop}. La scelta da noi effettuata è di lasciare selezionabili per ogni nodo gli $m$ collegamenti a costo minore che lo vedono come un loro vertice. Il numero $m$ è lasciato selezionabile dall'utente e da risultati sperimentali non è consigliabile che si discosti troppo dal valore $10$;
     \item \textbf{terza categoria}: vengono semplicemente combinate le due precedenti;
 \end{itemize}
@@ -1228,17 +1388,17 @@ Nei due paragrafi successivi vengono mostrati alcuni dettagli, tra cui quelli re
 
 \subsection*{EpGap}
 
-EpGap risulta essere un parametro interno di Cplex, il cui valore di default è $1e^{-06}$. Indicando con \textbf{bestnode} il miglior valore della funzione obiettivo calcolata ad un nodo dell'albero decisionale attraverso metodi euristici propri di Cplex, e con \textbf{bestInteger} il costo della miglior soluzione intera trovata fino a quel momento, ossia il costo dell'incumbent, qualora la seguente quantità:
+EpGap risulta essere un parametro interno di CPLEX, il cui valore di default è $1e^{-06}$. Indicando con \textbf{bestnode} il miglior valore della funzione obiettivo calcolata ad un nodo dell'albero decisionale attraverso metodi euristici propri di CPLEX, e con \textbf{bestInteger} il costo della miglior soluzione intera trovata fino a quel momento, ossia il costo dell'incumbent, qualora la seguente quantità:
 
 $$|bestNode - bestInteger|/(1e-10 + |bestInteger|)$$
 
 risulti inferiore ad \textit{EpGap} il solver si arresta.
 
-Il settaggio del parametro in questione è molto semplice, è sufficiente invocare il metodo \textbf{SetParam} sull'oggetto della classe \textbf{Cplex} che si sta utilizzando come riportato di seguito:
+Il settaggio del parametro in questione è molto semplice, è sufficiente invocare il metodo \textbf{SetParam} sull'oggetto della classe \textbf{CPLEX} che si sta utilizzando come riportato di seguito:
 
 \begin{lstlisting}
 
-cplex.SetParam(Cplex.DoubleParam.EpGap, newValue);
+cplex.SetParam(CPLEX.DoubleParam.EpGap, newValue);
 
 \end{lstlisting}
 
@@ -1255,7 +1415,7 @@ Completato il settaggio di \textit{EpGap} è sufficiente procedere con il normal
 \subsection*{TITOLO DA CAMBIARE}
 \label{sec:TitoloS}
 
-Nel paragrafo LINK!!!!!!!!!!!!!!!, è stato presentato il metodo \textbf{BuildModel} della classe \textbf{Utility} il cui compito è di creare il modello matematico, privo dei vincoli di subtour elimination, risolubile da Cplex. Durante la presentazione della sua firma, era stato lasciato in sospeso l'utilizzo del parametro \textit{nEdges} in quanto allora del tutto prematura.
+Nel paragrafo LINK!!!!!!!!!!!!!!!, è stato presentato il metodo \textbf{BuildModel} della classe \textbf{Utility} il cui compito è di creare il modello matematico, privo dei vincoli di subtour elimination, risolubile da CPLEX. Durante la presentazione della sua firma, era stato lasciato in sospeso l'utilizzo del parametro \textit{nEdges} in quanto allora del tutto prematura.
 
 Come specificato nel paragrafo LINK!!!!!!!!!! una variante euristica del metodo \textbf{Loop}, prevede di utilizzare solamente un numero massimo $m$ di lati incidenti in ogni nodo del problema in questione del commesso viaggiatore. Tale parametro è inoltre richiesto all'utente per i motivi già specificati e viene comunicato al metodo \textbf{BuildModel} proprio grazie alla variabile di ingresso \textbf{nEdges}\footnote{Come dettaglio implementativo specifichiamo inoltre che per convenzione si è deciso di settare $nEdges = -1$ nel caso in cui si voglia coistruire un modello con tutti i lati possibili abilitati}.
 
@@ -1332,10 +1492,10 @@ Dove chiaramente \textbf{x} è il vettore contenente i riferimenti alle variabil
 \label{sec:SezioneSetteS}
 
 In questa sezione esponiamo una tecnica alternativa per l'inserimento delle espressioni di subtour elimination all'interno di un sistema. Ciò che varia rispetto al metodo \textbf{Loop} presentato in precedenza è il \textbf{momento} in cui tali espressioni vengono definite.\\
-L'idea è di sfruttare il fatto che Cplex come metodo di risoluzione per i problemi di \textbf{PLI} utilizza la tecnica del \textbf{Branch\&Cut}\footnote{Da ora in avanti sarà abbreviato con la sigla \textbf{B\&C}}. Viene inoltre offerta la possibilità di conoscere la soluzione trovata, sia essa frazionaria o intera, per ogni nodo dell'albero decisione ma soprattuto la possibilità di ampliare il modello matematico come meglio crediamo.\\
+L'idea è di sfruttare il fatto che CPLEX come metodo di risoluzione per i problemi di \textbf{PLI} utilizza la tecnica del \textbf{Branch\&Cut}\footnote{Da ora in avanti sarà abbreviato con la sigla \textbf{B\&C}}. Viene inoltre offerta la possibilità di conoscere la soluzione trovata, sia essa frazionaria o intera, per ogni nodo dell'albero decisione ma soprattuto la possibilità di ampliare il modello matematico come meglio crediamo.\\
 Quello che vogliamo fare risulta a questo punto molto chiaro: se alla analisi della soluzione di un nodo sono presenti subtour il modello matematico deve essere modificato per eliminarli.\\
-A livello pratico Cplex permette l'implementazione distinta di callback che vengono eseguite nel momento in cui viene trovata una soluzione intera oppure frazionaria\footnote{In informatica una callback è una funzione definita dall'utente che viene eseguita in automatico dal sistema ogniqualvolta scatta un particolare evento.}: nel primo caso è necessario implementare una \textbf{"lazy constraint callback"} mentre nel secondo caso una \textbf{"user cut callback"}. Da notare che in realtà solo soluzioni valide per i criteri di fathoming possono far scattare una callback, ciò non avviene ad esempio se il valore della soluzione di un nodo risulta maggiore rispetto a quello dell'incumbent\footnote{Per incumbent si intende il valore migliore trovato fino a questo momento relativo ad un soluzione accettabile.}.\\
-In generale i tagli possono essere definiti \textbf{locali} o \textbf{globali}: mentre i primi hanno validità esclusiva all'interno del sottoalbero avente come radice il nodo per la quale sono stati generati, i secondi hanno validità per tutti i nodi dell'albero decisionale e vengono memorizzati in una struttura globale detta \textbf{pool di tagli}. Cplex inoltre fornisce la possibilità di definire un taglio \textbf{purgeable} o meno: nel primo caso significa che può essere rimosso in un secondo momento poiché ritenuto inefficace. Durante il proseguo della tesi i tagli saranno da considerarsi sempre globali e non purgeable.
+A livello pratico CPLEX permette l'implementazione distinta di callback che vengono eseguite nel momento in cui viene trovata una soluzione intera oppure frazionaria\footnote{In informatica una callback è una funzione definita dall'utente che viene eseguita in automatico dal sistema ogniqualvolta scatta un particolare evento.}: nel primo caso è necessario implementare una \textbf{"lazy constraint callback"} mentre nel secondo caso una \textbf{"user cut callback"}. Da notare che in realtà solo soluzioni valide per i criteri di fathoming possono far scattare una callback, ciò non avviene ad esempio se il valore della soluzione di un nodo risulta maggiore rispetto a quello dell'incumbent\footnote{Per incumbent si intende il valore migliore trovato fino a questo momento relativo ad un soluzione accettabile.}.\\
+In generale i tagli possono essere definiti \textbf{locali} o \textbf{globali}: mentre i primi hanno validità esclusiva all'interno del sottoalbero avente come radice il nodo per la quale sono stati generati, i secondi hanno validità per tutti i nodi dell'albero decisionale e vengono memorizzati in una struttura globale detta \textbf{pool di tagli}. CPLEX inoltre fornisce la possibilità di definire un taglio \textbf{purgeable} o meno: nel primo caso significa che può essere rimosso in un secondo momento poiché ritenuto inefficace. Durante il proseguo della tesi i tagli saranno da considerarsi sempre globali e non purgeable.
 
 \begin{figure}[htbp]
     \centering
@@ -1346,17 +1506,17 @@ In generale i tagli possono essere definiti \textbf{locali} o \textbf{globali}: 
 Prima di procedere con l'esposizione dei dattagli riguardanti l'implementare di tali procedure, è possibile effettuare le seguenti considerazioni:\\
 
 \begin{itemize}
-    \item La soluzione ottima fornita da Cplex risulta per costruzione priva di subtour: non è quindi più necessario, al contrario del metodo \textbf{Loop}, lanciare molteplici risoluzioni. A livello pratico è sufficiente invocare solo una volta il metodo \textbf{Cplex.Solve()}.
+    \item La soluzione ottima fornita da CPLEX risulta per costruzione priva di subtour: non è quindi più necessario, al contrario del metodo \textbf{Loop}, lanciare molteplici risoluzioni. A livello pratico è sufficiente invocare solo una volta il metodo \textbf{CPLEX.Solve()}.
     \item Maggiore è il numero di vincoli che andiamo ad inserire, maggiore diventa il tempo di risoluzione per i vari nodi successivi dell'albero decisionale.
     \item Il numero di nodi che forniscono soluzioni frazionarie risulta di molto superiore rispetto a quelli con soluzione intera. Tenendo conto di quanto detto al punto precedente, non è quindi saggio andare ad analizzare tutte le soluzioni frazionarie ma solo una loro minima percentuale. Senza questo accorgimento si andrebbe inevitabilmente ad inserire innumerevoli vincoli superflui per l'ottenenimento della soluzione ottima con conseguenti tempi di risoluzione eccessivamente elevati.
-    \item I moderni processori hanno a disposizione molteplici core sia reali che virtuali e quindi sfruttare tecniche di multi-threading. In particolare Cplex permette di settare il numero di thread utilizzabili, in modo tale che ognuno di essi si occupi dalla risoluzione di un nodo dell'albero decisionale: in questo modo, in linea teorica, si drovrebbe ottenere un boost delle prestazioni con conseguente riduzione dei tempi di calcolo. D'altro canto, come per qualsiasi applicazione informatica, l'utilizzo del multi-threading risulta rischioso in quanto l'accesso contemporaneo ai medesimi dati può portare ad una loro inconsistenza. Nel nostro caso può capitare che più callback eseguite contemporaneamente vadano a modificare variabili condivise andando così incontro ad eccezioni o anomalie tali da non garantire più la correttezza della soluzione prodotta da Cplex.\\
-    Per evitare queste problematiche, i progettisti di Cplex hanno preferito settare il numero di thread al valore \textbf{1} dopo l' installazione di una callback. \'E quindi nostro compito modificare tale parametro così da renderlo pari al numero di processori virtuali a nostra disposizione e di conseguenza assicurarci che le callback risultino \textbf{thread-safe}. Maggiori dettagli sono riportati nei successivi paragrafi.
+    \item I moderni processori hanno a disposizione molteplici core sia reali che virtuali e quindi sfruttare tecniche di multi-threading. In particolare CPLEX permette di settare il numero di thread utilizzabili, in modo tale che ognuno di essi si occupi dalla risoluzione di un nodo dell'albero decisionale: in questo modo, in linea teorica, si drovrebbe ottenere un boost delle prestazioni con conseguente riduzione dei tempi di calcolo. D'altro canto, come per qualsiasi applicazione informatica, l'utilizzo del multi-threading risulta rischioso in quanto l'accesso contemporaneo ai medesimi dati può portare ad una loro inconsistenza. Nel nostro caso può capitare che più callback eseguite contemporaneamente vadano a modificare variabili condivise andando così incontro ad eccezioni o anomalie tali da non garantire più la correttezza della soluzione prodotta da CPLEX.\\
+    Per evitare queste problematiche, i progettisti di CPLEX hanno preferito settare il numero di thread al valore \textbf{1} dopo l' installazione di una callback. \'E quindi nostro compito modificare tale parametro così da renderlo pari al numero di processori virtuali a nostra disposizione e di conseguenza assicurarci che le callback risultino \textbf{thread-safe}. Maggiori dettagli sono riportati nei successivi paragrafi.
 \end{itemize}
 
 \subsection*{LAZYCONSTRAINT CALLBACK C\#}
 \label{sec:LazyS}
 
-Per poter utilizzare una \textbf{lazy constraint callback} in \textbf{C\#} Cplex fornisce all'interno delle proprie librerie la classe astratta \textbf{LazyConstraintCallback} che a sua volta estende \textbf{ControlCallback}. \'E quindi necessario creare una propria classe che estenda quest'ultima, nel nostro caso è stato deciso di chiamarla \textbf{TSPLazyConsCallback}, in questo modo è necessario definire al suo interno il metodo \textbf{Main} che verrà invocato automaticamente dal sistema ogniqualvolta scatta la callback\footnote{Rocordiamo che tutti i metodi astratti presenti all'interno di una classe astratta devono essere obbligatoriamente definiti da tutte le classi che estendono quest'ultima}.\\
+Per poter utilizzare una \textbf{lazy constraint callback} in \textbf{C\#} CPLEX fornisce all'interno delle proprie librerie la classe astratta \textbf{LazyConstraintCallback} che a sua volta estende \textbf{ControlCallback}. \'E quindi necessario creare una propria classe che estenda quest'ultima, nel nostro caso è stato deciso di chiamarla \textbf{TSPLazyConsCallback}, in questo modo è necessario definire al suo interno il metodo \textbf{Main} che verrà invocato automaticamente dal sistema ogniqualvolta scatta la callback\footnote{Rocordiamo che tutti i metodi astratti presenti all'interno di una classe astratta devono essere obbligatoriamente definiti da tutte le classi che estendono quest'ultima}.\\
 Una volta terminato questo processo l'installazione della callback viene eseguita nel seguente modo:
 
 \begin{lstlisting}
@@ -1365,12 +1525,12 @@ cplex.Use(new TSPLazyConsCallback(...));
 
 \end{lstlisting}
 
-Dove, come al solito, cplex è l'instanza della classe \textbf{Cplex} sulla quale definiamo il modello matematico privo dei vincoli di subtour elimination.\\
+Dove, come al solito, cplex è l'instanza della classe \textbf{CPLEX} sulla quale definiamo il modello matematico privo dei vincoli di subtour elimination.\\
 Mostriamo ora la firma del costruttore della classe \textbf{TSPLazyConsCallback} riportando una breve descrizione dei parametri di ingresso:
 
 \begin{lstlisting}
 
-public TSPLazyConsCallback(Cplex cplex, INumVar[] z, Instance instance, Process process, bool BlockPrint)
+public TSPLazyConsCallback(CPLEX cplex, INumVar[] z, Instance instance, Process process, bool BlockPrint)
 
 \end{lstlisting}
 
@@ -1386,12 +1546,12 @@ Come accennato nel paragrafo precedente, l'installazione di una callback setta a
 
 \begin{lstlisting}
 
-cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+cplex.SetParam(CPLEX.Param.Threads, cplex.GetNumCores());
 
 \end{lstlisting}
 
-Come sarà possibile vedere più avanti, la tecnica da noi utilizzata per l'individuazione di subtour risulta thread-safe in quanto non vengono utilizzate variabili condivise da più threads se non nella sola modalità di lettura. L'aggiunta di eventuali tagli, d'altro canto, viene gestita in modo automatico da Cplex assicurandoci, anche in questo caso, una procedura thread-safe. Un discorso apparte deve invece essere fatto nel caso in cui la variabile \textbf{BlockPrint} descritta in precedenza sia stata posta a \textbf{true}. Come era logico aspettarsi, abbiamo verificato che spesso la procedura di stampa attraverso GNUPlot di una qualsiasi soluzione richiede un tempo di esecuzione maggiore rispetto la frequenza con cui le callback sono effettuate. Ricordando inoltre che, il metodo da noi utilizzato per comunicare a GNUPlot le coordinate cartesiane dei punti del grafo cartesiano prevede la scrittura di queste ultime in un apposito file di testo, è stato necessario individuare un modo per evitare problemi riguardanti il multi-threading: utilizzare sempre lo stesso file di testo causa infatti errori nella stampa dei grafi, in particolare la lettura delle coordinate da parte di GNUPlot risulta troppo lenta e durante questo processo più thread rischiano di modificare il file con le proprie coordinate.\\
-Per evitare questo problema è stato quindi necessario stampare le coordinate prodotte dai vari nodi dell'albero decisionale in differenti files. A tal proposito la tecnica da noi scelta è stata quella di inserire nel nome di questi ultimi anche l'id numerico del nodo a loro associato che viene fornito dirretamente da Cplex:
+Come sarà possibile vedere più avanti, la tecnica da noi utilizzata per l'individuazione di subtour risulta thread-safe in quanto non vengono utilizzate variabili condivise da più threads se non nella sola modalità di lettura. L'aggiunta di eventuali tagli, d'altro canto, viene gestita in modo automatico da CPLEX assicurandoci, anche in questo caso, una procedura thread-safe. Un discorso apparte deve invece essere fatto nel caso in cui la variabile \textbf{BlockPrint} descritta in precedenza sia stata posta a \textbf{true}. Come era logico aspettarsi, abbiamo verificato che spesso la procedura di stampa attraverso GNUPlot di una qualsiasi soluzione richiede un tempo di esecuzione maggiore rispetto la frequenza con cui le callback sono effettuate. Ricordando inoltre che, il metodo da noi utilizzato per comunicare a GNUPlot le coordinate cartesiane dei punti del grafo cartesiano prevede la scrittura di queste ultime in un apposito file di testo, è stato necessario individuare un modo per evitare problemi riguardanti il multi-threading: utilizzare sempre lo stesso file di testo causa infatti errori nella stampa dei grafi, in particolare la lettura delle coordinate da parte di GNUPlot risulta troppo lenta e durante questo processo più thread rischiano di modificare il file con le proprie coordinate.\\
+Per evitare questo problema è stato quindi necessario stampare le coordinate prodotte dai vari nodi dell'albero decisionale in differenti files. A tal proposito la tecnica da noi scelta è stata quella di inserire nel nome di questi ultimi anche l'id numerico del nodo a loro associato che viene fornito dirretamente da CPLEX:
 
 
 \begin{lstlisting}
@@ -1405,7 +1565,7 @@ string fileName = instance.InputFile + "_" + nodeId;
 \end{lstlisting}
 
 La funzione \textbf{GetNodeId} risulta disponibile in quanto ereditata dalla classe \textbf{ControlCallback}.\\
-Dopo i dovuti chiarimenti riguardanti il multi-threading passiamo ora a descrivere nei dettagli come è stata realizzato il metodo Main della classe TSPLazyConsCallback. Prima di tutto per verificare l'eventuale presenza di subtour bisogna naturalmente accedere alla soluzione fornita per il nodo dell'albero decisionale in questione: a tal fine si possono utilizzare i metodi \textbf{GetValues} e \textbf{GetValue}, ereditati entrambi dalla classe ControlCallback, che ricevono in input rispettivamente un vettore di riferimenti per variabili del modello matematico e un singolo riferimento ad una variabile di quest'ultimo. Dopo pochi test ci si accorge immediatamente che invocare più volte il metodo \textbf{GetValue}, ad esempio dentro un ciclo for, risulta molto più oneroso in termini temporali rispetto una singola evocazione del metodo \textbf{GetValues}: si può quindi dedurre che è molto più dispendioso effettuare multiplici accessi all'interfaccia fornita da Cplex rispetto alla quantità di dati che ad essa richiediamo.\\
+Dopo i dovuti chiarimenti riguardanti il multi-threading passiamo ora a descrivere nei dettagli come è stata realizzato il metodo Main della classe TSPLazyConsCallback. Prima di tutto per verificare l'eventuale presenza di subtour bisogna naturalmente accedere alla soluzione fornita per il nodo dell'albero decisionale in questione: a tal fine si possono utilizzare i metodi \textbf{GetValues} e \textbf{GetValue}, ereditati entrambi dalla classe ControlCallback, che ricevono in input rispettivamente un vettore di riferimenti per variabili del modello matematico e un singolo riferimento ad una variabile di quest'ultimo. Dopo pochi test ci si accorge immediatamente che invocare più volte il metodo \textbf{GetValue}, ad esempio dentro un ciclo for, risulta molto più oneroso in termini temporali rispetto una singola evocazione del metodo \textbf{GetValues}: si può quindi dedurre che è molto più dispendioso effettuare multiplici accessi all'interfaccia fornita da CPLEX rispetto alla quantità di dati che ad essa richiediamo.\\
 Per quanto appena detto la nostra scelta è ricaduta nel metodo \textbf{GetValues} che restituisce un vettori di \textbf{double} contenente il valore dell variabili (il cui riferimento è ricevuto come ingresso) nella soluzione corrente del modello matematico. Da notare che anche in questo caso anche se ci aspettiamo tutti valori interi, in particolare pari a 0 oppure 1, è possibile che ci siano in realtà discostamenti infinitesimi pertanto quando controlliamo il valore di una variabile verifichiamo semplicemente se è maggiore o minore del valore 0,5.\\
 I metodi utilizzati per l'individuazione di eventuali subtour e la eventuale stampa del grafo attraverso GNUPlot sono identici a quelli utilizzati per il metodo \textbf{Loop} pertanto non sono qui riportarti.\\
 Una volta ottenute tutte le informazioni riguardanti i subtour, al contrario di quanto viene fatto nel metodo Loop non è richiesto di ampliare direttamente il modello con nuovi vincoli ma, come era già stato accennato in precedenza, deve essere popolato il pool di tagli associato al modello matematico:
@@ -1429,15 +1589,15 @@ if (cuts.Length > 1)
 Dove:
 
 \begin{itemize}
-    \item \textbf{cuts}: è un vettore di \textbf{IRange} che sono la struttura di dati base fornita da Cplex per memorizzare espressioni lineari;
-    \item \textbf{ccExprLC[i]}: analogamente per quanto avviene nel metodo Loop, contiene i dati delle variabili dell'i-esimo taglio memorizzati come \textbf{ILinearNumExpr} (struttura dati fornita da Cplex);
+    \item \textbf{cuts}: è un vettore di \textbf{IRange} che sono la struttura di dati base fornita da CPLEX per memorizzare espressioni lineari;
+    \item \textbf{ccExprLC[i]}: analogamente per quanto avviene nel metodo Loop, contiene i dati delle variabili dell'i-esimo taglio memorizzati come \textbf{ILinearNumExpr} (struttura dati fornita da CPLEX);
     \item \textbf{bufferCoeffCCLC[i]}: analogamente per quanto avviene nel metodo Loop, contiene il numero di variabili che definiscono l'i-esimo taglio;
-    \item \textbf{cplex.Le}: è la funzione definita da Cplex che restituisce una espressione lineare che impone le variabili, ricevute come primo parametro, minori oppure uguali del secondo parametro ricevuto;
-    \item \textbf{Add}: è la funzione eraditata dalla classe \textbf{LazyConstraintCallback} che permette di aggiungere un taglio \textbf{globale}. Come parametri riceve quindi il taglio stesso ed un valore intero che indica a Cplex come debba gestire quest'ultimo:
+    \item \textbf{cplex.Le}: è la funzione definita da CPLEX che restituisce una espressione lineare che impone le variabili, ricevute come primo parametro, minori oppure uguali del secondo parametro ricevuto;
+    \item \textbf{Add}: è la funzione eraditata dalla classe \textbf{LazyConstraintCallback} che permette di aggiungere un taglio \textbf{globale}. Come parametri riceve quindi il taglio stesso ed un valore intero che indica a CPLEX come debba gestire quest'ultimo:
     \begin{itemize}
         \item \textbf{0}: il taglio è aggiunto al pool in maniera permanente;
         \item \textbf{1}: il taglio è definito come \textbf{purgeable} quindi eliminabile nel caso in cui non risulti più efficiente;
-        \item \textbf{2}: il taglio viene trattato come se fosse stato generato da Cplex, quindi ad esempio prima di essere aggiunto al pool viene analizzata la sua efficacia e di conseguenza l'operazione va quindi a buon fino o meno;
+        \item \textbf{2}: il taglio viene trattato come se fosse stato generato da CPLEX, quindi ad esempio prima di essere aggiunto al pool viene analizzata la sua efficacia e di conseguenza l'operazione va quindi a buon fino o meno;
     \end{itemize}
 
 \end{itemize}
@@ -1518,7 +1678,7 @@ Dove:
 
 \begin{itemize}
     \item \textbf{env}: Espressione contenente una combinazione lineare delle variabili del vincolo; SIAMO SICURI!!!!???!??!
-    \item \textbf{lazyconcallback}: Rappresenta il nome, attribuito dal programmatore esterno, della funzione che viene invocata da Cplex qualora la soluzione del rilassamento continuo di un nodo abbia valore intero ed inferiore all'incumbent. Nel nostro caso il nome assunto è \textbf{myLazyCallBack};
+    \item \textbf{lazyconcallback}: Rappresenta il nome, attribuito dal programmatore esterno, della funzione che viene invocata da CPLEX qualora la soluzione del rilassamento continuo di un nodo abbia valore intero ed inferiore all'incumbent. Nel nostro caso il nome assunto è \textbf{myLazyCallBack};
     \item \textbf{cbhandle}: Puntatore ad una struttura dati passata dall'utente contenente le informazioni che devono essere visibili all'interno della callback \textit{myLazyCallBack}. Come parametro si è passato il puntatore all'istanza;
 \end{itemize}
 
@@ -1532,7 +1692,7 @@ CPXsetintparam(env, CPXPARAM\_Threads, nCore);
 
 \end{lstlisting}
 
-Passiamo ora a descrivere la funzione \textit{myLazyCallBack} che identifica i subtour ed aggiunge i relativi vincoli al modello, ricordando che la sua firma deve rispettare specifici parametri definiti da Cplex stesso\footnote{Essendo tali funzioni invocate automaticamente da Cplex i tipi di parametri che esse ricevono sono stati definiti a priori e non risultano modificabili}:
+Passiamo ora a descrivere la funzione \textit{myLazyCallBack} che identifica i subtour ed aggiunge i relativi vincoli al modello, ricordando che la sua firma deve rispettare specifici parametri definiti da CPLEX stesso\footnote{Essendo tali funzioni invocate automaticamente da CPLEX i tipi di parametri che esse ricevono sono stati definiti a priori e non risultano modificabili}:
 
 \begin{lstlisting}
 
@@ -1546,12 +1706,12 @@ Dove:
     \item \textbf{env}: rappresenta l’istanza dell’ enviroment con il quale stiamo lavorando. DIVERSO DA SOPRA!!!!!!!!
     \item \textbf{cbdata}: come accennato poco fa questo parametro è quello specificato dall'utente durante l'installazione della callback, non essendo noto a priori il tipo di dato che l'utente desidera ricevere si utilizza \textbf{void};
     \item \textbf{wherefrom}: definisce da che punto del \textit{B\&C} è stata invocata la funzione, ai fini pratici tale parametro, per la lazy callback è risultato irrilevante;
-    \item \textbf{cbhandle}: puntatore a dati privati utilizzato da Cplex;
-    \item \textbf{useraction\_p}: puntatore ad un intero utilizzato dall'utente per comunicare a Cplex diverse informazioni. Tale parametro può assumere i seguenti tre valori:
+    \item \textbf{cbhandle}: puntatore a dati privati utilizzato da CPLEX;
+    \item \textbf{useraction\_p}: puntatore ad un intero utilizzato dall'utente per comunicare a CPLEX diverse informazioni. Tale parametro può assumere i seguenti tre valori:
     \begin{itemize}
-    \item \textbf{0}: avente come costante simbolica CPX\_CALLBACK\_DEFAULT comunica a Cplex che fino a quel punto la callback non ha aggiunto tagli al modello;
-    \item \textbf{1}: avente come costante simbolica CPX\_CALLBACK\_FAI impone a Cplex di uscire dall'ottimizzazione;
-    \item \textbf{2}: avente come costante simbolica CPX\_CALLBACK\_SET comunica a Cplex che sono stati aggiunti tagli;
+    \item \textbf{0}: avente come costante simbolica CPX\_CALLBACK\_DEFAULT comunica a CPLEX che fino a quel punto la callback non ha aggiunto tagli al modello;
+    \item \textbf{1}: avente come costante simbolica CPX\_CALLBACK\_FAI impone a CPLEX di uscire dall'ottimizzazione;
+    \item \textbf{2}: avente come costante simbolica CPX\_CALLBACK\_SET comunica a CPLEX che sono stati aggiunti tagli;
     \end{itemize}
 
 \end{itemize}
@@ -1596,12 +1756,12 @@ double *xstar = (double*)malloc(inst->nCols * sizeof(double));
 
 Questa operazione risulta necessaria al fine di realizzare un codice che risulti thread-safety: poiché \textit{inst} è un puntatore accessibile da tutti i thread esiste il rischio di accessi multipli sia in modalità di lettura popolando così \textit{bestLb} con valori appartenti a soluzioni differenti.
 A questo punto entra in gioco Concorde per l'individuazione e l'introduzione dei vincoli di subtour elination, dato che il metodo da utilizzare è il medesimo che vedremo per le \textit{usercut callback} rimandiamo al paragrafo seguente per maggiori dettagli.
-Una volta completato tale passaggio non rimane altro che impostare il parametro \textbf{*useraction\_p} al valore \textbf{CPX\_CALLBACK\_SET} al fine di comunicare a Cplex che sono stati aggiunti tagli.
+Una volta completato tale passaggio non rimane altro che impostare il parametro \textbf{*useraction\_p} al valore \textbf{CPX\_CALLBACK\_SET} al fine di comunicare a CPLEX che sono stati aggiunti tagli.
 
 \subsection*{USERCUT CALLBACK IN C}
 \label{sec:UserS}
 
-Come già anticipato nei precedenti paragrafi questo tipo di callback sono utilizzate per gestire soluzioni frazionarie ottenute per i vari nodidell'albero decisionale durante una risoluzione di tipo \textit{B\&C} per problemi di programmazione lineare da parte di Cplex. A livello concettuale sono del tutto simili a quanto visto nel paragrafo precedente per le \textit{lazy callback} in linguaggio \textbf{C}, è raccomandata una lettura del paragrafo precedente a loro dedicato in quanto di seguito saranno esposti estensivamente solamente i dettagli riguardanti la gestione dei tagli.\footnote{Notiamo in realtà che l'implementazione delle \textit{usercut callback} avviene sempre in concomitanza all'implementazione delle \textit{lazy callback} per tanto il settaggio del numero di thread è necessario solamente una volta}.
+Come già anticipato nei precedenti paragrafi questo tipo di callback sono utilizzate per gestire soluzioni frazionarie ottenute per i vari nodidell'albero decisionale durante una risoluzione di tipo \textit{B\&C} per problemi di programmazione lineare da parte di CPLEX. A livello concettuale sono del tutto simili a quanto visto nel paragrafo precedente per le \textit{lazy callback} in linguaggio \textbf{C}, è raccomandata una lettura del paragrafo precedente a loro dedicato in quanto di seguito saranno esposti estensivamente solamente i dettagli riguardanti la gestione dei tagli.\footnote{Notiamo in realtà che l'implementazione delle \textit{usercut callback} avviene sempre in concomitanza all'implementazione delle \textit{lazy callback} per tanto il settaggio del numero di thread è necessario solamente una volta}.
 
 L'installazione delle callback avviene tramite la funzione \textbf{CPXsetusercutcallbackfunc}:
 
@@ -1611,7 +1771,7 @@ int CPXsetusercutcallbackfunc (CPXENVptr env, int(*)(CALLBACK\_CUT\_ARGS) lazyco
 
 \end{lstlisting}
 
-La funzione invocata da Cplex in corrispondenza di una soluzione frazionaria è stata da noi chiamata \textbf{myUserCutCallBack} la cui firma, che anche in questo caso viene imposta dai progettisti di Cplex, risulta essere:
+La funzione invocata da CPLEX in corrispondenza di una soluzione frazionaria è stata da noi chiamata \textbf{myUserCutCallBack} la cui firma, che anche in questo caso viene imposta dai progettisti di CPLEX, risulta essere:
 
 \begin{lstlisting}
 
@@ -1619,8 +1779,8 @@ int CPXPUBLIC myUserCutCallBack(CPXCENVptr env, void *cbdata, int wherefrom, voi
 
 \end{lstlisting}
 
-Cplex, una volta calcolata una soluzione frazionara, genera in automatico dei propri tagli\footnote{Ad esempio taglio di \textit{Gomory}}. Quando il parametro \textit{wherefrom} risulta pari a \textbf{CPX\_CALLBACK\_MIP\_CUT\_LAST} significa che l'iterazione successiva da parte di Cplex consisterebbe nell'operazione di branching sul nodo in questione: solo in questa condizione risulta conveniente generare i propri vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro \textit{wherefrom} assuma invece altri valori, si effettua una semplice \textbf{return 0} senza eseguire alcuna operazione, altrimenti come già discusso per le lazy, è necessario recuperare il puntate all’istanza.
-Riprendendo quanto detto nel paragrafo LINK PARAGRAFO CALLBACK||||| è sconsigliato aggiungere \textit{manualmente} ad ogni nodo dell’albero decisionale dei tagli in quanto il loro numero complessivo risulterebbe troppo elevato andando quindi a \textbf{peggiorare} le prestazioni di Cplex. Per tale ragione, dopo alcuni test e secondo le linee guida discusse durante il corso, si è deciso che solamente con una probabilità del \textbf{$10\%$} la \textit{usercut callback} da noi definita entra in gioco. Dato che l'id numerico assegnato ai nodi dell'albero decisionale, ottenuto attraverso al funzione \textbf{CPXgetcallbacknodeinfo}, non ha alcuna relazione diretta alla probabilità che venga generata una soluzione intera oppure frazionaria, è sufficiente effettuare una operazione di modulo dieci a tale valore: nel caso in cui il risultato sia pari a zero si procede con il calcolo dei tagli. Successivamente, invocando la nota funzione \textbf{CPXgetcallbacknodex} si ottiene la soluzione frazionaria. Prima di procedere con la parte principale di questo metodo, per ragioni di chiarezza riportiamo il codice che esegue quanto finora descritto:
+CPLEX, una volta calcolata una soluzione frazionara, genera in automatico dei propri tagli\footnote{Ad esempio taglio di \textit{Gomory}}. Quando il parametro \textit{wherefrom} risulta pari a \textbf{CPX\_CALLBACK\_MIP\_CUT\_LAST} significa che l'iterazione successiva da parte di CPLEX consisterebbe nell'operazione di branching sul nodo in questione: solo in questa condizione risulta conveniente generare i propri vincoli caratteristici del problema che si sta risolvendo. Qualora il parametro \textit{wherefrom} assuma invece altri valori, si effettua una semplice \textbf{return 0} senza eseguire alcuna operazione, altrimenti come già discusso per le lazy, è necessario recuperare il puntate all’istanza.
+Riprendendo quanto detto nel paragrafo LINK PARAGRAFO CALLBACK||||| è sconsigliato aggiungere \textit{manualmente} ad ogni nodo dell’albero decisionale dei tagli in quanto il loro numero complessivo risulterebbe troppo elevato andando quindi a \textbf{peggiorare} le prestazioni di CPLEX. Per tale ragione, dopo alcuni test e secondo le linee guida discusse durante il corso, si è deciso che solamente con una probabilità del \textbf{$10\%$} la \textit{usercut callback} da noi definita entra in gioco. Dato che l'id numerico assegnato ai nodi dell'albero decisionale, ottenuto attraverso al funzione \textbf{CPXgetcallbacknodeinfo}, non ha alcuna relazione diretta alla probabilità che venga generata una soluzione intera oppure frazionaria, è sufficiente effettuare una operazione di modulo dieci a tale valore: nel caso in cui il risultato sia pari a zero si procede con il calcolo dei tagli. Successivamente, invocando la nota funzione \textbf{CPXgetcallbacknodex} si ottiene la soluzione frazionaria. Prima di procedere con la parte principale di questo metodo, per ragioni di chiarezza riportiamo il codice che esegue quanto finora descritto:
 
 
 \begin{lstlisting}
@@ -1701,8 +1861,8 @@ if (CCcut\_connect\_components(inst->nNodes, nLati, elist, xstar, &ncomp, &comps
     printError(" error in CCcut\_connect\_components() inside fractcutusercallback");
 \end{lstlisting}
 
-Al suo termine, in modo del tutto trasparente, otteniamo le tre variabili \textbf{ncomp}, \textbf{compscount} e \textbf{comps} che forniscono tutte le informazioni necessarie all'aggiunta dei tagli all'interno dell'apposito pool fornito da Cplex.
-Completiamo quest'ultima operazione tramite la routine fornita da Cplex \textbf{CPXcutcallbackadd} la cui firma è:
+Al suo termine, in modo del tutto trasparente, otteniamo le tre variabili \textbf{ncomp}, \textbf{compscount} e \textbf{comps} che forniscono tutte le informazioni necessarie all'aggiunta dei tagli all'interno dell'apposito pool fornito da CPLEX.
+Completiamo quest'ultima operazione tramite la routine fornita da CPLEX \textbf{CPXcutcallbackadd} la cui firma è:
 
 \begin{lstlisting}
 
@@ -1721,12 +1881,12 @@ Dove:
     \begin{itemize}
     \item \textbf{cutind}: array di \textit{nzcnt} elementi contenenti gli indici delle variabili presenti nel vincolo;
     \item \textbf{cutval}: array di \textit{nzcnt} elementi contenenti i corrispondenti valori dei coefficienti;
-    \item \textbf{purgeable}: valore intero che specifica come Cplex deve trattare il taglio:
+    \item \textbf{purgeable}: valore intero che specifica come CPLEX deve trattare il taglio:
     
         \begin{itemize}
         \item \textbf{CPX\_USECUT\_FORCE}: il taglio una volta aggiunto al rilassamento non può essere più rimosso;
         \item \textbf{CPX\_USECUT\_PURGE}: il taglio è aggiunto al rilassamento ma può essere eliminato in un secondo momento se giudicato inefficiente;
-        \item \textbf{CPX\_USECUT\_FILTER}: il taglio deve essere trattato come se generato da Cplex il quale prima di aggiungerlo al rilassamento lo analizza e può quindi decidere di abortire l'operazione di aggiunta.
+        \item \textbf{CPX\_USECUT\_FILTER}: il taglio deve essere trattato come se generato da CPLEX il quale prima di aggiungerlo al rilassamento lo analizza e può quindi decidere di abortire l'operazione di aggiunta.
         nel rilassamento(per esempio è già presente un taglio più efficiente);
         \end{itemize}
     \end{itemize}
@@ -1787,7 +1947,7 @@ Nel caso in cui la soluzione presenti una sola componente connessa, come in Fig.
     \item \textbf{int ncount}, \textbf{int ecount}, \textbf{int *elist}: il loro significato è già stato descritto per la funzione \textit{CCcut\_connect\_components};
     \item \textbf{dlen}: vettore contenente la capacità di ogni lato;
     \item \textbf{cutoff}:[Questo è il termine noto della disequazione f2, non ho capito perchè devo togliere a 2 un EPSILON, così è scritto nel pdf condiviso dal prof che si chiama         RO2\_TSPutilities]
-    \item \textbf{(*(doit\_fn)(double, int, int *, void *) }: è una funzione creata da noi che risulta essere una vera e propria callback: ogniqualvolta \textit{Concorde} individua un insieme $S$ cercato tale funzione viene invocata. Al suo interno, grazie ai parametri forniti\footnote{Maggiori dettagli riguardo i quattro parametri di ingresso saranno forniti a breve durante la descrizione di come l'implementazione di tale funzione è stata da noi realizzata.} è nostro compito procedere all'ampliamento del pool di tagli di \textit{Cplex}.
+    \item \textbf{(*(doit\_fn)(double, int, int *, void *) }: è una funzione creata da noi che risulta essere una vera e propria callback: ogniqualvolta \textit{Concorde} individua un insieme $S$ cercato tale funzione viene invocata. Al suo interno, grazie ai parametri forniti\footnote{Maggiori dettagli riguardo i quattro parametri di ingresso saranno forniti a breve durante la descrizione di come l'implementazione di tale funzione è stata da noi realizzata.} è nostro compito procedere all'ampliamento del pool di tagli di \textit{CPLEX}.
     \item \textbf{pass\_param}: puntatore ad una struttura dati contenente variabili e puntatori che devono essere accessibili all’interno della callback;
 \end{itemize}
 
@@ -1877,7 +2037,7 @@ return 0;
 \label{sec:SezioneOttoS}
 
 Fino a questo momento sono stati presentati algoritmi che, alla loro naturale terminazione, garantiscono di risolvere una generica istanza del problema del commesso viaggiatore in modo esatto, ovvero restituendo sempre un ottimo globale come soluzione.
-L'applicazione di metodi esatti non è sempre possibile per due motivi principali: il primo è che si necessita di un programma di calcolo molto potente ed in genere costoso come può essere \textbf{Cplex}, in secondo luogo, quando si procede all'analisi di problemi \textbf{NP-hard}, indipendentemente da quali accorgimenti introduciamo, non è mai garantito di trovare la soluzione migliore in tempi relativamente brevi.
+L'applicazione di metodi esatti non è sempre possibile per due motivi principali: il primo è che si necessita di un programma di calcolo molto potente ed in genere costoso come può essere \textbf{CPLEX}, in secondo luogo, quando si procede all'analisi di problemi \textbf{NP-hard}, indipendentemente da quali accorgimenti introduciamo, non è mai garantito di trovare la soluzione migliore in tempi relativamente brevi.
 Per tali ragioni, nelle applicazioni reali, capita spesso che l'unica strada percorribile sia il ricorrere a metodi \textit{non esatti}, che, come abbiamo già potuto vedere nelle varianti del metodo \textbf{Loop} presentate, prendono il nome di algoritmi euristici: la soluzione che offrono sarà sempre ammissibile ma non viene garantità la sua ottimilità, al contrario nella maggior parte dei casi, soprattutto per istanze complesse, questa non viene quasi mai raggiunta. \'E inoltre tenere ben presente che esistono molteplici algoritmi euristici più o meno potenti, essendo inoltre tecniche non esatte, è possibile trovarne infinite varianti per ognuno di essi. In generale, come meglio vedremo nel seguito del testo, possiamo classificarli in \textbf{costruttivi}, \textbf{migliorativi}, \textbf{metaeuristici} e \textbf{matheuristics}.
 Quanto esposto fino ad ora ci porta intuitivamente a pensare che la bontà di un metodo proposto può subire enormi variazioni in base a quali istanze su cui viene applicato.
 
@@ -2527,7 +2687,7 @@ return nextGeneration;
 
 Gli algoritmi \textbf{matheuristics} nascono con l'obbiettivo di migliorare una soluzione di partenza ammissibile \textbf{x} sfruttando il \textbf{modello matematico} del problema (ogni tanto parli di MIP, ma si intende modelli misti interi e frazionari, è giusto usarlo???) che si vuole risolvere. Analogamente a quanto visto per gli algoritmi di ricerca locale e metaeuristici, i matheuristici tentano di individuare una soluzione migliore \textbf{x*} all' interno di un intorno N(x) ottenuto, in questo ambito, modificando opportunamente il modello matematico di partenza. 
 
-L'esplorazione di N(x) non avviene per enumerazione come visto in precedenza ma tramite appositi solver come ad esempio Cplex: grazie alla loro sempre maggiore ottimizzazione, questa operazione risulta quindi essere molto veloce. 
+L'esplorazione di N(x) non avviene per enumerazione come visto in precedenza ma tramite appositi solver come ad esempio CPLEX: grazie alla loro sempre maggiore ottimizzazione, questa operazione risulta quindi essere molto veloce. 
 
 I matheuristici possono essere applicati a qualunque soluzione ammissibile x; ciò nonostante per apprezzarne davvero la potenza è consigliabile utilizzare un punto di partenza già buono. A tale scopo si può quindi pensare di concatenarli  all'esecuzione di un algoritmo migliorativo o, meglio ancora, al termine del multistart o di un metaeuristico. Questi infatti arrivano molto frequentemente a saturare in prossimità di una soluzione molto buona \textbf{$\overline{x}$} ma non ottima.
 
@@ -2561,11 +2721,11 @@ Preferiamo quindi ampliare il range di possibili intorni da visitae dando però 
 \subsection*{WARM-START}
 \label{sec:WarmStartS}
 
-Tra le svariate funzionalità offerta da Cplex possiamo trovarne una in particolare che è sempre consigliato utilizzare quando possibile e nello specifico risulta essere una naturale aggiunta alla tecnica dell'\textbf{hard-fixing}. Stiamo parlando della possibilità di fornire a Cplex una soluzione al problema che dovrà andare a risolvere in modo tale che, una volta controllata la sua validità durante la fase di prepocessing, possa essere utilizzata come incumbent. Questa soluzione prende il nome di \textbf{warm-start} o \textbf{MIP-start} e chiaramente quando si procede al fissaggio di alcune variabili in accordo ad $x_H$, questa rimane ovviamente valida per il problema e quindi è una naturale candidata per questo ruolo.
+Tra le svariate funzionalità offerta da CPLEX possiamo trovarne una in particolare che è sempre consigliato utilizzare quando possibile e nello specifico risulta essere una naturale aggiunta alla tecnica dell'\textbf{hard-fixing}. Stiamo parlando della possibilità di fornire a CPLEX una soluzione al problema che dovrà andare a risolvere in modo tale che, una volta controllata la sua validità durante la fase di prepocessing, possa essere utilizzata come incumbent. Questa soluzione prende il nome di \textbf{warm-start} o \textbf{MIP-start} e chiaramente quando si procede al fissaggio di alcune variabili in accordo ad $x_H$, questa rimane ovviamente valida per il problema e quindi è una naturale candidata per questo ruolo.
 
-Cplex trae diversi potenziali vantaggi grazie ad un \textbf{warm-start}: prima di tutto sfruttando il criterio di bounding, avere a disposizione un buon incumbent fin dai primi momenti della tecnica del \textit{branch\&cut} può velocizzare la costruzione dell'albero decisionale dichiarandone alcuni nodi come sondati; In secondo luogo permette di applicare particolare tecniche euristiche che necessitano di questa condizione di partenza, parliamo ad esempio degli algoritmi \textbf{RINS} e \textbf{polishing} che saranno discussi successivamente anche in questa tesi.
+CPLEX trae diversi potenziali vantaggi grazie ad un \textbf{warm-start}: prima di tutto sfruttando il criterio di bounding, avere a disposizione un buon incumbent fin dai primi momenti della tecnica del \textit{branch\&cut} può velocizzare la costruzione dell'albero decisionale dichiarandone alcuni nodi come sondati; In secondo luogo permette di applicare particolare tecniche euristiche che necessitano di questa condizione di partenza, parliamo ad esempio degli algoritmi \textbf{RINS} e \textbf{polishing} che saranno discussi successivamente anche in questa tesi.
 
-In linguaggio \textbf{C\#} l'operazione di warm-start avviene attraverso il metodo non statico \textbf{AddMIPStart} della classe \textit{Cplex} la cui firma è:
+In linguaggio \textbf{C\#} l'operazione di warm-start avviene attraverso il metodo non statico \textbf{AddMIPStart} della classe \textit{CPLEX} la cui firma è:
 
 \begin{lstlisting}
 
@@ -2580,14 +2740,14 @@ Dove:
     \item \textbf{values}: Vettore contenente nella posizione $i$ il valore della $i-esima$ variabile del modello;
 \end{itemize}
 
-Si osserva inoltre che nel caso in cui si attuino consecutive esecuzione dell'\textit{hard-fixing} non è più necessario aggiornare manualmente il valore di \textit{warm-start}\footnote{Se non alla prima run.}: variare solamente i fissaggi delle variabili, senza modificare ulteriormente il modello matematico, non viene considerata da Cplex una operazione \textit{drastica} al punto di abbandonare i risultati ottenuti fino a quel momento.
+Si osserva inoltre che nel caso in cui si attuino consecutive esecuzione dell'\textit{hard-fixing} non è più necessario aggiornare manualmente il valore di \textit{warm-start}\footnote{Se non alla prima run.}: variare solamente i fissaggi delle variabili, senza modificare ulteriormente il modello matematico, non viene considerata da CPLEX una operazione \textit{drastica} al punto di abbandonare i risultati ottenuti fino a quel momento.
 
-In altre parole, nel caso in cui non sia trovata una soluzione migliore rispetto al \textit{warm-start} attuale la validità di quest'ultimo viene automaticamente ricontrollata durante la successiva fase di preprocessing\footnote{La sua validità è sempre garantita in quanto siamo nel caso in cui sì applichiamo un fissaggio diverso ma rispetto la stessa soluzione di partenza dato che non ne sono state trovate di migliori.} effettuata dal solver. Altrimenti nel caso in cui l'ultimo rilassamento continuo abbia individuato un nuovo valore per l'incumbent, e quindi un nuovo \textit{warm-start}, Cplex provvede autonomamente al suo aggiornamento.
+In altre parole, nel caso in cui non sia trovata una soluzione migliore rispetto al \textit{warm-start} attuale la validità di quest'ultimo viene automaticamente ricontrollata durante la successiva fase di preprocessing\footnote{La sua validità è sempre garantita in quanto siamo nel caso in cui sì applichiamo un fissaggio diverso ma rispetto la stessa soluzione di partenza dato che non ne sono state trovate di migliori.} effettuata dal solver. Altrimenti nel caso in cui l'ultimo rilassamento continuo abbia individuato un nuovo valore per l'incumbent, e quindi un nuovo \textit{warm-start}, CPLEX provvede autonomamente al suo aggiornamento.
 
 \subsection*{PREPROCESSINGTSP}
 \label{sec:PreProcessingTSPS}
 
-Una volta defenito l'intorno \textbf{$N(x_I)$} e quindi aver fissato il \textit{lower bound} di alcune variabili a $1$ è possibile procedere immediatamente alla risoluzione del problema modificato attraverso il solver, nel nostro caso Cplex. Come ben noto, nel caso più generico, il pool di tagli è inizialmente vuoto e solo quelli necessari, non determinabili a priori, sono individuati attraverso le callback installate.
+Una volta defenito l'intorno \textbf{$N(x_I)$} e quindi aver fissato il \textit{lower bound} di alcune variabili a $1$ è possibile procedere immediatamente alla risoluzione del problema modificato attraverso il solver, nel nostro caso CPLEX. Come ben noto, nel caso più generico, il pool di tagli è inizialmente vuoto e solo quelli necessari, non determinabili a priori, sono individuati attraverso le callback installate.
 
 Nel caso dell'\textbf{hard-fixing} questa affermazione non è del tutto esatta in quanto \textbf{alcuni} dei tagli \textbf{necessari}\footnote{Per necessari si intende che sicuramente } possono essere trovati molto velocemente attraverso una analisi del fissaggio effettuato. Una loro aggiunta preventiva risulta quindi molto vantaggiosa in quanto si evitano certamente delle iterazioni al solver risparmiando nel complesso diverso tempo.
 In \hyperref[fig:Preprocessiong1]{FiguraX} troviamo una generica situazione dove gli archi in \textit{blu} sono stati \textit{fissati} mentre quelli in \textit{azzurro} no. Proprio questi ultimi però verrebbero immediatamente selezionati dal solver in quanto la soluzione con i due subtour indicati risulta banalmente la meno costosa. Il compito del preprocessingTSP (\textbf{ppTSP}) da noi progettato è quindi proprio questo, trovare tutti quei lati che, se anche selezionati singolarmente, generano un subtour\footnote{Dato che non ha senso fissare $n-1$ lati su un totale di $n$, se la singola selezione di un lato genera un subtour, qualsiasi siano le restanti selezioni, la soluzione così prodotta avrà sempre almeno un secondo subtour e quindi risulta invalida.} e di conseguenza forzarli a valore $0$.
@@ -2693,7 +2853,7 @@ for (int i = 0; i < instance.NNodes; i++)
 
 \begin{lstlisting}
 
-static void HardFixing(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
+static void HardFixing(CPLEX cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
 
 \end{lstlisting}
 
@@ -2761,16 +2921,16 @@ currentIncumbentCost = heuristicSol.cost;
 TSPLazyConsCallback tspLazy = new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint);
 cplex.Use(tspLazy);
 
-//Forniamo a Cplex il warm-start
+//Forniamo a CPLEX il warm-start
 cplex.AddMIPStart(x, currentIncumbentSol);
 
-//Setto i thread utilizzati da Cplex pari al numero di core virtuali della macchina utilizzata, il codice della Lazy è thread-safe
-cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+//Setto i thread utilizzati da CPLEX pari al numero di core virtuali della macchina utilizzata, il codice della Lazy è thread-safe
+cplex.SetParam(CPLEX.Param.Threads, cplex.GetNumCores());
 
 //La polita da noi scelta prevede che al primo miglioramento ottenuto durante l'esplorazione dell'intorno attuale questa venga fermata in modo da ripetere il procedimento
-//in modo da ripetere il procedimentocon il nuovo valore di incumbent. Per ottenere questo risultato comunichiamo a Cplex che alla seconda soluzione intera trovata fermi
+//in modo da ripetere il procedimentocon il nuovo valore di incumbent. Per ottenere questo risultato comunichiamo a CPLEX che alla seconda soluzione intera trovata fermi
 //la propria risoluzione. Notiamo che la prima soluzione intera è il warm-start
-cplex.SetParam(Cplex.LongParam.IntSolLim, 2);
+cplex.SetParam(CPLEX.LongParam.IntSolLim, 2);
 
 do
 {
@@ -2781,14 +2941,14 @@ do
     cplex.Solve();
 
     //Se otteniamo un miglioramento
-    if (currentIncumbentCost > cplex.GetObjValue(Cplex.IncumbentId))
+    if (currentIncumbentCost > cplex.GetObjValue(CPLEX.IncumbentId))
     {
         //Preparo il file
         file = new StreamWriter(instance.InputFile + ".dat", false);
 
         //Aggiorno le variabili con l'attuale percorso e costo incumbent
-        currentIncumbentCost = cplex.GetObjValue(Cplex.IncumbentId);
-        currentIncumbentSol = cplex.GetValues(x, Cplex.IncumbentId);
+        currentIncumbentCost = cplex.GetObjValue(CPLEX.IncumbentId);
+        currentIncumbentSol = cplex.GetValues(x, CPLEX.IncumbentId);
 
         //Stampa del nuovo percorso incumbent su file
         for (int i = 0; i < instance.NNodes; i++)
@@ -2846,17 +3006,17 @@ do
 instance.XBest = currentIncumbentCost;
 instance.BestSol = currentIncumbentSol;
 
-//Stampo righe vuota nell'output standard di Cplex
+//Stampo righe vuota nell'output standard di CPLEX
 cplex.Output().WriteLine();
 cplex.Output().WriteLine();
-//Stampo il costo della miglior soluzione trovata nell'output standard di Cplex
+//Stampo il costo della miglior soluzione trovata nell'output standard di CPLEX
 cplex.Output().WriteLine("x = " + instance.XBest + "\n");
 \end{lstlisting}
 
 \subsection*{LOCAL BRANCH}
 \label{sec:LocalBranchS}
 
-Terminata l'analisi di una possibile variante della tecnica \textit{hard-fixing} proseguiamo con la tipologia gemella del \textbf{soft-fixing}: si ricordi che la principale differenza tra i due approcci è che il secondo lascia al solver, nel nostro caso Cplex, anche l'operazione di fissaggio indicandogli solamente la forma che questo deve assuemere.
+Terminata l'analisi di una possibile variante della tecnica \textit{hard-fixing} proseguiamo con la tipologia gemella del \textbf{soft-fixing}: si ricordi che la principale differenza tra i due approcci è che il secondo lascia al solver, nel nostro caso CPLEX, anche l'operazione di fissaggio indicandogli solamente la forma che questo deve assuemere.
 
 Nello specifico prendiamo in considerazione una particolare tipologia di algoritmi facente parte del ramo \textit{soft-fixing} e cioè il \textbf{Local Branch}: proposto nell'anno 2002 dai docenti universitari \textbf{Matteo Fischetti} \footnote{Docente presso l' Università di Padova, Dipartimento di Ingegneria dell’ Informazione.} e \textbf{Andrea Lodi} \footnote{Docente presso l' Università di Bologna, Dipartimento di Ingegneria dell'Energia Elettrica e dell'Informazione.}, questa variante mira ad ottenere l'esplorazione di un intorno $N(x,r)$ di una soluzione $x$ con un costo computazionale estremamente inferiore a $O(n^r)$ che invece abbiamo visto essere necessario per un classico algoritmo di \textit{r-ottimalità}.
 
@@ -2867,7 +3027,7 @@ Il \textit{Local Branch} non utilizza la classica tecnica di eplorazione per enu
 \displaystyle\sum_{e \text{ } : \text{ } x_e = 1} x_e^{*} \ge n - r
 \end{equation}
 
-Attraverso questo vincolo è il solver stesso a generare un intorno $N(x,r)$ sul quale cercare la soluzione migliore al suo interno. In altre parole, nel nostro esempio, sfruttiamo la velocità offerta da Cplex nel risolvere un modello matematico e costruiamo quest'ultimo così che ammetta tutte le soluzioni a loro volta valide per un algoritmo di \textit{r-ottimalità}.
+Attraverso questo vincolo è il solver stesso a generare un intorno $N(x,r)$ sul quale cercare la soluzione migliore al suo interno. In altre parole, nel nostro esempio, sfruttiamo la velocità offerta da CPLEX nel risolvere un modello matematico e costruiamo quest'ultimo così che ammetta tutte le soluzioni a loro volta valide per un algoritmo di \textit{r-ottimalità}.
 
 Prendendo più in esame \eqref{eq:LocalBranchVincoloAsimmetrico}, è possibile notare come la sua elevata potenza sia in pieno contrasto alla sua estrema semplicità. Tra tutte le variabili disponibili, sono considerate solamente quelle facenti parte della soluzione $x$ attuale\footnote{Il cui numero totale pari al numero di nodi indicato con $n$.} e si impone che almeno $n-r$ dovranno far parte della nuova soluzione prodotta dal solver. Sono quindi ammessi fino a $r$ scambi tra variabili in soluzione e non, producendo di fatto \textit{gratuitamente} un'operazione di $r-ottimalità$.
 
@@ -2897,7 +3057,7 @@ Infine riprendendo quanto detto alla fine dell'ultimo paragrafo specifichiamo ch
 
 \begin{lstlisting}
 
-static void LocalBranching(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
+static void LocalBranching(CPLEX cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
 
 \end{lstlisting}
 
@@ -2920,7 +3080,7 @@ int[] possibleRadius = {3, 5, 7, 10};
 //Variabile che memorizza l'indice dove trovare l'attuale raggio in possibleRadius, inizializzata a 0
 int currentRange = 0;
 
-//Variabile booleana utilizzare per comunicare alla Lazy Callback di Cplex se deve stampare la soluzione
+//Variabile booleana utilizzare per comunicare alla Lazy Callback di CPLEX se deve stampare la soluzione
 //intera trovata nel caso migliore quella incumbent
 bool BlockPrint = false;
 
@@ -2956,10 +3116,10 @@ for (int i = 0; i < instance.NNodes; i++)
 //Installazione Lazy Callback
 cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, BlockPrint));
 
-//Settaggio per il multi-thread di Cplex, si utilizzano tanti thread quanti i core virtuali della macchina
-cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
+//Settaggio per il multi-thread di CPLEX, si utilizzano tanti thread quanti i core virtuali della macchina
+cplex.SetParam(CPLEX.Param.Threads, cplex.GetNumCores());
 
-//Aggiunta di un warm-start per Cplex
+//Aggiunta di un warm-start per CPLEX
 cplex.AddMIPStart(x, incumbentSol);
 
 //Inizio creazione del vincolo asincrono caratterizzante il Local Branching
@@ -2976,7 +3136,7 @@ for (int i = 0; i < instance.NNodes; i++)
 IAddable localBranchConstraint  = cplex.Ge(expr, instance.NNodes - possibleRadius[currentRange]);
 
 //Aggiungo il vincolo creato non come un qualsiasi taglio ma come una vero e proprio vincolo
-//del modello matematico, la risoluzione da parte di Cplex è nettamente migliorata
+//del modello matematico, la risoluzione da parte di CPLEX è nettamente migliorata
 cplex.Add(localBranchConstraint);
 
 
@@ -2984,13 +3144,13 @@ cplex.Add(localBranchConstraint);
 //indicato dall'utente o quando il raggio r=10 non produce più miglioramenti
 do
 {
-    //Cplex risolve l'attuale modello
+    //CPLEX risolve l'attuale modello
     cplex.Solve();
 
     //Se trovo un miglioramento rispetto alla soluzione incumbent
     if (incumbentCost > cplex.GetObjValue())
     {
-        //Sostituisco l'incumbent attuale con i valori appena trovati da Cplex
+        //Sostituisco l'incumbent attuale con i valori appena trovati da CPLEX
         incumbentCost = cplex.ObjValue;
         incumbentSol = cplex.GetValues(x);
 
@@ -3069,9 +3229,9 @@ instance.BestLb = incumbentCost;
 \subsection*{POLISHING}
 \label{sec:polishingS}
 
-L'algoritmo \textbf{polishing}\footnote{Polishing è utilizzato anche all'interno di Cplex stesso ed è inoltre brevettato da quest'ultimo, la realizzazione è da attribuirsi ad Edward Rothberg} è di fatto l'ultima tecnica presentata in questa tesi e fa parte degli algoritmi \textbf{matheuristici}.
+L'algoritmo \textbf{polishing}\footnote{Polishing è utilizzato anche all'interno di CPLEX stesso ed è inoltre brevettato da quest'ultimo, la realizzazione è da attribuirsi ad Edward Rothberg} è di fatto l'ultima tecnica presentata in questa tesi e fa parte degli algoritmi \textbf{matheuristici}.
 
-\textit{Polishing} non introduce di per sè novità ma bensì combina le migliori caratteristiche degli algoritmi \textbf{genetici} LINK!!!!! e di \textbf{Relaxation Induced Neighborhood Search} conosciuto più comunemente con la sigla \textbf{RINS}. Quest'ultimo nasce nel 2004 per opera di \textbf{Emilie Danna}, \textbf{Edward Rothberg} \footnote{Uno dei fondatori di \textbf{GuRoBi}, software solver concorrente a \textbf{Cplex}.} e \textbf{Claude Le Pape}. \'E stato ampiente discusso nei precedenti paragrafi come nei metodi \textbf{matheuristici} il fattore caratterizzante sia la realizzazione del \textit{fissaggio} di alcune variabili del modello matematico in modo tale da limitare le possibili soluzioni e quindi i tempi di esecuzione da parte del solver. \textit{RINS} definisce una regola molto semplice a tale scopo: date due soluzioni $x_1$ e $x_2$, valide per il \textbf{MIP} preso in analisi, ogni variabili che assume lo stesso valore in entrambe deve essere fissata nel nuovo modello a tale valore. Naturalmente più $x_1$ ed $x_2$ sono \textit{simili} tra loro, più variabili fisso e quindi minore diventa la dimensione dell'intorno che il solver esplora.
+\textit{Polishing} non introduce di per sè novità ma bensì combina le migliori caratteristiche degli algoritmi \textbf{genetici} LINK!!!!! e di \textbf{Relaxation Induced Neighborhood Search} conosciuto più comunemente con la sigla \textbf{RINS}. Quest'ultimo nasce nel 2004 per opera di \textbf{Emilie Danna}, \textbf{Edward Rothberg} \footnote{Uno dei fondatori di \textbf{GuRoBi}, software solver concorrente a \textbf{CPLEX}.} e \textbf{Claude Le Pape}. \'E stato ampiente discusso nei precedenti paragrafi come nei metodi \textbf{matheuristici} il fattore caratterizzante sia la realizzazione del \textit{fissaggio} di alcune variabili del modello matematico in modo tale da limitare le possibili soluzioni e quindi i tempi di esecuzione da parte del solver. \textit{RINS} definisce una regola molto semplice a tale scopo: date due soluzioni $x_1$ e $x_2$, valide per il \textbf{MIP} preso in analisi, ogni variabili che assume lo stesso valore in entrambe deve essere fissata nel nuovo modello a tale valore. Naturalmente più $x_1$ ed $x_2$ sono \textit{simili} tra loro, più variabili fisso e quindi minore diventa la dimensione dell'intorno che il solver esplora.
 
 \textit{RINS} sembra quindi un buon metodo da applicare in presenza di due soluzioni molto simili a quella ottima $x_{opt}$, è plausibile assumere che in tal caso il fissaggio vada a riguardare in gran parte valori concordi ad $x_{opt}$. La proprietà più importante è da vedersi nella estrema velocità di questa tecnica nel caso di problemi come il \textbf{TSP}, dove con un ordine del numero di variabili pari a \textbf{$O(n^2)$} solamente \textbf{n} assumo valore $1$ in una qualsiasi soluzione mentre le restanti $0$\footnote{Naturalmente anche il caso opposto ha pari valenza}. Come conseguenza diretta si ha che indipendentemente da come sono state ottenute $x_1$ e $x_2$ la probabilità che una qualsiasi variabili assuma valore $0$ in entrambe è estremamente elevata.
 
@@ -3107,7 +3267,7 @@ Esiste una seconda problematica molto meno evidente e che può essere ricondotta
 
 La nostra scelta è stata quindi di limitare questa situazione preferendo produrre più generazioni possibili. Le modalità di attuazione per questa idea sono multiple e variano nella loro intrusività con la normale prosecuzione dell'algoritmo. Ad esempio, una volta calcolati un certo numero di figli, si potrebbe iniziare a tenere traccia dei loro tempi di generazione medi e limitare i successivi di conseguenza.
 
-La tecnica proposta è leggermente diversa da quest'ultima, meno lmitante e sfrutta la nozione fondamentale che la creazione dei nuovi figli, in ogni generazione esclusa la prima, avviene in multi threading: il calcolatore mette a disposizione un numero di thread pari ai propri processori virtuali, i quali generano in modo autonomo un nuovo \textit{figlio}. Questo richiede di attivare multiple istanze di Cplex contemporaneamente, tra loro scorrelate e che utilizzino un solo thread.
+La tecnica proposta è leggermente diversa da quest'ultima, meno lmitante e sfrutta la nozione fondamentale che la creazione dei nuovi figli, in ogni generazione esclusa la prima, avviene in multi threading: il calcolatore mette a disposizione un numero di thread pari ai propri processori virtuali, i quali generano in modo autonomo un nuovo \textit{figlio}. Questo richiede di attivare multiple istanze di CPLEX contemporaneamente, tra loro scorrelate e che utilizzino un solo thread.
 
 Fatta questa premessa, indicando con $m$ il numero di \textit{figli} da creare ad ogni generazione e con $z$ il numero di thread a disposizione, la nostra tecnica prevede di tenere traccia di quanto tempo impiega l'algoritmo per ottenere $m-z$ figli. Tale intervallo è pesato proprio su $m-z$ ed in base al valore finale ottenuto si attuano limitazioni per i restanti $z$ \textit{figli}.
 
@@ -3126,9 +3286,9 @@ Entrando più nel dettaglio si limita il tempo per completare i restanti figli, 
 La descrizione di come questa seconda tecnica anti saturazione è stata implementata viene rimandata alla appendice in quanto risulta particolarmente complessa ma di relativo interesse. Prima di passare alla sezione successiva dove viene discusso come attivare thread multipli ed assegnargli compiti specifici facciamo solamente notare che per come è stato costruito, $t_{mzP}$ è pari, ma in genere \textbf{superiore} al tempo medio necessario per calcolare $z$ figli parallelamente.
 
 \subsection*{UTILIZZARE MULTIPLE ISTANZE DI CPLEX IN PARALLELO}
-\label{sec:ParCplexS}
+\label{sec:ParCPLEXS}
 
-L'utilizzo di multiple istanze di cplex, tra loro indipendenti ed attive contemporaneamente su appositi threads viene introdotto solamente ora in quanto tutti gli algoritmi discussi precedentemente al \textbf{polishing} sono stati presentati nella loro versione più base dove era l'unica istanza di Cplex a lavorare in più threads. In realtà i test che verranno presentati in questa tesi fanno tutti uso di una versione modificata delle tecniche proposte che appunto sfrutta più istanze di Cplex attive contemporaneamente.
+L'utilizzo di multiple istanze di cplex, tra loro indipendenti ed attive contemporaneamente su appositi threads viene introdotto solamente ora in quanto tutti gli algoritmi discussi precedentemente al \textbf{polishing} sono stati presentati nella loro versione più base dove era l'unica istanza di CPLEX a lavorare in più threads. In realtà i test che verranno presentati in questa tesi fanno tutti uso di una versione modificata delle tecniche proposte che appunto sfrutta più istanze di CPLEX attive contemporaneamente.
 
 Il motivo di tale scelta è che permette di ottenere multipli output ma con prestazioni chiaramente limitate. Teniamo sempre ben presente che lo scopo delle varie prove proposte è il confronto delle tecniche studiate e non una loro analisi in termini di prestazioni assolute in quanto queste sono molto dipendenti dall'hardware utilizzato.
 
@@ -3136,7 +3296,7 @@ Questo ragionamento non riguarda gli algoritmi \textit{genetico} e \textit{polis
 
 Per quanto riguarda il \textit{genetico} il motivo è molto semplice: il calcolo delle soluzione \textit{figlie} a partire da due soluzioni \textit{genitori} è molto semplice e non impiega grandi risorse hardware. \'E quindi motivato un approccio multi-threading e dato che la bontà di tali algoritmi dipende molto dal numero di generazioni che si creano è preferibile velocizzare tale processo piuttosto che attivare più algoritmi genetici contemporaneamente.
 
-D'altro canto l'algoritmo \textit{polishing}, tenendo comunque valida la motivazione appena esposta per il \textit{genetico}, si deve considerare che si utilizza Cplex per generare un nuovo \textit{figlio} e che tale solver non garantisce risultati migliori se gli si condece più threads\footnote{Visitare contemporaneamente più nodi dell'albero decisionale durante la fase di \textbf{Branch\&Cut} non garantisce di terminare la risoluzione più velocemente rispetto all'analisi di un solo nodo ma a pieno potenziale hardware.}.
+D'altro canto l'algoritmo \textit{polishing}, tenendo comunque valida la motivazione appena esposta per il \textit{genetico}, si deve considerare che si utilizza CPLEX per generare un nuovo \textit{figlio} e che tale solver non garantisce risultati migliori se gli si condece più threads\footnote{Visitare contemporaneamente più nodi dell'albero decisionale durante la fase di \textbf{Branch\&Cut} non garantisce di terminare la risoluzione più velocemente rispetto all'analisi di un solo nodo ma a pieno potenziale hardware.}.
 
 Vediamo quindi la struttura generale per attivare multipli threads in linguaggio \textbf{C\#}. \'E possibile trovare una applicazione pratica nell'esposizione del codice relativo all'algoritmo \textit{polishing} nella sezione successiva, mentre maggiori dettagli per tutti gli altri metodi risolutivi verranno forniti assieme ai test eseguiti.
 
@@ -3201,38 +3361,38 @@ Dove:
     \item \textbf{clock}: Oggetto che funge da cronometro;
 \end{itemize}
 
-Come prima operazione, trattandosi di un metodo matheuristco è necessario preparare i riferimenti a Cplex e quindi costruire il modello di partenza ovviamente privo di alcun taglio. Ricordiamo inoltre che il codice presentato utilizza il multithreading per genere più \textit{figli} contemporaneamente e pertanto sono necessarie multiple istanze di Cplex e relativi modelli matematici:
+Come prima operazione, trattandosi di un metodo matheuristco è necessario preparare i riferimenti a CPLEX e quindi costruire il modello di partenza ovviamente privo di alcun taglio. Ricordiamo inoltre che il codice presentato utilizza il multithreading per genere più \textit{figli} contemporaneamente e pertanto sono necessarie multiple istanze di CPLEX e relativi modelli matematici:
 
 \begin{lstlisting}
-//Lista contenente i riferimenti alle istanze degli oggetti di tipo Cplex
-List<Cplex> CplexList = new List<Cplex>();
+//Lista contenente i riferimenti alle istanze degli oggetti di tipo CPLEX
+List<CPLEX> CPLEXList = new List<CPLEX>();
 
-//Lista contenente i riferimenti alle variabili utilizzate dagli oggetti di tipo Cplex nel proprio modello matematico
+//Lista contenente i riferimenti alle variabili utilizzate dagli oggetti di tipo CPLEX nel proprio modello matematico
 List<INumVar[]> xList = new List<INumVar[]>();
 
 //Data una popolazione di n elementi si creano n/2 figli 
 for (int i = 0; i < sizePopulation / 2; i++)
 {
-    //Inizializzazione degli oggetti di tipo Cplex
-    CplexList.Add(new Cplex());
+    //Inizializzazione degli oggetti di tipo CPLEX
+    CPLEXList.Add(new CPLEX());
     //Settaggio di un seme random basato sui ticks di sistema rappresentanti l'istante attuale
-    CplexList[i].SetParam(Cplex.Param.RandomSeed, (int)(DateTime.Now.Ticks & 0x0000FFFF));
+    CPLEXList[i].SetParam(CPLEX.Param.RandomSeed, (int)(DateTime.Now.Ticks & 0x0000FFFF));
 
-    //Per ogni oggetto Cplex inizializzato se ne definice il modello matematico, viene inoltre aggiunto 
+    //Per ogni oggetto CPLEX inizializzato se ne definice il modello matematico, viene inoltre aggiunto 
     //il riferimento delle variabili utilizzate alla apposita lista in modo tale che il generico j-esimo
-    //oggetto Cplex in CplexList abbia le proprie nella j-esima posizione di xList
-    xList.Add(Utility.BuildModel(CplexList[i], instance, -1));
+    //oggetto CPLEX in CPLEXList abbia le proprie nella j-esima posizione di xList
+    xList.Add(Utility.BuildModel(CPLEXList[i], instance, -1));
 
     //Installazione lazyconstraint callback
-    CplexList[i].Use(new TSPLazyConsCallback(CplexList[i], xList[i], instance, false));
+    CPLEXList[i].Use(new TSPLazyConsCallback(CPLEXList[i], xList[i], instance, false));
 
-    //Inizializzazione di un aborter per ogni oggetti Cplex, utilizzato per gestire la saturazione di 
+    //Inizializzazione di un aborter per ogni oggetti CPLEX, utilizzato per gestire la saturazione di 
     //secondo tipo
-    CplexList[i].Use(new Cplex.Aborter());
+    CPLEXList[i].Use(new CPLEX.Aborter());
 }
 \end{lstlisting}
 
-Devono essere inizializzati anche gli oggetti che andranno a contenere i \textit{percorsi} delle varie soluzioni trovate. Viene utilizzata a tale scopo la classe \textbf{PathGenetic} LINK!!!!!! dove in questo caso il percorso è memorizzato sempre all'interno della variabile \textbf{path} ma rispettando la struttura delle variabili di Cplex: molto semplicemente $path[i]$ assume valore $1$ se e solo se la variabile di indice $i-esimo$ della soluzione a cui si fa riferimento vale anch'essa $1$, in caso contrario deve valere $0$.
+Devono essere inizializzati anche gli oggetti che andranno a contenere i \textit{percorsi} delle varie soluzioni trovate. Viene utilizzata a tale scopo la classe \textbf{PathGenetic} LINK!!!!!! dove in questo caso il percorso è memorizzato sempre all'interno della variabile \textbf{path} ma rispettando la struttura delle variabili di CPLEX: molto semplicemente $path[i]$ assume valore $1$ se e solo se la variabile di indice $i-esimo$ della soluzione a cui si fa riferimento vale anch'essa $1$, in caso contrario deve valere $0$.
 
 \begin{lstlisting}
 //Definisco l'oggetto che codifica la soluzione incumbent (miglior soluzione in assoluto fra tutte le generazioni)
@@ -3280,7 +3440,7 @@ Per poter cominciare la generazione ciclica delle varie generazioni sono necessa
 //ThreadPool può programmare un numero massimo di threads pari ai core virtuali della macchina per la //generazione di nuovi figli, ed un thread aggiuntivo di servizio utilizzato per evitare la saturazione
 //di secondi tipo e cioè evitare che alcuni figli impieghino troppo tempo a generarsi rispetto agli
 //altri della stessa generazione. Questo thread rimane per la maggior parte del tempo in attesa
-ThreadPool.SetMaxThreads(CplexList[0].GetNumCores() + 1, CplexList[0].GetNumCores() + 1);
+ThreadPool.SetMaxThreads(CPLEXList[0].GetNumCores() + 1, CPLEXList[0].GetNumCores() + 1);
 
 //Questa variabile memorizza il tempo impiegato per generare i figli della attuale generazione
 double timeC;
@@ -3311,21 +3471,21 @@ lockPol = new object();
 EventWaitHandle ewhCnt = new EventWaitHandle(false, EventResetMode.AutoReset);
 EventWaitHandle ewhCntComplete = new EventWaitHandle(false, EventResetMode.AutoReset);
 
-//Aggiornamento dei time limit di Cplex in modo tale che venga sempre lasciato almeno un secondo e mezzo
+//Aggiornamento dei time limit di CPLEX in modo tale che venga sempre lasciato almeno un secondo e mezzo
 //per la generazione di ogni figlio
 for (int i = 0; i < sizePopulation / 2; i++)
 {
     if (instance.TimeLimit - (clock.ElapsedMilliseconds / 1000.0) > 1.5)
     {
-        CplexList[i].SetParam(Cplex.Param.TimeLimit, instance.TimeLimit - (clock.ElapsedMilliseconds / 1000.0));
+        CPLEXList[i].SetParam(CPLEX.Param.TimeLimit, instance.TimeLimit - (clock.ElapsedMilliseconds / 1000.0));
         
-        CplexList[i].SetParam(Cplex.Param.DetTimeLimit, Program.TICKS_PER_SECOND * CplexList[i].GetParam(Cplex.Param.TimeLimit));
+        CPLEXList[i].SetParam(CPLEX.Param.DetTimeLimit, Program.TICKS_PER_SECOND * CPLEXList[i].GetParam(CPLEX.Param.TimeLimit));
     }
     else
     {
-        CplexList[i].SetParam(Cplex.Param.TimeLimit, 1.5);
+        CPLEXList[i].SetParam(CPLEX.Param.TimeLimit, 1.5);
         
-        CplexList[i].SetParam(Cplex.Param.DetTimeLimit, Program.TICKS_PER_SECOND * CplexList[i].GetParam(Cplex.Param.TimeLimit));
+        CPLEXList[i].SetParam(CPLEX.Param.DetTimeLimit, Program.TICKS_PER_SECOND * CPLEXList[i].GetParam(CPLEX.Param.TimeLimit));
     }
 }
 
@@ -3352,17 +3512,17 @@ for (int i = 0; i < sizePopulation/2; i++)
 
 
 //Richiesta di attivavazione del thread di servizio che monitora e gestisce il tempo con cui vengono 
-//generati i figli, è compito del metodo MonitorCplex gestire quindi la saturazione di secondo tipo
+//generati i figli, è compito del metodo MonitorCPLEX gestire quindi la saturazione di secondo tipo
 ThreadPool.QueueUserWorkItem(o =>
 {
-    MonitorCplex(CplexList[0].GetNumCores(), CplexList, sizePopulation, ewhCnt, ewhCntComplete);
+    MonitorCPLEX(CPLEXList[0].GetNumCores(), CPLEXList, sizePopulation, ewhCnt, ewhCntComplete);
     resetEventSat.Set();
 });
 
 //resetEventSat è aggiunto alla lista resetEvent
 resetEvent.Add(resetEventSat);
 
-//Prima di proseguire è necessario che il thread di servizio venga creato e MonitorCplex abbia completato 
+//Prima di proseguire è necessario che il thread di servizio venga creato e MonitorCPLEX abbia completato 
 //l'inizializzazione locale. Viene conferito un tempo di attesa limite di 50 ms
 ewhCntComplete.WaitOne(50);
 
@@ -3379,7 +3539,7 @@ foreach(int i in index)
 
     ThreadPool.QueueUserWorkItem(o =>
     {
-        ChildPoulation.Add(Utility.GenerateChildPolish(CplexList[(y - 1) / 2], (Instance)instance.Clone(), xList[(y - 1) / 2], CurrentPopulation[y - 1], CurrentPopulation[y], lockPol, ewhCnt, ewhCntComplete));
+        ChildPoulation.Add(Utility.GenerateChildPolish(CPLEXList[(y - 1) / 2], (Instance)instance.Clone(), xList[(y - 1) / 2], CurrentPopulation[y - 1], CurrentPopulation[y], lockPol, ewhCnt, ewhCntComplete));
         mRE.Set();
     });
 
@@ -3390,10 +3550,10 @@ foreach(int i in index)
 //di servizio, terminano non si prosegue
 WaitHandle.WaitAll(resetEvent.ToArray());
 
-//Reset degli oggetti Cplex.Aborter per ogni oggetto Cplex
+//Reset degli oggetti CPLEX.Aborter per ogni oggetto CPLEX
 for (int i = 0; i < sizePopulation / 2; i++)
 {
-    CplexList[i].Use(new Cplex.Aborter());
+    CPLEXList[i].Use(new CPLEX.Aborter());
 }
 
 //La effettiva nuova generazione viene creata sfruttando la precedente ed i suoi figli nello stesso modo
@@ -3466,11 +3626,11 @@ if (cntSat == 10)
 Si conclude questa sezione con la dovuta analisi del metodo \textbf{GenerateChildPolish} che utilizza l'algoritmo \textit{RINS} per creare un \textit{figlio} a partire da due genitori.
 
 \begin{lstlisting}
-public static PathGenetic GenerateChildPolish(Cplex cplex, Instance instance, INumVar[] x, PathGenetic mother, PathGenetic father, object lockPol, EventWaitHandle ewhCnt, EventWaitHandle ewhCntComplete)
+public static PathGenetic GenerateChildPolish(CPLEX cplex, Instance instance, INumVar[] x, PathGenetic mother, PathGenetic father, object lockPol, EventWaitHandle ewhCnt, EventWaitHandle ewhCntComplete)
 \end{lstlisting}
 
 \begin{itemize}
-    \item \textbf{cplex}: oggetto della classe Cplex utilizzato per risolvere il modello;
+    \item \textbf{cplex}: oggetto della classe CPLEX utilizzato per risolvere il modello;
     \item \textbf{instance}: riferimento alla classe Instance, accesso solo in lettura;
     \item \textbf{x}: vettore contenente i riferimenti alla variabili del modello matematico di cplex;
     \item \textbf{mother}: primo dei due circuiti genitori;
@@ -3478,7 +3638,7 @@ public static PathGenetic GenerateChildPolish(Cplex cplex, Instance instance, IN
     \item \textbf{lockPol, ewhCnt, ewhCntComplete}: oggetti necessari per segnalare in modo il completamento della generazione della soluzione \textit{figlio}, maggiori dettagli LINK!!!!!!;
 \end{itemize}
 
-Il contenuto di questa funzione è molto semplice, si procede inizialmente al fissaggio secondo la tecnica \textit{RINS} delle variabili a valore comune nei due circuiti \textit{genitori} ed inoltre il migliore tra questi viene settato come \textbf{warm-start}\footnote{La definizione di un warm-start è necessaria in quanto può capitare che Cplex non generi una soluzione valida entro il tempo limite fissato causando successivamente una eccezione.}:
+Il contenuto di questa funzione è molto semplice, si procede inizialmente al fissaggio secondo la tecnica \textit{RINS} delle variabili a valore comune nei due circuiti \textit{genitori} ed inoltre il migliore tra questi viene settato come \textbf{warm-start}\footnote{La definizione di un warm-start è necessaria in quanto può capitare che CPLEX non generi una soluzione valida entro il tempo limite fissato causando successivamente una eccezione.}:
 
 \begin{lstlisting}
 //Il percorso della soluzione figlio viene inizializzzato
@@ -3505,7 +3665,7 @@ if (mother.Cost > father.Cost)
 else
     cplex.AddMIPStart(x, ConvertIntArrayToDoubleArray(mother.Path));
     
-//Il modello matematico definito viene risolto da Cplex
+//Il modello matematico definito viene risolto da CPLEX
 cplex.Solve();
 \end{lstlisting}
 
@@ -3532,7 +3692,7 @@ if (!cplex.GetAborter().IsAborted())
 }
 \end{lstlisting}
 
-Completata la fase di sincronizzazione non rimane altro che leggere la soluzione trovata da Cplex, popolare un apposito oggetto \textbf{PathGentic} contenente il nuovo figlio e restituirlo, non prima di aver eliminato il fissaggio delle variabili secondo \textit{RINS}.
+Completata la fase di sincronizzazione non rimane altro che leggere la soluzione trovata da CPLEX, popolare un apposito oggetto \textbf{PathGentic} contenente il nuovo figlio e restituirlo, non prima di aver eliminato il fissaggio delle variabili secondo \textit{RINS}.
 
 \begin{lstlisting}
 //Si ottiene il valore delle variabili nella soluzione figlio trovata
@@ -3563,6 +3723,15 @@ return child;
 
 \section*{APPENDICE}
 \label{sec:AppendiceS}
+
+\subsection*{CLASEE STOPWATCH}
+\label{sec:StopwatchS}
+
+\subsection*{GNUPLOT}
+\label{sec:GNUPlotS}
+
+\subsection*{METODO INITPROCESS}
+\label{sec:InitProcessS}
 
 \subsection*{METODO MODIFYMODEL}
 \label{sec:ModifyModelS}
@@ -3845,7 +4014,7 @@ return currentBestPath;
 \label{sec:NNPRNDPS}
 
 Il metodo \textbf{NearestNeightborPolishing} applica una versione dell'algoritmo \textbf{NearestNeightbor} LINK!!!!! compatibile con il metodo matheuristico \textbf{Polishing}.
-Viene memorizzato il circuito in modo compatibile alle variabili di Cplex\footnote{Se la variabile di indice $i$ ha valore $x$ allora il vettore che descrive il circuito sarà $vect[i] = x$.}, utilizza come nodo di partenza sempre e solo quello di indice $0$ ed utilizza una propria versione del metodo \textbf{RndPlus}\footnote{\textbf{RndPlus} determina se la selezione del lato migliore possibile oppure uno dei successivi ad ogni iterazione dell'algoritmo \textbf{NearestNeighbor}.} chiamata \textbf{RndPlusPolishing}.
+Viene memorizzato il circuito in modo compatibile alle variabili di CPLEX\footnote{Se la variabile di indice $i$ ha valore $x$ allora il vettore che descrive il circuito sarà $vect[i] = x$.}, utilizza come nodo di partenza sempre e solo quello di indice $0$ ed utilizza una propria versione del metodo \textbf{RndPlus}\footnote{\textbf{RndPlus} determina se la selezione del lato migliore possibile oppure uno dei successivi ad ogni iterazione dell'algoritmo \textbf{NearestNeighbor}.} chiamata \textbf{RndPlusPolishing}.
 
 \begin{lstlisting}
 
@@ -3868,7 +4037,7 @@ Di seguito si riporta il codice commentato
 
 //Vettore in cui memorizzo il nuovo circuito, (instance.NNodes - 1) * instance.NNodes / 2 corrisponde
 //al numero totale di lati presenti
-int[] heuristicSolutionCplex = new int[(instance.NNodes - 1) * instance.NNodes / 2];
+int[] heuristicSolutionCPLEX = new int[(instance.NNodes - 1) * instance.NNodes / 2];
 
 //Costo del circuito prodotto
 double cost = 0;
@@ -3901,7 +4070,7 @@ for (int i = 1; i < instance.NNodes; i++)
         {
             //Il lato da aggiungere ha estremi i nodi di indice currentNodes[0] e currentNodes[1]
             currentNodes[1] = nextNode;
-            //Si trova l'indice utilizzato da Cplex per memorizzare la variabile relativa al nodo
+            //Si trova l'indice utilizzato da CPLEX per memorizzare la variabile relativa al nodo
             //selezionato
             int pos = xPos(currentNodes[0], currentNodes[1], instance.NNodes);
 
@@ -3909,7 +4078,7 @@ for (int i = 1; i < instance.NNodes; i++)
             cost += (int)Point.Distance(instance.Coord[currentNodes[0]], instance.Coord[currentNodes[1]], instance.EdgeType);
 
             //Il vettore che descrive il circuito è aggiornato
-            heuristicSolutionCplex[pos] = 1;
+            heuristicSolutionCPLEX[pos] = 1;
 
             //Aggiornamento dei nodi non disponibili e della nuova estremità del circuito
             notAvailableNodes.Add(nextNode);
@@ -3933,11 +4102,11 @@ for (int i = 1; i < instance.NNodes; i++)
 }
 
 //Il circuito viene effettivamente chiuso collegando l'ultimo nodo selezionato a quello di indice 0
-heuristicSolutionCplex[xPos(0, currentNodes[1], instance.NNodes)] = 1;
+heuristicSolutionCPLEX[xPos(0, currentNodes[1], instance.NNodes)] = 1;
 //Il costo viene aggiornato
 cost += (int)Point.Distance(instance.Coord[0], instance.Coord[currentNodes[1]], instance.EdgeType);
 //Una variabile di tipo PathGenetic viene restituita, Path e costo sono settati di conseguenza
-return new PathGenetic(heuristicSolutionCplex, cost);
+return new PathGenetic(heuristicSolutionCPLEX, cost);
 
 \end{lstlisting}
 
@@ -3984,12 +4153,12 @@ else
 
 Ricordando che nell'algoritmo polishing, la saturazione di secondo tipo avviene quando gli ultimi $m$\footnote{Dove $m$ è il numero di \textit{figli} calcolati costantemente in modo parallelo da $m$ threads.} \textit{figli} non ancora determinati richiedono un tempo troppo elevato rispetto ai loro \textit{fratelli}.
 
-L'idea per gestire questa problematica è molto semplice: una volta terminata la creazione di tutti i \textit{figli}, eccetto gli ulti $m$, si attende ancora un certo tempo $T_r$ LINK!!!!! dopodiché si lancia una operazione di abort su tutte le istanze di Cplex. Quelle che hanno già terminato la propria risoluzione non subiscono alcun effetto mentre le altre la terminano in modo \textit{sicuro}.
+L'idea per gestire questa problematica è molto semplice: una volta terminata la creazione di tutti i \textit{figli}, eccetto gli ulti $m$, si attende ancora un certo tempo $T_r$ LINK!!!!! dopodiché si lancia una operazione di abort su tutte le istanze di CPLEX. Quelle che hanno già terminato la propria risoluzione non subiscono alcun effetto mentre le altre la terminano in modo \textit{sicuro}.
 
-Tutto questo viene gestito dal metodo \textbf{MonitorCplex} eseguito in background su un apposito thread. Le problematiche che incorrono sono principalmente due:
+Tutto questo viene gestito dal metodo \textbf{MonitorCPLEX} eseguito in background su un apposito thread. Le problematiche che incorrono sono principalmente due:
 \begin{itemize}
-    \item La comunicazione tra i thread che generano i nuovi \textit{figli} e \textit{MonitorCplex} deve essere serializzata.
-    \item Fare in modo che, se durante la attesa del tempo $T_r$, tutti i figli sono completati e quindi \textbf{non} è presente saturazione di secondo tipo, \textit{MonitorCplex} termini immediatamente così che l'algoritmo di polishing possa proseguire senza inutili ritardi.
+    \item La comunicazione tra i thread che generano i nuovi \textit{figli} e \textit{MonitorCPLEX} deve essere serializzata.
+    \item Fare in modo che, se durante la attesa del tempo $T_r$, tutti i figli sono completati e quindi \textbf{non} è presente saturazione di secondo tipo, \textit{MonitorCPLEX} termini immediatamente così che l'algoritmo di polishing possa proseguire senza inutili ritardi.
 \end{itemize}
 
 Per superare questi due ostacoli è necessario introdurre due classi \textbf{WaitHandle} e \textbf{EventWaitHandle}\footnote{Entrambe le classi \textit{WaitHandle} e \textit{EventWaitHandle} fanno parte dello spazio dei nomi System.Threading.}: la prima dispone dell'essenziale metodo \textbf{SignalAndWait(WaitHandle toSignal, WaitHandle toWaitOn)} il quale atomicamente risveglia un thread in attesa su \textbf{toSignal} e pone il chiamante esso stesso in atteso su \textbf{toWaitOn}.
@@ -4006,7 +4175,7 @@ La soluzione proposta per ottenere una completa sincronizzazione tra tutti i thr
 
 \FloatBarrier
 
-Banalmente come già visto nel paragrafo LINK!!!!! il metodo \textbf{GenerateChildPolish} una volta terminato il comando \textbf{Cplex.Solve()} usa il codice:
+Banalmente come già visto nel paragrafo LINK!!!!! il metodo \textbf{GenerateChildPolish} una volta terminato il comando \textbf{CPLEX.Solve()} usa il codice:
 
 \begin{lstlisting}
 
@@ -4023,15 +4192,15 @@ if (!cplex.GetAborter().IsAborted())
 
 Dove l'operazione \textit{WaitHandle.SignalAndWait} ha un timeout di un secondo\footnote{Questo intervallo di tempo è enormemente superiore ad una normale attesa e quindi assicura il corretto funzionamento della sincronizzazione. Essendo la situazione di timeout altrettanto rara non si hanno effetti reali per quanto riguarda un rallentamento dell'algoritmo \textit{polishing}} in quanto può capitare che l'operazione di abort sia avviata tra il test della clausola \textbf{if} e l'esecuzione di \textbf{WaitHandle.SignalAndWait} stesso creando così una attesa infinita.
 
-Completata la creazione del proprio figlio, il thread che esegue \textbf{GenerateChildPolish} effettua la segnalazione, attende la sua totale gestione da parte di \textbf{MonitorCplex} e libera \textbf{lockPol}.
+Completata la creazione del proprio figlio, il thread che esegue \textbf{GenerateChildPolish} effettua la segnalazione, attende la sua totale gestione da parte di \textbf{MonitorCPLEX} e libera \textbf{lockPol}.
 
-Di seguito è riportato infine il codice completo e commentato del metodo \textit{MonitorCplex}:
+Di seguito è riportato infine il codice completo e commentato del metodo \textit{MonitorCPLEX}:
 
 \begin{lstlisting}
 
-public static void MonitorCplex(int numThreadsPar, List<Cplex> cplexList, int sizePop, EventWaitHandle ewhCnt, EventWaitHandle ewhCntComplete)
+public static void MonitorCPLEX(int numThreadsPar, List<CPLEX> cplexList, int sizePop, EventWaitHandle ewhCnt, EventWaitHandle ewhCntComplete)
 {
-    //Cronometro che determina se è necessario un abort o meno di Cplex
+    //Cronometro che determina se è necessario un abort o meno di CPLEX
     Stopwatch clock = new Stopwatch();
     clock.Start();
     //Dati sizePop si creano sempre sizePop/2 figli
@@ -4083,12 +4252,12 @@ public static void MonitorCplex(int numThreadsPar, List<Cplex> cplexList, int si
         {
             clock.Stop();
 
-            //Tutte le istanze di Cplex subiscono un abort sicuro se ancora in fase risolutiva
-            Cplex.Aborter aborter;
+            //Tutte le istanze di CPLEX subiscono un abort sicuro se ancora in fase risolutiva
+            CPLEX.Aborter aborter;
 
-            foreach (Cplex cplex in cplexList)
+            foreach (CPLEX cplex in cplexList)
             {
-                aborter = new Cplex.Aborter();
+                aborter = new CPLEX.Aborter();
                 cplex.Use(aborter);
                 aborter.Abort();
             }
@@ -4151,7 +4320,7 @@ Nelle tre successessive sottosezioni troviamo inizialmente una descrizione delle
 
 Per nessun test sono riportati i circuiti hamiltoniani trovati in quanto le istanze utilizzate sono tutte note in litteratura e già risolte all'ottimo. L'obiettivo che si vuole raggiungere è, per quanto riguarda gli algoritmi esatti un confronto dei loro tempi di esecuzione, mentre invece per quelli euristici un confronto del costo delle soluzioni da loro trovate e il valore ottimo noto entro un tempo limite fissato.
 
-In ogni algoritmo sono state quindi rimosse tutte le stampe sia visuali attraverso GNUPlot che su file del circuito trovato ed anche la stampa su file del modello matematico finale comprendente i tagli generati. Le prove per gli algoritmi esatti sono state automatizzate in modo tale che per la stessa istanza venissero eseguiti in serie tutte le run necessarie ogni algoritmo\footnote{Ogni run è stata caratterizzata da un seme diverso sia per quanto riguarda Cplex sia per quanto riguarda gli oggetti utilizzati per generare valori random.}.
+In ogni algoritmo sono state quindi rimosse tutte le stampe sia visuali attraverso GNUPlot che su file del circuito trovato ed anche la stampa su file del modello matematico finale comprendente i tagli generati. Le prove per gli algoritmi esatti sono state automatizzate in modo tale che per la stessa istanza venissero eseguiti in serie tutte le run necessarie ogni algoritmo\footnote{Ogni run è stata caratterizzata da un seme diverso sia per quanto riguarda CPLEX sia per quanto riguarda gli oggetti utilizzati per generare valori random.}.
 
 Nel caso in cui una o più run presentavano rallentamentamenti apparentemente non motivabili o improvvisi queste sono state ripetute per verificare che il problema non riguardasse fattori esterni determinati dalla macchina utilizzata. Tutti i valori riportati sono quindi verificati sotto questo punto di vista e dipendenti solamente dalla applicazione sviluppata.
 
@@ -4383,7 +4552,7 @@ Notiamo che modificare un modello matematico attraverso l'eliminazione di alcune
 
 Questo set di risultati ha le stesse identiche premesse indicate per il precedente se non che il numero di run eseguito per ogni coppia istanza/algoritmo è pari a $2$ e non $5$. Il motivo di tale scelta è puramente per una questione temporale.
 
-Come più volte ripetuto è stato posto un tempo limite pari a $30$ minuti il quale è stato raggiunto dall'istanza \textbf{pr99} se risolta attraverso l'utilizzo della sola \textit{LazyConstraint Callback}: il valore medio comunicato da Cplex per ottenere il risultato ottimo era in questo di circa lo $0,36\%$.
+Come più volte ripetuto è stato posto un tempo limite pari a $30$ minuti il quale è stato raggiunto dall'istanza \textbf{pr99} se risolta attraverso l'utilizzo della sola \textit{LazyConstraint Callback}: il valore medio comunicato da CPLEX per ottenere il risultato ottimo era in questo di circa lo $0,36\%$.
 
 \vspace*{\fill}
 {

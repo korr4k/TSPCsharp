@@ -8,11 +8,11 @@ namespace TSPCsharp
 {
     public class TSPLazyConsCallback : Cplex.LazyConstraintCallback
     {
-        private bool BlockPrint;
-        private Cplex cplex;
-        private INumVar[] x;
-        private Instance instance;
-        private Process process;
+        internal bool BlockPrint;
+        internal Cplex cplex;
+        internal INumVar[] x;
+        internal Instance instance;
+        internal Process process;
 
         public TSPLazyConsCallback(Cplex cplex, INumVar[] x, Instance instance, Process process, bool BlockPrint)
         {
@@ -30,7 +30,7 @@ namespace TSPCsharp
             List<ILinearNumExpr> ccExprLC = new List<ILinearNumExpr>();
             List<int> bufferCoeffCCLC = new List<int>(); ;
 
-            int[] compConnLC = new int[instance.NNodes];
+            int[] compConnLC = new int[instance.nNodes];
 
             Utility.InitCC(compConnLC);
 
@@ -45,15 +45,15 @@ namespace TSPCsharp
             if (Program.VERBOSE >= -1)
             {
                 //Init the StreamWriter for the current solution
-                fileLC = new StreamWriter(instance.InputFile + "_" + nodeId + ".dat", false);
+                fileLC = new StreamWriter(instance.inputFile + "_" + nodeId + ".dat", false);
             }
 
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                for (int j = i + 1; j < instance.NNodes; j++)
+                for (int j = i + 1; j < instance.nNodes; j++)
                 {
                     //Retriving the correct index position for the current link inside x
-                    int position = Utility.xPos(i, j, instance.NNodes);
+                    int position = Utility.xPos(i, j, instance.nNodes);
 
                     //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
                     if (actualX[position] >= 0.5)
@@ -63,8 +63,8 @@ namespace TSPCsharp
 
                         if (BlockPrint)
                         {
-                            fileLC.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                            fileLC.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            fileLC.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                            fileLC.WriteLine(instance.coord[j].x + " " + instance.coord[j].y + " " + (j + 1) + "\n");
                         }
                     }
                 }
@@ -76,7 +76,7 @@ namespace TSPCsharp
                 fileLC.Close();
             }
 
-            string fileName = instance.InputFile + "_" + nodeId;
+            string fileName = instance.inputFile + "_" + nodeId;
 
             //Accessing GNUPlot to read the file
             if (BlockPrint)

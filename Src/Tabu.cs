@@ -4,19 +4,19 @@ namespace TSPCsharp
 {
     public class Tabu
     {
-        string mode;
-        string originalMode;
-        List<string> tabuVector;
-        Instance inst;
-        int threshold;
+        internal string mode;
+        internal string originalMode;
+        internal List<string> tabuVector;
+        internal Instance inst;
+        internal int threshold;
 
         public Tabu(string mode, Instance inst, int threshold)
         {
             this.mode = mode;
-            this.originalMode = mode;
+            originalMode = mode;
             this.inst = inst;
             this.threshold = threshold;
-            this.tabuVector = new List<string>();
+            tabuVector = new List<string>();
         }
 
         public bool IsTabu(int a, int b)

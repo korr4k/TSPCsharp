@@ -5,8 +5,8 @@ namespace TSPCsharp
     //PathGenetic is an extension of a PathStandard. PathGenetic is needed into Genetic algorithms
     public class PathGenetic : PathStandard
     {
-        int nRoulette;
-        double fitness;
+        internal int nRoulette { get; set; }
+        internal double fitness { get; set; }
 
         public PathGenetic(int[] path, double cost) : base()
         {
@@ -26,30 +26,6 @@ namespace TSPCsharp
         {
             fitness = -1;
             nRoulette = -1;
-        }
-
-        public double Fitness
-        {
-            get
-            {
-                return fitness;
-            }
-            set
-            {
-                fitness = value;
-            }
-        }
-
-        public int NRoulette
-        {
-            get
-            {
-                return nRoulette;
-            }
-            set
-            {
-                nRoulette = value;
-            }
         }
 
         private void CalculateFitness()

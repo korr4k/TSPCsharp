@@ -16,35 +16,33 @@ namespace TSPCsharp
         public static extern int Concorde(StringBuilder fileName, int timeLimit);
 
         //"Main" method
-        static public bool TSPOpt(Instance instance, Stopwatch clock)
+        static public void Solve(Instance instance)
         {
             Cplex cplex = new Cplex();
+            Stopwatch clock = new Stopwatch();
+            clock.Start();
             Process process = Utility.InitProcess(instance);
-
-            //Real starting time is stored inside instance
-            instance.TStart = clock.ElapsedMilliseconds / 1000.0;
-
-            clock.Stop();
+            
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("\nPress enter to continue, attention: the display will be cleared");
             Console.ReadLine();
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("Insert 1 to use the classic loop method, 2 to use the optimal branch & cut , 3 to use heuristics methods , 4 to use matheuristics: ");
+            Console.Write("Insert 1 to use the Loop method, 2 to use the Branch&Cut tecnique, 3 to use heuristic techniques");
 
             switch (Console.ReadLine())
             {
                 case "1":
                     {
-                        Console.Write("\nInsert 1 for normal resolution, 2 to specifie the % precion, 3 to use only a # of the nearest edges, 4 to use both previous options: ");
+                        Console.Write("\nInsert 1 for normal resolution, 2 to specifie the % EpGap to use, 3 to use only a # of the nearest edges, 4 to use both previous options: ");
                         switch (Console.ReadLine())
                         {
                             case "1":
                                 {
                                     //Clock restart
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                                    //Setting the residual time limit for cplex, it's almost equal to instance.tStart
                                     Utility.MipTimelimit(cplex, instance, clock);
                                     //Calling the proper resolution method
                                     Loop(cplex, instance, clock, process, -1, -1);
@@ -53,12 +51,12 @@ namespace TSPCsharp
 
                             case "2":
                                 {
-                                    Console.Write("\nWrite the % precision: ");
+                                    Console.Write("\nWrite the % EpGap [0 -> 0% ; 1 -> 100%] precision: ");
                                     //storing the percentage selected
                                     double percentage = Convert.ToDouble(Console.ReadLine());
                                     //Clock restart
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                                    //Setting the residual time limit for cplex, it's almost equal to instance.tStart
                                     Utility.MipTimelimit(cplex, instance, clock);
                                     //Calling the proper resolution method
                                     Loop(cplex, instance, clock, process, percentage, -1);
@@ -72,7 +70,7 @@ namespace TSPCsharp
                                     int numb = Convert.ToInt32(Console.ReadLine());
                                     //Clock restart
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                                    //Setting the residual time limit for cplex, it's almost equal to instance.tStart
                                     Utility.MipTimelimit(cplex, instance, clock);
                                     //Calling the proper resolution method
                                     Loop(cplex, instance, clock, process , -1, numb);
@@ -81,14 +79,14 @@ namespace TSPCsharp
 
                             case "4":
                                 {
-                                    Console.Write("\nWrite the % precision: ");
+                                    Console.Write("\nWrite the % EpGap [0 -> 0% ; 1 -> 100%] precision: ");
                                     //storing the percentage selected
                                     double percentage = Convert.ToDouble(Console.ReadLine());
                                     Console.Write("Write the # of nearest edges: ");
                                     //number of nearest edges selected
                                     int numb = Convert.ToInt32(Console.ReadLine());
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                                    //Setting the residual time limit for cplex, it's almost equal to instance.tStart
                                     Utility.MipTimelimit(cplex, instance, clock);
                                     //Calling the proper resolution method
                                     Loop(cplex, instance, clock, process, percentage, numb);
@@ -110,7 +108,7 @@ namespace TSPCsharp
                                 {
                                     //Restarting the clock
                                     clock.Start();
-                                    //Setting the residual time limit for cplex, it's almost equal to instance.TStart
+                                    //Setting the residual time limit for cplex, it's almost equal to instance.tStart
                                     Utility.MipTimelimit(cplex, instance, clock);
                                     //Calling the proper resolution method
                                     CallBackMethod(cplex, instance, clock, process);
@@ -119,10 +117,10 @@ namespace TSPCsharp
                             case "2":
                                 {
                                     //Restarting the clock
-                                    clock.Restart();
-                                    instance.XBest = Concorde(new StringBuilder(instance.InputFile), (int)instance.TimeLimit);
-                                    Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.XBest, -1);
-                                    Console.WriteLine("Best solution: " + instance.BestLb);
+                                    clock.Start();
+                                    instance.xBest = Concorde(new StringBuilder(instance.inputFile), (int)instance.timeLimit);
+                                    Utility.PrintGNUPlot(process, instance.inputFile, 1, instance.xBest, -1);
+                                    Console.WriteLine("Best solution: " + instance.bestLb);
                                     break;
                                 }
                             default:
@@ -224,7 +222,16 @@ namespace TSPCsharp
                 default:
                     throw new System.Exception("Bad argument");
             }
-            return true;
+
+            //Program.VERBOSE >= 0 implica che la stampa venga sempre eseguita
+            //Se l'algoritmo avviato non ha modificato il valore di instance.xBest significa che nessuna soluzione è stata trovata
+            if (Program.VERBOSE >= 0 && instance.xBest != 0)
+                Console.WriteLine("The best solution found in " + clock.ElapsedMilliseconds / 1000 + " seconds has cost: " + instance.xBest);
+            else
+                Console.WriteLine("No solution found in " + clock.ElapsedMilliseconds / 1000 + " seconds");
+
+            //Il cronometro viene fermato
+            clock.Stop();
         }
 
         //Handle the resolution method without callbacks
@@ -261,15 +268,15 @@ namespace TSPCsharp
 
             //Allocating the correct space to store the optimal solution
             //Only links from node i to i with i < i are considered
-            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            instance.bestSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
 
             //Init buffers
-            int[] relatedComponents = new int[instance.NNodes];
+            int[] relatedComponents = new int[instance.nNodes];
             List<ILinearNumExpr> rcExpr = new List<ILinearNumExpr>();
             List<int> bufferCoeffRC = new List<int>();
 
             //Temporary variable
-            double[] linksDistances = new double[(instance.NNodes - 1) * instance.NNodes / 2]; ;
+            double[] linksDistances = new double[(instance.nNodes - 1) * instance.nNodes / 2]; ;
 
             do
             {
@@ -297,22 +304,22 @@ namespace TSPCsharp
                 bufferCoeffRC = new List<int>();
 
                 //Init the StreamWriter for the current solution
-                StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+                StreamWriter file = new StreamWriter(instance.inputFile + ".dat", false);
 
                 //Storing the optimal value of the objective function
-                instance.BestLb = cplex.ObjValue;
+                instance.bestLb = cplex.ObjValue;
 
                 //Blank line
                 Console.WriteLine();
 
                 //Printing the optimal solution and the GNUPlot input file
-                for (int i = 0; i < instance.NNodes; i++)
+                for (int i = 0; i < instance.nNodes; i++)
                 {
-                    for (int j = i + 1; j < instance.NNodes; j++)
+                    for (int j = i + 1; j < instance.nNodes; j++)
                     {
 
                         //Retriving the correct index position for the current link inside x
-                        int position = Utility.xPos(i, j, instance.NNodes);
+                        int position = Utility.xPos(i, j, instance.nNodes);
 
                         //Reading the optimal solution for the actual link (i,i)
                         linksDistances[position] = cplex.GetValue(x[position]);
@@ -330,8 +337,8 @@ namespace TSPCsharp
                              *<Blank line> 
                              *-- next link --
                             */
-                            file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                            file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                            file.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                            file.WriteLine(instance.coord[j].x + " " + instance.coord[j].y + " " + (j + 1) + "\n");
 
                             //Updating the model with the current subtours elimination
                             Utility.UpdateCC(cplex, x, rcExpr, bufferCoeffRC, relatedComponents, i, j);
@@ -351,29 +358,29 @@ namespace TSPCsharp
 
                 //Accessing GNUPlot to read the file
                 if (Program.VERBOSE >= -1)
-                    Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.BestLb, -1);
+                    Utility.PrintGNUPlot(process, instance.inputFile, typeSol, instance.bestLb, -1);
 
                 //Blank line
                 cplex.Output().WriteLine();
 
                 //Writing the value
-                cplex.Output().WriteLine("xOPT = " + instance.BestLb + "\n");
+                cplex.Output().WriteLine("xOPT = " + instance.bestLb + "\n");
 
             } while (rcExpr.Count > 1 || epGap || !allEdges); //if there is more then one related components the solution is not optimal 
 
-            instance.BestSol = linksDistances;
-            instance.XBest = instance.BestLb;
+            instance.bestSol = linksDistances;
+            instance.xBest = instance.bestLb;
 
             //Exporting the updated model
             if (Program.VERBOSE >= -1)
-                cplex.ExportModel(instance.InputFile + ".lp");
+                cplex.ExportModel(instance.inputFile + ".lp");
 
             //Closing Cplex link
             cplex.End();
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.XBest, -1);
+                Utility.PrintGNUPlot(process, instance.inputFile, typeSol, instance.xBest, -1);
         }
 
         //Handle the callback resolution method
@@ -385,7 +392,7 @@ namespace TSPCsharp
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
             //Initializing the vector
-            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            instance.bestSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
 
             //Adding lazycallback
             cplex.Use(new TSPLazyConsCallback(cplex, x, instance, process, true));
@@ -400,28 +407,28 @@ namespace TSPCsharp
             cplex.Solve();
 
             //Init the StreamWriter for the current solution
-            StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+            StreamWriter file = new StreamWriter(instance.inputFile + ".dat", false);
 
             //Storing the optimal value of the objective function
-            instance.XBest = cplex.ObjValue;
+            instance.xBest = cplex.ObjValue;
 
             //Blank line
             cplex.Output().WriteLine();
 
             //Printing the optimal solution and the GNUPlot input file
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                for (int j = i + 1; j < instance.NNodes; j++)
+                for (int j = i + 1; j < instance.nNodes; j++)
                 {
 
                     //Retriving the correct index position for the current link inside z
-                    int position = Utility.xPos(i, j, instance.NNodes);
+                    int position = Utility.xPos(i, j, instance.nNodes);
 
                     //Reading the optimal solution for the actual link (i,i)
-                    instance.BestSol[position] = cplex.GetValue(x[position]);
+                    instance.bestSol[position] = cplex.GetValue(x[position]);
 
                     //Only links in the optimal solution (coefficient = 1) are printed in the GNUPlot file
-                    if (instance.BestSol[position] >= 0.5)
+                    if (instance.bestSol[position] >= 0.5)
                     {
                         /*
                          *Current GNUPlot format is:
@@ -432,8 +439,8 @@ namespace TSPCsharp
                          *<Blank line> 
                          *-- next link --
                         */
-                        file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                        file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                        file.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                        file.WriteLine(instance.coord[j].x + " " + instance.coord[j].y + " " + (j + 1) + "\n");
                     }
                 }
             }
@@ -443,17 +450,17 @@ namespace TSPCsharp
 
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, typeSol, instance.XBest, -1);
+                Utility.PrintGNUPlot(process, instance.inputFile, typeSol, instance.xBest, -1);
 
             //Blank line
             cplex.Output().WriteLine();
 
             //Writing the value
-            cplex.Output().WriteLine("xOPT = " + instance.XBest + "\n");
+            cplex.Output().WriteLine("xOPT = " + instance.xBest + "\n");
 
             //Exporting the updated model
             if (Program.VERBOSE >= -1)
-                cplex.ExportModel(instance.InputFile + ".lp");
+                cplex.ExportModel(instance.inputFile + ".lp");
 
         }
 
@@ -480,7 +487,7 @@ namespace TSPCsharp
                 else
                     Console.WriteLine("Incumbed not changed");
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
 
             Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
         }
@@ -532,7 +539,7 @@ namespace TSPCsharp
 
                 VNS(instance, solHeuristic, rnd);
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
 
             Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
         }
@@ -573,7 +580,7 @@ namespace TSPCsharp
                 // We empty the list that contain the child
                 ChildPoulation.RemoveRange(0, ChildPoulation.Count);
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
 
             Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
         }
@@ -592,15 +599,15 @@ namespace TSPCsharp
                 int c = pathG.path[b];
                 int d = pathG.path[c];
 
-                for (int i = 0; i < instance.NNodes - 3; i++)
+                for (int i = 0; i < instance.nNodes - 3; i++)
                 {
-                    double distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
-                    double distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
-                    double distAD = Point.Distance(instance.Coord[a], instance.Coord[d], instance.EdgeType);
-                    double distBC = Point.Distance(instance.Coord[b], instance.Coord[c], instance.EdgeType);
+                    double distAC = Point.Distance(instance.coord[a], instance.coord[c], instance.edgeType);
+                    double distBD = Point.Distance(instance.coord[b], instance.coord[d], instance.edgeType);
+                    double distAD = Point.Distance(instance.coord[a], instance.coord[d], instance.edgeType);
+                    double distBC = Point.Distance(instance.coord[b], instance.coord[c], instance.edgeType);
 
-                    double distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
-                        Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
+                    double distTotABCD = Point.Distance(instance.coord[a], instance.coord[b], instance.edgeType) +
+                        Point.Distance(instance.coord[c], instance.coord[d], instance.edgeType);
 
                     if (distAC + distBD < distTotABCD)
                     {
@@ -627,7 +634,7 @@ namespace TSPCsharp
                     cnt++;
                 }
 
-            } while (cnt < instance.NNodes);
+            } while (cnt < instance.nNodes);
         }
 
         static void TabuSearch(Instance instance, Process process, Tabu tabu, PathStandard currentSol, PathStandard incumbentPath, Stopwatch clock)
@@ -643,22 +650,22 @@ namespace TSPCsharp
 
             do
             {
-                for (int j = 0; j < instance.NNodes; j++, indexStart = b)
+                for (int j = 0; j < instance.nNodes; j++, indexStart = b)
                 {
                     a = indexStart;
                     b = currentSol.path[a];
                     c = currentSol.path[b];
                     d = currentSol.path[c];
 
-                    for (int i = 0; i < instance.NNodes - 3; i++, c = d, d = currentSol.path[c])
+                    for (int i = 0; i < instance.nNodes - 3; i++, c = d, d = currentSol.path[c])
                     {
                         if (!tabu.IsTabu(a, c) && !tabu.IsTabu(b, d))
                         {
-                            distAC = Point.Distance(instance.Coord[a], instance.Coord[c], instance.EdgeType);
-                            distBD = Point.Distance(instance.Coord[b], instance.Coord[d], instance.EdgeType);
+                            distAC = Point.Distance(instance.coord[a], instance.coord[c], instance.edgeType);
+                            distBD = Point.Distance(instance.coord[b], instance.coord[d], instance.edgeType);
 
-                            distTotABCD = Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) +
-                                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType);
+                            distTotABCD = Point.Distance(instance.coord[a], instance.coord[b], instance.edgeType) +
+                                Point.Distance(instance.coord[c], instance.coord[d], instance.edgeType);
 
                             if ((distAC + distBD) - distTotABCD < bestGain && (distAC + distBD) != distTotABCD)
                             {
@@ -705,7 +712,7 @@ namespace TSPCsharp
                 bestGain = double.MaxValue;
                 worstGain = double.MinValue;
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
         }
 
         static void VNS(Instance instance, PathStandard currentSol, Random rnd)
@@ -780,19 +787,19 @@ namespace TSPCsharp
 
             currentSol.path[order[3]] = order[5];
 
-            currentSol.cost += Point.Distance(instance.Coord[order[0]], instance.Coord[order[2]], instance.EdgeType) +
-                Point.Distance(instance.Coord[order[1]], instance.Coord[order[4]], instance.EdgeType) +
-                Point.Distance(instance.Coord[order[3]], instance.Coord[order[5]], instance.EdgeType) -
-                Point.Distance(instance.Coord[a], instance.Coord[b], instance.EdgeType) -
-                Point.Distance(instance.Coord[c], instance.Coord[d], instance.EdgeType) -
-                Point.Distance(instance.Coord[e], instance.Coord[f], instance.EdgeType);
+            currentSol.cost += Point.Distance(instance.coord[order[0]], instance.coord[order[2]], instance.edgeType) +
+                Point.Distance(instance.coord[order[1]], instance.coord[order[4]], instance.edgeType) +
+                Point.Distance(instance.coord[order[3]], instance.coord[order[5]], instance.edgeType) -
+                Point.Distance(instance.coord[a], instance.coord[b], instance.edgeType) -
+                Point.Distance(instance.coord[c], instance.coord[d], instance.edgeType) -
+                Point.Distance(instance.coord[e], instance.coord[f], instance.edgeType);
 
         }
 
         static void HardFixing(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
         {
             StreamWriter file;
-            double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            double[] incumbentSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
             double incumbentCost = Double.MaxValue;
             List<int>[] listArray = Utility.BuildSLComplete(instance);
 
@@ -802,15 +809,15 @@ namespace TSPCsharp
             int numIterazioni = 10;
             int percentageFixing = 8;
 
-            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            instance.bestSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
 
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
             PathStandard heuristicSol = Utility.NearestNeighbour(instance, rnd, listArray);
 
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                int position = Utility.xPos(i, heuristicSol.path[i], instance.NNodes);
+                int position = Utility.xPos(i, heuristicSol.path[i], instance.nNodes);
                 incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
             }
 
@@ -824,35 +831,35 @@ namespace TSPCsharp
             {
 
                 Utility.ModifyModel(instance, x, rnd, percentageFixing, incumbentSol, fixedVariables);
-                if ((fixedVariables.Count != instance.NNodes - 1) && (fixedVariables.Count != instance.NNodes))
+                if ((fixedVariables.Count != instance.nNodes - 1) && (fixedVariables.Count != instance.nNodes))
                     Utility.PreProcessing(instance, x, fixedVariables);
 
                 cplex.Solve();
 
                 if (incumbentCost > cplex.ObjValue)
                 {
-                    file = new StreamWriter(instance.InputFile + ".dat", false);
+                    file = new StreamWriter(instance.inputFile + ".dat", false);
 
                     incumbentCost = cplex.ObjValue;
                     incumbentSol = cplex.GetValues(x);
 
-                    for (int i = 0; i < instance.NNodes; i++)
+                    for (int i = 0; i < instance.nNodes; i++)
                     {
-                        for (int j = i + 1; j < instance.NNodes; j++)
+                        for (int j = i + 1; j < instance.nNodes; j++)
                         {
-                            int position = Utility.xPos(i, j, instance.NNodes);
+                            int position = Utility.xPos(i, j, instance.nNodes);
 
                             if (incumbentSol[position] >= 0.5)
                             {
-                                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                                file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                                file.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                                file.WriteLine(instance.coord[j].x + " " + instance.coord[j].y + " " + (j + 1) + "\n");
                             }
                         }
                     }
 
                     file.Close();
 
-                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
+                    Utility.PrintGNUPlot(process, instance.inputFile, 1, incumbentCost, -1);
                     cplex.ChangeMIPStart(z, x, incumbentSol);
                 }
             
@@ -870,24 +877,24 @@ namespace TSPCsharp
                         numIterazioni = 10;
                 }
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
 
-            instance.XBest = incumbentCost;
-            instance.BestSol = incumbentSol;
+            instance.xBest = incumbentCost;
+            instance.bestSol = incumbentSol;
 
-            file = new StreamWriter(instance.InputFile + ".dat", false);
+            file = new StreamWriter(instance.inputFile + ".dat", false);
             cplex.Output().WriteLine();
 
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                for (int j = i + 1; j < instance.NNodes; j++)
+                for (int j = i + 1; j < instance.nNodes; j++)
                 {
-                    int position = Utility.xPos(i, j, instance.NNodes);
+                    int position = Utility.xPos(i, j, instance.nNodes);
 
-                    if (instance.BestSol[position] >= 0.5)
+                    if (instance.bestSol[position] >= 0.5)
                     {
-                        file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                        file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                        file.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                        file.WriteLine(instance.coord[j].x + " " + instance.coord[j].y + " " + (j + 1) + "\n");
                     }
                 }
             }
@@ -895,13 +902,13 @@ namespace TSPCsharp
             file.Close();
 
             if (Program.VERBOSE >= -1)
-                Utility.PrintGNUPlot(process, instance.InputFile, 1, instance.XBest, -1);
+                Utility.PrintGNUPlot(process, instance.inputFile, 1, instance.xBest, -1);
 
             cplex.Output().WriteLine();
-            cplex.Output().WriteLine("xOPT = " + instance.XBest + "\n");
+            cplex.Output().WriteLine("xOPT = " + instance.xBest + "\n");
 
             if (Program.VERBOSE >= -1)
-                cplex.ExportModel(instance.InputFile + ".lp");
+                cplex.ExportModel(instance.inputFile + ".lp");
         }
 
         static void LocalBranching(Cplex cplex, Instance instance, Process process, Random rnd, Stopwatch clock)
@@ -910,28 +917,28 @@ namespace TSPCsharp
             int currentRange = 0;
             bool BlockPrint = false;
             IRange cut;
-            double[] incumbentSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            double[] incumbentSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
             double incumbentCost = double.MaxValue;
             List<int>[] listArray = Utility.BuildSLComplete(instance);
 
-            instance.BestSol = new double[(instance.NNodes - 1) * instance.NNodes / 2];
+            instance.bestSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);//Costruisco il modello la prima volta
 
             PathStandard solHeuristic = Utility.NearestNeighbour(instance, rnd, listArray);
             //incumbentSol = ConvertIntArrayToDoubleArray(solHeuristic.path);
-            for (int i = 0; i < instance.NNodes; i++)
+            for (int i = 0; i < instance.nNodes; i++)
             {
-                int position = Utility.xPos(i, solHeuristic.path[i], instance.NNodes);
+                int position = Utility.xPos(i, solHeuristic.path[i], instance.nNodes);
                 incumbentSol[position] = 1;//Metto ad 1 solo i lati che appartengono al percorso random generato
             }
 
             TwoOpt(instance, solHeuristic);
             ILinearNumExpr expr = cplex.LinearNumExpr();
 
-            for (int i = 0; i < instance.NNodes; i++)
-                expr.AddTerm(x[Utility.xPos(i, solHeuristic.path[i], instance.NNodes)], 1);
+            for (int i = 0; i < instance.nNodes; i++)
+                expr.AddTerm(x[Utility.xPos(i, solHeuristic.path[i], instance.nNodes)], 1);
 
-            cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local brnching constraint");
+            cut = cplex.Ge(expr, instance.nNodes - possibleRange[currentRange], "Local brnching constraint");
             cplex.AddCut(cut);
 
             cplex.SetParam(Cplex.Param.Threads, cplex.GetNumCores());
@@ -947,29 +954,29 @@ namespace TSPCsharp
                     incumbentCost = cplex.ObjValue;
                     incumbentSol = cplex.GetValues(x);
 
-                    StreamWriter file = new StreamWriter(instance.InputFile + ".dat", false);
+                    StreamWriter file = new StreamWriter(instance.inputFile + ".dat", false);
 
-                    for (int i = 0; i < instance.NNodes; i++)
+                    for (int i = 0; i < instance.nNodes; i++)
                     {
-                        for (int j = i + 1; j < instance.NNodes; j++)
+                        for (int j = i + 1; j < instance.nNodes; j++)
                         {
-                            int position = Utility.xPos(i, j, instance.NNodes);
+                            int position = Utility.xPos(i, j, instance.nNodes);
 
                             if (incumbentSol[position] >= 0.5)
                             {
-                                file.WriteLine(instance.Coord[i].X + " " + instance.Coord[i].Y + " " + (i + 1));
-                                file.WriteLine(instance.Coord[j].X + " " + instance.Coord[j].Y + " " + (j + 1) + "\n");
+                                file.WriteLine(instance.coord[i].x + " " + instance.coord[i].y + " " + (i + 1));
+                                file.WriteLine(instance.coord[j].x + " " + instance.coord[j].y + " " + (j + 1) + "\n");
                             }
                         }
                     }
 
-                    Utility.PrintGNUPlot(process, instance.InputFile, 1, incumbentCost, -1);
+                    Utility.PrintGNUPlot(process, instance.inputFile, 1, incumbentCost, -1);
                     file.Close();
 
                     //Eliminate all cuts
                     cplex.ClearCuts();
 
-                    for (int i = 0; i < instance.NNodes; i++)
+                    for (int i = 0; i < instance.nNodes; i++)
                     {
                         if (incumbentSol[i] == 1)
                             expr.AddTerm(x[i], 1);
@@ -977,7 +984,7 @@ namespace TSPCsharp
 
                     currentRange = 0;
 
-                    cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local branching constraint");//Aggiungo il vincolo nuovo
+                    cut = cplex.Ge(expr, instance.nNodes - possibleRange[currentRange], "Local branching constraint");//Aggiungo il vincolo nuovo
                     cplex.AddCut(cut);
                 }
                 else
@@ -986,7 +993,7 @@ namespace TSPCsharp
                     {
                         currentRange++;
                         cplex.ClearCuts();
-                        cut = cplex.Ge(expr, instance.NNodes - possibleRange[currentRange], "Local branching constraint");//Aggiungo il vincolo nuovo
+                        cut = cplex.Ge(expr, instance.nNodes - possibleRange[currentRange], "Local branching constraint");//Aggiungo il vincolo nuovo
                         cplex.AddCut(cut);
                     }
                     else
@@ -995,10 +1002,10 @@ namespace TSPCsharp
                     }
                 }
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
 
-            instance.BestSol = incumbentSol;
-            instance.BestLb = incumbentCost;
+            instance.bestSol = incumbentSol;
+            instance.bestLb = incumbentCost;
         }
 
         static void Polishing(Cplex cplex, Instance instance, Process process, Random rnd, int sizePopulation, Stopwatch clock)
@@ -1048,7 +1055,7 @@ namespace TSPCsharp
 
                 ChildPoulation.RemoveRange(0, ChildPoulation.Count);
 
-            } while (clock.ElapsedMilliseconds / 1000.0 < instance.TimeLimit);
+            } while (clock.ElapsedMilliseconds / 1000.0 < instance.timeLimit);
 
             Console.WriteLine("Best distance found within the timelit is: " + incumbentSol.cost);
         }

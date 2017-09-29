@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Diagnostics;
 using System.Linq;
 
 namespace TSPCsharp
@@ -10,10 +9,6 @@ namespace TSPCsharp
 
         //Setting constant value, to access them use Program.<name>
         public const int VERBOSE = 5;
-        public const int TICKS_PER_SECOND = 1000;
-
-        //Stopwatch type is used to evaluate the execution time
-        static Stopwatch clock;
 
         static void Main(string[] args)
         {
@@ -36,46 +31,32 @@ namespace TSPCsharp
             */
             Instance inst = new Instance();
 
-            ParseInst(inst,args);
+            ParseInput(inst,args);
 
             //Reading the input file and storing its data into inst
             Populate(inst);
 
 
-            //Starting the clock
-            clock = new Stopwatch();
-            clock.Start();
-
-
             //Starting the elaboration of the TSP problem
             //The boolean returning value tells if everything went fine
-            if (!TSP.TSPOpt(inst, clock))
-                throw new System.Exception("Impossible to find the optimal solution for the given instance");
-
-
-            //Stopping the clock
-            clock.Stop();
-
-            //Printing the time needed to find the optimal solution
-            //If it's equal to the input timelimit the solution is not the optimal
-            Console.WriteLine("The optimal solution was found in " + clock.ElapsedMilliseconds/1000.0 + " s");
+            TSP.Solve(inst);
             
 
             //Only to check the output
             Console.ReadLine();
 
-            foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dat").Where(item => item.EndsWith(".dat")))
+            foreach (string file in Directory.GetFiles("..\\..\\..\\..\\Output\\", "*.dat").Where(item => item.EndsWith(".dat")))
             {
                 File.Delete(file);
             }
 
-            foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.lp").Where(item => item.EndsWith(".lp")))
+            foreach (string file in Directory.GetFiles("..\\..\\..\\..\\Output\\", "*.lp").Where(item => item.EndsWith(".lp")))
             {
                 File.Delete(file);
             }
         }
 
-        static void ParseInst(Instance inst, string[] input)
+        static void ParseInput(Instance inst, string[] input)
         {
             //input is equal to the args vector, every string is obtained by splitting
             //the input at each blank space
@@ -84,19 +65,19 @@ namespace TSPCsharp
                 if (input[i] == "-file")
                 {
                     //Expecting that the next value is the file name
-                    inst.InputFile = input[++i];
+                    inst.inputFile = input[++i];
                     continue;
                 }
                 if (input[i] == "-timelimit")
                 {
                     //Expecting that the next value is the time limit in seconds
-                    inst.TimeLimit = Convert.ToDouble(input[++i]);
+                    inst.timeLimit = Convert.ToDouble(input[++i]);
                     continue;
                 }
             }
 
             //At least the input file name and the timelimit are needed
-            if (inst.InputFile == null || inst.TimeLimit == 0)
+            if (inst.inputFile == null || inst.timeLimit == 0)
                 throw new Exception("File input name and/or timelimit are missing");
         }
 
@@ -111,7 +92,7 @@ namespace TSPCsharp
             {
                 //StreaReader types need to be disposed at the end
                 //the 'using' key automatically handles that necessity
-                using (StreamReader sr = new StreamReader("..\\..\\..\\..\\Data\\" + inst.InputFile))
+                using (StreamReader sr = new StreamReader("..\\..\\..\\..\\Data\\" + inst.inputFile))
                 {
                     //The whole file is read
                     while ((line = sr.ReadLine()) != null)
@@ -127,9 +108,9 @@ namespace TSPCsharp
                         if (line.StartsWith("DIMENSION"))
                         {
                             //Setting the # of nodes for the problem
-                            inst.NNodes = Convert.ToInt32(line.Remove(0, line.IndexOf(':') + 2));
+                            inst.nNodes = Convert.ToInt32(line.Remove(0, line.IndexOf(':') + 2));
                             //Allocating the space for the points that will be read
-                            inst.Coord = new Point[inst.NNodes];
+                            inst.coord = new Point[inst.nNodes];
                             if (VERBOSE >= 5)
                                 Console.WriteLine(line);
                             continue;
@@ -142,7 +123,7 @@ namespace TSPCsharp
                             if (!(tmp == "EUC_2D" || tmp == "ATT" || tmp == "MAN_2D" || tmp == "GEO" || tmp == "MAX_2D" || tmp == "CEIL_2D"))
                                 throw new System.Exception("Format error:  only EDGE_WEIGHT_TYPE == {ATT, MAN_2D, GEO, MAX_2D and CEIL_2D} are implemented");
                             //Storing the edge type is necessary to correctly evaluete the distance between two points
-                            inst.EdgeType = tmp;
+                            inst.edgeType = tmp;
                             if (VERBOSE >= 5)
                                 Console.WriteLine(line);
                             continue;
@@ -151,7 +132,7 @@ namespace TSPCsharp
                         //When this line is read, the nexts contain the points' coordinates
                         if (line.StartsWith("NODE_COORD_SECTION"))
                         {
-                            if (inst.NNodes <= 0)
+                            if (inst.nNodes <= 0)
                                 throw new System.Exception("DIMENSION section should appear before NODE_COORD_SECTION section");
                             if (VERBOSE >= 5)
                                 Console.WriteLine(line);
@@ -178,22 +159,22 @@ namespace TSPCsharp
                         {
                             string[] elements = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                             //First item of the line needs to be the index of the point
-                            //Expected minimum index to be 1 and max to be instance.NNodes
+                            //Expected minimum index to be 1 and max to be instance.nNodes
                             int i = Convert.ToInt32(elements[0]);
-                            if (i < 0 || i > inst.NNodes)
+                            if (i < 0 || i > inst.nNodes)
                                 throw new System.Exception("Unknown node in NODE_COORD_SECTION section");
                             //Vectors starts at index 0 not 1, it is necessary to perform a -1
-                            inst.Coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".",",")));
+                            inst.coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".",",")));
 
                             //Storing the smallest and biggest x and y coordinates
-                            if (Convert.ToDouble(elements[1].Replace(".", ",")) < inst.XMin)
-                                inst.XMin = Convert.ToDouble(elements[1].Replace(".", ","));
-                            if (Convert.ToDouble(elements[1].Replace(".", ",")) > inst.XMax)
-                                inst.XMax = Convert.ToDouble(elements[1].Replace(".", ","));
-                            if (Convert.ToDouble(elements[2].Replace(".", ",")) < inst.YMin)
-                                inst.YMin = Convert.ToDouble(elements[2].Replace(".", ","));
-                            if (Convert.ToDouble(elements[2].Replace(".", ",")) > inst.YMax)
-                                inst.YMax = Convert.ToDouble(elements[2].Replace(".", ","));
+                            //if (Convert.ToDouble(elements[1].Replace(".", ",")) < inst.xMin)
+                            //    inst.xMin = Convert.ToDouble(elements[1].Replace(".", ","));
+                            //if (Convert.ToDouble(elements[1].Replace(".", ",")) > inst.xMax)
+                            //    inst.xMax = Convert.ToDouble(elements[1].Replace(".", ","));
+                            //if (Convert.ToDouble(elements[2].Replace(".", ",")) < inst.yMin)
+                            //    inst.yMin = Convert.ToDouble(elements[2].Replace(".", ","));
+                            //if (Convert.ToDouble(elements[2].Replace(".", ",")) > inst.yMax)
+                            //    inst.yMax = Convert.ToDouble(elements[2].Replace(".", ","));
 
                             continue;
                         }
