@@ -662,17 +662,18 @@ ANDREBBE UN COMMENTINO SU OGNUNO
 
 \end{lstlisting}
 
-\section*{SEZIONE Quattro}
+\section*{SEZIONE QUATTRO}
 \label{sec:SezioneQuattroS}
 
+In questa sezione dedichiamo spazio ad una presentazione dettagliata sulla struttura sintattica che devono seguire i file di input contenenti le informazione delle istanze \textit{TSP} che si desidera risolvere tramite l'applicativo. In particolare vengono analizzati i metodi \hyperref[sec:LetturaInputS]{ParseInput} e \hyperref[sec:MetodoPopulateS]{Populate} utilizzati dalla classe \hyperref[sec:ClasseProgramS]{Program} per, rispettivamente, ottenere il nome del file descrittore dell'istanza \textit{TSP} da risolvere e l'effettiva estrapolazione delle informazione ivi contenute così da memorizzarle all'interno di un oggetto della classe \hyperref[sec:ClasseInstanceS]{Instance}.
 
-Le istanze del problema del Commesso Viaggiatore fornite in input al programma sono state selezionata da un libreria presente al seguente indirizzo web: 
+Prima di procedere indichiamo che all'indirizzo
 
 \begin{center}
     \href{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}{http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html}
 \end{center}
 
-Ogni istanza è memorizzata in un file di testo in un formato ben preciso, è stato quindi possibile progettare un opportuno parser che automaticamente riesca a estrapolare le informazioni contenute e popolare le strutture dati da noi create\footnote{Nessun altro tipo di input è supportato}.
+è presente una libreria molto completa di istanze \textit{TSP}, in formato compatibile, dalla qua
 
 \subsection*{LETTURA INPUT FILE}
 \label{sec:LetturaInputS}
