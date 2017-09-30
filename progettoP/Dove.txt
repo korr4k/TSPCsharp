@@ -2,3 +2,12 @@
 \item \textbf{p2}: riferimento ad un oggetto della classe \{textbfPoint} che rappresenta il primo nodo;
 \item \textbf{pointType}: stringa che descrive quale tipo di formula matematica si debba utilizzare per calcolare il costo del lato delimitato da \textbf{p1} e \textbf{p2}. Può assumere i seguenti valori:
 \item \textbf{inst}: riferimento ad un oggetto della classe \textbf{Instance} contente tutti dati che descrivono l'istanza del Problema del Commesso Viaggiatore fornita in ingresso dall'utente;
+\item \textbf{env}: puntatore all'environment sul quale si è deciso di creare il modello;
+\item \textbf{lp} : puntatore ai dati che caratterizzano il modello matematico;
+
+
+
+
+
+
+

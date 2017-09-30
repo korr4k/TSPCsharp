@@ -62,15 +62,22 @@ namespace TSPCsharp
             //the input at each blank space
             for (int i = 0; i < input.Length; i++)
             {
+                /*
+                * Cerco una delle due parole chiavi "-file" e "-timelimit"
+                * all'indice successiva è contenuta la relativa informazione
+                */
                 if (input[i] == "-file")
                 {
-                    //Expecting that the next value is the file name
+                    /*
+                    * Si aspetta di trovare il nome del file input
+                    * (compreso di estensione)
+                    */
                     inst.inputFile = input[++i];
                     continue;
                 }
                 if (input[i] == "-timelimit")
                 {
-                    //Expecting that the next value is the time limit in seconds
+                    //Si aspetta di trovare il tempo limite espresso in secondi)
                     inst.timeLimit = Convert.ToDouble(input[++i]);
                     continue;
                 }
@@ -78,7 +85,7 @@ namespace TSPCsharp
 
             //At least the input file name and the timelimit are needed
             if (inst.inputFile == null || inst.timeLimit == 0)
-                throw new Exception("File input name and/or timelimit are missing");
+                throw new Exception("Missing information or bad format inside the command line");
         }
 
         static void Populate(Instance inst)
@@ -87,6 +94,8 @@ namespace TSPCsharp
             string line;
             //When true line is storing a point's coordinates of the problem
             bool readingCoordinates = false;
+            //Rappresenta il numero di nodi per cui sono state lette le coordinate
+            int cnt = 0;
 
             try
             {
@@ -97,95 +106,159 @@ namespace TSPCsharp
                     //The whole file is read
                     while ((line = sr.ReadLine()) != null)
                     {
-                        //Content of those lines are simply printed 
-                        if (line.StartsWith("NAME") || line.StartsWith("COMMENT") || line.StartsWith("TYPE") || line.StartsWith("EDGE_WEIGHT_FORMAT: FUNCTION") || line.StartsWith("DISPLAY_DATA_TYPE: COORD_DISPLAY")) 
+                        /*
+                        * Il contenuto delle righe con prefisso le seguenti parole chiavi
+                        * viene solamente mostrato a video ma non memorizzato dentro
+                        * l'oggetto di tipo Istance che si sta popolando
+                        * in quanto tali informazioni non risultano rilevanti ai fini
+                        * della risoluzione dell'istanza TSP
+                        */
+                        if (line.StartsWith("NAME") || line.StartsWith("COMMENT") || line.StartsWith("TYPE") || line.StartsWith("EDGE_WEIGHT_FORMAT: FUNCTION") || line.StartsWith("DISPLAY_DATA_TYPE: COORD_DISPLAY"))
                         {
-                            if (VERBOSE >= 5) Console.WriteLine(line);
-                            continue;
-                        }
-
-                        //inst needs to be updated according to the value of his line
-                        if (line.StartsWith("DIMENSION"))
-                        {
-                            //Setting the # of nodes for the problem
-                            inst.nNodes = Convert.ToInt32(line.Remove(0, line.IndexOf(':') + 2));
-                            //Allocating the space for the points that will be read
-                            inst.coord = new Point[inst.nNodes];
                             if (VERBOSE >= 5)
                                 Console.WriteLine(line);
+
+                            //Si passa alla riga successiva del file
                             continue;
                         }
 
-                        //inst needs to be updated according to the value of his line
+                        /*
+                        * Il numero di nodi del grafo è un parametro essenziale
+                        * viene memorizzato in Instance.nNodes e
+                        * determina la grandezza del vettore Instance.coord
+                        * nel quale sono memorizzate le coordinate (x,y)
+                        * di ogni nodo
+                        */
+                        if (line.StartsWith("DIMENSION"))
+                        {
+                            //Memorizzazione del numero n di nodi del grafo
+                            inst.nNodes = Convert.ToInt32(line.Remove(0, line.IndexOf(':') + 2));
+                            //Alloco al vettore coord lo spazio di memoria di n oggetti Point
+                            inst.coord = new Point[inst.nNodes];
+
+                            if (VERBOSE >= 5)
+                                Console.WriteLine(line);
+
+                            //Si passa alla riga successiva del file
+                            continue;
+                        }
+
+                        /*
+                        * Questo parametro determina la formula matematica
+                        * da utilizzare per calcolare la distanza tra due oggetti Point
+                        * Viene memorizzato in Instance.edgeType
+                        */
                         if (line.StartsWith("EDGE_WEIGHT_TYPE"))
                         {
                             string tmp = line.Remove(0, line.IndexOf(':') + 2);
+                            //Solo questi tipi sono supportati dalla applicazione
                             if (!(tmp == "EUC_2D" || tmp == "ATT" || tmp == "MAN_2D" || tmp == "GEO" || tmp == "MAX_2D" || tmp == "CEIL_2D"))
                                 throw new System.Exception("Format error:  only EDGE_WEIGHT_TYPE == {ATT, MAN_2D, GEO, MAX_2D and CEIL_2D} are implemented");
-                            //Storing the edge type is necessary to correctly evaluete the distance between two points
+
+                            //Se il tipo di peso di nodo è supportato dalla applicazione
                             inst.edgeType = tmp;
+
                             if (VERBOSE >= 5)
                                 Console.WriteLine(line);
+
+                            //Si passa alla riga successiva del file
                             continue;
                         }
 
-                        //When this line is read, the nexts contain the points' coordinates
+                        /*
+                        * La parola chiave NODE_COORD_SECTION indica che le prossime n
+                        * righe contengono le informazioni riguardanti le coordinate (x,y)
+                        * degli n nodi del grafo
+                        */
                         if (line.StartsWith("NODE_COORD_SECTION"))
                         {
+                            //L'informazione riguardante il numero di nodi deve essere nota
                             if (inst.nNodes <= 0)
-                                throw new System.Exception("DIMENSION section should appear before NODE_COORD_SECTION section");
+                                throw new System.Exception("DIMENSION section should be before NODE_COORD_SECTION section");
+
                             if (VERBOSE >= 5)
                                 Console.WriteLine(line);
+
+                            //Viene settato a true il valore di readingCoordinates
                             readingCoordinates = true;
-                            continue;
-                        }
-                        if (line.StartsWith("EDGE_WEIGHT_FORMAT: FUNCTION "))
-                        {
+
+                            //Si passa alla riga successiva del file
                             continue;
                         }
 
-                        //This line signals the end of the file
+                        //Questa riga viene ignorata
+                        if (line.StartsWith("EDGE_WEIGHT_FORMAT: FUNCTION "))
+                        {
+                            //Si passa alla riga successiva del file
+                            continue;
+                        }
+
+                        //La parola chiave EOF indica la terminazione del file
                         if (line.StartsWith("EOF"))
                         {
+                            /*
+                            * Le informazioni memorizzate riguardanti le coordinate (x,y)
+                            * degli n nodi vengono stampate a video
+                            */
                             Instance.Print(inst);
-                            Console.WriteLine(line);
-                            //Correct end of the file
+
+                            if (VERBOSE >= 5)
+                                Console.WriteLine(line);
+
+                            //Il ciclo di lettura viene interrotto
                             break;
                         }
 
-
-                        //if true, line contains a point's coordinate
+                        /*
+                        * Se il valore readingCoordinates è pari a true significa che
+                        * la lettura del file è giunta alla n righe contenenti
+                        * le coordinate (x,y) degli n nodi del grafo del problema TSP
+                        */
                         if (readingCoordinates)
                         {
+                            /*
+                            * elements viene settato nel seguente modo
+                            * elements[0] -> indice reale del nodo
+                            * elements[1] -> coordinata x del nodo
+                            * elements[2] -> coordinata y del nodo
+                            */
                             string[] elements = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                            //First item of the line needs to be the index of the point
-                            //Expected minimum index to be 1 and max to be instance.nNodes
+
                             int i = Convert.ToInt32(elements[0]);
+                            //Il valore dell'indice deve essere compreso tra 1 ed n
                             if (i < 0 || i > inst.nNodes)
                                 throw new System.Exception("Unknown node in NODE_COORD_SECTION section");
-                            //Vectors starts at index 0 not 1, it is necessary to perform a -1
-                            inst.coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".",",")));
+                            /*
+                            * Se l'indice reale i è valido
+                            * l'oggetto Point che descrive le sue coordinate bidimensionali
+                            * viene memorizzato alla posizione i-1 di Instance.coord
+                            */
+                            inst.coord[i - 1] = new Point(Convert.ToDouble(elements[1].Replace(".", ",")), Convert.ToDouble(elements[2].Replace(".", ",")));
 
-                            //Storing the smallest and biggest x and y coordinates
-                            //if (Convert.ToDouble(elements[1].Replace(".", ",")) < inst.xMin)
-                            //    inst.xMin = Convert.ToDouble(elements[1].Replace(".", ","));
-                            //if (Convert.ToDouble(elements[1].Replace(".", ",")) > inst.xMax)
-                            //    inst.xMax = Convert.ToDouble(elements[1].Replace(".", ","));
-                            //if (Convert.ToDouble(elements[2].Replace(".", ",")) < inst.yMin)
-                            //    inst.yMin = Convert.ToDouble(elements[2].Replace(".", ","));
-                            //if (Convert.ToDouble(elements[2].Replace(".", ",")) > inst.yMax)
-                            //    inst.yMax = Convert.ToDouble(elements[2].Replace(".", ","));
+                            //Il contatore dei nodi analizzati è aumentato
+                            cnt++;
 
+                            /*
+                            * Reperite le informazioni di tutti gli n nodi
+                            * readingCoordinates è settato a false
+                            */
+                            if (cnt == inst.nNodes)
+                                readingCoordinates = false;
+
+                            //Si passa alla riga successiva del file
                             continue;
                         }
 
-                        //Blank lines are ignored
+                        //Se la riga è priva di caratteri si passa alla successiva
                         if (line == "")
                             continue;
 
-                        //If each if statement is false, the file contains at least one line with a wrong format
-                        throw new System.Exception("Wrong format for the current simplified parser!!!!!!!!!");
-
+                        /*
+                        * Giunti a questo punto finale del ciclo while significa 
+                        * che il file non rispetto lo standar prefissato
+                        * la sua lettura non può essere continuata
+                        */
+                        throw new System.Exception("The file bad format");
                     }
                 }
             }

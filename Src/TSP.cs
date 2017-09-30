@@ -18,11 +18,20 @@ namespace TSPCsharp
         //"Main" method
         static public void Solve(Instance instance)
         {
+            //Inizializzazione oggetto di tipo Cplex
             Cplex cplex = new Cplex();
+            //Inizializzazione oggetto di tipo Stopwatch
             Stopwatch clock = new Stopwatch();
+            //Avvio del cronometro
             clock.Start();
+            /*
+            * Il metodo InitProcess della classe Utility fornisce un oggetto process
+            * inizializzato pronto per essere utilizzato per la comunicazione con
+            * GNUPlot per disegnare il grafico di una qualsiasi soluzione trovata
+            */
             Process process = Utility.InitProcess(instance);
-            
+
+            clock.Stop();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("\nPress enter to continue, attention: the display will be cleared");
             Console.ReadLine();
@@ -223,8 +232,11 @@ namespace TSPCsharp
                     throw new System.Exception("Bad argument");
             }
 
-            //Program.VERBOSE >= 0 implica che la stampa venga sempre eseguita
-            //Se l'algoritmo avviato non ha modificato il valore di instance.xBest significa che nessuna soluzione è stata trovata
+            /*
+            * Program.VERBOSE >= 0 implica che la stampa venga sempre eseguita
+            * Se l'algoritmo avviato non ha modificato il valore di instance.xBest
+            * significa che nessuna soluzione è stata trovata
+            */
             if (Program.VERBOSE >= 0 && instance.xBest != 0)
                 Console.WriteLine("The best solution found in " + clock.ElapsedMilliseconds / 1000 + " seconds has cost: " + instance.xBest);
             else
