@@ -1433,7 +1433,7 @@ Seppur multiple esecuzioni di \textbf{GetValue} possano produrre il medesimo ris
 
 La risoluzione del modello matematico per come è stato costruito nella precedente sezione \hyperref[sec:SezioneCinqueS]{Sezione Cinque} come noto, essendo privo dei vincoli di \textit{subtour elimination}, non può fornire risultati accettabili indipendentemente da quale tipologia di algoritmi venga applicata.
 
-All'interno di questa sezione viene quindi introddoto il primo metodo di risoluzione \textbf{esatto}, denominato \textbf{LOOP}, che fornisce una tecnica molto semplice per aggiungere ad ogni sua iterazione una serie di vincoli necessari per ottenere la soluzione \textbf{ottima} del \textbf{TSP} preso in analisi.
+All'interno di questa sezione viene quindi introdotto il primo metodo di risoluzione \textbf{esatto}, denominato \textbf{LOOP}, che fornisce una tecnica molto semplice per aggiungere ad ogni sua iterazione una serie di vincoli necessari per ottenere la soluzione \textbf{ottima} del \textbf{TSP} preso in analisi.
 
 Successivamente sono proposte delle varianti nel complesso sempre \textbf{esatte} di questo algoritmo che, sfruttando una \textbf{iniziale} fase \textbf{euristica}, mirano a ridurre i tempi di esecuzione globali.
 
@@ -1450,19 +1450,22 @@ Naturalmente, trattandosi di una algoritmo, il ciclo \textit{loop} deve avere un
 
 Il fatto di partire con un modello matematico privo di vincoli aggiuntivi, combinato ad una loro aggiunta mirata e molto graduale, permette alle prime iterazione del metodo \textbf{LOOP} di essere estremamente veloci garantendo nel complesso dei tempi di esecuzione molto validi\footnote{Si noti che ogni vincolo, una volta aggiunto al modello matematico, non deve essere rimosso durante le fasi successive dell'algoritmo. In questo modo i tempi di esecuzione tendono a crescere con il progredire delle iterazioni eseguite.}.
 
-Per poter implementare il metodo Loop risulta quindi evidente la necessità di sviluppare un'opportuna funzione in grado di individuare la presenza di subtour all'interno di una generica soluzione proposta e di generarne gli opportuni vincoli per eliminarli.\\
-In letteratura esistono molteplici modi per eseguire tali operazioni, quella da noi adottata si rifà all'algoritmo di \text{Kruskal} per trovare un albero a costo minimo in un grafo connesso con lati non orientati\footnote{Nello specifico la parte di nostro interesse è quella che impedisce la formazione di più componenti connesse}.\\
-La tecnica da noi adottata è stata quella di creare due metodi chiamati \textbf{InitCC} e \textbf{UpdateCC}: il primo serve solamente come inizializzazione per le strutture dati utilizzate dal secondo il quale, se invocato una volta per ogni lato appartenente alla soluzione attuale ne trova tutte le componenti connesse indicando anche quali lati sono a loro appartenenti. I dettagli riguardo le loro implementazioni sono visibili nella appendice di questo testo, per ora specifichiamo solamente che al termine dell'utilizzo del metodo \textbf{UpdateCC} i seguenti oggetti:
+L'implementazione del metodo \textbf{LOOP} richiede quindi lo sviluppo di una funzione in grado di individuare la presenza di subtour all'interno di una generica soluzione e generare opportuni vincoli per eliminarli.
+
+In letteratura esistono molteplici modi per eseguire tali operazioni, quella proposta si rifà al famoso algoritmo di \text{Kruskal} per trovare un albero a costo minimo in un grafo connesso con lati non orientati\footnote{Nello specifico la parte di interesse è quella che impedisce la formazione di molteplici componenti connesse}.
+
+I dettagli realizzativi sono riportati all'interno dell'appendice nella sezione dedicata al metodo \hyperref[sec:UCCICCS]{UpdateCC} della classe \textbf{Utility}. Per il momento è sufficiente specifichiamo solamente che al termine dell'utilizzo del suddetto metodo i seguenti oggetti:
 
 \begin{lstlisting}
 
-        List<ILinearNumExpr> rcExpr = new List<ILinearNumExpr>();
-        List<int> bufferCoeffRC bufferCoeffRC = new List<int>();
+List<ILinearNumExpr> rcExpr = new List<ILinearNumExpr>();
+List<int> bufferCoeffRC bufferCoeffRC = new List<int>();
 
 \end{lstlisting}
 
-risultano essere costruiti, in particolare \textbf{rcExpr} contiene le espressioni dei subtour elimination mentre invece \textbf{bufferCoeffRC} contiene il numero di lati appartenenti ad ogni subtour e quindi il termine noto delle precedenti espressioni\footnote{Il codice assume che l'espressione di indice $i$ presente all'interno di \textbf{rcExpr} abbia il proprio termine noto nella posizione di indice $i$ dentro \textbf{bufferCoeffRC}}.\\
-Se all'interno di \textbf{rcExpr} è presente una espressione sola significa che la soluzione attuale è valida e quindi ottima per il problema, al contrario si deve procedere all'inserimento dei vincoli con un semplice ciclo for:
+vengono popolati in modo tale che \textbf{rcExpr} contenga le espressioni dei vincoli di \textit{subtour elimination} cercati mentre invece all'interno di \textbf{bufferCoeffRC} siano presenti il numero dei lati appartenenti ad ogni \textit{subtour} e quindi il termine noto delle precedenti espressioni maggiorato di una unità\footnote{Il codice è realizzato così che l'espressione di indice $i$ presente all'interno di \textbf{rcExpr} abbia il proprio termine noto nella posizione di indice $i$ in \textbf{bufferCoeffRC}.}.
+
+La condizione di uscita dal ciclo \textit{loop} discussa in precedenza corrisponde alla presenza di un solo elemento all'interno di una qualsiasi delle due liste così create. In caso contrario la modifica del modello matematico avviene attraverso:
 
 \begin{lstlisting}
                 
@@ -1470,128 +1473,6 @@ for (int i = 0; i < rcExpr.Count; i++)
   cplex.AddLe(rcExpr[i], bufferCoeffRC[i] - 1);
               
 \end{lstlisting}
-
-\subsection*{METODI UpdateCC e InitCC}
-\label{sec:UCCICCS}
-
-Come già specificato nella sezione riguardo il metodo \textbf{LOOP} questi due metodi di supporto appartenenti alla classe \textbf{Utility} hanno il compito di individuare tutte le componenti connesse (che da ora in avanti abbrevieremo con \textbf{cc}) di una generica soluzione proposta.\\
-Prima di passare alla implementazione vera e propria introduciamoli ad alto livello: inizialmente si vuole assumere l'esistenza di $n$ \textbf{cc} distinte, ognuna di esse contenente un nodo della soluzione. Questo è il compito della dalla funzione \textbf{InitCC}.\\
-Successivamente per ogni lato della soluzione si vuole analizzare a quali \textbf{cc} sono assegnati i due nodi che lo caratterizzano. Se queste sono differenti vanno unificate in modo tale che tutti i nodi appartenenti, ad esempio
-, alla seconda ora appartengano tutti alla prima. Nel caso in cui invece le due \textbf{cc} coincidano significa che abbiamo trovato un subtour e il relativo vincolo di eliminazione deve essere definito. Tutte questo è invece compito del metodo \textbf{UpdateCC}.
-
-Iniziamo quindi l'analisi del codice necessario. Per prima cosa si necessita di un vettore di interi che contenga all'indice $i-esimo$ l'identificativo della \textbf{cc} alla quale appartiene il nodo $i$\footnote{Per semplicità si è deciso di identificare ogni \textbf{cc} con un valore intero univoco}. L'inizializzazione di questo vettore viene fornita da \textbf{InitCC}:
-
-\begin{lstlisting}
-
-public static void InitCC(int[] cc)
-{
-    for (int i = 0; i < cc.Length; i++)
-    {
-        cc[i] = i;
-    }
-}
-
-\end{lstlisting}
-
-Passiamo ora al metodo \textbf{UpdateCC} che presenta la seguente firma:
-
-\begin{lstlisting}
-
-public static void UpdateCC(CPLEX cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
-
-\end{lstlisting}
-
-dove:
-
-\begin{itemize}
-    \item \textbf{cplex}: oggetto contenente il modello matematico corrente, eventualmente necessario per la creazione del vincolo di subtour elimination;
-    \item \textbf{z}: vettore contenente le variabili del modello, eventualmente necessario per la creazione del vincolo di subtour elimination;
-    \item \textbf{rcExpr}: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
-    \item \textbf{bufferCoeffRC}: Lista contenente i termini noti dei vincoli di subtour;
-    \item \textbf{relatedComponents}: vettore che definisce per ogni nodo del grafo la relativa componente connessa;
-    \item \textbf{i}: Nodo che con il parametro j forma il lato (i,j);
-    \item \textbf{j}: Nodo che con il parametro i forma il lato (i,j).
-\end{itemize}
-
-La funzione UpdateCC viene invocata dal metodo Loop $n$ volte, alla k-esima invocazione riceve in ingresso il k-esimo lato appartenente alla soluzione ottima del modello corrente. Per verificare se il lato ricevuto genera un subtour nel grafo G=(V,T*), dove T* contiene i precedenti $k-1$ lati controllati, si verifica se i vertici del lato appartengono alla medesima componente connessa. Nel caso in cui i due vertici non appartengono alla medesima componente connessa, è necessario aggiornare le componenti connesse dei vertici per l' invocazione successiva del metodo, viceversa si è  individuato un subtour caratterizzato dai nodi aventi come componente connessa la medesima dei nodi i e j.
-
-A livello implementativo si è utilizzato un array di interi chiamato relatedComponents, di dimensione pari al numero di vertici del grafo, come struttura dati necessaria per fotografare le componenti connesse del grafo G=(V,T*); relatedComponents contiene all' indice j la componente connessa del nodo j. La funzione InitCC, invocata ad ogni iterazione del metodo Loop, ha il compito di inizializzare relatedComponents associando ad ogni nodo una componente connessa diversa: in particolare si è  scelto di associare al nodo j la componente connessa j. Passiamo ora ad analizzare come è  stato nella pratica implementato il metodo UpdateCC, la sua intestazione è la seguente:
-
-\begin{lstlisting}
-
-public static void UpdateCC(CPLEX cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,int[] relatedComponents, int i, int j)
-
-\end{lstlisting}
-
-dove:
-\begin{itemize}
-\item cplex: oggetto contenente il modello matematico corrente;
-\item z: vettore contenente le variabili del modello;
-\item rcExpr: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
-\item bufferCoeffRC: Lista contenente i termini noti dei vincoli di subtour;
-\item relatedComponents: vettore che definisce per ongi nodo del grafo la relativa componente connessa;
-\item i: Nodo che con il parametro j forma il lato [i,j];
-\item j: Nodo che con il parametro i forma il lato [i,j].
-\end{itemize}
-
-Il caso in cui non si crei un subtour è gestito molto semplicemente in questo modo:
-
-\begin{lstlisting}
-
-if (relatedComponents[i] != relatedComponents[j])
-{
-    for (int k = 0; k < relatedComponents.Length; k++)
-    {
-        if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
-        {
-            //Same as Kruskal
-            relatedComponents[k] = relatedComponents[i];
-        }
-    }
-    //Finally also the vallue relative to the Point i are updated
-    relatedComponents[j] = relatedComponents[i];
-}
-
-\end{lstlisting}
-
-Dove per convenzione si è deciso di inglobare la \textbf{cc} del nodo $j$ in quella del nodo $i$.\\
-Il secondo caso è invece gestito nel seguente modo:
-
-\begin{lstlisting}
-
-else
-{
-    ILinearNumExpr expr = cplex.LinearNumExpr();
-
-    //cnt stores the # of nodes of the current related components
-    int cnt = 0;
-
-    for (int h = 0; h < relatedComponents.Length; h++)
-    {
-        //Only nodes of the current related components are considered
-        if (relatedComponents[h] == relatedComponents[i])
-        {
-            //Each link involving the node with index h is analized
-            for (int k = h + 1; k < relatedComponents.Length; k++)
-            {
-                //Testing if the link is valid
-                if (relatedComponents[k] == relatedComponents[i])
-                {
-                    //Adding the link to the expression with coefficient 1
-                    expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
-                }
-            }
-            cnt++;
-        }
-    }
-    //Adding the objects to the buffers
-    rcExpr.Add(expr);
-    bufferCoeffRC.Add(cnt);
-}
-
-\end{lstlisting}
-
-Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente ci assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per implementare i subtour elimination desiderati.
 
 \subsection*{METODO LOOP CON PRIMA FASE EURISTICA}
 \label{sec:LoopEuristicoS}
@@ -3961,6 +3842,132 @@ return child;
 
 \subsection*{METODO XPOS}
 \label{sec:XPos}
+
+\subsection*{METODI UPDATECC e INITCC}
+\label{sec:UCCICCS}
+
+All'interno di questa sezione viene mostrato l'adattamento dell'algoritmo di \textbf{Kruscal} che in un grafo connesso individua l'albero a costo minimo, per determinare le \textit{componenti connesse} all'interno di una potenziale soluzione del \textit{TSP} studiato e generarne i relativi vincoli di eliminazione.
+
+Prima di passare all'algoritmo vero e proprio se ne discute il funzionamento. Inizialmente si vuole assumere l'esistenza di $n$ \textit{componenti connesse} (\textbf{cc}) \textbf{fittizie}\footnote{Fittizie in quanto una \textit{componente connessa} è tale se e solo se descrive un grafo connesso.}, ognuna delle quali contenente un distinto nodo del problema. Questa banale inizializzazione è realizzata dal metodo \textbf{InitCC}.
+
+Successivamente, si opera iterativamente su ogni lato della soluzione, in particolare le due \textit{cc} a cui appartengono i nodi che li delimitano vengono unificate. Nel caso in cui queste siano già uguali significa che una \textbf{reale} \textit{componente connessa} è stata trovata e se ne può definire il vincolo di eliminazione. Il metodo \textbf{UpdateCC} esegue una sola operazione di aggiornamento e pertanto deve essere invocato per tutti gli $n$ lati che definiscono la soluzione presa in esame.
+
+
+Durante l'intero algoritmo si fa riferimento al vettore di interi \textbf{cc} contenente all'indice $i-esimo$ l'identificativo della \textit{componente connessa} alla quale appartiene il nodo con indice di memorizzazione $i$\footnote{Si ricorda che l'indice di memorizzazione di un qualsiasi nodo è inferiore di una unità rispetto all'indice reale.}. L'inizializzazione di questo vettore viene fornita dal metodo \textbf{InitCC}:
+
+\begin{lstlisting}
+
+public static void InitCC(int[] cc)
+{
+	for (int i = 0; i < cc.Length; i++)
+	{
+		cc[i] = i;
+	}
+}
+
+\end{lstlisting}
+
+In altre parole l'identificativo delle $n$ fittizie \textit{componenti connesse} corrisponde all'indice di memorizzazione dell'unico nodo che ne fa parte  inizialmente.
+
+Passiamo ora al metodo \textbf{UpdateCC} che presenta la seguente firma:
+
+\begin{lstlisting}
+
+public static void UpdateCC(CPLEX cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
+
+\end{lstlisting}
+
+dove:
+
+\begin{itemize}
+	\item \textbf{cplex}: oggetto contenente il modello matematico corrente, eventualmente necessario per la creazione del vincolo di subtour elimination;
+	\item \textbf{z}: vettore contenente le variabili del modello, eventualmente necessario per la creazione del vincolo di subtour elimination;
+	\item \textbf{rcExpr}: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
+	\item \textbf{bufferCoeffRC}: Lista contenente i termini noti dei vincoli di subtour;
+	\item \textbf{relatedComponents}: vettore che definisce per ogni nodo del grafo la relativa componente connessa;
+	\item \textbf{i}: Nodo che con il parametro j forma il lato (i,j);
+	\item \textbf{j}: Nodo che con il parametro i forma il lato (i,j).
+\end{itemize}
+
+La funzione UpdateCC viene invocata dal metodo Loop $n$ volte, alla k-esima invocazione riceve in ingresso il k-esimo lato appartenente alla soluzione ottima del modello corrente. Per verificare se il lato ricevuto genera un subtour nel grafo G=(V,T*), dove T* contiene i precedenti $k-1$ lati controllati, si verifica se i vertici del lato appartengono alla medesima componente connessa. Nel caso in cui i due vertici non appartengono alla medesima componente connessa, è necessario aggiornare le componenti connesse dei vertici per l' invocazione successiva del metodo, viceversa si è  individuato un subtour caratterizzato dai nodi aventi come componente connessa la medesima dei nodi i e j.
+
+A livello implementativo si è utilizzato un array di interi chiamato relatedComponents, di dimensione pari al numero di vertici del grafo, come struttura dati necessaria per fotografare le componenti connesse del grafo G=(V,T*); relatedComponents contiene all' indice j la componente connessa del nodo j. La funzione InitCC, invocata ad ogni iterazione del metodo Loop, ha il compito di inizializzare relatedComponents associando ad ogni nodo una componente connessa diversa: in particolare si è  scelto di associare al nodo j la componente connessa j. Passiamo ora ad analizzare come è  stato nella pratica implementato il metodo UpdateCC, la sua intestazione è la seguente:
+
+\begin{lstlisting}
+
+public static void UpdateCC(CPLEX cplex, INumVar[] z, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC,int[] relatedComponents, int i, int j)
+
+\end{lstlisting}
+
+dove:
+\begin{itemize}
+	\item cplex: oggetto contenente il modello matematico corrente;
+	\item z: vettore contenente le variabili del modello;
+	\item rcExpr: Lista all' interno della quale vengono memorizzate le espressioni contenenti le variabili del vincolo di subtour;
+	\item bufferCoeffRC: Lista contenente i termini noti dei vincoli di subtour;
+	\item relatedComponents: vettore che definisce per ongi nodo del grafo la relativa componente connessa;
+	\item i: Nodo che con il parametro j forma il lato [i,j];
+	\item j: Nodo che con il parametro i forma il lato [i,j].
+\end{itemize}
+
+Il caso in cui non si crei un subtour è gestito molto semplicemente in questo modo:
+
+\begin{lstlisting}
+
+if (relatedComponents[i] != relatedComponents[j])
+{
+for (int k = 0; k < relatedComponents.Length; k++)
+{
+if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
+{
+//Same as Kruskal
+relatedComponents[k] = relatedComponents[i];
+}
+}
+//Finally also the vallue relative to the Point i are updated
+relatedComponents[j] = relatedComponents[i];
+}
+
+\end{lstlisting}
+
+Dove per convenzione si è deciso di inglobare la \textbf{cc} del nodo $j$ in quella del nodo $i$.\\
+Il secondo caso è invece gestito nel seguente modo:
+
+\begin{lstlisting}
+
+else
+{
+ILinearNumExpr expr = cplex.LinearNumExpr();
+
+//cnt stores the # of nodes of the current related components
+int cnt = 0;
+
+for (int h = 0; h < relatedComponents.Length; h++)
+{
+//Only nodes of the current related components are considered
+if (relatedComponents[h] == relatedComponents[i])
+{
+//Each link involving the node with index h is analized
+for (int k = h + 1; k < relatedComponents.Length; k++)
+{
+//Testing if the link is valid
+if (relatedComponents[k] == relatedComponents[i])
+{
+//Adding the link to the expression with coefficient 1
+expr.AddTerm(z[zPos(h, k, relatedComponents.Length)], 1);
+}
+}
+cnt++;
+}
+}
+//Adding the objects to the buffers
+rcExpr.Add(expr);
+bufferCoeffRC.Add(cnt);
+}
+
+\end{lstlisting}
+
+Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente ci assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per implementare i subtour elimination desiderati.
 
 \subsection*{METODO MODIFYMODEL}
 \label{sec:ModifyModelS}
