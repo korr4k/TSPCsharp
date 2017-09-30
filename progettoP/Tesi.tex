@@ -1431,15 +1431,24 @@ Seppur multiple esecuzioni di \textbf{GetValue} possano produrre il medesimo ris
 \section*{SEZIONE SEI}
 \label{sec:SezioneSeiS}
 
+La risoluzione del modello matematico per come è stato costruito nella precedente sezione \hyperref[sec:SezioneCinqueS]{Sezione Cinque} come noto, essendo privo dei vincoli di \textit{subtour elimination}, non può fornire risultati accettabili indipendentemente da quale tipologia di algoritmi venga applicata.
+
+All'interno di questa sezione viene quindi introddoto il primo metodo di risoluzione \textbf{esatto}, denominato \textbf{LOOP}, che fornisce una tecnica molto semplice per aggiungere ad ogni sua iterazione una serie di vincoli necessari per ottenere la soluzione \textbf{ottima} del \textbf{TSP} preso in analisi.
+
+Successivamente sono proposte delle varianti nel complesso sempre \textbf{esatte} di questo algoritmo che, sfruttando una \textbf{iniziale} fase \textbf{euristica}, mirano a ridurre i tempi di esecuzione globali.
+
 \subsection*{METODO LOOP}
 \label{sec:MetodoLoopS}
 
-Il primo metodo sperimentato prende il nome di \textbf{LOOP}.
--------------------------------------------------------------
-Va messa un pò di storia!!!!!!
--------------------------------------------------------------
-L'idea alla sua base è molto semplice ed è la seguente: inizialmente il modello fornito non deve contiene alcun vincolo di subtour elimination ed una volta risolto si procedere ad analizzare la soluzione ottima trovata. Se questa presenta dei subtour il modello viene ampliato inserendovi gli appositi vincoli per eliminarli e si procede ad una sua nuova risoluzione. Viene da se che quest'ultimo passo va ripetuto fino a quando la soluzione proposta non risulta accettabile e quindi priva di subtour\footnote{Da qui deriva il nome del metodo in quanto la soluzione consiste in un loop delle stesse operazioni}.\\\'E importante far notare che ogni iterazione del loop i vincoli aggiunti nella precedente sono ovviamente mantenuti.\\
-In questo modo siamo sicuri di aver aggiunto al nostro modello solo i vincoli strettamente necessari il che non assicura che essi non siano un numero esponenziale.\\
+Il primo algoritmo risolutivo sperimentato e quindi introdotto in questo testo prende il nome di \textbf{LOOP}, più nello specifico si tratta della sua variante \textbf{priva} di fasi \textit{euristiche}.
+
+L'idea alla base è molto semplice: inizialmente il modello matematico creato, anche se privo di alcun vincolo di \textit{subtour elimination}, viene risolto. La soluzione \textit{ottima} così ottenuta viene processata individuando eventuali componenti connesse al suo interno. Una loro presenza in quantità superiore ad \textbf{uno} implica inevitabilmente un grafo \textbf{non connesso} e di conseguenza la soluzione attuale deve essere dichiarata \textbf{non valida}. A questo punto si deve procedere con l'individuazione dei vincoli che avrebbero impedito al \textit{solver} di proporre tale soluzione e conseguente loro aggiunta al modello motematico.
+
+Eseguito l'aggiornamento, il procedimento viene ripetuto dal principio partendo con una nuova risoluzione. Proprio da questo ripetersi degli stessi identici passi sistematicamente, creando così un \textbf{loop}, dà il nome alla tecnica.
+
+Naturalmente, trattandosi di una algoritmo, il ciclo \textit{loop} deve avere una o più condizioni di arresto. In questo caso specifico si tratta dell'individuazione di una sola componente connessa e pertanto l'ultima soluzione trovata è \textbf{valida} e anche l'\textbf{ottimo globale} desiderato.
+
+Il fatto di partire con un modello matematico privo di vincoli aggiuntivi, combinato ad una loro aggiunta mirata e molto graduale, permette alle prime iterazione del metodo \textbf{LOOP} di essere estremamente veloci garantendo nel complesso dei tempi di esecuzione molto validi\footnote{Si noti che ogni vincolo, una volta aggiunto al modello matematico, non deve essere rimosso durante le fasi successive dell'algoritmo. In questo modo i tempi di esecuzione tendono a crescere con il progredire delle iterazioni eseguite.}.
 
 Per poter implementare il metodo Loop risulta quindi evidente la necessità di sviluppare un'opportuna funzione in grado di individuare la presenza di subtour all'interno di una generica soluzione proposta e di generarne gli opportuni vincoli per eliminarli.\\
 In letteratura esistono molteplici modi per eseguire tali operazioni, quella da noi adottata si rifà all'algoritmo di \text{Kruskal} per trovare un albero a costo minimo in un grafo connesso con lati non orientati\footnote{Nello specifico la parte di nostro interesse è quella che impedisce la formazione di più componenti connesse}.\\
