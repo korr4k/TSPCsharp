@@ -51,37 +51,55 @@ namespace TSPCsharp
         //Building initial model
         public static INumVar[] BuildModel(Cplex cplex, Instance instance, int nEdges)
         {
-            //Init the model's variables
+            //Il vettore contenente tutte le variabili viene creato
             INumVar[] x = new INumVar[(instance.nNodes - 1) * instance.nNodes / 2];
 
-            /*
-             *expr will hold all the expressions that needs to be added to the model
-             *initially it will be the optimality's functions
-             *later it will be Ax's rows 
-            */
+            //La variabili su cui viene definita una espressione lineare
             ILinearNumExpr expr = cplex.LinearNumExpr();
 
-
-            //Populating objective function
+            //Solamente i lati delimitati dai noi (i,j) per cui i < j sono considerati
             for (int i = 0; i < instance.nNodes; i++)
             {
                 for (int j = i + 1; j < instance.nNodes; j++)
                 {
-                    ////xPos return the correct position where to store the variable corresponding to the actual link (i,i)
+                    /*
+                    * La funzione xPos determina il corretto indice
+                    * da utilizzare per identificare il lato x(i+1, j+1)
+                    * all'interno del vettore di variabili x
+                    */
                     int position = xPos(i, j, instance.nNodes);
 
+                    /*
+                    * Creazione della variabile.
+                    * Se necessario attivarne solo un numero limitato
+                    * vengono tutte create inizialmente anche con 
+                    * l'upper buond pari a 0
+                    */
                     if (nEdges > 0)
                         x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
                     else
                         x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
 
+                    /*
+                    * Aggiunta del termine relativo al lato x(i+1, j+1)
+                    * ad expr, per la funzione obiettivo il coefficiente
+                    * è equivalente al costo del lato in questione
+                    */
                     expr.AddTerm(x[position], Point.Distance(instance.coord[i], instance.coord[j], instance.edgeType));
                 }
             }
 
+            //Setting the optimality's function
+            cplex.AddMinimize(expr);
+
+            /*
+            * Eventuale attivazione per tutti i nodi
+            * dei soli (nEdges) lati meno costosi
+            * ivi incidenti
+            */
             if (nEdges > 0)
             {
-                List<int>[] listArray = BuildSLComplete(instance);
+                List<int>[] listArray = OrderEdgesComplete(instance);
 
                 for (int i = 0; i < instance.nNodes; i++)
                 {
@@ -94,35 +112,38 @@ namespace TSPCsharp
                 }
             }
 
-            //Setting the optimality's function
-            cplex.AddMinimize(expr);
-
-
-            //Starting to elaborate Ax
+            /*
+            * Ogni nodo del grafo determina un proprio vincolo
+            * che coinvolge tutti i lati in esso incidenti
+            */
             for (int i = 0; i < instance.nNodes; i++)
             {
-                //Resetting expr
+                //Reset di expr
                 expr = cplex.LinearNumExpr();
 
                 for (int j = 0; j < instance.nNodes; j++)
                 {
-                    //For each row i only the links (i,i) or (i,i) have coefficent 1
-                    //xPos return the correct position where link is stored inside the vector x
-                    if (i != j)//No loops wioth only one node
+                    /*
+                    * L'espressione è la semplice somma di tutti i lati
+                    * incidenti nel nodo quindi tutti quelli del tipo
+                    * x(i+1,..) oppure x(..,i+1) validi
+                    */
+                    if (i != j)
                         expr.AddTerm(x[xPos(i, j, instance.nNodes)], 1);
                 }
 
-                //Adding to Ax the current equation with known term 2 and name degree(<current i node>)
+                //Aggiunta del vincolo al modello
                 cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
             }
 
-            //Printing the complete model inside the file <name_file.tsp.lp>
-            if (Program.VERBOSE >= -1)
+            //Eventuale esportazione del modello matematico
+            if (Program.VERBOSE >= 9)
                 cplex.ExportModel(instance.inputFile + ".lp");
 
+            //Il riferimento al vettore delle variabili x viene restituito
             return x;
-
         }
+
 
         //Used to evaluete the correct position to store and read the variables for the model
         public static int xPos(int i, int j, int nNodes)
@@ -367,7 +388,7 @@ namespace TSPCsharp
             return new PathGenetic(heuristicSolution, instance);
         }
 
-        public static List<int>[] BuildSLComplete(Instance instance)
+        public static List<int>[] OrderEdgesComplete(Instance instance)
         {
             //SL and L stores the information regarding the nearest edges for each node 
             List<itemList>[] SL = new List<itemList>[instance.nNodes];

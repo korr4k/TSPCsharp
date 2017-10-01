@@ -1239,7 +1239,7 @@ for (int i = 0; i < inst->nNodes; i++)
 }
 \end{lstlisting}
 
-\subsection*{Modello Matematico: Linguaggio C\#}
+\subsection*{MODELLO MATEMATICO: LINGUAGGIO C\#}
 \label{sec:ModelloCSS}
 
 Per una corretta comprensione di questa sezione è consigliato aver letto la precedente \hyperref[sec:ModelloCS]{Modello Matematico: Linguaggio C} in quanto alcune nozioni ivi fornite rimangono valide e pertanto qui non più riportate.
@@ -1334,14 +1334,15 @@ cplex.AddMinimize(expr);
 L'operazione successiva di creazione dell'espressione di un vincolo, eccetto per quelli di \textit{subtour elimination}, avviene nel seguente modo:
 
 \begin{lstlisting}
-expr = cplex.LinearNumExpr();
-
 /*
 * Ogni nodo del grafo determina un proprio vincolo
 * che coinvolge tutti i lati in esso incidenti
 */
 for (int i = 0; i < instance.nNodes; i++)
 {
+    //Reset di expr
+    expr = cplex.LinearNumExpr();
+    
     for (int j = 0; j < instance.nNodes; j++)
     {
         /*
@@ -1374,7 +1375,7 @@ Dove:
     \item \textbf{name}: nome identificativo del vincolo;
 \end{itemize}
 
-Il codice proposto, dopo minime modifiche dovute alla presenza della variabile \textbf{nEdges}, viene inserito all'interno di un apposito metodo \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che oltre alla definizione del modello matematico restituisce il riferimento al vettore di variabili:
+Il codice proposto, dopo minime modifiche dovute alla presenza della variabile \textbf{nEdges}\footnote{Maggiori dettagli \hyperref[sec:MetodoBuildModelS]{Metodo BuildModel}}, viene inserito all'interno di un apposito metodo \textbf{BuilModel} appartenente alla classe \textbf{Utility}, che oltre alla definizione del modello matematico restituisce il riferimento al vettore di variabili:
 
 \begin{lstlisting}
 public static INumVar[] BuildModel(CPLEX cplex, Instance instance, int nEdges)
@@ -1482,68 +1483,104 @@ for (int i = 0; i < rcExpr.Count; i++)
 \subsection*{METODO LOOP CON PRIMA FASE EURISTICA}
 \label{sec:LoopEuristicoS}
 
-Il metodo Loop, indipendente dalla implementazione che si decide di utilizzare, vuole essere un algoritmo esatto. In altre parole è necessario assicurarsi che il risultato finale da esso prodotto sia \textbf{sempre} il migliore possibile. Come vedremo nei paragrafi successivi, sono stati pensati molteplici algoritmi, detti euristici, che al contrario cercano solamente di avvicinarsi al risultato ottimo limitando al contempo i loro tempi di esecuzione.
-\'E infatti quest'ultimo fattore a risultare cruciale per molti problemi di programmazione lineare, a maggior ragione per quelli che, come il \textit{commesso viaggiatore}, vogliono studiare situazioni \textbf{np-difficili}\footnote{In letteratura è noto infatti che i problemi appartenenti a quest'ultima categoria sono caratterizzati da tempi di risoluzione, al caso peggiore, esponenziali rispetto al numero di variabili che li caratterizzano. Nel caso in cui siano definiti nel tipico linguaggio della programmazione lineare, la caratteristica appena esposta è riscontrabile da un numero di vincoli anch'esso esponenziale.}.
-Per quanto appena esposto si è pensato di progettare una variante del metodo \textbf{Loop} caratterizzata da una fase iniziale \textbf{euristica} i cui risultati vengono poi sfruttati da una seconda fase finale \textbf{esatta}. Durante la sua progettazione ci si accorge fin da subito che, come per ogni algoritmo euristico, non esistono specifici paletti che se fissati assicurano al \textbf{100\%} il raggiungimento dei propri obiettivi. Nel nostro caso ciò che desideriamo è chiaramente una fase \textit{euristica} più veloce di quella \textit{esatta} ma che produca anche risultati utili a quest'ultima. Abbiamo quindi deciso che, all'interno della nostra applicazione, sia l'utente stesso a poter settare alcuni parametri che rendono le due fasi più o meno differenti tra loro. In questo modo, basandosi sulle proprie esperienze e test, è possibile ottenere i risultati migliori per qualsiasi istanza del problema che si desidera risolvere.
-Entriamo ora nel dettaglio delle due fasi chiarendo fin da subito che tutte e due devono sempre fornire soluzioni \textbf{valide} per il problema che andiamo a risolvere. In realtà ciò che è interessante discutere riguarda quasi solamente la fase \textit{euristica} in quanto quella \textit{esatta} è in tutto e per tutto il classico metodo \textbf{Loop} già esposto in precedenza\footnote{Ciò che varia è solamente che il modello matematico iniziale dato in pasto alla fase \textit{esatta} presenta già dei vincoli di \textbf{subtour elimination} individuati dalla fase \textit{euristica} dove però il modello matematico di partenza presenta già alcuni vincoli di \textit{subtour elimination}.}.
-Esistono innumerevoli modi per rendere euristico il metodo \textbf{Loop}, possiamo suddividerli in tre grandi categorie: della prima fanno parte le tecniche che rendono la risoluzione stessa da parte di \textbf{CPLEX} euristica, nella seconda ricadono i metodi che introducono nuovi vincoli al modello matematico ed infine la terza categoria è una semplice combinazione delle due precedenti. All'interno del nostro progetto sono state sviluppate tre varianti della fase \textit{euristica}, una per ogni categoria appena esposta:
+Il metodo \hyperref[sec:MetodoLoopS]{LOOP} nella forma base presentata non garantisce sempre prestazioni accettabili, soprattutto per istanze \textit{TSP} complesse. Trascorso un certo numero di iterazione si corre il rischio di dover risolvere modelli matematici con un numero di vincoli così alto da rallentare eccessivamente l'intero processo. Nelle applicazioni reali questa situazione non è spesso accettabile in quanto sono richiesti tempi di esecuzione molto ridotti.
+
+In alternativa, sono nati nel corso degli anni diversi gli algoritmi \textbf{euristici} i quali, grazie alla rinuncia di un risultato ottimo garantito, offrono tecniche risolutive molto veloci.
+
+Nulla vieta che tali tecniche siano anche implementate in alcune specifiche fasi di algoritmi \textbf{esatti} così da poter sfruttare le migliori proprietà di entrambi. Nel \textit{LOOP}, ad esempio, si può pensare di introdurre una fase iniziale che produca velocemente vincoli di \textit{subtour elimination} \textbf{utili} per il l'algoritmo classico.
+Esistono innumerevoli modi per implementare questa idea, segue una descrizione di quelli utilizzati:
 
 \begin{itemize}
-    \item \textbf{prima categoria}: durante la risoluzione del problema attraverso la tecnica del \textbf{Branch\&Cut}, CPLEX, oltre al banale calcolo della soluzione ottima per ogni nodo dell'albero decisionale, sfrutta internamente algoritmi euristici per agevolare il processo. Durante quest'ultimo si hanno quindi a disposizione due parametri, il primo è il costo della soluzione euristica migliore (\textbf{$C_{eu}$}), mentre il secondo è il classico costo \textbf{lower bound}\footnote{Nel nostro caso sarà il costo della migliore soluzione intera trovato.} (\textbf{$L_{b}$}). \'E importate far notare che questi valori mutano mano a mano che si procede alla costruzione dell'albero decisione, in particolare \textbf{$C_{eu}$} cresce mentre \textbf{$L_{b}$} scende fino a che, teoricamente, non coincidano.
-    La distanza \textbf{relativa} tra i due valori viene costantemente monitorata da CPLEX e, se questa scende sotto la soglia minima del suo parametro interno \textbf{EpGap}, il processo di risoluzione viene considerato terminato e la miglior soluzione valida trovata viene restituita. Maggiori dettagli riguarda \textit{EpGap} sono forniti nel paragrafo ad esso dedicato LINK!!!!!!!, per ora ci basta dire che se di default è settato ad un valore vicino allo $0$, la sua variazione è proprio ciò che viene utilizzato nel nostro programma all'interno della fase \textit{euristica} del metodo \textit{Loop}.
-    Risulta estremamente intuitivo e facilmente verificabile che per una specifica istanza non è possibile a priori determinare quanto velocemente verrà raggiunto un certo gap durante la fase di \textit{Branch\&Cut}. E\' quindi consigliabile eseguire inizialmente il normale metodo \textbf{Loop}, analizzare l'output fornito da CPLEX durante la risoluzione ed osservare per quale gap soluzioni successive dell'albero decisionale non producono più miglioramenti sostanziali e\\o richiedono tempi di esecuzione eccessivi. Per quanto detto il valore di \textbf{EpGap} viene lasciato a discrezione dell'utente;
-    \item \textbf{seconda categoria}: come precedentemente indicato ad inizio paragrafo, i tempi di risoluzione risultano esponenziali rispetto al numero di variabili che caratterizzano il problema in questione. Limitarne il numero ha pertanto un impatto notevole nella risoluzione del modello matematico ed a tale scopo è possibile decidere di settare a priori il valore assunto da alcune variabili. Tanto migliore risulta essere la previsione così introdotta, migliori saranno i tempi di risoluzione ottenibili sia per la fase \textit{euristica} che quella \textit{esatta} del metodo \textit{Loop}. La scelta da noi effettuata è di lasciare selezionabili per ogni nodo gli $m$ collegamenti a costo minore che lo vedono come un loro vertice. Il numero $m$ è lasciato selezionabile dall'utente e da risultati sperimentali non è consigliabile che si discosti troppo dal valore $10$;
-    \item \textbf{terza categoria}: vengono semplicemente combinate le due precedenti;
+    \item \textbf{CPLEX}, durante la risoluzione del modello matematico attraverso la tecnica del \textbf{Branch\&Cut}, tiene sempre aggiornati due parametri fondamentali. Il primo, detto \textbf{lower bound}, è il miglior \textit{obbiettivo} che i restanti nodi da analizzare possono aspirare di raggiungere (non viene mai abbassato). Il secondo, detto valore \textbf{incumbent}, è il costo della miglior soluzione \textbf{intera} trovata (non viene mai alzato).
+    
+    Di default, al coincidere\footnote{In realtà il valore di default è pari ad una distanza relativa dello $0.01\%$.} di questi due valori \textbf{Cplex} termina il processo risolutivo in quanto l'ottimo globale è stato identificato. \'E altresì possibile specificare diversamente, imponendo un arresto prematuro al raggiungimento di una certa distanza relativa tra \textit{lower bound} e \textit{incumbent}.
+    
+    Il parametro in questione prende il nome di \textbf{EpGap} e può assumere qualsiasi valore compreso tra $0$->$0\%$ ed $1$->$100\%$. Durante la prima fase euristica del metodo \textit{LOOP} si può quindi pensare di variare tale parametro fino al raggiungimento della soluzione ottima in queste condizioni;
+    \item Come indicato ad inizio paragrafo, i tempi di risoluzione del metodo \textit{LOOP}, come per tutti gli algoritmi, hanno una forte dipendenza dalla istanza analizzata. Anche se una analisi a priori non può fornire indicazioni precise, più il numero di lati che compongono il grafo connesso è alto più complessa tende a diventare la risoluzione dell'istanza.
+    
+    Limitarne il numero ha pertanto un impatto notevole in tal senso ed è possibile farlo settando a priori il valore assunto da alcune variabili del modello matematico. Tanto migliore risulta essere la \textit{previsione} così introdotta, migliori saranno i tempi di risoluzione richiesti.
+    
+    L'approccio proposto prevede che per ogni nodo si lascino \textit{attivi} solamente gli $m$ lati a costo minore che vi incidono. Non esiste un valore migliore in assoluto per la quantità $m$ ed in alcuni casi, se settato troppo basso, può rendere il modello matematico \textbf{privo} di alcuna soluzione;
+    \item Una semplice utilizzo congiunto delle precedenti;
 \end{itemize}
 
-Nei due paragrafi successivi vengono mostrati alcuni dettagli, tra cui quelli realizzativi, per l'utilizzo delle varianti euristiche esposte del metodo \textbf{Loop}.
+Si specifica che in genere una tecnica euristica necessita di uno specifico \textbf{tuning} in base all'istanza su cui viene applicata in modo tale da rendere al meglio delle proprie possibilità. Pertanto sia il valore di \textbf{EpGap} che di \textbf{m} vengono lasciati settabili dall'utente.
 
-\subsection*{EpGap}
+Ottenuta la soluzione ottima della fase euristica, è necessario utilizzare il classico algoritmo \textit{LOOP} \textbf{esatto} mantenendo però validi i vincoli di \textit{subtour elimination} trovati in precedenza: il valore di \textbf{EpGap} viene riportato a $1e^{-04}$ oppure tutti i lati del grafo sono riabilitati.\\
 
-EpGap risulta essere un parametro interno di CPLEX, il cui valore di default è $1e^{-06}$. Indicando con \textbf{bestnode} il miglior valore della funzione obiettivo calcolata ad un nodo dell'albero decisionale attraverso metodi euristici propri di CPLEX, e con \textbf{bestInteger} il costo della miglior soluzione intera trovata fino a quel momento, ossia il costo dell'incumbent, qualora la seguente quantità:
+Nei successivi paragrafi, \hyperref[sec:EpGapS]{EpGap} e \hyperref[sec:MetodoBuildModelS]{Metodo BuildModel}, vengono esposti i dettagli algoritmici per la realizzazione delle due fasi euristiche proposte.
 
-$$|bestNode - bestInteger|/(1e-10 + |bestInteger|)$$
+\subsection*{EPGAP}
+\label{sec:EpGapS}
 
-risulti inferiore ad \textit{EpGap} il solver si arresta.
+Indicando con \textbf{lb} e \textbf{bestInteger} rispettivamente il \textbf{lower bound} ed il costo \textbf{incumbent} discussi nel paragrafo precedente durante l'introduzione del parametro di \textit{Cplex} \textbf{EpGap}, la formula:
 
-Il settaggio del parametro in questione è molto semplice, è sufficiente invocare il metodo \textbf{SetParam} sull'oggetto della classe \textbf{CPLEX} che si sta utilizzando come riportato di seguito:
+\begin{eqnarray}
+&\displaystyle|bestNode - bestInteger|/(1e-10 + |bestInteger|)
+\end{eqnarray}
+
+determina il valore che deve scendere sotto la soglia di \textit{EpGap} per terminare la risoluzione del modello matematico.
+
+Il settaggio di \textbf{EpGap}, che si ricorda poter assumere qualsiasi valore compreso tra $0$->$0\%$ ed $1$->$100\%$, risulta molto semplice: è sufficiente invocare il metodo \textbf{SetParam} sull'oggetto della classe \textbf{Cplex} su cui è definito il modello matematico da risolvere:
 
 \begin{lstlisting}
 
+//newValue è un valore double compreso tra 0 ed 1 (inclusi)
 cplex.SetParam(CPLEX.DoubleParam.EpGap, newValue);
 
 \end{lstlisting}
 
-Essendo \textit{EpGap} un valore di distanza \textbf{relativo} e non \textbf{assoluto}, la variabile \textbf{newValue} deve essere compresa tra i valori $0$\footnote{La risoluzione termina fornendo sempre la soluzione ottima.} e $1$\footnote{La risoluzione termina alla prima soluzione ammissibile individuata.}.
+\subsection*{METODO BUILDMODEL}
+\label{sec:MetodoBuildModelS}
 
-Completato il settaggio di \textit{EpGap} è sufficiente procedere con il normale metodo risolutivo \textbf{Loop}. Al termine di quest'ultimo otteniamo una soluzione euristica ma soprattutto un insieme di vincoli di \textit{subtour elimination}. Entriamo quindi nella fase \textit{esatta} dell'algoritmo riportando al valore di default \textit{EpGap} e ripetiamo il metodo risolutivo \textbf{Loop} sul modello matematico originale ampliato dai nuovi vincoli appena citati.
+Nel paragrafo \hyperref[sec:ModelloCSS]{Modello Matematico: Linguaggio C\#}, è stato presentato il metodo \textbf{BuildModel} della classe \textbf{Utility} il cui compito è di creare il modello matematico, privo dei vincoli di \textit{subtour elimination}, risolubile da CPLEX.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{Immagini/"InterfacciaGrafica".jpg}
-    \caption{Output}
-\end{figure}
+Veniva lasciato in sospeso il parametro \textit{nEdges}, questo corrisponde esattamente al valore $m$, descritto in \hyperref[sec:LoopEuristicoS]{Metodo LOOP Con Prima Fase Euristica}, e quindi per ogni nodo quanti dei lati meno costosi ed in esso incidenti siano da lasciare abilitati nel modello matematico.
 
-\subsection*{TITOLO DA CAMBIARE}
-\label{sec:TitoloS}
+A livello implementativo, per rendere inutilizzabili certi collegamenti è sufficiente non inserirli nel modello matematico oppure farlo ma fissandone sia il \textbf{lower} che l'\textbf{upper bound} a \textbf{0}. Quest'ultima opzione è quella più comoda da utilizzare in quanto, terminata la fase euristica, tutti i lati devono essere abilitati per procedere e quindi basta riportare gli \textbf{upper bound} al valore \textbf{1}.
 
-Nel paragrafo LINK!!!!!!!!!!!!!!!, è stato presentato il metodo \textbf{BuildModel} della classe \textbf{Utility} il cui compito è di creare il modello matematico, privo dei vincoli di subtour elimination, risolubile da CPLEX. Durante la presentazione della sua firma, era stato lasciato in sospeso l'utilizzo del parametro \textit{nEdges} in quanto allora del tutto prematura.
+Diversi algoritmi che verranno presentati nel corso della tesi necessitano di conoscere per ogni nodo l'ordinamento \textbf{completo} dei lati in esso incidenti basato sul loro costo. La funzione \textbf{OrderEdgesComplete} presentata all'interno dell'appendice \hyperref[sec:OrderEdgesComplete]{Metodo OrderEdgesComplete} serve a tale scopo.
 
-Come specificato nel paragrafo LINK!!!!!!!!!! una variante euristica del metodo \textbf{Loop}, prevede di utilizzare solamente un numero massimo $m$ di lati incidenti in ogni nodo del problema in questione del commesso viaggiatore. Tale parametro è inoltre richiesto all'utente per i motivi già specificati e viene comunicato al metodo \textbf{BuildModel} proprio grazie alla variabile di ingresso \textbf{nEdges}\footnote{Come dettaglio implementativo specifichiamo inoltre che per convenzione si è deciso di settare $nEdges = -1$ nel caso in cui si voglia coistruire un modello con tutti i lati possibili abilitati}.
+Questo metodo sfrutta algoritmi di ordinamento estremamente ottimizzati forniti direttamente dall'almbiente di sviluppo, considerando inoltre che la sua invocazione è necessaria una unica volta, può, e viene, utilizzato anche per trovare gli $m$ lati sopra citati sono inficiare in modo sensibile le prestazioni di \textbf{Build Model}.
 
-A livello implementativo, per rendere inutilizzabili certi collegamenti, è sufficiente non inserirli nel modello matematico oppure farlo ma fissandone sia il \textbf{lower} che l'\textbf{upper bound} a 0. Quest'ultima opzione è quella più comoda da utilizzare in quanto nella successiva fase \textit{esatta} dell'algoritmo il modello matematico deve comunque aver disponibili al suo interno tutte le variabili.
+\textbf{OrderEdgesComplete} restituisce una \textbf{lista di vettori di interi}, \textbf{listArray}, in cui l'$i-esimo$ elemento contiene, rispetto al nodo con indice di memorizzazione $i$, una sequenza dei restanti $n-1$ vertici basata sulla loro distanza crescente. In altre parole i lati il cui \textbf{upper bound} deve essere posto pari ad $1$ sono i soli individuabili dagli estremi
 
-L'individuazione algoritmica di quali collegamenti debbano essere abilitati risulta l'operazione più complessa da un punto di vista computazionale. Come vedremo nel corso di questa tesi, diversi algoritmi necessitano di conoscere per ogni nodo l'ordinamento completo dei lati ad esso incidenti basato sul loro costo e per tanto si è definita una unica funzione \textbf{BuildSL} adibita a tale scopo\footnote{In realtà il costo computazionale per trovare gli $m$ lati meno costosi incidenti in un nodo, ripetuto per tutti gli $n$ nodi disponibili, è il medesimo del metodo \textit{BuildSL} e quindi l'utilizzo di quest'ultimo non porta alcuno svantaggio.}.
-
-I dettagli riguardanti al metodo \textbf{BuildSL} sono riportati al seguente paragrafo della appendice LINK!!!!!!!!!!!!!!!, in questo contesto ci basta indicare che essa restituisce una lista di vettori di interi, chiamata \textbf{listArray}, in cui $i-esimo$ elemento contiene, in ordine crescente, la sequenza dei restanti $n-1$ vertici basandosi sulla loro distanza rispetto al nodo $i$. In altre parole, una volta invocato \textit{BuildSL}, i lati il cui \textbf{upper bound} deve essere posto pari ad $1$ sono individuabili dagli estremi $[0,(listArray[0])[0]], [0,(listArray[0])[1]], ..., [0,(listArray[0])[m]], ..., [i,(listArray[i])[0]], ..., [i,(listArray[i])[m]], ..., [n-1,(listArray[n-1])[0]], ..., [n-1,(listArray[n-1])[m]]$.
+\begin{center}
+$[0,(listArray[0])[0]], [0,(listArray[0])[1]], ..., [0,(listArray[0])[m]]$\\
+...\\
+$[i,(listArray[i])[0]], ..., [i,(listArray[i])[m]]$\\
+...\\
+$[n-1,(listArray[n-1])[0]], ..., [n-1,(listArray[n-1])[m]]$
+\end{center}
 
 Di seguito è riportato per completezza il codice all'interno della funzione \textbf{BuildModel} che nel caso di $nEdges \geqslant 1$ sfrutta le informazioni presenti in \textit{listArray} per il settaggio delle variabili del modello matematico:
 
 \begin{lstlisting}
 
+/*
+* Ogni nodo del grafo determina un proprio vincolo
+* che coinvolge tutti i lati in esso incidenti
+*/
+for (int i = 0; i < instance.nNodes; i++)
+{
+    for (int j = 0; j < instance.nNodes; j++)
+    {
+        /*
+        * L'espressione è la semplice somma di tutti i lati
+        * incidenti nel nodo quindi tutti quelli del tipo
+        * x(i+1,..) oppure x(..,i+1) validi
+        */
+        if (i != j)
+        expr.AddTerm(x[xPos(i, j, instance.nNodes)], 1);
+    }
+    
+    //Aggiunta del vincolo al modello
+    cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
+}
+
 if (nEdges > 0)
 {
-    List<int>[] listArray = BuildSLComplete(instance);
+    List<int>[] listArray = OrderEdgesComplete(instance);
 
     for (int i = 0; i < instance.NNodes; i++)
     {
@@ -1558,35 +1595,121 @@ if (nEdges > 0)
 
 \end{lstlisting}
 
-Dove chiaramente in precedenza era stato necessario inizializzare tutte le variabili contenute in \textbf{x} come:
+La porzione di codice precedente viene inserita tra la fase di creazione delle variabili del modello matematico (vettore \textbf{x}) e la definizione dei vincoli indicate nel paragrafo \hyperref[sec:ModelloCSS]{Modello Matematico: Linguaggio C\#}.
+
+In realtà anche la creazione delle variabili deve tenere conto di \textbf{nEdges} nel seguente modo:
 
 \begin{lstlisting}
 
-ILinearNumExpr expr = cplex.LinearNumExpr();
+if (nEdges > 0)
+    x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+else
+    x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+    
+\end{lstlisting}
 
+Combinando quindi quanto detto nel paragrafo \hyperref[sec:ModelloCSS]{Modello Matematico: Linguaggio C\#} e le informazioni qui fornite, il metodo \textbf{BuildModel} completo risulta essere:
 
-//Populating objective function
-for (int i = 0; i < instance.NNodes; i++)
+\begin{lstlisting}
+
+public static INumVar[] BuildModel(Cplex cplex, Instance instance, int nEdges)
 {
-    for (int j = i + 1; j < instance.NNodes; j++)
+    //Il vettore contenente tutte le variabili viene creato
+    INumVar[] x = new INumVar[(instance.nNodes - 1) * instance.nNodes / 2];
+    
+    //La variabili su cui viene definita una espressione lineare
+    ILinearNumExpr expr = cplex.LinearNumExpr();
+    
+    //Solamente i lati delimitati dai noi (i,j) per cui i < j sono considerati
+    for (int i = 0; i < instance.nNodes; i++)
     {
-        ////xPos return the correct position where to store the variable corresponding to the actual link (i,i)
-        int position = xPos(i, j, instance.NNodes);
-
-        if (nEdges > 0)
-            x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
-        else
-            ...
-
-        expr.AddTerm(x[position], Point.Distance(instance.Coord[i], instance.Coord[j], instance.EdgeType));
+        for (int j = i + 1; j < instance.nNodes; j++)
+        {
+            /*
+            * La funzione xPos determina il corretto indice
+            * da utilizzare per identificare il lato x(i+1, j+1)
+            * all'interno del vettore di variabili x
+            */
+            int position = xPos(i, j, instance.nNodes);
+            
+            /*
+            * Creazione della variabile.
+            * Se necessario attivarne solo un numero limitato
+            * vengono tutte create inizialmente anche con 
+            * l'upper buond pari a 0
+            */
+            if (nEdges > 0)
+                x[position] = cplex.NumVar(0, 0, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+            else
+                x[position] = cplex.NumVar(0, 1, NumVarType.Bool, "x(" + (i + 1) + "," + (j + 1) + ")");
+                
+            /*
+            * Aggiunta del termine relativo al lato x(i+1, j+1)
+            * ad expr, per la funzione obiettivo il coefficiente
+            * è equivalente al costo del lato in questione
+            */
+            expr.AddTerm(x[position], Point.Distance(instance.coord[i], instance.coord[j], instance.edgeType));
         }
     }
+    
+    //Setting the optimality's function
+    cplex.AddMinimize(expr);
+    
+    /*
+    * Eventuale attivazione per tutti i nodi
+    * dei soli (nEdges) lati meno costosi
+    * ivi incidenti
+    */
+    if (nEdges > 0)
+    {
+        List<int>[] listArray = OrderEdgesComplete(instance);
+        
+        for (int i = 0; i < instance.nNodes; i++)
+        {
+            for (int j = 0; j < nEdges; j++)
+            {
+                int position = xPos(i, listArray[i][j], instance.nNodes);
+                
+                x[position].UB = 1;
+            }
+        }
+    }
+    
+    /*
+    * Ogni nodo del grafo determina un proprio vincolo
+    * che coinvolge tutti i lati in esso incidenti
+    */
+    for (int i = 0; i < instance.nNodes; i++)
+    {
+        //Reset di expr
+        expr = cplex.LinearNumExpr();
+        
+        for (int j = 0; j < instance.nNodes; j++)
+        {
+            /*
+            * L'espressione è la semplice somma di tutti i lati
+            * incidenti nel nodo quindi tutti quelli del tipo
+            * x(i+1,..) oppure x(..,i+1) validi
+            */
+            if (i != j)
+                expr.AddTerm(x[xPos(i, j, instance.nNodes)], 1);
+        }
+        
+        //Aggiunta del vincolo al modello
+        cplex.AddEq(expr, 2, "degree(" + (i + 1) + ")");
+    }
+    
+    //Eventuale esportazione del modello matematico
+    if (Program.VERBOSE >= 9)
+        cplex.ExportModel(instance.inputFile + ".lp");
+    
+    //Il riferimento al vettore delle variabili x viene restituito
+    return x;
 }
 
 \end{lstlisting}
 
-Terminata la costruzione del modello matematico si procede alla sua risoluzione attraverso il classico metodo \textbf{Loop}. Al suo termine, otteniamo una soluzione euristica e soprattutto una lista di vincoli di \textit{subtour elimination}. Per passare alla risoluzione esatta del problema in analisi, manteniamo questi ultimi e settiamo l'\textbf{upper bound} di ogni variabile ad $1$. Questa ultima operazione è ottenibile invocando il metdo \textbf{ResetVariables} appartenente alla classe Utility:
-
+Terminata la fase euristica, prima di riapplicare il metodo \textbf{LOOP} sul modello matematico non privato dei vincoli di \textit{subtour elimination} trovati, è necessario riabilitare tutte le variabili. Questa operazione è eseguita dal metodo \textbf{ResetVariables}:
 
 \begin{lstlisting}
 
@@ -3985,6 +4108,9 @@ else
 \end{lstlisting}
 
 Ripetere il metodo \textbf{UpdateCC} una ed una sola volta per ogni lato appartenente alla soluzione corrente assicura che le due liste \textbf{rcExpr} e \textbf{bufferCoeffRC} contengano tutti i dati per formulare i vincoli di \textit{subtour elimination} ricercati.
+
+\subsection*{METODO ORDEREDGESCOMPLETE}
+\label{sec:OrderEdgesComplete}
 
 \subsection*{METODO MODIFYMODEL}
 \label{sec:ModifyModelS}

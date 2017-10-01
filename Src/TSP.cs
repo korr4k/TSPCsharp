@@ -481,7 +481,7 @@ namespace TSPCsharp
             PathStandard incumbentSol = new PathStandard();
             PathStandard heuristicSol;
             int typeSol = 0;
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
 
             do
             {
@@ -507,7 +507,7 @@ namespace TSPCsharp
         static void TabuSearch(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
         {
             int typeSol = 0;
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
             PathStandard incumbentSol;
             PathStandard solHeuristic = Utility.NearestNeighbour(instance, rnd, listArray);
             incumbentSol = (PathStandard)solHeuristic.Clone();
@@ -528,7 +528,7 @@ namespace TSPCsharp
         static void VNS(Instance instance, Process process, Random rnd, Stopwatch clock, string choice)
         {
             int typeSol = 0;
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
             PathStandard incumbentSol;
             PathStandard solHeuristic = Utility.NearestNeighbour(instance, rnd, listArray);
             incumbentSol = (PathStandard)solHeuristic.Clone();
@@ -564,7 +564,7 @@ namespace TSPCsharp
             List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
             List<PathGenetic> ChildPoulation = new List<PathGenetic>();
 
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
 
             //Generate the first population
             for (int i = 0; i < sizePopulation; i++)
@@ -813,7 +813,7 @@ namespace TSPCsharp
             StreamWriter file;
             double[] incumbentSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
             double incumbentCost = Double.MaxValue;
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
 
             List<int[]> fixedVariables = new List<int[]>();
 
@@ -931,7 +931,7 @@ namespace TSPCsharp
             IRange cut;
             double[] incumbentSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
             double incumbentCost = double.MaxValue;
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
 
             instance.bestSol = new double[(instance.nNodes - 1) * instance.nNodes / 2];
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);//Costruisco il modello la prima volta
@@ -1029,7 +1029,7 @@ namespace TSPCsharp
             List<PathGenetic> OriginallyPopulated = new List<PathGenetic>();
             List<PathGenetic> ChildPoulation = new List<PathGenetic>();
 
-            List<int>[] listArray = Utility.BuildSLComplete(instance);
+            List<int>[] listArray = Utility.OrderEdgesComplete(instance);
 
             INumVar[] x = Utility.BuildModel(cplex, instance, -1);
 
