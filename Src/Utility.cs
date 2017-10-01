@@ -146,7 +146,8 @@ namespace TSPCsharp
                     process.StandardInput.WriteLine("set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
                 else if (typeSol == 1)
                     process.StandardInput.WriteLine("set style line 1 lc rgb '#ad0000' lt 1 lw 1 pt 5 ps 0.5\nset title \"Current best solution: " + incumbentCost + "   Current solution: " + currentCost + "\"\nplot '" + name + ".dat' with linespoints ls 1 notitle, '" + name + ".dat' using 1:2:3 with labels point pt 7 offset char 0,0.5 notitle\nset autoscale");
-            }else
+            }
+            else
             {
                 //typeSol == 1 => red lines, TypeSol == 0 => blue Lines
                 if (typeSol == 0)
@@ -178,51 +179,85 @@ namespace TSPCsharp
         //Updating the related components
         public static void UpdateCC(Cplex cplex, INumVar[] x, List<ILinearNumExpr> rcExpr, List<int> bufferCoeffRC, int[] relatedComponents, int i, int j)
         {
-            if (relatedComponents[i] != relatedComponents[j])//Same related component, the latter is not closed yet
+            if (relatedComponents[i] != relatedComponents[j])
             {
+                //Scansione della componente connesse di ogni nodo
                 for (int k = 0; k < relatedComponents.Length; k++)
                 {
+                    /*
+                    * Eccetto per il nodo j che per questione algoritmica
+                    * viene aggiornato per ultimo, tutti gli altri facenti
+                    * parte della sua stessa componente connessa
+                    * vengono trasferiti in quella del nodo i
+                    */
                     if ((k != j) && (relatedComponents[k] == relatedComponents[j]))
                     {
-                        //Same as Kruskal
                         relatedComponents[k] = relatedComponents[i];
                     }
                 }
-                //Finally also the vallue relative to the Point i are updated
+                //Infine anche la componente connessa relativa al nodo j è modificata
                 relatedComponents[j] = relatedComponents[i];
             }
-            else//Here the current releted component is complete and the relative subtout elimination constraint can be added to the model
+            else
             {
+                //Una nuova espressione deve essere definita
                 ILinearNumExpr expr = cplex.LinearNumExpr();
 
-                //cnt stores the # of nodes of the current related components
+                //cnt memorizza quanti lati fanno parte del subtour trovato
                 int cnt = 0;
 
+                //Ogni nodo viene analizzato
                 for (int h = 0; h < relatedComponents.Length; h++)
                 {
-                    //Only nodes of the current related components are considered
+                    /*
+                    * Solo i nodi la relativa componente connessa
+                    * è pari a quella che corrisponde ad un subtour
+                    * proseguono nella analisi
+                    */
                     if (relatedComponents[h] == relatedComponents[i])
                     {
-                        //Each link involving the node with index h is analized
+                        /*
+                        * Nel nodo di indice h incidono due lati facenti
+                        * parte della attuale soluzione, per costruzione
+                        * del tipo x(v,h) e x(h,w) con v<h<w e stesse
+                        * componenti connesse di appartenenza.
+                        * Grazie ad una analisi crescente degli indici
+                        * dei nodi, è sufficiente cercare w ed aggiungere 
+                        * x(h,w) ad expr in quanto il lato x(v,h) 
+                        * è già stato aggiunto ad expr durante la
+                        * v-esima iterazione del ciclo for
+                        */
                         for (int k = h + 1; k < relatedComponents.Length; k++)
                         {
-                            //Testing if the link is valid
+                            //Cerco il nodo w menzionato
                             if (relatedComponents[k] == relatedComponents[i])
                             {
-                                //Adding the link to the expression with coefficient 1
+                                /*
+                                * Il lato x(h,w) menzionato viene così
+                                * aggiunto ad expr con coefficiente uno
+                                * secondo la struttura dei vincoli di
+                                * subtour elimination
+                                */
                                 expr.AddTerm(x[xPos(h, k, relatedComponents.Length)], 1);
                             }
                         }
-
+                        /*
+                        * Ad ogni clausola if vera un lato viene
+                        * aggiunto ad expr
+                        */
                         cnt++;
                     }
                 }
-
-                //Adding the objects to the buffers
+                /*
+                * L'espressione definita ed il relativo numero di lati
+                * che sono coinvolti al suo interno sono memorizzati
+                * allo stesso indice all'interno dei rispettivi buffer
+                */
                 rcExpr.Add(expr);
                 bufferCoeffRC.Add(cnt);
             }
         }
+
 
 
         //--------------------------------------------HEURISTIC UTILITYES--------------------------------------------
@@ -286,7 +321,7 @@ namespace TSPCsharp
             int[] heuristicSolution = new int[instance.nNodes];
 
             //List that contains all nodes belonging to the graph 
-            List<int> availableNodes = new List<int>(); 
+            List<int> availableNodes = new List<int>();
             int currenNode;
 
             //rndStartPoint define if the starting point is random or always the node 0 
@@ -297,7 +332,7 @@ namespace TSPCsharp
 
             heuristicSolution[0] = currenNode;
             availableNodes.Add(currenNode);
-            
+
             for (int i = 1; i < instance.nNodes; i++)
             {
                 bool found = false;
@@ -309,7 +344,7 @@ namespace TSPCsharp
                     //We control that the selected node has never been visited
                     if (availableNodes.Contains(nextNode) == false)
                     {
-                        heuristicSolution[i] = nextNode;                     
+                        heuristicSolution[i] = nextNode;
                         availableNodes.Add(nextNode);
                         currenNode = nextNode;
                         found = true;
@@ -396,7 +431,7 @@ namespace TSPCsharp
                 return 3;
         }
 
-        public static void PrintHeuristicSolution(Instance instance, Process process,  PathStandard pathG, double incumbentCost, int typeSol)
+        public static void PrintHeuristicSolution(Instance instance, Process process, PathStandard pathG, double incumbentCost, int typeSol)
         {
 
             //Init the StreamWriter for the current solution
@@ -424,7 +459,7 @@ namespace TSPCsharp
             //Accessing GNUPlot to read the file
             if (Program.VERBOSE >= -1)
             {
-                if(pathG.cost != incumbentCost)
+                if (pathG.cost != incumbentCost)
                     PrintGNUPlot(process, instance.inputFile, typeSol, pathG.cost, incumbentCost);
                 else
                     PrintGNUPlot(process, instance.inputFile, typeSol, pathG.cost, -1);
@@ -450,12 +485,12 @@ namespace TSPCsharp
 
             //With a probability of 0.01 we make a mutation
             if (rnd.Next(0, 101) == 100)
-                Mutation(instance, rnd, pathChild);              
+                Mutation(instance, rnd, pathChild);
 
             //The repair method ensures that the child is a permissible path
             child = Repair(instance, pathChild, listArray);
 
-            
+
             if (ProbabilityTwoOpt(instance, rnd) == 1)
             {
                 child.path = InterfaceForTwoOpt(child.path);
@@ -594,9 +629,9 @@ namespace TSPCsharp
             int[] pathComplete = new int[instance.nNodes];
 
             for (int i = 0; i < instance.nNodes; i++)
-            {              
+            {
                 if (pathIncomplete.Contains(pathChild[i]) == false)
-                    pathIncomplete.Add(pathChild[i]);       
+                    pathIncomplete.Add(pathChild[i]);
             }
 
             int positionInsertNode = 0;
