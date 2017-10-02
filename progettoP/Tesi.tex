@@ -3962,6 +3962,12 @@ return child;
 \subsection*{CLASEE STOPWATCH}
 \label{sec:StopwatchS}
 
+La classe \textbf{Stopwatch}, appartenente alla libreria \textbf{.NET Framework}, mette a disposizione del programmatore metodi e variabili che consentono di misurare il tempo trascorso in uno o più intervalli di tempo. Ai fini della tesi, sono stati utilizzati i metodi non statici \textbf{Start()} e \emph{Stop()} e la proprietà \textbf{ElapsedMilliseconds} di tipo long.
+
+I metodi sopra citati, come facilmente intuibile, definiscono rispettivamente l'\textbf{istante} in cui la misurazione viene avviata e quello in cui viene arrestata. La proprietà determina invece la quantità di tempo trascorsa, espressa in \textbf{millisecondi}, dall' invocazione del metodo Start().
+
+\'E fondamentale far notale che se all'interno di un certo thread \textbf{A} si esegue \textbf{Start()}, \textbf{nessuna} operazione successiva, che tolga o meno il focus ad \textbf{A} (avvio di altri threads, invocazione di metodi che interagiscono con librerie esterne..), compromette la misurazione del cronometro. Questo infatti si basa sull'orologio di sistema della macchina, chiaramente non influenzabile dall'applicazione.
+
 \subsection*{GNUPLOT}
 \label{sec:GNUPlotS}
 
@@ -3970,6 +3976,59 @@ return child;
 
 \subsection*{METODO XPOS}
 \label{sec:XPos}
+
+La funzione \textbf{xPos} è realizzata per ottenere l'\textbf{indice} di memorizzazione di un generico \textbf{lato} all'interno di vettori e liste contenenti le \textbf{variabili} che li rappresentano. All'interno di \textit{xPos} è definita una apposita funzione matematica \textbf{F} che, dati gli indici di memorizzazione \textbf{i} e \textbf{j} ($0\leq i<j<n$) dei due nodi che delimitano il lato, restituisce un valore compreso tra $0$ e $((n - 1) * n / 2) - 1$, dove $n$ è il numero di nodi che compongono il grafo.
+
+Si pensi ad una matrice $M_{(n, n)}$ in cui l'elemento $a_{i,j}$ corrisponde alla variabile associata al lato delimitato dai nodi con indice di memorizzazione \textbf{i} e \textbf{j}. Solamente una porzione di $M$ è \textit{necessaria} in quanto $a_{i,j}$ è equivalente a $a_{j,i}$ ed $a_{i,i}$ rappresenta un \textit{cappio}. Nel complesso quindi degli $n^2$ elementi solamente $(n^2 - n)/2 \rightarrow (n - 1) * n / 2$ sono \textit{validi}.
+
+Immaginiamo di inserire questi ultimi in un vettore \textbf{v} ordinandoli secondo una visita \textit{row wise} della matrice, la funzione \textbf{F} deve restituire l'indice di memorizzazione in \textbf{v} secondo tale logica.
+
+Per quanto detto, seguendo una visita \textit{row wise} di \textbf{M}, giunti ad un qualsiasi elemento valido della \textbf{i-esima} riga, sono stati incontrati:
+
+\begin{eqnarray}
+\displaystyle\sum\limits_{k=0}^{i+1} k = \displaystyle\sum\limits_{k=0}^{i} k + (i+1)  = \displaystyle\frac{i(i+1)}{2} + (i+1) = \displaystyle\frac{(i+1)(i+2)}{2}
+\end{eqnarray}
+
+elementi \textbf{non validi}. Nel complesso \textbf{F} deve quindi essere:
+
+\begin{eqnarray}
+&\displaystyle F(i,j)=
+\begin{cases}
+\text{impossibile} & \text{se i = j}\\
+F(j,i) & \text{se i > j} \\
+i * n + j - (i + 1) * (i + 2) / 2 & \text{altrimenti}
+\end{cases}
+\end{eqnarray}
+
+Dove non sono considerati i casi di indici \textit{out of bound}\footnote{negativi o superiore ad $n-1$}.
+
+La versione algoritmica di \textbf{xPos} diventa quindi:
+
+\begin{lstlisting}
+public static int xPos(int i, int j, int nNodes)
+\end{lstlisting}
+
+Dove:
+
+\begin{itemize}
+    \item \textbf{i}: primo indice di memorizzazione del primo nodo su cui incide il lato;
+    \item \textbf{j}: secondo indice di memorizzazione del primo nodo su cui incide il lato;
+    \item \textbf{nNodes}: numero totale di nodi e quindi il numero di righe e colonne della matrice \textbf{M} descritta;
+\end{itemize}
+
+\begin{lstlisting}
+
+//-1 viene interpretato come errore
+if (i == j)
+    return -1;
+
+if (i > j)
+    return xPos(j, i, nNodes);
+
+
+return i * nNodes + j - (i + 1) * (i + 2) / 2;
+
+\end{lstlisting}
 
 \subsection*{METODI UPDATECC e INITCC}
 \label{sec:UCCICCS}

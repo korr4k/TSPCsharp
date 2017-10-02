@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.9.7)  1 OCT 2017 22:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6400) (preloaded format=pdflatex 2017.9.7)  2 OCT 2017 10:08
 entering extended mode
 **./Tesi.tex
 (Tesi.tex
@@ -1161,343 +1161,298 @@ Overfull \hbox (6.72556pt too wide) in paragraph at lines 3655--3656
  []
 
 [98] [99] [100] [101] [102] [103] [104] [105] [106] [107] [108] [109] [110]
-<Immagini/"circuitoF".jpg, id=2899, 376.40625pt x 285.4665pt>
+[111]
+<Immagini/"circuitoF".jpg, id=2908, 376.40625pt x 285.4665pt>
 File: Immagini/"circuitoF".jpg Graphic file (type jpg)
 <use Immagini/"circuitoF".jpg>
-Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 4233. on 
-input line 4233.
+Package pdftex.def Info: Immagini/"circuitoF".jpg  used on input line 4292. on 
+input line 4292.
 Package pdftex.def Info: Requested size: 469.75502pt x 356.28775pt on input lin
-e 4233.
-<Immagini/"circuitoH".jpeg, id=2900, 380.622pt x 284.86424pt>
+e 4292.
+<Immagini/"circuitoH".jpeg, id=2909, 380.622pt x 284.86424pt>
 File: Immagini/"circuitoH".jpeg Graphic file (type jpg)
 <use Immagini/"circuitoH".jpeg>
-Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 4239. on
- input line 4239.
+Package pdftex.def Info: Immagini/"circuitoH".jpeg  used on input line 4298. on
+ input line 4298.
 Package pdftex.def Info: Requested size: 469.75502pt x 351.59799pt on input lin
-e 4239.
-<Immagini/"circuitoC".jpg, id=2901, 377.61075pt x 284.262pt>
+e 4298.
+<Immagini/"circuitoC".jpg, id=2910, 377.61075pt x 284.262pt>
 File: Immagini/"circuitoC".jpg Graphic file (type jpg)
 <use Immagini/"circuitoC".jpg>
-Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 4245. on 
-input line 4245.
+Package pdftex.def Info: Immagini/"circuitoC".jpg  used on input line 4304. on 
+input line 4304.
 Package pdftex.def Info: Requested size: 469.75502pt x 353.63933pt on input lin
-e 4245.
+e 4304.
 
-[111 <./Immagini/circuitoF.jpg>] [112 <./Immagini/circuitoH.jpeg>] [113 <./Imma
-gini/circuitoC.jpg>]
-Overfull \hbox (3.73863pt too wide) in paragraph at lines 4262--4263
+Overfull \hbox (3.73863pt too wide) in paragraph at lines 4321--4322
 [][][][][][][][][][][][]  
  []
 
-[114] [115] [116] [117] [118] [119]
-<Immagini/"DiagrammaPolishing".png, id=3151, 571.13374pt x 834.11626pt>
+[112] [113 <./Immagini/circuitoF.jpg>] [114 <./Immagini/circuitoH.jpeg>]
+[115 <./Immagini/circuitoC.jpg>] [116] [117] [118] [119] [120]
+<Immagini/"DiagrammaPolishing".png, id=3157, 571.13374pt x 834.11626pt>
 File: Immagini/"DiagrammaPolishing".png Graphic file (type png)
 <use Immagini/"DiagrammaPolishing".png>
 Package pdftex.def Info: Immagini/"DiagrammaPolishing".png  used on input line 
-4551. on input line 4551.
+4610. on input line 4610.
 Package pdftex.def Info: Requested size: 571.13235pt x 834.11423pt on input lin
-e 4551.
- [120 <./Immagini/DiagrammaPolishing.png>]
-[121] [122]
-<Immagini/"Spec1".jpg, id=3255, 298.11375pt x 252.19218pt>
+e 4610.
+ [121] [122 <./Immagini/DiagrammaPolishing.png>]
+Overfull \vbox (0.27002pt too high) has occurred while \output is active []
+
+
+[123] [124]
+<Immagini/"Spec1".jpg, id=3274, 298.11375pt x 252.19218pt>
 File: Immagini/"Spec1".jpg Graphic file (type jpg)
 <use Immagini/"Spec1".jpg>
-Package pdftex.def Info: Immagini/"Spec1".jpg  used on input line 4671. on inpu
-t line 4671.
+Package pdftex.def Info: Immagini/"Spec1".jpg  used on input line 4730. on inpu
+t line 4730.
 Package pdftex.def Info: Requested size: 298.11302pt x 252.19156pt on input lin
-e 4671.
-<Immagini/"Spec2".jpg, id=3256, 298.11375pt x 252.19218pt>
+e 4730.
+<Immagini/"Spec2".jpg, id=3275, 298.11375pt x 252.19218pt>
 File: Immagini/"Spec2".jpg Graphic file (type jpg)
 <use Immagini/"Spec2".jpg>
-Package pdftex.def Info: Immagini/"Spec2".jpg  used on input line 4677. on inpu
-t line 4677.
+Package pdftex.def Info: Immagini/"Spec2".jpg  used on input line 4736. on inpu
+t line 4736.
 Package pdftex.def Info: Requested size: 298.11302pt x 252.19156pt on input lin
-e 4677.
-<Immagini/"Spec3".jpg, id=3257, 298.11375pt x 228.855pt>
+e 4736.
+<Immagini/"Spec3".jpg, id=3276, 298.11375pt x 228.855pt>
 File: Immagini/"Spec3".jpg Graphic file (type jpg)
 <use Immagini/"Spec3".jpg>
-Package pdftex.def Info: Immagini/"Spec3".jpg  used on input line 4683. on inpu
-t line 4683.
+Package pdftex.def Info: Immagini/"Spec3".jpg  used on input line 4742. on inpu
+t line 4742.
 Package pdftex.def Info: Requested size: 298.11302pt x 228.85443pt on input lin
-e 4683.
-<Immagini/"Spec4".jpg, id=3258, 298.11375pt x 233.37187pt>
+e 4742.
+<Immagini/"Spec4".jpg, id=3277, 298.11375pt x 233.37187pt>
 File: Immagini/"Spec4".jpg Graphic file (type jpg)
 <use Immagini/"Spec4".jpg>
-Package pdftex.def Info: Immagini/"Spec4".jpg  used on input line 4689. on inpu
-t line 4689.
+Package pdftex.def Info: Immagini/"Spec4".jpg  used on input line 4748. on inpu
+t line 4748.
 Package pdftex.def Info: Requested size: 298.11302pt x 233.37129pt on input lin
-e 4689.
- [123 <./Immagini/Spec1.jpg>] [124 <./Immagini/Spec2.jpg> <./Immagini/Spec3.jpg
->] [125 <./Immagini/Spec4.jpg>] [126]
-<Immagini/GRAFI_ESATTI/"berlin52".png, id=3306, 627.84563pt x 424.58624pt>
+e 4748.
+ [125] [126 <./Immagini/Spec1.jpg> <./Immagini/Spec2.jpg>] [127 <./Immagini/Spe
+c3.jpg> <./Immagini/Spec4.jpg>] [128]
+<Immagini/GRAFI_ESATTI/"berlin52".png, id=3332, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"berlin52".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"berlin52".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"berlin52".png  used on input li
-ne 4783. on input line 4783.
+ne 4842. on input line 4842.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4783.
+ 4842.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4783--4785
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4842--4844
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"st70".png, id=3307, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"st70".png, id=3333, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"st70".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"st70".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"st70".png  used on input line 4
-790. on input line 4790.
+849. on input line 4849.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4790.
+ 4849.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4790--4792
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4849--4851
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"eil76".png, id=3308, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"eil76".png, id=3334, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"eil76".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"eil76".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"eil76".png  used on input line 
-4797. on input line 4797.
+4856. on input line 4856.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4797.
+ 4856.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4797--4799
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4856--4858
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr76".png, id=3309, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr76".png, id=3335, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr76".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr76".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr76".png  used on input line 4
-804. on input line 4804.
+863. on input line 4863.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4804.
+ 4863.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4804--4806
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4863--4865
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"rat99".png, id=3310, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"rat99".png, id=3336, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"rat99".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"rat99".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat99".png  used on input line 
-4811. on input line 4811.
+4870. on input line 4870.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4811.
+ 4870.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4811--4813
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4870--4872
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroA100".png, id=3311, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroA100".png, id=3337, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroA100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroA100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA100".png  used on input lin
-e 4818. on input line 4818.
+e 4877. on input line 4877.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4818.
+ 4877.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4818--4820
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4877--4879
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroB100".png, id=3312, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroB100".png, id=3338, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroB100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroB100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB100".png  used on input lin
-e 4825. on input line 4825.
+e 4884. on input line 4884.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4825.
+ 4884.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4825--4827
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4884--4886
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroC100".png, id=3313, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroC100".png, id=3339, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroC100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroC100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroC100".png  used on input lin
-e 4832. on input line 4832.
+e 4891. on input line 4891.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4832.
+ 4891.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4832--4834
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4891--4893
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroD100".png, id=3314, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroD100".png, id=3340, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroD100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroD100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroD100".png  used on input lin
-e 4839. on input line 4839.
+e 4898. on input line 4898.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4839.
+ 4898.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4839--4841
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4898--4900
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroE100".png, id=3315, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroE100".png, id=3341, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroE100".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroE100".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroE100".png  used on input lin
-e 4846. on input line 4846.
+e 4905. on input line 4905.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4846.
+ 4905.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4846--4848
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4905--4907
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"eil101".png, id=3316, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"eil101".png, id=3342, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"eil101".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"eil101".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"eil101".png  used on input line
- 4853. on input line 4853.
+ 4912. on input line 4912.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4853.
+ 4912.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4853--4855
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4912--4914
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"lin105".png, id=3317, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"lin105".png, id=3343, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"lin105".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"lin105".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"lin105".png  used on input line
- 4860. on input line 4860.
+ 4919. on input line 4919.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4860.
+ 4919.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4860--4862
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4919--4921
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"bier127".png, id=3318, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"bier127".png, id=3344, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"bier127".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"bier127".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"bier127".png  used on input lin
-e 4867. on input line 4867.
+e 4926. on input line 4926.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4867.
+ 4926.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4867--4869
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4926--4928
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"ch130".png, id=3319, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"ch130".png, id=3345, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"ch130".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"ch130".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"ch130".png  used on input line 
-4874. on input line 4874.
+4933. on input line 4933.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4874.
+ 4933.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4874--4876
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4933--4935
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr144".png, id=3320, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr144".png, id=3346, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr144".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr144".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr144".png  used on input line 
-4881. on input line 4881.
+4940. on input line 4940.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4881.
+ 4940.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4881--4883
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4940--4942
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroA150".png, id=3321, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroA150".png, id=3347, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroA150".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroA150".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA150".png  used on input lin
-e 4888. on input line 4888.
+e 4947. on input line 4947.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4888.
+ 4947.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4888--4890
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4947--4949
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroB150".png, id=3322, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"kroB150".png, id=3348, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"kroB150".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"kroB150".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB150".png  used on input lin
-e 4895. on input line 4895.
+e 4954. on input line 4954.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4895.
+ 4954.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4895--4897
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4954--4956
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"ch150".png, id=3323, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"ch150".png, id=3349, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"ch150".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"ch150".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"ch150".png  used on input line 
-4902. on input line 4902.
+4961. on input line 4961.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4902.
+ 4961.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4902--4904
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 4961--4963
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr152".png, id=3324, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr152".png, id=3350, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr152".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr152".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr152".png  used on input line 
-4909. on input line 4909.
-Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4909.
-
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4909--4911
- [][] 
- []
-
-<Immagini/GRAFI_ESATTI/"u159".png, id=3325, 627.84563pt x 424.58624pt>
-File: Immagini/GRAFI_ESATTI/"u159".png Graphic file (type png)
-<use Immagini/GRAFI_ESATTI/"u159".png>
-Package pdftex.def Info: Immagini/GRAFI_ESATTI/"u159".png  used on input line 4
-916. on input line 4916.
-Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4916.
-
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4916--4918
- [][] 
- []
-
-<Immagini/GRAFI_ESATTI/"rat195".png, id=3326, 627.84563pt x 424.58624pt>
-File: Immagini/GRAFI_ESATTI/"rat195".png Graphic file (type png)
-<use Immagini/GRAFI_ESATTI/"rat195".png>
-Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat195".png  used on input line
- 4923. on input line 4923.
-Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4923.
-
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4923--4925
- [][] 
- []
-
-[127] [128 <./Immagini/GRAFI_ESATTI/berlin52.png>] [129 <./Immagini/GRAFI_ESATT
-I/st70.png>] [130 <./Immagini/GRAFI_ESATTI/eil76.png>] [131 <./Immagini/GRAFI_E
-SATTI/pr76.png>] [132 <./Immagini/GRAFI_ESATTI/rat99.png>] [133 <./Immagini/GRA
-FI_ESATTI/kroA100.png>] [134 <./Immagini/GRAFI_ESATTI/kroB100.png>] [135 <./Imm
-agini/GRAFI_ESATTI/kroC100.png>] [136 <./Immagini/GRAFI_ESATTI/kroD100.png>]
-[137 <./Immagini/GRAFI_ESATTI/kroE100.png>] [138 <./Immagini/GRAFI_ESATTI/eil10
-1.png>] [139 <./Immagini/GRAFI_ESATTI/lin105.png>] [140 <./Immagini/GRAFI_ESATT
-I/bier127.png>] [141 <./Immagini/GRAFI_ESATTI/ch130.png>] [142 <./Immagini/GRAF
-I_ESATTI/pr144.png>] [143 <./Immagini/GRAFI_ESATTI/kroA150.png>] [144 <./Immagi
-ni/GRAFI_ESATTI/kroB150.png>] [145 <./Immagini/GRAFI_ESATTI/ch150.png>]
-[146 <./Immagini/GRAFI_ESATTI/pr152.png>] [147 <./Immagini/GRAFI_ESATTI/u159.pn
-g>] [148 <./Immagini/GRAFI_ESATTI/rat195.png>]
-<Immagini/GRAFI_ESATTI/"kroA200".png, id=3448, 627.84563pt x 424.58624pt>
-File: Immagini/GRAFI_ESATTI/"kroA200".png Graphic file (type png)
-<use Immagini/GRAFI_ESATTI/"kroA200".png>
-Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA200".png  used on input lin
-e 4968. on input line 4968.
+4968. on input line 4968.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
  4968.
 
@@ -1505,11 +1460,11 @@ Overfull \hbox (1.12804pt too wide) in paragraph at lines 4968--4970
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"kroB200".png, id=3449, 627.84563pt x 424.58624pt>
-File: Immagini/GRAFI_ESATTI/"kroB200".png Graphic file (type png)
-<use Immagini/GRAFI_ESATTI/"kroB200".png>
-Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB200".png  used on input lin
-e 4975. on input line 4975.
+<Immagini/GRAFI_ESATTI/"u159".png, id=3351, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"u159".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"u159".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"u159".png  used on input line 4
+975. on input line 4975.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
  4975.
 
@@ -1517,10 +1472,10 @@ Overfull \hbox (1.12804pt too wide) in paragraph at lines 4975--4977
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"tsp225".png, id=3450, 627.84563pt x 424.58624pt>
-File: Immagini/GRAFI_ESATTI/"tsp225".png Graphic file (type png)
-<use Immagini/GRAFI_ESATTI/"tsp225".png>
-Package pdftex.def Info: Immagini/GRAFI_ESATTI/"tsp225".png  used on input line
+<Immagini/GRAFI_ESATTI/"rat195".png, id=3352, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"rat195".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"rat195".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"rat195".png  used on input line
  4982. on input line 4982.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
  4982.
@@ -1529,146 +1484,194 @@ Overfull \hbox (1.12804pt too wide) in paragraph at lines 4982--4984
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr226".png, id=3451, 627.84563pt x 424.58624pt>
+[129] [130 <./Immagini/GRAFI_ESATTI/berlin52.png>] [131 <./Immagini/GRAFI_ESATT
+I/st70.png>] [132 <./Immagini/GRAFI_ESATTI/eil76.png>] [133 <./Immagini/GRAFI_E
+SATTI/pr76.png>] [134 <./Immagini/GRAFI_ESATTI/rat99.png>] [135 <./Immagini/GRA
+FI_ESATTI/kroA100.png>] [136 <./Immagini/GRAFI_ESATTI/kroB100.png>] [137 <./Imm
+agini/GRAFI_ESATTI/kroC100.png>] [138 <./Immagini/GRAFI_ESATTI/kroD100.png>]
+[139 <./Immagini/GRAFI_ESATTI/kroE100.png>] [140 <./Immagini/GRAFI_ESATTI/eil10
+1.png>] [141 <./Immagini/GRAFI_ESATTI/lin105.png>] [142 <./Immagini/GRAFI_ESATT
+I/bier127.png>] [143 <./Immagini/GRAFI_ESATTI/ch130.png>] [144 <./Immagini/GRAF
+I_ESATTI/pr144.png>] [145 <./Immagini/GRAFI_ESATTI/kroA150.png>] [146 <./Immagi
+ni/GRAFI_ESATTI/kroB150.png>] [147 <./Immagini/GRAFI_ESATTI/ch150.png>]
+[148 <./Immagini/GRAFI_ESATTI/pr152.png>] [149 <./Immagini/GRAFI_ESATTI/u159.pn
+g>] [150 <./Immagini/GRAFI_ESATTI/rat195.png>]
+<Immagini/GRAFI_ESATTI/"kroA200".png, id=3473, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroA200".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroA200".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroA200".png  used on input lin
+e 5027. on input line 5027.
+Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
+ 5027.
+
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5027--5029
+ [][] 
+ []
+
+<Immagini/GRAFI_ESATTI/"kroB200".png, id=3474, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"kroB200".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"kroB200".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"kroB200".png  used on input lin
+e 5034. on input line 5034.
+Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
+ 5034.
+
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5034--5036
+ [][] 
+ []
+
+<Immagini/GRAFI_ESATTI/"tsp225".png, id=3475, 627.84563pt x 424.58624pt>
+File: Immagini/GRAFI_ESATTI/"tsp225".png Graphic file (type png)
+<use Immagini/GRAFI_ESATTI/"tsp225".png>
+Package pdftex.def Info: Immagini/GRAFI_ESATTI/"tsp225".png  used on input line
+ 5041. on input line 5041.
+Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
+ 5041.
+
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5041--5043
+ [][] 
+ []
+
+<Immagini/GRAFI_ESATTI/"pr226".png, id=3476, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr226".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr226".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr226".png  used on input line 
-4989. on input line 4989.
+5048. on input line 5048.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4989.
+ 5048.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4989--4991
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5048--5050
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"gil262".png, id=3452, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"gil262".png, id=3477, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"gil262".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"gil262".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"gil262".png  used on input line
- 4996. on input line 4996.
+ 5055. on input line 5055.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 4996.
+ 5055.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 4996--4998
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5055--5057
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"a280".png, id=3453, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"a280".png, id=3478, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"a280".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"a280".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"a280".png  used on input line 5
-003. on input line 5003.
+062. on input line 5062.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 5003.
+ 5062.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 5003--5005
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5062--5064
  [][] 
  []
 
-<Immagini/GRAFI_ESATTI/"pr299".png, id=3454, 627.84563pt x 424.58624pt>
+<Immagini/GRAFI_ESATTI/"pr299".png, id=3479, 627.84563pt x 424.58624pt>
 File: Immagini/GRAFI_ESATTI/"pr299".png Graphic file (type png)
 <use Immagini/GRAFI_ESATTI/"pr299".png>
 Package pdftex.def Info: Immagini/GRAFI_ESATTI/"pr299".png  used on input line 
-5010. on input line 5010.
+5069. on input line 5069.
 Package pdftex.def Info: Requested size: 627.84409pt x 424.5852pt on input line
- 5010.
+ 5069.
 
-Overfull \hbox (1.12804pt too wide) in paragraph at lines 5010--5012
+Overfull \hbox (1.12804pt too wide) in paragraph at lines 5069--5071
  [][] 
  []
 
-[149
+[151
 
-] [150 <./Immagini/GRAFI_ESATTI/kroA200.png>] [151 <./Immagini/GRAFI_ESATTI/kro
-B200.png>] [152 <./Immagini/GRAFI_ESATTI/tsp225.png>] [153 <./Immagini/GRAFI_ES
-ATTI/pr226.png>] [154 <./Immagini/GRAFI_ESATTI/gil262.png>] [155 <./Immagini/GR
-AFI_ESATTI/a280.png>] [156 <./Immagini/GRAFI_ESATTI/pr299.png>] [157]
-[158] [159] [160] [161] [162] [163]
+] [152 <./Immagini/GRAFI_ESATTI/kroA200.png>] [153 <./Immagini/GRAFI_ESATTI/kro
+B200.png>] [154 <./Immagini/GRAFI_ESATTI/tsp225.png>] [155 <./Immagini/GRAFI_ES
+ATTI/pr226.png>] [156 <./Immagini/GRAFI_ESATTI/gil262.png>] [157 <./Immagini/GR
+AFI_ESATTI/a280.png>] [158 <./Immagini/GRAFI_ESATTI/pr299.png>] [159]
+[160] [161] [162] [163] [164] [165]
 Overfull \vbox (105.56944pt too high) has occurred while \output is active []
 
 
-[164] [165] [166]
+[166] [167] [168]
 Overfull \vbox (21.96953pt too high) has occurred while \output is active []
 
 
-[167] [168] [169]
+[169] [170] [171]
 Overfull \vbox (144.36945pt too high) has occurred while \output is active []
 
 
-[170] [171] [172] [173]
+[172] [173] [174] [175]
 Overfull \vbox (664.76904pt too high) has occurred while \output is active []
 
 
-[174] [175] [176] [177] [178] [179] [180] [181] [182] [183] [184] [185]
-[186] [187] [188] [189]
+[176] [177] [178] [179] [180] [181] [182] [183] [184] [185] [186] [187]
+[188] [189] [190] [191]
 Overfull \vbox (86.76933pt too high) has occurred while \output is active []
 
 
-[190] [191] [192]
+[192] [193] [194]
 Overfull \vbox (138.76933pt too high) has occurred while \output is active []
 
 
-[193] [194] [195]
+[195] [196] [197]
 Overfull \vbox (241.16916pt too high) has occurred while \output is active []
 
 
-[196] [197] [198]
+[198] [199] [200]
 Overfull \vbox (119.16924pt too high) has occurred while \output is active []
 
 
-[199] [200] [201]
+[201] [202] [203]
 Overfull \vbox (317.16919pt too high) has occurred while \output is active []
 
 
-[202] [203] [204]
+[204] [205] [206]
 Overfull \vbox (288.76923pt too high) has occurred while \output is active []
 
 
-[205] [206] [207]
+[207] [208] [209]
 Overfull \vbox (289.16922pt too high) has occurred while \output is active []
 
 
-[208] [209] [210]
+[210] [211] [212]
 Overfull \vbox (371.16916pt too high) has occurred while \output is active []
 
 
-[211] [212] [213]
+[213] [214] [215]
 Overfull \vbox (304.76918pt too high) has occurred while \output is active []
 
 
-[214] [215] [216]
+[216] [217] [218]
 Overfull \vbox (452.36911pt too high) has occurred while \output is active []
 
 
-[217] [218]
+[219] [220]
 
-LaTeX Warning: Float too large for page by 231.96907pt on input line 8952.
+LaTeX Warning: Float too large for page by 231.96907pt on input line 9011.
 
-[219] [220] [221] [222] [223] [224] [225] [226] [227]
+[221] [222] [223] [224] [225] [226] [227] [228] [229]
 
-LaTeX Warning: Float too large for page by 7.96931pt on input line 9380.
-
-
-LaTeX Warning: Float too large for page by 35.96928pt on input line 9656.
+LaTeX Warning: Float too large for page by 7.96931pt on input line 9439.
 
 
-LaTeX Warning: Float too large for page by 21.9693pt on input line 9754.
+LaTeX Warning: Float too large for page by 35.96928pt on input line 9715.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 9924.
-[228
 
-] [229] [230] [231] [232] [233] [234] [235] [236]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 9924.
+LaTeX Warning: Float too large for page by 21.9693pt on input line 9813.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 9983.
+[230
+
+] [231] [232] [233] [234] [235] [236] [237] [238]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 9983.
  (Tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 9924.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 9924.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 9983.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 9983.
 
 Package rerunfilecheck Info: File `Tesi.out' has not changed.
 (rerunfilecheck)             Checksum: 8612E71D4ACC2D44FB25256C1026297E;63.
  ) 
 Here is how much of TeX's memory you used:
- 17887 strings out of 493314
- 262016 string characters out of 3136264
+ 17905 strings out of 493314
+ 262277 string characters out of 3136264
  413729 words of memory out of 3000000
  18230 multiletter control sequences out of 15000+200000
  26810 words of font info for 68 fonts, out of 3000000 for 9000
@@ -1703,9 +1706,9 @@ r/sfti0900.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/s
 fti1095.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/cm-super/sftt
 1000.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/tipa/tipabx10.pf
 b>
-Output written on Tesi.pdf (236 pages, 3234409 bytes).
+Output written on Tesi.pdf (238 pages, 3243566 bytes).
 PDF statistics:
- 4583 PDF objects out of 5155 (max. 8388607)
- 2893 named destinations out of 2984 (max. 500000)
+ 4611 PDF objects out of 5155 (max. 8388607)
+ 2911 named destinations out of 2984 (max. 500000)
  239 words of extra memory for PDF output out of 10000 (max. 10000000)
 
